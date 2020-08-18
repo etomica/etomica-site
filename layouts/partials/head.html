@@ -1,0 +1,9 @@
+<head>
+    {{ $sass := resources.Get "sass/main.scss" }}
+    {{ $style := $sass | resources.ToCSS | fingerprint}}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ .Title }}</title>
+</head>

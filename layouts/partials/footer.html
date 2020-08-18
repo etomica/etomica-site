@@ -1,0 +1,52 @@
+
+<footer class="footer">
+  <div class="container">
+      <div class="row">
+          <div class="col">
+              <p class="text-center text-muted"><em class="small">Etomica is dedicated to the memory of Bryan Mihalick.</em></p>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col">
+              <ul class="list-unstyled small" id="footer-links">
+                  <li><a href="http://www.cheme.buffalo.edu/">Department of Chemical & Biological Engineering</a></li>
+                  <li><a href="http://www.ccr.buffalo.edu/">Center for Computational Research</a></li>
+                  <li><a href="http://www.buffalo.edu/">University at Buffalo</a></li>
+                  <li><a href="http://www.eng.buffalo.edu/">School of Engineering and Applied Sciences</a></li>
+              </ul>
+          </div>
+
+          <div class="col text-center text-muted">
+              {{ $img := ((resources.Get "img/nsf_logo.png").Resize "x100").Permalink}}
+              <img id="nsf-logo" src="{{ $img }}" alt="" class="img-fluid">
+              {{ $img := ((resources.Get "img/ub_logo.png").Resize "128x").Permalink}}
+              <img id="ub-logo" src="{{ $img }}" alt="" class="img-fluid">
+
+              <p class="small">
+                  This material is based on work supported by the National Science Foundation and performed in the Chemical & Biological Engineering Department
+                  of the University at Buffalo.
+              </p>
+          </div>
+      </div>
+  </div>
+
+</footer>
+<footer class="footer mt-5">
+    <div class="container">
+      <table class="table table-sm">
+        <caption>Hugo Variables for current page</caption>
+        <tr><th>Name</th><td>{{ .Name }}</td></tr>
+        <tr><th>Kind</th><td>{{ .Kind }}</td></tr>
+        <tr><th>Type</th><td>{{ .Type }}</td></tr>
+        <tr><th>List Page</th><td>.Pages</td></tr>
+        <tr><th>IsPage</th><td>{{ .IsPage }}</td></tr>
+        <tr><th>IsHome</th><td>{{ .IsPage }}</td></tr>
+        <tr><th>Next</th><td>{{ .Next }}</td></tr>
+        <tr><th>Prev</th><td>{{ .Prev }}</td></tr>
+        <tr><th>Section</th><td>{{ .CurrentSection }}</td></tr>
+      </table>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
