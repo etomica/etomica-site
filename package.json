@@ -1,0 +1,9 @@
+{
+  "name": "etomica-site",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.0.0-alpha1"
+  }
+}
