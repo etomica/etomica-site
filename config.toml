@@ -10,6 +10,11 @@ title = "Etomica"
         url = "/docs/"
 
     [[menu.main]]
+        identifier = "modules"
+        name = "Modules"
+        url = "/modules/"
+
+    [[menu.main]]
         identifier = "publications"
         name = "Publications"
         url = "/publications/"

@@ -1,13 +1,14 @@
 <div class="container" id="topbar">
     <ul class="nav justify-content-center align-items-center">
-        {{ $img := (resources.Get "img/logo.png").Resize "128x128"}}
-        {{ with $img }}
-        <li>
-            <img class="img-responsive" src="{{ .Permalink }}" alt="" >
+        <li class="mr-auto">
+            <a href="{{ .Site.Home.Permalink }}" class="d-inline-flex align-items-center text-decoration-none link-dark">
+                {{ $img := (resources.Get "img/logo.png").Resize "128x128"}}
+                {{ with $img }}
+                    <img class="img-responsive" src="{{ .Permalink }}" alt="" >
+                {{ end }}
+                <h1 class="display-5">Etomica</h1>
+            </a>
         </li>
-        {{ end }}
-
-        <h1 class="display-5 mr-auto">Etomica</h2>
 
         {{ $currentPage := . }}
         {{ range .Site.Menus.main }}

@@ -1,4 +1,16 @@
 {{ define "main" }}
-<p>hi</p>
+<main aria-role="main" class="container">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <p class="lead">
+                <b>Etomica</b> is an open-source molecular simulation framework written in Java. 
+            </p>
+        </div>
+        <div class="col-md-6">
+              {{ $img := ((resources.Get "img/catalysis-demo.png").Resize "x512 box").Permalink}}
+              <img class="img-fluid" src="{{ $img }}" alt="">
+        </div>
+    </div>
+</main>
     
 {{ end }}

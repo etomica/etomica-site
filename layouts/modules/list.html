@@ -1,0 +1,34 @@
+{{ define "main" }}
+
+<main class="container">
+    <div class="row">
+        <h1>{{ .Title }}</h1>
+
+        <p>
+            {{ .Content }}
+        </p>
+    </div>
+
+    <h1>Index of Molecular Simulation Modules</h1>
+
+    <div class="row row-cols-md-3">
+        {{ range .Pages }}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <a href="{{ .Permalink }}" class="stretched-link"><h5 class="card-title">{{ .Title }}</h5></a>
+                    <p class="card-text">{{ .Description }}</p>
+                    {{ $page := . }}
+                    {{ with .Param "thumbnail" }}
+                        <img src="{{ ($page.Resources.GetMatch .).RelPermalink }}" class="card-img-bottom" alt="">
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+            
+        {{ end }}
+    </div>
+
+</main>
+
+{{ end }}
