@@ -3,10 +3,64 @@
     margin-bottom: 1rem;
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    position: relative; // for scrollspy
+}
+
+#content {
+    flex: 1 0 auto;
+}
+
 footer {
+    flex-shrink: 0;
+
     margin-top: 1.5rem;
     padding: 1.5rem 0;
     background-color: #e1e1e1;
 }
+
+#toc {
+    position: sticky;
+    top: 1rem;
+}
+
+#toc nav {
+    font-size: .875rem;
+
+    a.active {
+        font-weight: bolder;
+    }
+}
+
+#toc a {
+    color: inherit;
+
+    padding: 0; // need to override because we insert nav-link class
+}
+
+#toc a:not(:hover) {
+    text-decoration: none;
+}
+
+#toc nav a:hover {
+    text-decoration: underline;
+}
+
+#toc nav ul {
+    list-style: none;
+    padding-left: 0px;
+
+    ul {
+        padding-left: 1rem;
+    }
+}
+
 
 @import "../../node_modules/bootstrap/scss/bootstrap.scss"

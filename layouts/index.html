@@ -5,6 +5,13 @@
             <p class="lead">
                 <b>Etomica</b> is an open-source molecular simulation framework written in Java. 
             </p>
+            <p>
+                It is modular in design, providing many choices for the simulation elements, including:  
+                sampling algorithm;  spatial dimension; molecular model (including both hard and soft potentials); and properties for measurement. 
+                Simulation components are easily extended to develop new capabilities.  In addition to allowing for conventional batch simulations, 
+                Etomica is unique in enabling construction of interactive simulations, with a rich set of tools to manipulate, view, and interrogate the simulation as it runs. 
+                Etomica is unique also in providing capabilities for calculating thermodynamic virial coefficients efficiently and accurately. 
+            </p>
         </div>
         <div class="col-md-6">
               {{ $img := ((resources.Get "img/catalysis-demo.png").Resize "x512 box").Permalink}}

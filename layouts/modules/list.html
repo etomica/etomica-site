@@ -4,9 +4,7 @@
     <div class="row">
         <h1>{{ .Title }}</h1>
 
-        <p>
             {{ .Content }}
-        </p>
     </div>
 
     <h1>Index of Molecular Simulation Modules</h1>
@@ -20,7 +18,7 @@
                     <p class="card-text">{{ .Description }}</p>
                     {{ $page := . }}
                     {{ with .Param "thumbnail" }}
-                        <img src="{{ ($page.Resources.GetMatch .).RelPermalink }}" class="card-img-bottom" alt="">
+                        <img src="{{ ($page.Resources.GetMatch .).RelPermalink }}" class="card-img-bottom shadow" alt="">
                     {{ end }}
                 </div>
             </div>

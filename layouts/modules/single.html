@@ -1,6 +1,25 @@
 {{ define "main"}}
 <main aria-role="main" class="container">
-    {{ .Content }}
+    <div class="row align-items-stretch">
+        <article class="col" >
+            <h1 class="display-4">{{ .Title }}</h1>
+            {{ .Content }}
+        </article>
+        <aside id="toc" class="col-auto text-muted h-100">
+            <strong class=""><a href="#top">{{ .Title }}</a></strong>
+            <!-- {{ .TableOfContents | replaceRE `<nav id="TableOfContents">` `<nav id="TableOfContents" class="nav">` | replaceRE `<a href="(.*)">` `<a href="$1" class="nav-link">` | safeHTML}} -->
+            {{ .TableOfContents }}
+        </aside>
+    </div>
 </main>
+
+<!-- tried scrollspy but it's buggy -->
+<!-- <script>
+    window.onload = () => {
+        var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+            target: '#toc'
+        })
+    }
+</script> -->
 
 {{ end }}
