@@ -63,4 +63,14 @@ footer {
 }
 
 
-@import "../../node_modules/bootstrap/scss/bootstrap.scss"
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+#nav-brand {
+    flex-basis: 100%;
+}
+
+@include media-breakpoint-up(lg) {
+    #nav-brand {
+        flex-basis: auto;
+    }
+}
