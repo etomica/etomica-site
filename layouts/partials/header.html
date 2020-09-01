@@ -1,5 +1,5 @@
 <div class="container" id="topbar">
-    <ul id="nav-list" class="nav justify-content-center align-items-center text-center">
+    <ul id="nav-list" class="nav nav-pills justify-content-center align-items-center text-center">
         <li id="nav-brand" class="mr-auto">
             <a href="{{ .Site.Home.Permalink }}" class="d-inline-flex align-items-center text-decoration-none link-dark">
                 {{ $img := (resources.Get "img/logo.png").Resize "128x128"}}
@@ -12,8 +12,9 @@
 
         {{ $currentPage := . }}
         {{ range .Site.Menus.main }}
-        <li class="nav-item {{if or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }} active{{end}}">
-            <a class="nav-link h5" href="{{ .URL }}" title="{{ .Title }}">{{ .Name }}</a>
+        {{ $active := cond (or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .)) "active" "" }}
+        <li class="nav-item ">
+            <a class="nav-link h5 {{$active}}" href="{{ .URL }}" title="{{ .Title }}">{{ .Name }}</a>
         </li>
         {{ end }}
     </ul>

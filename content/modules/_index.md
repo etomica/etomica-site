@@ -10,3 +10,10 @@ This is a project of [CACHE](www.cache.org). Funding for this development has be
 
 ## Download Instructions
 
+{{< button href="https://github.com/etomica/etomica/releases/latest" class="btn btn-outline-primary">}}Latest Release{{< /button >}}
+
+The modules are distributed as a self-contained application which allows selecting and launching individual modules. Note that this distribution does not require Java to
+be installed on your system!
+
+You can download the latest build from GitHub [here](https://github.com/etomica/etomica/releases/latest) and run the application from the zip archive. On MacOS and
+Windows your system may need to be configured to allow running unsigned applications. 

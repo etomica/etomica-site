@@ -2,21 +2,26 @@
 <main aria-role="main" class="container">
     <div class="row align-items-center">
         <div class="col-md-6">
-            <p class="lead">
+            <p class="display-5">
                 <b>Etomica</b> is an open-source molecular simulation framework written in Java. 
-            </p>
-            <p>
-                It is modular in design, providing many choices for the simulation elements, including:  
-                sampling algorithm;  spatial dimension; molecular model (including both hard and soft potentials); and properties for measurement. 
-                Simulation components are easily extended to develop new capabilities.  In addition to allowing for conventional batch simulations, 
-                Etomica is unique in enabling construction of interactive simulations, with a rich set of tools to manipulate, view, and interrogate the simulation as it runs. 
-                Etomica is unique also in providing capabilities for calculating thermodynamic virial coefficients efficiently and accurately. 
             </p>
         </div>
         <div class="col-md-6">
-              {{ $img := ((resources.Get "img/catalysis-demo.png").Resize "x512 box").Permalink}}
-              <img class="img-fluid" src="{{ $img }}" alt="">
+              {{ $img := ((resources.Get "img/catalysis-demo.png").Resize "x493 lanczos").Permalink}}
+              <img class="img-fluid shadow mb-4" src="{{ $img }}" alt="">
         </div>
+    </div>
+    <div class="row">
+            <p class="lead">
+                It is modular in design, providing many choices for the simulation elements, including:  
+                sampling algorithm;  spatial dimension; molecular model (including both hard and soft potentials); and properties for measurement. 
+                Simulation components are easily extended to develop new capabilities.
+            </p>
+            <p class="lead">
+                  In addition to allowing for conventional batch simulations, 
+                Etomica is unique in enabling construction of interactive simulations, with a rich set of tools to manipulate, view, and interrogate the simulation as it runs. 
+                Etomica is unique also in providing capabilities for calculating thermodynamic virial coefficients efficiently and accurately. 
+            </p>
     </div>
 </main>
     
