@@ -17,6 +17,9 @@
   --ifm-code-font-size: 95%;
 
   --ifm-navbar-height: 70px;
+
+  --ifm-background-color: #f2f3f4; 
+  --ifm-navbar-background-color: var(--ifm-background-color);
 }
 
 .navbar__brand {
