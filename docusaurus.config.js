@@ -1,3 +1,6 @@
+const remarkMath = require('remark-math')
+const rehypeKatex = require('rehype-katex')
+
 module.exports = {
   title: 'Etomica',
   tagline: 'Java Molecular Simulation Framework',
@@ -8,6 +11,14 @@ module.exports = {
   favicon: 'favicon.ico',
   organizationName: 'facebook', // Usually your GitHub org/user name.
   projectName: 'etomica', // Usually your repo name.
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw',
+      crossorigin: 'anonymous'
+    },
+  ],
   themeConfig: {
     navbar: {
       title: 'Etomica',
@@ -20,6 +31,12 @@ module.exports = {
           to: 'docs/',
           activeBasePath: 'docs',
           label: 'Docs',
+          position: 'left',
+        },
+        {
+          to: 'modules/',
+          activeBasePath: 'modules',
+          label: 'Modules',
           position: 'left',
         },
         {to: 'blog', label: 'Blog', position: 'left'},
@@ -56,6 +73,7 @@ module.exports = {
       ],
       // copyright: `Copyright © ${new Date().getFullYear()} Etomica. Built with Docusaurus.`,
     },
+    hideableSidebar: true,
   },
   presets: [
     [
@@ -64,8 +82,9 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+          editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/',
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
         },
         blog: {
           showReadingTime: true,
@@ -80,5 +99,20 @@ module.exports = {
     ],
   ],
 
-  plugins: ['@docusaurus/plugin-ideal-image']
+  plugins: [
+    '@docusaurus/plugin-ideal-image',
+
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'modules',
+        path: 'modules',
+        routeBasePath: 'modules',
+        sidebarPath: require.resolve('./sidebarsModules.js'),
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+      }
+    ]
+  
+  ]
 };

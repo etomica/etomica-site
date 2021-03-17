@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
+import Image from '@theme/IdealImage'
 
 const features = [
   {
@@ -78,6 +79,19 @@ function Home() {
         </div>
       </header>
       <main>
+        <section>
+          <div className="container">
+            <div className="row">
+              <p className="col">
+                Etomica has been developed at the University at Buffalo since 1999
+                for research and education.
+              </p>
+              <div className="col">
+                <Image img={require('@site/static/img/catalysis-demo.png')}/>
+              </div>
+            </div>
+          </div>
+        </section>
         {features && features.length > 0 && (
           <section className={styles.features}>
             <div className="container">
