@@ -1,8 +1,8 @@
 
 
-=Glossary of Terms=
+# Glossary of Terms
 
-##Osmosis
+## Osmosis
 
 Osmosis is the flow of a (liquid) solvent through a semi-permeable (permeable only to the solvent) membrane when a solution is separated from a pure solvent by such a membrane. In osmosis the solvent moves from the solvent side to the solution side, while in reverse osmosis the solvent moves from the solution to the solvent side. Osmosis and reverse osmosis are fundamentally the same phenomenon, and governed by the
 same fundamental laws.
@@ -12,11 +12,11 @@ Osmosis is a type of passive transport, that is, no energy is required for the m
 
 In biological systems, the most common solvent is water so the definition of osmosis can be modified to the passage of water from a region of high water concentration through a semi-permeable membrane to a region of low water concentration
 
-##Semi-permeable membranes
+## Semi-permeable membranes
 
 Semi-permeable membranes are thin layers of material, which allow some things to pass through them but prevent other things from passing through, for example, cell membranes. Cell membranes will allow small molecules like oxygen, water, carbon dioxide, ammonia, glucose, amino-acids, etc. to pass through, while not allowing larger molecules like sucrose, starch, protein, etc. to pass through.
 
-##Osmotic Pressure
+## Osmotic Pressure
 
 Osmotic pressure is a colligative property in that for a **dilute ideal** solution it depends only on the mole fraction of the solute. It does not depend on the nature of the solute but only on the number of molecules in the solution.
 The transport of the solvent molecules across the membrane in osmosis stops when the hydrostatic pressure on the solution side is sufficiently high to prevent the flow of the solvent (by ensuring the chemical potential of the solvent on both sides of the membrane is equal). This extra pressure on the solution side necessary to counteract the forces of osmosis is called osmotic pressure.
@@ -38,21 +38,18 @@ $V_A$ = molar volume of the solvent A
 
 $x_B$  = mole fraction of solute B
 
-Osmotic pressure measurements are used in the determination molecular mass of  compounds like polymers and biologically important macromolecules.
+Osmotic pressure measurements are used in the determination molecular mass of compounds like polymers and biologically important macromolecules.
 
 =The Effects of Osmosis=
 
 When an animal cell or a plant cell is placed in a medium, which is a water solution , the possible consequences are listed below.
 
 
-**1.**If the **water concentration** of the cell<92>s cytoplasm is **lower** then that of the medium (i.e. the medium is a **hypotonic** solution) surrounding the cell then osmosis will result in the cell **gaining** water. The water molecules are free to pass across the cell membrane in both directions, but more water molecules will enter the cell than will diffuse out with the result that water enters the cell, which will then **swell** up and could possibly burst.
+**1.** If the **water concentration** of the cell's cytoplasm is **lower** then that of the medium (i.e. the medium is a **hypotonic** solution) surrounding the cell then osmosis will result in the cell **gaining** water. The water molecules are free to pass across the cell membrane in both directions, but more water molecules will enter the cell than will diffuse out with the result that water enters the cell, which will then **swell** up and could possibly burst.
 **2.**If the **water concentration** inside the cell is the **same** as that in the surrounding medium (i.e. the medium is a **isotonic** solution) there will exist a **dynamic equilibrium** between the number of molecules of water entering and leaving the cell and so the cell will **retain** its original size.
 For example, the red blood cell in the blood plasma retains its shape because of the isotonic nature of the plasma.
 
-
-
-<center>![](./Osmosis Rbc iso.gif)</center>
-
+![](<./Osmosis Rbc iso.gif>)
 
 
 **3.**If the **water concentration** inside the cell is **higher** then that of the medium (i.e. the medium is a **hypertonic** solution) the number of water molecules diffusing out will be more than that entering and the cell will **shrink** and shrivel due to osmosis.
@@ -69,11 +66,7 @@ When a plant cell is placed in an isotonic solution, a phenomenon called **incip
 
 Animal cells do not have cell walls. In hypotonic solutions, animal cells swell up and explode as they cannot become turgid because there is no cell wall to prevent the cell from bursting. When the cell is in danger of bursting, organelles called contractile vacuoles will pump water out of the cell to prevent this. In hypertonic solutions, water diffuses out of the cell due to osmosis and the cell shrinks. Thus, the animal cell has always to be surrounded by an isotonic solution. In the human body, the kidneys provide the necessary regulatory mechanism for the blood plasma and the concentration of water and salt removed from the blood by the kidneys is controlled by a part of the brain called the hypothalamus. The process of regulating the concentration of water and mineral salts in the blood is called **osmoregulation** Animals which live on dry land must conserve water and so must animals which live in the salty sea water, but animals which live in freshwater have the opposite problem; they must get rid of excess water as fast as it gets into their bodies by osmosis.
 
-
-
-<center>![](./Osmosis Animal.jpg)</center>
-
-
+![](<./Osmosis Animal.jpg>)
 
 ##Dialysis
 
@@ -87,7 +80,7 @@ Reverse osmosis is the process by which the liquid solvent moves across the semi
 
 This process is also known as hyperfiltration as it is one of the best filtration methods known .The removal of particles as small as ions from a solution is made possible using this method. Reverse osmosis is most commonly used to purify water and desalination. It can also be used to purify fluids such as ethanol and glycol, which will pass through the reverse osmosis membrane, while rejecting other ions and contaminants from passing. Reverse osmosis is capable of rejecting bacteria, salts, sugars, proteins, particles, dyes, etc.
 
-=Formulation=
+# Formulation
 
 The chemical potential of the solvent A at the constant temperature is a function of mole fraction of the solute B and external pressure P
 
@@ -152,7 +145,7 @@ For a dilute solution, $\ln(1 - x_B) \approx -x_B$
 So, $\pi = \frac{RT}{\overline{V_A}}x_B$
 
 
-=Background Material=
+# Background Material
 
 ##Books (Molecular Simulations and Reverse Osmosis)
 

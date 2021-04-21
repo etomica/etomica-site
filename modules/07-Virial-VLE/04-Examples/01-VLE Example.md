@@ -36,23 +36,23 @@ small magnitudes of the Vapor Density Error listed in the Data Display Panel. Be
 showing what a simulation typically looks like after roughly $10^6$ steps, and what data the various plots contain:
 
 
-![](./VLE EX1.jpg)
+![](<./VLE EX1.jpg>)
 
 
 
-![](./VLE EX2.jpg)
+![](<./VLE EX2.jpg>)
 
 
 
-![](./VLE EX3.jpg)
+![](<./VLE EX3.jpg>)
 
 
 
-![](./VLE EX4.jpg)
+![](<./VLE EX4.jpg>)
 
 
 
-![](./VLE EX5.jpg)
+![](<./VLE EX5.jpg>)
 
 
 

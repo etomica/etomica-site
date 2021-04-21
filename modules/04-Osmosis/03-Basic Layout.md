@@ -2,7 +2,7 @@
 
 = Version I (Lennard-Jones Mixture) =
 
-![](./clip image002.jpg)
+![](<./Clip image002.jpg>)
 
 ##System Key
 
@@ -37,7 +37,7 @@ within the usual fluctuations of small systems, away from the membrane. The peak
  
 =Version II (Brine Solution)=
 
-![](./clip image001.jpg)
+![](<./Clip image001.jpg>)
 
 ##System Key
 

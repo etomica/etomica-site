@@ -19,10 +19,10 @@ Push the “start” tab. Observe the changes in the tilt angles as well in the 
 
 Next, push the “Wall” tab then the sub-tab “Lower Wall.” The wall will progressively move downward toward the SAM system. It is also possible to lower the wall manually via the “Wall Position” slider in order to start the loading experiment relatively quickly. In this case the wall should be lowered just above the free surface of the SAM system, then the wall is lowered progressively by pushing the “Lower Wall” tab anew.
 
-![](./Monolayer example2-1.jpg) 
+![](<./Monolayer example2-1.jpg>) 
 
 
 After the wall has reached a minimum (preset to 15 Å) position, the loading experiment stops. Push the “Stress vs. Strain” tab. A plot showing the variation of stress as a function of strain (wall position) is displayed.
 
 
-![](./Monolayer example2-2.jpg)
+![](<./Monolayer example2-2.jpg>)

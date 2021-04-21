@@ -15,7 +15,7 @@ $U(R) = \varepsilon \left [ \left(\frac{R_0}{R} \right )^{12} - 2 \left ( \frac{
 Here, $\varepsilon$ quantifies the strength of the interaction, R is the distance between the molecules, and $R_0$ is the location of the minimum, as shown in the plot below:
 
 
-![](./VLE MinLoc.jpg)
+![](<./VLE MinLoc.jpg>)
 
 
 Another way of writing this potential is :

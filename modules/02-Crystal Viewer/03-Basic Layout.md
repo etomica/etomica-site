@@ -4,7 +4,7 @@ When the Crystal Viewer application is started, it should look something like th
 
 
 
-![](./CrystalViewer Crystal1.jpg)
+![](<./CrystalViewer Crystal1.jpg>)
 
 
 
@@ -29,7 +29,7 @@ All vector lengths can be adjusted independently as the boxes surrounding them a
 
 
 
-![](./CrystalViewer Crystal2.jpg)
+![](<./CrystalViewer Crystal2.jpg>)
 
 
 
@@ -37,7 +37,7 @@ The second tab on the "Control Panel" is the **plane tab**. The **plane tab** pr
 
 
 
-![](./CrystalViewer Crystal3.jpg)
+![](<./CrystalViewer Crystal3.jpg>)
 
 
 
@@ -55,9 +55,9 @@ Clipping Off
 </tr>
 <tr>
 <td width="50%" align="center">
-![](./CrystalViewer Crystal4.jpg)
+![](<./CrystalViewer Crystal4.jpg>)
 <td width="50%" align="center">
-![](./CrystalViewer Crystal5.jpg)
+![](<./CrystalViewer Crystal5.jpg>)
 </tr>
 </table>
 ```
@@ -81,9 +81,9 @@ Show Plane Off
 </tr>
 <tr>
 <td width="50%" align="center">
-![](./CrystalViewer Crystal6.jpg)
+![](<./CrystalViewer Crystal6.jpg>)
 <td width="50%" align="center">
-![](./CrystalViewer Crystal7.jpg)
+![](<./CrystalViewer Crystal7.jpg>)
 </tr>
 </table>
 ```

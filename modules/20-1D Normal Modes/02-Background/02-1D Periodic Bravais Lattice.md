@@ -4,7 +4,7 @@ The easiest way to picture a Bravais Lattice is to picture lined up atoms attach
 
 
 
-<center>![](./Harmonic1DMD Image001.jpg)</center>
+![](<./Harmonic1DMD Image001.jpg>)
 
 
 
@@ -14,8 +14,8 @@ Periodic boundary conditions allow us discard anomalies that can pop up at end b
 
 
 
-<center>![](./Harmonic1DMD Image004.jpg)</center>
+![](<./Harmonic1DMD Image004.jpg>)
 
 
 
-This is called Born-von Karman&#8217;s Boundary Conditions, where the first position is attached to the last.
+This is called Born-von Karman's Boundary Conditions, where the first position is attached to the last.

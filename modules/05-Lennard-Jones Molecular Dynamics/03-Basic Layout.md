@@ -4,7 +4,7 @@ When you LJMD application is started, it should look something like this:
 
 
 
-![600px](./LJ LJMD1.jpg)
+![600px](<./LJ LJMD1.jpg>)
 
 
 

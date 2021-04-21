@@ -4,7 +4,7 @@ When the Dimer Reaction Equilibrium application is started, it should look somet
 
 
 
-![](./ReactionEquilibrium Reaction1.jpg)
+![](<./ReactionEquilibrium Reaction1.jpg>)
 
 
 

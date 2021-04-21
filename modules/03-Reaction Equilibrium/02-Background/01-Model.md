@@ -8,16 +8,16 @@ So the model is this Two atoms that are not bound to any other atoms will mutual
 
 The following figure illustrates the definition of the size parameters of the potentials
 
-![](./ReactionEquilibrium Parameters.gif)
+![](<./ReactionEquilibrium Parameters.gif>)
 
 The following three images show a pair of atoms about to interact, inside the range of attraction, and at the hard-core collision
 
-![](./ReactionEquilibrium Interaction.gif)
+![](<./ReactionEquilibrium Interaction.gif>)
 
 In the following, the third atom is repelled from the others when separated from one of them by a distance $\sigma$
 
-![](./ReactionEquilibrium Threebody.gif)
+![](<./ReactionEquilibrium Threebody.gif>)
 
 In the module, the atoms are colored as red or black spheres of diameter $\sigma$; the inner hard core is not illustrated. They look like this
 
-![](./ReactionEquilibrium Redblack.gif)
+![](<./ReactionEquilibrium Redblack.gif>)

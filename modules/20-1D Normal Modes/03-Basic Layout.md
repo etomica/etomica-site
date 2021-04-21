@@ -1,6 +1,6 @@
 
 
-![](./Harmonic Harmonic0.jpg)
+![](<./Harmonic Harmonic0.jpg>)
 
 
 

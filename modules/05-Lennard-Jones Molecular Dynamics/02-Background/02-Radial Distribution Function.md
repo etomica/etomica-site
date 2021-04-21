@@ -6,7 +6,7 @@ Of course, molecules are in constant motion, rotating and moving about in errati
 
 
 
-![](./LJ Rdf shell t.GIF)
+![](<./LJ Rdf shell t.GIF>)
 
 
 

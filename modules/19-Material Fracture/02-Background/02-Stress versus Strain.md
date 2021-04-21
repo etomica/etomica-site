@@ -6,7 +6,7 @@ The stress-strain curve is produced from the tensile test.
 
 
  
-![](./MaterialFracture SSCurve.jpg)
+![](<./MaterialFracture SSCurve.jpg>)
 
  
 
@@ -36,7 +36,7 @@ l is the gage length at a given load and lo is the original gage length with zer
 
 
 
-![](./MaterialFracture SSPicture1.jpg)
+![](<./MaterialFracture SSPicture1.jpg>)
 
 
 
@@ -59,7 +59,7 @@ The toughness is used to describe the combination of strength and ductility. Thi
 
 
 
-![](./MaterialFracture SSPicture2.jpg)
+![](<./MaterialFracture SSPicture2.jpg>)
 
 
 
@@ -68,7 +68,7 @@ For certain materials, especially low-carbon steel alloys, the stress-strain cur
 
 
 
-![](./MaterialFracture SSPicture3.jpg)
+![](<./MaterialFracture SSPicture3.jpg>)
 
 
 

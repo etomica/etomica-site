@@ -29,7 +29,7 @@ $d$ = width of the interface
 
 
 
-![](./VL interface.gif)
+![](<./VL interface.gif>)
 
 
 
@@ -46,7 +46,7 @@ $N$ = total number of particles
 
 
 
-![](./PE interface.gif)
+![](<./PE interface.gif>)
 
 
 
@@ -58,7 +58,7 @@ When surfactants are added to the simulation, it is important to be able to iden
 
 
 
-![](./Orientation.gif)
+![](<./Orientation.gif>)
 
 
 
@@ -116,7 +116,7 @@ In the figure below (taken from a representative simulation), the interfacial te
 
 
 
-![](./ST profile.gif)
+![](<./ST profile.gif>)
 
 
 
@@ -153,7 +153,7 @@ In the figure below (taken from a representative simulation), the chemical poten
 
 
 
-![](./Chemical potential.gif)
+![](<./Chemical potential.gif>)
 
 
 

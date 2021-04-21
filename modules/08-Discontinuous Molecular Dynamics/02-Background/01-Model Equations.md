@@ -44,11 +44,11 @@ $(7) D_{ij} = (b^2_{ij} - u^2_{ij}(r^2_{ij} - \sigma^2_{ij})) \equiv$ discrimina
 <table width="75%">
 <tr>
 <td width="25%" align="center">
-![](./DMD Model Eq 1.jpg)
+![](<./DMD Model Eq 1.jpg>)
 <td width="25%" align="center">
-![](./DMD Model Eq 2.jpg)
+![](<./DMD Model Eq 2.jpg>)
 <td width="25%" align="center">
-![](./DMD Model Eq 3.jpg)
+![](<./DMD Model Eq 3.jpg>)
 </tr>
 <tr>
 <td width="25%" align="center">
@@ -73,7 +73,7 @@ $$(8) \frac{\vartriangle u_i}{m_j} = \frac{-2(b^c_{ij} / \sigma^2)r^c_{ij}}{(m_i
 We can derive this formula by assuming that particle *j* is stationary (reference frame) and particle *i* is moving on the *x*-axis with equal mass. The *j*-direction after collision is given by the line of action $r^c_{ij}$, since that is all *j* feels about momentum change.  Conservation of momentum means that $u^f_i + u^f_j = u^i_i$ with the geometric interpretation of a sum of vectors in the form of a triangle. Conservation of energy gives $(u^f_i)^2 + (u^f_j)^2 = (u^i_i)^2$.  The Pythagorean theorem applied to the conservation of energy means that this triangle must be a right triangle.  Therefore, we can rotate the coordinate system such that $y = u^f_i; x = u^f_i; u^f_i = u^i_i cos \theta; u^f_j = u^i_i sine\theta$
 
 <td width="20%" align="center">
-![](./DMD Model Eq 4.jpg)
+![](<./DMD Model Eq 4.jpg>)
 </tr>
 </table>
 ```

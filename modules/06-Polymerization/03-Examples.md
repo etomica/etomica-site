@@ -5,7 +5,7 @@
 First, run the stepwise growth simulation.  The program should look like this after opening: 
 
 
-![400px|Startup view of Stepwise Growth Simulation](./Exf1.JPG)
+![400px|Startup view of Stepwise Growth Simulation](<./Exf1.JPG>)
  
 
 Note that all of the input and control options are located to the left of the visualization window, while all of the output data and calculations are accessible by tabs above the visualization window. 
@@ -31,7 +31,7 @@ Next, click on the “Reaction Energy” tab (below the “Number of Molecules�
 After a short while the visualization window under the “configuration” tab should look something like this:
 
  
-![400px| Stepwise Growth Simulation](./Exf2.JPG)
+![400px| Stepwise Growth Simulation](<./Exf2.JPG>)
 
 
 
@@ -91,11 +91,11 @@ Next, click on the “Reaction Energy” tab (below the “Number of Molecules�
 After a high conversion is reached, which may take some time, you should observe a polymer chain which moves from one end of the periodic boundary condition to the other from top to bottom or left to right as seen below: 
 
    
-![400px| Gelation Unit Cell](./Exf3.JPG)
+![400px| Gelation Unit Cell](<./Exf3.JPG>)
 
 By tracing along the polymer chain, one can observe regions where the polymer enters from the bottom and leaves on the same point on the top.  This can be better observed by left clicking on the visualization window, then pressing “1” to see the mosaic view: 
 
-![600px| Gelation Unit Cell 3x3](./Exf4.JPG)
+![600px| Gelation Unit Cell 3x3](<./Exf4.JPG>)
 
  
 Pressing “0” will return to the original window.  Considering the periodic boundary condition, this would mean the polymer has an infinite molecular weight.  This is not just an artifact of the periodic boundary condition, but rather it is a real effect known as gelation!  Gelation is the formation of this interconnected structure, where the polymer ceases to be a high molecular weight fluid and becomes a solid of infinite molecular weight.  A common household analogy would be that of gelatin, where the dissolved gelatin molecules will cross-link over time to become an increasingly viscous fluid and then suddenly become a solid.
@@ -111,7 +111,7 @@ First, run the free radical chain addition simulation.  The program should look 
 
 
  
-![400px| Free Radical Chain Startup](./Exf5.JPG)
+![400px| Free Radical Chain Startup](<./Exf5.JPG>)
 
 ##Initiators
 Again, set the simulation to run isothermally at 300K.  Then click on the “Number of Molecules” tab on the left to enter:

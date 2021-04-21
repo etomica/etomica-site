@@ -51,13 +51,13 @@ of what a simulation typically looks like after roughly 2000 ps (following the e
 *surfactant head = purple
 
 *surfactant tail = blue
-![](./Config surf2.gif)
+![](<./Config surf2.gif>)
 
 
 
 
 *Density Tab (with surfactants)
-![](./Surf profile.gif)
+![](<./Surf profile.gif>)
 
 
 
@@ -75,7 +75,7 @@ of what a simulation typically looks like after roughly 2000 ps (following the e
 
 
 *Tension Profile
-![](./ST profile.gif)
+![](<./ST profile.gif>)
 
 
 

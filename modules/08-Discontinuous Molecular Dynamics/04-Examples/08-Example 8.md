@@ -100,7 +100,7 @@ Homework: [Problem 2.6](http://rheneas.eng.buffalo.edu/wiki/DMD:Problems:Level_2
  
 In case you are wondering, the curvature in the experimental data at high temperature results from the softness of the interactions between real molecules. The square well model assumes that the repulsive energy is infinite at r < σ, so it cannot characterize this softness accurately. Returning to the truck analogy, slamming a truck into a cliff at Mach 3 might make a non-negligible dent. The square well approximation oversimplifies slightly, but 750K and 611MPa are uncommon conditions. Many applications may be studied with the square well model at more modest conditions.
 
-<td width="20%">![](./DMD Ex8.jpg)
+<td width="20%">![](<./DMD Ex8.jpg>)
 </tr>
 </table>
 ```

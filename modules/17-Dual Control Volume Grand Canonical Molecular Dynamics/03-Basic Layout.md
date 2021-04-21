@@ -4,7 +4,7 @@ When you start up the applet, you should encounter a window that looks something
 
 
 
-![](./DCVGCMD BeginSim001.gif)
+![](<./DCVGCMD BeginSim001.gif>)
 
 
 

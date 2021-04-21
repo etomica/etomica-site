@@ -11,6 +11,6 @@ Set the initial conditions (Any parameter not mentioned should be left at the de
 
 Start the simulation by pushing the start button. The piston should remain stationary. The current density and current temperature should remain constant (and can be verified by viewing the plots and data display boxes) even though the system is adiabatic. The graphs and display boxes should be similar to:
 
-![](./PistonCylinder ig.jpg)
+![](<./PistonCylinder ig.jpg>)
 
 Why does the simulation behave in this manner? Look at the pressure graph and notice that the measured and target pressure do NOT coincide. The target pressure is not relevant when the piston is held fixed. The pressure can be evaluated by looking at the measured value on the graph. It may fluctuate significantly about some average value. You should see no fluctuation in the density, temperature or the target pressure.

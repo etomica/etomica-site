@@ -49,7 +49,7 @@ $$
 which gives the surface coverage as a function of the pressure of gas above the surface, and the equilibrium
 constant.  Several Langmuir isotherms, differing in $K$, are shown in the following plot:
 
-![](./langmuir plot.png)
+![](<./Langmuir plot.png>)
 
 At high $K$, the surface is strongly adsorbent, and the adsorbing gas forms a nearly complete monolayer
 ($\theta = 1$) at low pressures.  At low  $K$, much higher gas pressures are required for the

@@ -4,7 +4,7 @@ Choose a temperature and two different Mu values and start the simulation. Obser
 
 
 
-![](./DCVGCMD EX1.gif)
+![](<./DCVGCMD EX1.gif>)
 
 
 
@@ -14,7 +14,7 @@ Another interesting feature of this simulation is the "Data" tab which appears a
 
 
 
-![](./DCVGCMD EX2.gif)
+![](<./DCVGCMD EX2.gif>)
 
 
 

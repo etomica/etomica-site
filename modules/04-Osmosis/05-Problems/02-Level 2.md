@@ -22,7 +22,7 @@ Membrane Thickness:1
 
 Carefully examine the initial system configuration. Here is one view.
 
-![](./clip image021.jpg)
+![](<./Clip image021.jpg>)
 
 You will notice that the initial configuration mostly consists of ion pairs
 (i.e Na+ and Cl- ions are adjacent to each other.
@@ -30,11 +30,11 @@ You will notice that the initial configuration mostly consists of ion pairs
 Now start the simulation. Let it run for a few ps (check the metrics button). 
 Now re-examine the configuration. You should see very few ion pairs. Here is one possible view
 
-![](./clip image022.jpg)
+![](<./Clip image022.jpg>)
 
 Here is the same simulation a little later
 
-![](./clip image025.jpg)
+![](<./Clip image025.jpg>)
 
 Please note that the Na+ are smaller in size and are more difficult to see, 
 since they are surrounded by the larger water molecules, but if you rotate the
@@ -49,13 +49,13 @@ Set all the parameters to the same values as before but in the configuration mak
 
 Now once again examine the initial configuration. Depending upon your view it should like something like this:
 
-![](./clip image023.jpg)
+![](<./Clip image023.jpg>)
 
 Now start the simulation and let it run for a few ps (at least 4 or more) and then re-examine the configurations.
 
 It would probably look like this.
 
-![](./clip image024.jpg)
+![](<./Clip image024.jpg>)
 
 You should notice a lot more ion pairs (Na+ can Cl- ions adjacent to each other. The question to address is:
 
@@ -90,7 +90,7 @@ state: isothermal = 175 K.
 Run the program till equilibrium is reached. Now examine the density profile only. Did the system undergo
 osmosis or reverse osmosis? 
 
-![](./clip image032.jpg)
+![](<./Clip image032.jpg>)
 
 **Problem 6b: You are only allowed to change one variable from amongst all available to reverse what you observed**
 (e.g. osmosis to reverse osmosis). Which variable will you pick, and explain if this variable in unique in accomplishing such a  switch?

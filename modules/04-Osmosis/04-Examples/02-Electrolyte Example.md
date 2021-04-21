@@ -31,11 +31,11 @@ visually, and using the density profiles, and metrics. You will observe (i) that
 osmosis in the system, i.e. water is going from the solution side to the solvent side; and no solute molecules move from the 
 solution side to the solvent side. This is how the configuration looks like after about 0.8 ps
 
-![](./clip image005.jpg)
+![](<./Clip image005.jpg>)
 
 You can see visually that there are no ions in the solvent section (middle). To confirm this also examine the density profiles
 
-![](./clip image006.jpg)
+![](<./Clip image006.jpg>)
 
 Here is something interesting to think about. Notice that the sodium ions (blue) are certainly much smaller than the water molecules
 shown in the system. Why have no sodium ions moved across the membrane. Is it because the simulation has not long enough to give them
@@ -50,9 +50,9 @@ Solvent Density: 0
 
 This is what you will see for the the configuration and the Density Profiles
 
-![](./clip image007.jpg)
+![](<./Clip image007.jpg>)
 
-![](./clip image008.jpg)
+![](<./Clip image008.jpg>)
 
 Compare these with the previous case. What are your important observations. Is there anything unexpected you have observed?
 

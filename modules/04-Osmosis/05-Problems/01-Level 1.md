@@ -24,11 +24,11 @@ This means that the membrane does not have 100% selectivity;
 
 **Problem 1: Can you tell whether the system is undergoing osmosis or reverse osmosis? and why?**
 
-![](./clip image015.jpg)
+![](<./Clip image015.jpg>)
 
 Now increase the membrane core diameter size till you see observe that no solute molecules cross.
 
-![](./clip image016.jpg)
+![](<./Clip image016.jpg>)
 
 **Problem 2: Compare the osmotic pressure in the two cases. Which is higher and why?**
 
@@ -48,7 +48,7 @@ State: Change to Isothermal 125K
 
 Start the program and wait till it reaches equilibrium. Examine the density profiles till they look symmetric and uniform away from the membrane.
 
-![](./clip image033.jpg)
+![](<./Clip image033.jpg>)
 
 Calculate the osmotic pressure using the ideal solution law (you can calculate densities needed from the density profiles). Compare with the values obtained from the simulator and explain any differences. If you wanted to increase agreement which variables would you change. Run the program with these changes and check if your prediction was correct
 
@@ -65,11 +65,11 @@ State: Isothermal 125K
 Now examine the flux plots and calculate the average flux (by roughly averaging the area under the curve). In continuum fluid mechanics the flux is inversely proportional to thickness of the membrane. Does that
 hold for such nano-systems and such short averaging times?
 
-![](./clip image041.jpg)
+![](<./Clip image041.jpg>)
 
 Thickness: 1
 
-![](./clip image042.jpg)
+![](<./Clip image042.jpg>)
 
 Thickness: 2
 
@@ -79,4 +79,4 @@ For the second case (membrane thickness=2) of Problem 5 the energy profiles look
 (with fluctuations, since this is an isothermal simulation), the total energy and kinetic energy is drifting downwards. Based on your understanding
 of thermodynamics can you explain this trend. Now run the same case adiabatically. Examine the energy history and discuss the differences
 
-![](./clip image043.jpg)
+![](<./Clip image043.jpg>)

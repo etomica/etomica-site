@@ -42,25 +42,25 @@ of what a simulation typically looks like after roughly 2000 ps (following the e
 
 
 
-![](./IT pic4.gif)
+![](<./IT pic4.gif>)
 
 
 
 
 *Density Tab
-![](./VL interface.gif)
+![](<./VL interface.gif>)
 
 
 
 
 *Virial Profile
-![](./Virial.gif)
+![](<./Virial.gif>)
 
 
 
 
 *Tension Profile
-![](./ST profile.gif)
+![](<./ST profile.gif>)
 
 
 

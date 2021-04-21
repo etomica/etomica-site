@@ -2,20 +2,20 @@
 
 Molecular self-assembled monolayers are films made up of long chain organic molecules, essentially alkanes, which spontaneously form on certain solid substrates by immersing the substrate in a solution of an active surfactant in an organic solvent. The organic monolayers formed through self-assembly are usually closely packed and, therefore, have a highly ordered structure [1].
 
-![](./selfassemble 1.jpg)
+![](<./Selfassemble 1.jpg>)
 
 
 
 The self-assembled monolayer in question in this module consists of sulfur-terminated n-alkanes, namely, $CH_3(CH_2)_{n-1}SH$, where n = 15. The head group, viz., SH, is chemisorbed onto a gilded solid surface, the alkane chain consists of methylene, $-CH_2-$, groups, while the free surface (tail group) consists of a methyl group, $-CH_3$.
 
 
-![](./selfassemble 2.jpg)
+![](<./Selfassemble 2.jpg>)
 
 
 
 The simplest $CH_3(CH_2)_{n-1}$ (n = 15)/gold(111) SAM consists of a commensurate $(\sqrt{3}\times \sqrt{3})R30^{\circ}$ overlayer structure with one alkanethiol chain in the two-dimensional unit cell, according to electron diffraction results [2].
 
-![](./selfassemble 3.jpg)
+![](<./Selfassemble 3.jpg>)
 
 large circles: gold atoms; small circles: locations of SH groups
 

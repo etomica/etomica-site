@@ -27,9 +27,9 @@ Recall what the results were in that case. Now change the Solute to a charge of 
 
 Start the program again. Is this what you observe after a few ps.
 
-![](./clip image010.jpg)
+![](<./Clip image010.jpg>)
 
-![](./clip image011.jpg)
+![](<./Clip image011.jpg>)
 
 Is this what you see for the density profile. and the configuration?
 
@@ -57,7 +57,7 @@ solute mole fraction: 0.2
 
 state: isothermal: 175 K.
 
-![](./clip image031.jpg)
+![](<./Clip image031.jpg>)
 
 Do the two agree in this case (you should let the program run till the error bar is about 10%.
 
