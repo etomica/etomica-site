@@ -1,5 +1,6 @@
 const remarkMath = require('remark-math')
 const rehypeKatex = require('rehype-katex')
+const remarkFootnotes = require('remark-footnotes')
 
 module.exports = {
   title: 'Etomica',
@@ -109,7 +110,7 @@ module.exports = {
         path: 'modules',
         routeBasePath: 'modules',
         sidebarPath: require.resolve('./sidebarsModules.js'),
-        remarkPlugins: [remarkMath],
+        remarkPlugins: [remarkMath, remarkFootnotes],
         rehypePlugins: [rehypeKatex],
       }
     ]
