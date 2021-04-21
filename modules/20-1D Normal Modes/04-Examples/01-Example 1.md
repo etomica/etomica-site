@@ -1,0 +1,3 @@
+
+
+In the “Equation Adjustment” Panel, modify the cosine amplitude box from 1.0 to 2.0 (remember to press enter). Bring up the Displacement Transform Pane by clicking on its tab and turn off the transform by deselecting the Displacement Transform checkbox. Press Update. You should now see very nice, clean waves. This represents the displacements of the atoms found in the Simulation tab. Select the displacement transform checkbox and note the 2 main non-zero values. There are only 2 because the wave is harmonic and only one wave equation has a non-zero amplitude. Go to the Simulation Pane and note the motion of the wave – similar to a slow slinky spring, contracting and expanding to produce later waves.

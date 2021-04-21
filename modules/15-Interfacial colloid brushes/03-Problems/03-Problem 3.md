@@ -1,0 +1,3 @@
+
+
+Repeat Problem 2, but changing &epsilon;<sub>MonMon</sub> above 0.1 k<sub>B</sub>T. When entropy dictates the properties of the system, as the length of the grafted chains increases the probability of colloid adsorption decreases (Problem 2). When enthalpy dictates the behavior of the system, the opposite trend is observed (Problem 1). At what point do you observe a transition from the two regimes just summarized?

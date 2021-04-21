@@ -1,0 +1,25 @@
+
+
+##Basic dynamic behavior
+
+The physical model underlying the piston-cylinder apparatus is very simple, and follows the most elementary laws of mechanics. The interesting feature of the simulation is the way that it shows how the more abstract thermodynamic behavior arises from the "statistical mechanics" of the collective molecular motions.
+
+The cylinder contains spherical molecules that bounce off one another and the walls of the apparatus. There are three types of collisions that arise
+
+1. Molecule-molecule collisions. Collisions between molecules are completely elastic, and they proceed in a way that always conserves the total energy and momentum of the colliding pair.
+1. Molecule-cylinder collisions. The cylinder walls are immobile, and collisions of the spheres with them reverses the molecules trajectory in the direction perpendicular to the wall. It is just like a billiard ball bouncing off a wall. Energy is conserved, but momentum is not.
+1. Molecule-piston collisions. The piston is a movable wall that that can acquire and give up momentum in its collisions with the molecules. Molecule-piston collisions conserve energy and momentum. 
+
+The piston moves under the influence of a constant downward force, so it tends to accelerate downward in the absence of any collisions with the molecules. The continual collision of the molecules with the piston tends to reverse motion, pushing it back up. The piston position fluctuates up and down as the molecules patter it with collisions. The magnitude of the imposed force varies directly with the selected value of the external pressure. If the force (pressure) is greater, the piston accelerates more, and consequently a larger number of collisions is required to slow it down. The number of collisions increases only as the volume decreases, so in increasing the pressure, the piston position moves downward until the rate of collisions with it is the right amount to offset its motion.
+
+##Adiabatic and isothermal behavior
+
+The model may be set so the the system of molecules behaves as an isothermal or as an adiabatic system. In the adiabatic case, there is no energy transferred as heat between the molecules to the surroundings. The molecules move and collide according to the basic laws of mechanics, as described above. For isothermal behavior, the molecules gain and lose energy via heat transfer to the surroundings. In a real system this happens when the molecules collide with the walls, causing the molecules forming the walls to speed up or slow down. We don't employ such a detailed model here. Instead, we mimic heat transfer by artifically speeding up or slowing down all the molecules at once, intermittently during the simulation, in such a way that they keep an average velocity consistent with the imposed temperature.
+
+##Molecular models
+
+Three models are available to describe the way that the molecules interact with each other. With the ideal-gas model, the molecules have no interaction at all. They do not collide, but instead can pass right through each other. They do of course undergo collisions with the piston and the cylinder, as described above. However, since the molecules do not collide with each other, they have no way to equilibrate, or to transfer momentum between their x- and y-directed motions. The absence of such coupling of their motion can give rise to anomalous behavior, and cause misleading results. To offset this problem, we artifically couple motion in the x and y directions through the wall collisions. When a molecule collides with a cylinder wall, it doesn't undergo completely realistic dynamics. Instead the total kinetic energy is distributed in a random fashion between the x- and y-directions of motion. If the molecule were to go upwards after the collision, it will still go upwards, but it may be with an upward speed that would be given by a simple collision. This feature is not as unrealistic as it might at first sound. One can regard this random element as a way to model the randomness arising in the molecule's collision with the atoms of the cylinder walls. Although motivated by the need to obtain correct ideal-gas behavior, this modeling feature is in effect for all the molecular models.
+
+The second model is one that introduces purely repuslive interactions between the molecules: the molecules only repel each other, and they have nothing that makes them want to stick together. The molecules bounce off each other just as though they were little marbles, or billiard balls.
+
+The third model keeps the repulsion part and adds molecular attractions. The molecules want to stick together, and will do so if the thermal energy (i.e., the temperature) is sufficiently small. These molecules are capable of condensing, and forming something resembling a liquid phase (there are too few of them in the system to get realistic liquid behavior).

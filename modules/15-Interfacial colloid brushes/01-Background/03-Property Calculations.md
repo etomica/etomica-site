@@ -1,0 +1,13 @@
+
+
+The main objective of this module is to assess the probability of adsorption of the colloidal brush onto the attractive wall. This probability is calculated via the density distribution for the center of the colloid within the simulation box. The density distribution is only calculated along the Z direction because of symmetric reasons (data along the X and Y directions are identical). The results show that the colloid is repelled from the repulsive wall, as indicated by a depletion found in the density profile near that wall. Under appropriate conditions, the colloid will adsorb on the attractive wall. When this happens, the probability density near the attractive wall will be much larger than that at the center of the simulation box. The ratio between these two values will identify the likelihood of adsorption. The larger the ratio is, the more likely it is that the colloid adsorbs on the wall.
+
+To understand the role played by the grated polymer chains, the module also calculates the probability density distribution for the polymer segments. It is expected that upon colloid adsorption the polymer segments will also accumulate near the attractive wall, while when the colloid does not adsorb the polymer segments will not adsorb either.
+
+----
+
+To rationalize the results in terms of enthalpy and entropy, it should be remembered, as mentioned in the introductory material, that when either the colloid or one polymer segment adsorbs onto the attractive wall there is a gain in system enthalpy. However, when this gain occurs simultaneously with a decrease in the number of possible system configurations, with the related entropic penalty. A balance between these two effects will determine the equilibrium properties of the simulated system. It is worth repeating that the scope of this module is to demonstrate that small changes in solvent conditions for the grafted polymer chains, shown by εMonMon, determine the adsorption of the colloidal.
+
+----
+
+To estimate the solvent conditions, this module calculates the average radius of gyration squared and the end-to-end distance for the grafted side chains. By calculating these quantities as a function of the length of the grafted chains, ideally within a very large simulation box so that the colloidal brushes do not interact with the surfaces, one can assess whether the grafted chains are under good or poor solvent conditions. At the ‘theta’ solvent conditions the radius of gyration squared of a polymer chain scales linearly with the polymer length, as for example shown by Dautenhahn and Hall.[31] At good and poor solvent conditions the radius of gyration increases more or less rapidly, respectively.

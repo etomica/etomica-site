@@ -1,0 +1,8 @@
+
+
+= The Role of the Temperature in the Repulsion Only Case =
+
+The discussion of the Z factors suggests an interesting possibility for simplifying the analysis of P, $\rho$, T, and the resulting model equations.  A well-known result is that Zid = 1.  The simplification here is that Zid does not vary with temperature or density.  What about Zrep?  Clearly, Zrep must vary with density, because it approaches infinity when the density approaches its close packed value.  This observation means that P and ρ cannot be proportional under all conditions.  On the other hand, it may be possible that an increase in temperature would give rise to a proportional rise in pressure.  After all, temperature simply makes the molecules move faster and Eq.  shows that the change in velocity may cancel with the change in temperature.  What experiment and analysis can we perform to prove or disprove this possibility?  
+
+## Solution 
+If we raise the temperature and simulate the new value of pressure at $\rho =1.993E-6$, we can compute the new value of Z and compare it to the value at 300K in Ex. 5b.  Select the “Isothermal” button, then move the temperature slider to 400K.  You can fine tune it using the left and right arrow buttons on your keyboard.  Then switch back to adiabatic mode.  Running the simulation for about 5 seconds gives P=92.18±0.13 and Z = 1.391±0.0014 compared to 1.388±0.0011.  These are very close, but they do not agree perfectly.  To get a more definite result, we should perform more simulations at more densities.  (As a matter of fact, it does turn out that Zrep is only a function of density.)

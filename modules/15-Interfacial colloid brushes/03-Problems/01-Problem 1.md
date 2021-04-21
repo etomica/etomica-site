@@ -1,0 +1,3 @@
+
+
+Set &epsilon;<sub>MonMon</sub> equal to 1.0 k<sub>B</sub>T, and the reduced temperature to 2.0. Set the number of grated polymer chains to 8, and the size of the simulation box to 35. Maintain all other parameters to their default values. Conduct a number of simulations in which the length of the grafted chains increases from 5 to 10, 15, 25, 35, and 45. Plot the ratio between the probability density for the colloid at contact with the attractive wall to that observed in the center of the simulation box as a function of the length of the grafted chains. Discuss the results. Does the probability of observing the colloid adsorbed on the surface increase or decrease as the length of the grafted polymer chains increases? Did you expect this result? Why?
