@@ -1,6 +1,6 @@
 
 
-##BET analysis
+## BET analysis
 In this problem, you will determine how well the BET model describes our simple adsorbate system.
 
 1.  Obtain isotherms up to $P/P_0$ at both T=0.90 and T=1.0 for $\epsilon = 5.0$ 

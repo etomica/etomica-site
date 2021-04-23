@@ -4,7 +4,7 @@
 
 ![](<./Clip image002.jpg>)
 
-##System Key
+## System Key
 
 **White Molecules**:  Membrane Molecules tethered to their equilibrium site with a spherical harmonic potential (spring constant K – see later)
 
@@ -12,7 +12,7 @@
 
 **Red Molecules**: Solute Molecules.
 
-##Variable Manipulation
+## Variable Manipulation
 
 **State Tab**: Allows temperature to be fixed. Simulation can then be run either with energy fixed, or temperature fixed.
 
@@ -20,7 +20,7 @@
 
 **Configuration Tab:**  Allows solution density (left of the left membrane, and right of the right membrane), solvent density (between the two membranes) and solute mole fraction in solution to be fixed.
 
-##Results
+## Results
 
 **Configuration Tab:**  The default display – shows the position of the molecules and their time evolution.
 
@@ -39,7 +39,7 @@ within the usual fluctuations of small systems, away from the membrane. The peak
 
 ![](<./Clip image001.jpg>)
 
-##System Key
+## System Key
 
 **Blue Molecules:**  Membrane Molecules tethered to their equilibrium site with a spherical harmonic potential (spring constant K – see later)
 
@@ -49,7 +49,7 @@ within the usual fluctuations of small systems, away from the membrane. The peak
 
 **Blue:** Na+ ions
  
-##Variable Manipulation
+## Variable Manipulation
 (Parts not present in Lennard-Jones module)
 
 **Solute Button:** Allows charge in e units on the solute molecules to be adjusted (note that the number of positive and negative ions is equal, so the charge of both ions will change)

@@ -71,7 +71,7 @@ $
 
 Because $H(\theta)$ is given in terms of $r(\theta)$ and its derivatives by equation (3), this is actually a second-order ODE for the interfacial profile. 
 
-##Dimensionless ODE for the drop profile
+## Dimensionless ODE for the drop profile
 
 For reasons that will become evident later, we shall make distances dimensionless with respect to the equivalent radius $a$  of a spherical drop that has twice the volume $V$ of the sessile drop in question,
 
@@ -148,7 +148,7 @@ $
 \Big[ \hat{h} \, - \, \hat{r}(\theta) \sin\theta \Big]
 $
 
-##Axisymmetric drop shapes
+## Axisymmetric drop shapes
 
 Without getting too bogged down in mathematical details, we can now explain in general terms how to find the shape of a sessile drop. If we know the volume $V$ of the drop, we can find its equivalent radius $a$ from equation (6) and subsequently the Bond number from equation (9). The ODE (12) is not yet specified because it contains two shape parameters from the solution (height $\hat{h}$ and radius of curvature $\hat{b}$ at the apex) ) which we are trying to solve for. What to do? Well, we still have to satisfy two additional conditions. (i) The contact angle $\alpha$ that the interfacial curve makes with the horizontal wall is a physical property of the wall and two fluids. Setting this angle gives us a boundary condition at $\theta = 0$. (ii) The volume enclosed by revolving the interfacial profile around the axis should match the dimensionless volume $\hat{V}$ of the drop. 
 
@@ -159,7 +159,7 @@ $\hat{r}(\pi/2) = \hat{h}$ and slope $\hat{r}^{\prime}(\pi/2) = 0$, we integrate
 
 The three-dimensional drop shape is given by revolving this profile around the $z$ axis. All of these calculations can be programmed in a numerical algorithm. In fact, such capillarity calculations are carried out automatically by a pocket goniometer to determine the contact image from the digitized image of a tiny drop. Try a Google search on the keywords “pocket” and “goniometer”, and you will see that these instruments literally fit inside a pant pocket! They are used to characterize wetting interactions between solid surfaces and liquids.
 
-##Universal deformation curve
+## Universal deformation curve
 
 Gravity acts to flatten the drop against the horizontal surface, thereby reducing the gravitational potential energy but also increasing the total interfacial area energy penalty. On the other hand, interfacial tension acts to reduce the interfacial area, which requires a rounder shape that lifts higher off the surface and has greater a gravitational potential. The balance between gravity and interfacial tension (represented by the Bond number) determines the shape of the drop. For a contact angle of exactly 90 degrees, the drop shapes for various values of the Bond number are shown above. The degree to which the drop is flattened out is quantified by a deformation parameter. 
 

@@ -54,7 +54,7 @@ For example, the red blood cell in the blood plasma retains its shape because of
 
 **3.**If the **water concentration** inside the cell is **higher** then that of the medium (i.e. the medium is a **hypertonic** solution) the number of water molecules diffusing out will be more than that entering and the cell will **shrink** and shrivel due to osmosis.
 
-##Effects of osmosis in plant cells
+## Effects of osmosis in plant cells
 
 Plant cells are enclosed by a rigid cell wall. When the plant cell is placed in a hypotonic solution , it takes up water by osmosis and starts to swell, but the cell wall prevents it from bursting. The plant cell is said to have become **"turgid"** i.e. swollen and hard. The pressure inside the cell rises until this internal pressure is equal to the pressure outside. This liquid or hydrostatic pressure called the turgor pressure prevents further net intake of water . Turgidity is very important to plants as it helps in the maintenance of rigidity and stability of plant tissue and as each cell exerts a **turgor pressure** on its neighbor adding up to plant tissue tension which allows the green parts of the plant to "stand up" into the sunlight.
 
@@ -62,19 +62,19 @@ When a plant cell is placed in a hypertonic solution , the water from inside the
 
 When a plant cell is placed in an isotonic solution, a phenomenon called **incipient plasmolysis** is said to occur. "Incipient" means "about to be". Although the cell is not plasmolsysed, it is not turgid. When this happens the green parts of the plant droop and are unable to hold the leaves up into the sunlight.
 
-##Effects of osmosis in animal cells
+## Effects of osmosis in animal cells
 
 Animal cells do not have cell walls. In hypotonic solutions, animal cells swell up and explode as they cannot become turgid because there is no cell wall to prevent the cell from bursting. When the cell is in danger of bursting, organelles called contractile vacuoles will pump water out of the cell to prevent this. In hypertonic solutions, water diffuses out of the cell due to osmosis and the cell shrinks. Thus, the animal cell has always to be surrounded by an isotonic solution. In the human body, the kidneys provide the necessary regulatory mechanism for the blood plasma and the concentration of water and salt removed from the blood by the kidneys is controlled by a part of the brain called the hypothalamus. The process of regulating the concentration of water and mineral salts in the blood is called **osmoregulation** Animals which live on dry land must conserve water and so must animals which live in the salty sea water, but animals which live in freshwater have the opposite problem; they must get rid of excess water as fast as it gets into their bodies by osmosis.
 
 ![](<./Osmosis Animal.jpg>)
 
-##Dialysis
+## Dialysis
 
 In a multi-component system, dialysis is a process by which only certain compounds including both the solvent molecules and small solute molecules are able to pass through the selectively permeable dialysis membrane but other larger components such as large colloidal molecules like proteins cannot pass through pores in the dialysis membranes . Dialysis can therefore be used for separation of proteins from small ions and molecules and hence is used for purification of proteins required for laboratory experiments. Examples of membranes through which dialysis occurs are animal bladders, parchment and cellophane (cellulose acetate).
 
 The most important medical application of dialysis is in dialysis machines, where hemodialysis is used in the purification of blood from patients suffering from renal malfunction. Blood from the patient is circulated through a long cellophane dialysis tube suspended in an isotonic solution called the dialysate which is an electrolyte solution containing the normal constituents of blood plasma. The toxic end products of nitrogen metabolism such as urea from the blood pass through the dialysis membrane where they are removed while cells, proteins and other blood components are prevented by their size from passing through the membrane. Also, the dialysate concentration can be controlled so that salt , water and acid-base imbalances in electrolytes are corrected. Purified blood is then returned to the body.
 
-##Reverse Osmosis
+## Reverse Osmosis
 
 Reverse osmosis is the process by which the liquid solvent moves across the semi-permeable membrane against its concentration gradient , i.e. , from high solvent concentration to low solvent concentration in the presence of externally applied pressure on the solution. This pressure must be larger than the osmotic pressure, so in general reverse osmosis can be energy intensive. The process of reverse osmosis requires this driving force to push the fluid through the membrane (which is again attempting to ensure that the chemical potential of the solvent on both sides becomes equal as required by equilibrium thermodynamics), and the most common force is pressure from a pump. The higher the pressure, the larger the net driving force. As the concentration of the fluid being rejected increases, the driving force required to continue concentrating the fluid increases (since the osmotic pressure increases with higher concentrations).
 
@@ -147,7 +147,7 @@ So, $\pi = \frac{RT}{\overline{V_A}}x_B$
 
 # Background Material
 
-##Books (Molecular Simulations and Reverse Osmosis)
+## Books (Molecular Simulations and Reverse Osmosis)
 
 M. P. Allen,and D. J. Tildesley,  Computer Simulation of Liquids. Oxford: Clarendon Press, 1987.
 
@@ -155,7 +155,7 @@ J. M. Haile. Molecular dynamics: Elementary methods. New York: Wiley, 1992.
 
 S. Sourirajan. Reverse Osmosis. New York: Academic Press, 1970.
 
-##Papers (Algorithm)
+## Papers (Algorithm)
 
 S. Murad, J. G. Powles. A computer simulation of the classic experiment on osmosis and osmotic pressure. J. Chem. Phys. 99: 7271, 1993.
 

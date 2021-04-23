@@ -1,6 +1,6 @@
 
 
-##Adsorption from mixtures
+## Adsorption from mixtures
 In this problem, you will investigate the selective adsorption of one component of a
 mixture on the surface.  
 

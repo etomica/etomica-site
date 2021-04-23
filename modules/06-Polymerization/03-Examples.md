@@ -1,7 +1,7 @@
 
 
 = Step-wise Growth Simulation Example =
-##Importance of Stoichiometry
+## Importance of Stoichiometry
 First, run the stepwise growth simulation.  The program should look like this after opening: 
 
 
@@ -113,7 +113,7 @@ First, run the free radical chain addition simulation.  The program should look 
  
 ![400px| Free Radical Chain Startup](<./Exf5.JPG>)
 
-##Initiators
+## Initiators
 Again, set the simulation to run isothermally at 300K.  Then click on the “Number of Molecules” tab on the left to enter:
 
 * Initiator: 20
@@ -129,7 +129,7 @@ The first energy is the energy that holds the initiator together, the second ene
 
 Start the simulation.  Note each of pair of blue dots represent one initiator.  Over time, the thermal energy will overcome the bonding energy of the initiator, splitting the initiator into two free radical species (shown in green).  This will occur more often if the bonding energy is lower, or if the temperature is higher.  Hence, a common strategy for initializing polymerization reactions is to mix the polymer with the initiator, then heat the mixture to activate the free radicals when the engineer wishes to begin polymerization.
 
-##Initiator to Monomer Ratio 
+## Initiator to Monomer Ratio 
 Now, set the simulation to run isothermally at 300K.  Then click on the “Number of Molecules” tab on the left to enter:
 
 * Initiator: 50
@@ -145,7 +145,7 @@ Next, click on the “Reaction Energy” tab and set the following reaction ener
 
 Setting the initiator bonding energy to 0 will allow for instant disassociation of the initiator, speed up the polymerization, and make some of the results more repeatable.  Set the fraction heat transfer to solvent to 1.000 and the combination probability to 0.000.  At high conversions, the number-average molecular weight should be near 5, because this value can be calculated by dividing the number of monomers (500) by the number of free radical initiators (50 x 2).  The number found in the simulation may be slightly higher, since not all of the initiators may have formed growing chains.  Again, if the same simulation is run with a combination probability of 1, then the number average molecular weight should approximately double to 10.  Note that increasing the amount of initiator should increase the rate of conversion, but every time the amount of initiator is doubled, the resultant molecular weight is cut in half.
 
-##Note on Temperature Effects
+## Note on Temperature Effects
 
 Polymers made from free radical chain addition are also vulnerable to thermal degradation, but the depolymerization reactions are not allowed in this model.  However, under adiabatic conditions, this type of reaction is similarly auto-accelerating.  One positive thermal feedback loop is that the heat of reaction causes faster movement of molecules, allowing for faster reactions.  In addition, this increased heat will allow more initiators to split to form free radicals which will form more propagating chains, which will generate more heat.  Further polymerization makes the solution more viscous and unable to dissipate heat, which exacerbates the temperature rise.  This increase in viscosity can also reduce the rate of termination in what is known as the “gel effect.”  This auto-acceleration is also known as the Trommsdorf effect, which is important safety issue, since the temperature rise in the presence of monomer or solvent could result in an explosion.
 

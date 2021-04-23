@@ -52,7 +52,7 @@ $lnP^*=A+\frac{B}{T^*}$ &nbsp; &nbsp; &nbsp; &nbsp; Equation (16)
 
 **(e)** The width of the interface tends to increase as the temperature of the system increases.  *Plot the interfacial width as a function of the temperature.*  At the higher temperatures, you may need to experiment with larger simulation sizes, since the larger interfacial widths may not be accommodated with the default simulation size.
 
-##Level 2
+## Level 2
 
 **(a)** Compare your simulated results from above (coexisting densities, critical point data, and vapor pressures) with some benchmark calculations in the literature.  If your agreement with the literature data is not good, speculate why there are differences.  Also, if there are any differences among the data reported in the literature citations, which data sets do you believe are most reliable, and why?  You can find the necessary literature data in the following articles [[8]](Interfacial_tension/References#ref_rio),[[9]](Interfacial_tension/References#ref_orea),[[10]](Interfacial_tension/References#ref_vega):
 

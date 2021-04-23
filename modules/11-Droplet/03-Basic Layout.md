@@ -8,17 +8,17 @@ You can change the angle of view by pushing the left mouse button while the mous
 
 ![](./BL03.jpg)
 
-##System key
+## System key
 
 **Blue atoms:** Vapor phase.
 
 **Red atoms:** Liquid phase.
 
-##Variable manipulation
+## Variable manipulation
 
 ***Squeezing force*** **slider:** Adjusts the strength of the opposing gravitational fields (units of Angstroms per square picosecond).
 
-##Results
+## Results
 
 ***Configuration*** **tab:** The default display - shows the positions of all atoms and their time evolution.
 
@@ -28,7 +28,7 @@ You can change the angle of view by pushing the left mouse button while the mous
 
 ***Radius*** **tab:** Shows the equivalent radius of the droplet plotted cumulatively as a function of time. A sphere of this radius has the same volume as the spheroidal shape fitted in the ***Deformation*** tab.
 
-##Control buttons
+## Control buttons
 
 ***Start*** **button:** Launches the simulation.
 
@@ -46,13 +46,13 @@ You can change the angle of view by pushing the left mouse button while the mous
 
 ![](./BL05.jpg)
 
-##System key
+## System key
 
 **Red particles:** Surface particles.
 
 **Green particles:** Interior particles.
 
-##Controls (Variable Manipulation)
+## Controls (Variable Manipulation)
 
 ***Controls*** **tab:** This is the starting (default) view. Clicking here brings the **time step** slider to the foreground for adjustment.
 
@@ -76,7 +76,7 @@ You can change the angle of view by pushing the left mouse button while the mous
 
 ![](./BL07.jpg)
 
-##Results
+## Results
 
 ***Configuration*** **tab:** The default display - shows the positions of all particles and their time evolution.
 
@@ -84,7 +84,7 @@ You can change the angle of view by pushing the left mouse button while the mous
 
 ***Deformation*** **tab:** Shows the deformation parameter $D$ (of a spheroid fitted to the coordinates of all liquid atoms) plotted cumulatively as a function of time. $D = 0$ for an undeformed sphere. $D > 0$ for a prolate (rod-like) deformation. $D < 0$ for an oblate (disc-like) deformation.
 
-##Control buttons
+## Control buttons
 
 ***Start*** **button:** Launches the simulation.
 
