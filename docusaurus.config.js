@@ -21,6 +21,9 @@ module.exports = {
     },
   ],
   themeConfig: {
+    prism: {
+      theme: require('./src/darcula'),
+    },
     navbar: {
       title: 'Etomica',
       logo: {
@@ -72,7 +75,7 @@ module.exports = {
           ],
         },
       ],
-      // copyright: `Copyright © ${new Date().getFullYear()} Etomica. Built with Docusaurus.`,
+      copyright: `<small><i>Etomica is dedicated to the memory of Bryan Mihalick.</i> <br> Copyright © ${new Date().getFullYear()} Etomica. Built with Docusaurus.</small>`,
     },
     hideableSidebar: true,
   },

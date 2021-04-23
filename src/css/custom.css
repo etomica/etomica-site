@@ -14,7 +14,7 @@
   --ifm-color-primary-light: #105acd;
   --ifm-color-primary-lighter: #115ed6;
   --ifm-color-primary-lightest: #196cec;
-  --ifm-code-font-size: 95%;
+  --ifm-code-font-size: 90%;
 
   --ifm-navbar-height: 70px;
 
@@ -23,7 +23,8 @@
 }
 
 html[data-theme='dark'] {
-  --ifm-background-color: #212529;
+  --ifm-background-color: #1e2125;
+  --ifm-background-surface-color: #121212;
 }
 
 .navbar__brand {
