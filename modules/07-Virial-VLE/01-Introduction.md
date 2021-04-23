@@ -1,3 +1,6 @@
+---
+slug: ./
+---
 
 
 The Virial-VLE module consists of two parts.
@@ -35,5 +38,3 @@ about molecular structure and intermolecular interactions and relates it to the 
 encountered in the laboratory.
 This module is applicable to thermodynamics and statistical mechanics courses at both the undergraduate
 and graduate levels.
-
-[Run the simulation](VirialVLE/Simulator)

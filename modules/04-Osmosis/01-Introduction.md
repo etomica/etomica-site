@@ -1,4 +1,6 @@
-
+---
+slug: ./
+---
 
 This module presents an interactive molecular simulation, which can be used to study the process of osmosis and reverse osmosis. Osmosis is very important in biological systems and has other important uses too as is explained in the section titled "Background". Reverse osmosis is widely used in water purification (desalination of sea water), and in other industrial applications requiring water purification or removal of contaminants from a wide range of solvents. The osmometer is used to measure the osmotic pressure. This module illustrates the governing principles of osmosis and reverse osmosis. In addition solution chemistry plays an important role in both osmosis and reverse osmosis and in the water module, the important role of solution chemistry is also examined. 
 
@@ -7,5 +9,3 @@ The simulated apparatus is in effect an osmometer, which is a container holding 
 S. Murad and J. G. Powles, "A Computer Simulation of the Classic Experiment on Osmosis and Osmotic Pressure", Journal of Chemical Physics, 99, 7271-2 (1993).
 
 J. Lin and S. Murad, "A Computer Simulation Study of the Separation of Aqueous Solutions Using Thin Zeolite Membranes", Molecular Physics, 99, 1175-81 (2001).
-
-[Run the simulation](Osmosis/Simulator)

@@ -6,11 +6,11 @@ $$
 \theta \simeq KP_A
 $$
 
-where K is the equilibrium constant for the adsorption process ([Langmuir](Adsorption/Langmuir)).
+where K is the equilibrium constant for the adsorption process ([Langmuir](../Background/Langmuir)).
 
 1. For $\epsilon = 7.5$, at each of T = 0.9, 1.0 and 1.1, use simulations to determine 
 the pressure range over which the adsorption isotherm is linear, and measure its slope.  (Hint: at T=1.0, this
-is the same problem as done in [Example 1](Adsorption/Example_1).
+is the same problem as done in [Example 1](<../Examples/Example 1>).
 
 2. From these data, you should be able to determine the standard molar enthalpy and entropy of adsorption
 at low coverage, using the van't Hoff equation:

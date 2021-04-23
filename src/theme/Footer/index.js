@@ -38,6 +38,25 @@ const FooterLogo = ({
   alt
 }) => <img className="footer__logo" alt={alt} src={url} />;
 
+const supportedText = `
+This material is based on work supported by the National Science Foundation and performed in the 
+Chemical & Biological Engineering Department of the University at Buffalo.
+`
+
+const FooterOrgsCol = () => {
+  return (
+    <div className={`col footer__col ${styles.orgsImageCol}`}>
+      <img src={useBaseUrl('/img/nsf_logo.png')} className={styles.orgsImage} style={{ height: '100px' }}></img>
+      <img src={useBaseUrl('/img/ub_logo.png')} className={styles.orgsImage} style={{ width: '128px' }}></img>
+      <p>
+        <small>
+          {supportedText}
+        </small>
+      </p>
+    </div>
+  )
+}
+
 function Footer() {
   const {
     footer
@@ -70,6 +89,9 @@ function Footer() {
                         </li>)}
                   </ul> : null}
               </div>)}
+            
+            <FooterOrgsCol/>
+
           </div>}
         {(logo || copyright) && <div className="footer__bottom text--center">
             {logo && logo.src && <div className="margin-bottom--sm">

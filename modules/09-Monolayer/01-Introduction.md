@@ -1,3 +1,6 @@
+---
+slug: ./
+---
 
 
 One of the goals of nanoscale science and technology is the understanding of structure-property relationships of nanometer scale structures and devices. More often than not, this is not an easy task. Therefore, it is critical for nanotechnology to develop reliable simulation modules to guide in the design of nanoscale systems, the prediction of properties not easily accessible to current laboratory experiments, and the interpretation of experimental data. This module serves as a useful simulation tool directed at demonstrating important observable (macroscopic) mechanical properties of technologically important self-assembled monolayers (SAMs). The physical model is based on information about phenomena taking place at the molecular level, e.g., packing and ordering of the SAM assembly, and how these properties relate to the molecular features in SAMs. 
@@ -5,8 +8,3 @@ One of the goals of nanoscale science and technology is the understanding of str
 The material system consists of 16 two-dimensional self-assembled molecules (or chains) of alkanethiols $CH_3(CH_2)_{n-1}SH$, where n = 15 is the number of carbon atoms along the alkyl chain backbone, adsorbed onto a gold (Au) substrate. The molecular basis of stress and strain is illustrated through changes in the potential energy surface due to an external perturbation, viz., compressive load. Molecular dynamics has been used to simulate the self-assembled monolayer under zero-stress and under an external load by a flat surface (wall). Module changeable parameters include the type of corrugation potential (harmonic or sinusoidal), configurations of the molecules, number of molecules (1, 2 or 4) per unit cell, and temperature. Data that can be obtained from the module are numerous and include conformation and configuration parameters of the assembling molecules, total energy during loading, tilt angle of the loaded molecules, total force, displacement, etc. Numerous plots are generated and include energy versus time and molecule tilt angle versus time, energy versus tilt, and energy versus strain. The Young modulus and toughness of the organic assembly can be derived and their respective sensitivity to various parameters can be assessed. The results of the simulation can also be compared with data from atomic force microscopy/interfacial force microscopy (AFM/IFM) measurements.
 
 The module can be used as a supplement in materials science and engineering courses to illustrate the molecular basis of stress and strain and the dependence of the latter on molecular packing and assembly. The module is targeted at undergraduate students, graduate students, and instructors in chemical engineering, chemistry, and physics, where molecular science is becoming increasingly grounded in the respective curricula.
-
-----
-
-
-[Run the simulation](Monolayer/Simulator)

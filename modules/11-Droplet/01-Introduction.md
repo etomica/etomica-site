@@ -1,3 +1,6 @@
+---
+slug: ./
+---
 
 
 A previous Etomica module ([Interfacial Tension](http://rheneas.eng.buffalo.edu/wiki/Interfacial_tension)) presented the molecular basis for surface tension of a planar interface between coexisting liquid and vapor phases. This module extends the discussion to curvature of the surface of a liquid drop, and also to liquid-liquid interfacial tension. Interfacial tension   (force per unit length) can be interpreted equivalently in units of an energetic penalty per unit interfacial area. With reference to the spherical reference shape that minimizes the surface area for a given volume of liquid contained inside, we will explore two consequences of this contractile tendency of the interface. 
@@ -18,6 +21,3 @@ The Atomistic simulation allows you to subject the droplet to a steady squeezing
 : 1.) Axisymmetric drop shape analysis (ADSA) as an indirect mathematical way of deducing interfacial tension  without measuring forces directly. The shape of a drop is characterized by a dimensionless deformation parameter whose quantitative value (in the presence of static forces) or time trace (under the action of viscous flow) allows  to be calculated. You will distinguish between prolate (rod-like) and oblate (disc-like) deformations.
 
 : 2.) Dimensional analysis whereby continuum capillarity theory and Stokes flow can be suitable rescaled in both space and time for comparison with atomistic simulations for drops on the nanometer scale. You will see that continuum theory works unexpectedly well even at molecular scales.
-
-
-[Run the simulation](Droplet/Simulator)

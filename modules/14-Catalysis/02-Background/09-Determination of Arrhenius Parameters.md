@@ -18,6 +18,8 @@ Plotting ln(*k*) versus 1/T according to equation (7) above yields the following
 
 ![](./Fogler-Chap3-Arrhenius.gif)
 
-(Figure taken from [http://www.engin.umich.edu/~cre/course/lectures/three/pics/lec5-26.gif,](http://www.engin.umich.edu/~cre/course/lectures/three/pics/lec5-26.gif,) *Elements of Chemical Reaction Engineering* by [Fogler](Catalysis/References).)
+(Figure taken from [http://www.engin.umich.edu/~cre/course/lectures/three/pics/lec5-26.gif,](http://www.engin.umich.edu/~cre/course/lectures/three/pics/lec5-26.gif,) *Elements of Chemical Reaction Engineering* by Fogler [^1])
 
 From this type of plot, *A* is equal to the intercept and *E<sub>a</sub>* is equal to the $-R\times(slope)$
+
+[^1]: Fogler, H. S., *Elements of Chemical Reaction Engineering*, 4th Edition, Prentice-Hall, Inc., Englewood Cliffs (2005).

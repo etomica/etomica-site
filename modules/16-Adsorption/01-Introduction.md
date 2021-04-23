@@ -1,3 +1,6 @@
+---
+slug: ./
+---
 
 
 Gas molecules may adhere, or *adsorb* to a surface in different ways. If the attractive forces between the molecules and surface are largely non-bonding interactions such as van der Waals forces or hydrogen bonds, the process is called *physisorption*, while if chemical bonds are formed between the molecules and the surface it is called *chemisorption.*

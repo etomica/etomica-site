@@ -4,7 +4,7 @@ Desorption is the reverse of adsorption, where adsorbed complexes dissociate, li
 
 $A*S \rightarrow A + S$ 
 
-(Note that this is the reverse of the first [adsorption](Catalysis/Adsorption) reaction).  The same rules of kinetics and thermodynamics apply to adsorption events, just as they do to other chemical reactions in general.
+(Note that this is the reverse of the first [adsorption](./Adsorption) reaction).  The same rules of kinetics and thermodynamics apply to adsorption events, just as they do to other chemical reactions in general.
 
 Desorption can also involve multiple adsorbed species-site complexes, such as
 

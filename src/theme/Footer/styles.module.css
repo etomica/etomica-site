@@ -13,3 +13,13 @@
 .footerLogoLink:hover {
   opacity: 1;
 }
+
+.orgsImage {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+.orgsImageCol {
+  text-align: center;
+}

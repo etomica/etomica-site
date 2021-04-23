@@ -1,5 +1,6 @@
+---
+slug: ./
+---
 
 
 This module both produces and describes vibration and oscillating properties of a 1 Dimensional Monatomic Bravais Lattice structure. Atoms are periodically fit into a lattice and given initial conditions for displacement and momentum. Harmonic atom interactions are then setup between atoms. Once run, the simulation uses Molecular Dynamics to track and describe the motion of the atoms in the lattice due to the initial conditions and the subsequent interactions between neighboring atoms. Resulting Molecular Dynamic motion theoretically corresponds to analytically produced normal modes of such simulations. Once the simulation is started, the oscillation properties of the atomic motion are monitored (energies, and atom displacement). Calculations are made on the data by way of Fast Fourier Transform. The result produces a distinct characterization of the oscillation in terms of its wave vector (k). An additional Transform is performed on the change of these results over time, producing yet another distinct characterization in terms of its frequency $(\acute{E}^C)$. Finally, it is possible to simulate multiple oscillations running concurrently within the lattice.  The initial conditions are derived from the analytical wave equation by setting t=0 and solving for displacement and velocity (derivative).
-
-[Run the simulation](Harmonic1DMD/Simulator)

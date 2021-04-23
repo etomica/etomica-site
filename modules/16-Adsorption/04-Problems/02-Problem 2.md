@@ -11,7 +11,7 @@ look at such effects.
 energy of the simulation.
 
 2.  Determine the average potential energy per adsorbed particle (note that the surface
-area is 64 (8x8) in the atomic-diameter units used in the simulation (see [Simulation model](Adsorption/Simulation_model)).  
+area is 64 (8x8) in the atomic-diameter units used in the simulation (see [Simulation model](<../Background/Simulation model>)).  
 
 3.  Each surface-particle interaction is worth 7.5 energy units. Use this to determine the
 average energy of interaction between a particle and its neighbors.   Explain how this

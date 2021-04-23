@@ -4,7 +4,7 @@
 In this problem, you will investigate the selective adsorption of one component of a
 mixture on the surface.  
 
-1.  Confirm the derived relationship (see [Multicomponent](Adsorption/Multicomponent)):
+1.  Confirm the derived relationship (see [Multicomponent](../Background/Multicomponent)):
 
 $$
 \frac{\theta_A}{\theta_B} = \frac{P_A}{P_B}\frac{K_A}{K_B}

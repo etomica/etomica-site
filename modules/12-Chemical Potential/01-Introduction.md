@@ -1,3 +1,6 @@
+---
+slug: ./
+---
 
 
 Diffusive transport, also called mass transfer, plays important roles in both natural and industrial processes.  In biological systems, the transfer of oxygen and nutrients from blood vessels to tissue cells occurs by diffusion. In industry, many separations processes operate by diffusion: e.g., distillation is based on diffusion between a liquid and vapor phase, and liquid-liquid extraction is based on the diffusion of a solute between two immiscible phases.    
