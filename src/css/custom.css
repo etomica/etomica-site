@@ -22,6 +22,10 @@
   --ifm-navbar-background-color: var(--ifm-background-color);
 }
 
+html[data-theme='dark'] {
+  --ifm-background-color: #212529;
+}
+
 .navbar__brand {
   height: 3.5rem;
 }
