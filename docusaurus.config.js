@@ -7,7 +7,7 @@ module.exports = {
   tagline: 'Java Molecular Simulation Framework',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'favicon.ico',
   organizationName: 'etomica', // Usually your GitHub org/user name.
