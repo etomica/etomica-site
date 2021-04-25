@@ -10,7 +10,7 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
+  organizationName: 'etomica', // Usually your GitHub org/user name.
   projectName: 'etomica', // Usually your repo name.
   stylesheets: [
     {
@@ -75,7 +75,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `<small><i>Etomica is dedicated to the memory of Bryan Mihalick.</i> <br> Copyright © ${new Date().getFullYear()} Etomica. Built with Docusaurus.</small>`,
+      copyright: `<small><i>Etomica is dedicated to the memory of Bryan Mihalick.</i> <br> Copyright © ${new Date().getFullYear()} Etomica Group. Built with Docusaurus.</small>`,
     },
     hideableSidebar: true,
   },
@@ -93,8 +93,8 @@ module.exports = {
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+          // editUrl:
+          //   'https://github.com/etomica/etomica-site/edit/master/website/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
