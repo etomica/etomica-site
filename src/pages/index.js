@@ -77,7 +77,7 @@ function Home() {
         <section>
           <div className="container">
             <div className={clsx('row', styles.aboutRow)}>
-              <p className="col">
+              <div className="col">
                 <h3>
                   Etomica has been developed at the University at Buffalo since 1999
                   for research and education.
@@ -87,7 +87,7 @@ function Home() {
                   including: sampling algorithm; spatial dimension; molecular model (including both hard and soft potentials);
                   and properties for measurement. Simulation components are easily extended to develop new capabilities.
                 </p> */}
-              </p>
+              </div>
               <div className="col">
                 {/* <Image img={require('@site/static/img/catalysis-demo.png')}/> */}
                 <img src={useBaseUrl('/img/catalysis-demo.png')} className={styles.aboutImage}></img>
