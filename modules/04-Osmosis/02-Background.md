@@ -40,12 +40,13 @@ $x_B$  = mole fraction of solute B
 
 Osmotic pressure measurements are used in the determination molecular mass of compounds like polymers and biologically important macromolecules.
 
-=The Effects of Osmosis=
+## The Effects of Osmosis
 
 When an animal cell or a plant cell is placed in a medium, which is a water solution , the possible consequences are listed below.
 
 
 **1.** If the **water concentration** of the cell's cytoplasm is **lower** then that of the medium (i.e. the medium is a **hypotonic** solution) surrounding the cell then osmosis will result in the cell **gaining** water. The water molecules are free to pass across the cell membrane in both directions, but more water molecules will enter the cell than will diffuse out with the result that water enters the cell, which will then **swell** up and could possibly burst.
+
 **2.**If the **water concentration** inside the cell is the **same** as that in the surrounding medium (i.e. the medium is a **isotonic** solution) there will exist a **dynamic equilibrium** between the number of molecules of water entering and leaving the cell and so the cell will **retain** its original size.
 For example, the red blood cell in the blood plasma retains its shape because of the isotonic nature of the plasma.
 

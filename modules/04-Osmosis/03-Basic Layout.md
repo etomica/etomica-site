@@ -1,6 +1,6 @@
 
 
-= Version I (Lennard-Jones Mixture) =
+# Version I (Lennard-Jones Mixture) 
 
 ![](<./Clip image002.jpg>)
 
@@ -35,7 +35,7 @@ within the usual fluctuations of small systems, away from the membrane. The peak
 
 **Flux Tab:**  Shows the time evolution of flux across the membrane. Once a system reaches equilibrium this should be zero.
  
-=Version II (Brine Solution)=
+# Version II (Brine Solution)
 
 ![](<./Clip image001.jpg>)
 

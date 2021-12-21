@@ -1,6 +1,6 @@
 
 
-=Example of Reverse Osmosis in Solutions=
+# Example of Reverse Osmosis in Solutions
 
 Set the parameters of the program as follows
 
@@ -29,7 +29,7 @@ This is an example of steric reverse osmosis, i.e. the separation that results i
 differences in the sizes of the solute and solvent molecules. The movement of the solvent molecules from the solution
 to solvent side will stop, when the chemical potential (or fugacity) of the solvent molecules on both sides becomes equal.
 
-=An interesting Aside=
+# An interesting Aside
 
 ![](<./Clip image004.jpg>)
 

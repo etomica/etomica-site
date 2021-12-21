@@ -4,10 +4,10 @@ Planes are a fundamental concept in the discussion of crystals. In fact, the cry
 
 This one-to-one correspondence between a lattice (which defines the sites) and its reciprocal (which describes its planes) indicates that the lattice planes are no less elementary a description of the lattice than are the lattice sites themselves. We denote the primitive vectors of the reciprocal lattice as **a***, **b***, and **c***, and they are given uniquely in terms of the direct-lattice primitives **a**, **b**, and **c** according to
 
-:$a^\ast = \frac{2\pi b \times c}{a \cdot b \times c}$
+$a^\ast = \frac{2\pi b \times c}{a \cdot b \times c}$
 
-:$b^\ast = \frac{2\pi c \times a}{a \cdot b \times c}$
+$b^\ast = \frac{2\pi c \times a}{a \cdot b \times c}$
 
-:$c^\ast = \frac{2\pi a \times b}{a \cdot b \times c}$
+$c^\ast = \frac{2\pi a \times b}{a \cdot b \times c}$
 
 For cubic crystals, each direct-lattice primitive vector has the same direction as its reciprocal-lattice counterpart.
