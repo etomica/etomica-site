@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import mods from '../modules.json'
 import Link from '@docusaurus/Link'
 import styles from './ModuleIndex.module.css'
@@ -30,7 +30,11 @@ const ModuleCard = (props) => {
 }
 
 export default () => {
-    const items = mods.map((mod) => {
+    const [filterStr, setFilterStr] = useState("");
+
+    const items = mods
+        .filter((mod) => mod.title.toLowerCase().includes(filterStr.toLowerCase()) || mod.description.toLowerCase().includes(filterStr.toLowerCase()))
+        .map((mod) => {
         return (
             <div className="col col--4" key={mod.title}>
                 <ModuleCard link={`/modules/${mod.title}`} title={mod.title} desc={mod.description} thumb={mod.thumb} />
@@ -40,6 +44,11 @@ export default () => {
 
     return (
         <div className="container">
+            <div className="row margin-vert--md">
+                <div className="col col--6">
+                    <input className={styles.textBox} type="text" placeholder='Filter' value={filterStr} onInput={e => setFilterStr(e.target.value)} autoFocus />
+                </div>
+            </div>
             <div className="row">
                 {items}
             </div>
