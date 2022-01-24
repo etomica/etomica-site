@@ -38,7 +38,8 @@
     },
     {
         "title": "Interfacial tension",
-        "description": "Model of an explicit vapor-liquid interface, permitting computation of the surface tension and other thermodynamic and structural properties at various conditions."
+        "description": "Model of an explicit vapor-liquid interface, permitting computation of the surface tension and other thermodynamic and structural properties at various conditions.",
+        "startPath": "Background/Theory"
     },
     {
         "title": "Droplet",
@@ -58,7 +59,8 @@
     },
     {
         "title": "Interfacial colloid brushes",
-        "description": "This module shows that colloid brush-surface interactions are dictated by a balance between entropic and enthalpic phenomena due to the grafted polymer chains."
+        "description": "This module shows that colloid brush-surface interactions are dictated by a balance between entropic and enthalpic phenomena due to the grafted polymer chains.",
+        "startPath": "Background/Theory"
     },
     {
         "title": "Adsorption",

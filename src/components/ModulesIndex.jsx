@@ -35,10 +35,14 @@ export default () => {
     const items = mods
         .filter((mod) => mod.title.toLowerCase().includes(filterStr.toLowerCase()) || mod.description.toLowerCase().includes(filterStr.toLowerCase()))
         .map((mod) => {
-        return (
-            <div className="col col--4" key={mod.title}>
-                <ModuleCard link={`/modules/${mod.title}`} title={mod.title} desc={mod.description} thumb={mod.thumb} />
-            </div>
+            let link = `/modules/${mod.title}`;
+            if (mod.startPath) {
+                link = `${link}/${mod.startPath}`;
+            }
+            return (
+                <div className="col col--4" key={mod.title}>
+                    <ModuleCard link={link} title={mod.title} desc={mod.description} thumb={mod.thumb} />
+                </div>
         )
     })
 
