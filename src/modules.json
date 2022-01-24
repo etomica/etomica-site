@@ -51,7 +51,8 @@
     },
     {
         "title": "Polymer Rheology",
-        "description": "This module presents a Brownian dynamics simulation of a polymer in which the user may interact by adjusting important model parameters and flow conditions."
+        "description": "This module presents a Brownian dynamics simulation of a polymer in which the user may interact by adjusting important model parameters and flow conditions.",
+        "startPath": "Background/Polymer Chain Dynamics"
     },
     {
         "title": "Catalysis",
@@ -79,7 +80,7 @@
         "description": "2-D simulation of a monatomic species in the solid phase. Stress is applied and the resulting strain may be observed to and beyond the point of fracture. Vacancy defects may be introduced to examine their effect on the material's strength."
     },
     {
-        "title": "1D Normal Modes",
+        "title": "OneD Normal Modes",
         "description": "Demonstrates the independent collective motions that can be used to describe the dynamics of a system of one-dimensional coupled harmonic oscillators."
     }
 ]
