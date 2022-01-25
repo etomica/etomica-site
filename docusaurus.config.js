@@ -48,8 +48,8 @@ module.exports = {
           label: 'Apps',
           items: [
             {
-              href: 'pathname:///apps/LJ-EOS/',
-              label: 'LJ-EOS',
+              href: 'pathname:///apps/LJ_EOS/',
+              label: 'LJ_EOS',
             }
           ]
         },
