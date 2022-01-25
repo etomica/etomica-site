@@ -5,7 +5,7 @@ const remarkFootnotes = require('remark-footnotes')
 module.exports = {
   title: 'Etomica',
   tagline: 'Java Molecular Simulation Framework',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://www.etomica.org',
   baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
@@ -42,6 +42,16 @@ module.exports = {
           activeBasePath: 'modules',
           label: 'Modules',
           position: 'left',
+        },
+        {
+          type: 'dropdown',
+          label: 'Apps',
+          items: [
+            {
+              href: 'pathname:///apps/LJ-EOS/',
+              label: 'LJ-EOS',
+            }
+          ]
         },
         {to: 'blog', label: 'Blog', position: 'left'},
         {
@@ -116,7 +126,18 @@ module.exports = {
         remarkPlugins: [remarkMath, remarkFootnotes],
         rehypePlugins: [rehypeKatex],
       }
-    ]
-  
-  ]
+    ],
+
+  ],
+
+  // webpack: {
+  //   jsLoader: (isServer) => ({
+  //     loader: require.resolve('esbuild-loader'),
+  //     options: {
+  //       loader: 'tsx',
+  //       format: isServer ? 'cjs' : undefined,
+  //       target: isServer ? 'node12' : 'es2017',
+  //     },
+  //   }),
+  // },
 };
