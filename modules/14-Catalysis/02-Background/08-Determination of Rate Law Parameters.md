@@ -22,7 +22,7 @@ $$
 $$
 
 
-(The above rate law might apply to the reaction $A \rightarrow Products$ on a catalytic surface.  For more information on these types of rate laws, see [http://www.engin.umich.edu/~cre/10chap/frames.htm,](http://www.engin.umich.edu/~cre/10chap/frames.htm,) or *Elements of Chemical Reaction Engineering* by [Fogler](Catalysis/References))
+(The above rate law might apply to the reaction $A \rightarrow Products$ on a catalytic surface.  For more information on these types of rate laws, see [http://www.engin.umich.edu/~cre/10chap/frames.htm,](http://www.engin.umich.edu/~cre/10chap/frames.htm,) or *Elements of Chemical Reaction Engineering* by [Fogler](../References))
 
 
 Quantifying reaction orders inherently requires reaction rate information.  Perhaps the convenient way to obtain quantitative reaction rate data is through a mole balance on the given chemical reactor.  For a batch reactor, one has:
