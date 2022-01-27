@@ -96,7 +96,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/',
+          editUrl: 'https://github.com/etomica/etomica-site/edit/master/',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
@@ -125,6 +125,7 @@ module.exports = {
         sidebarPath: require.resolve('./sidebarsModules.js'),
         remarkPlugins: [remarkMath, remarkFootnotes],
         rehypePlugins: [rehypeKatex],
+        editUrl: 'https://github.com/etomica/etomica-site/edit/master/',
       }
     ],
 
