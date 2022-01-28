@@ -20,6 +20,8 @@ const features = [
     title: 'Interactive Graphical Simulations',
     description: (
       <>
+        Simulation data and configuration can be viewed graphically, allowing real-time visualization of results
+        and adjustment of parameters.
       </>
     ),
   },
@@ -27,6 +29,7 @@ const features = [
     title: 'fasterer?',
     description: (
       <>
+
       </>
     ),
   },
@@ -57,7 +60,8 @@ function Home() {
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <div>
-            <img className={styles.heroLogo} src={useBaseUrl('img/logo.png')}></img>
+            {/* <img className={styles.heroLogo} src={useBaseUrl('img/logo.png')}></img> */}
+            <Image className={styles.heroLogo} img={require('/img/logo_med.png')} />
           </div>
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
@@ -89,8 +93,8 @@ function Home() {
                 </p> */}
               </div>
               <div className="col">
-                {/* <Image img={require('@site/static/img/catalysis-demo.png')}/> */}
-                <img src={useBaseUrl('/img/catalysis-demo.png')} className={styles.aboutImage}></img>
+                <Image className={styles.aboutImage} img={require('/img/catalysis-demo.png')}/>
+                {/* <img src={useBaseUrl('/img/catalysis-demo.png')} className={styles.aboutImage}></img> */}
               </div>
             </div>
           </div>

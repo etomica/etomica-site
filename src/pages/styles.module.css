@@ -21,7 +21,8 @@
 }
 
 .heroLogo {
-  max-height: 256px;
+  display: inline-block;
+  max-width: 300;
 }
 
 .buttons {
