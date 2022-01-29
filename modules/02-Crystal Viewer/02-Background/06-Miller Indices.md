@@ -10,6 +10,6 @@ The reciprocal of the three integers in the Miller index are the intercepts of t
 
 Hexagonal lattices employ a variant of the three-index scheme.  For these systems the index comprises four integers: (*hklm*). The extra one is among the first three and is redundant, conveying no additional information. In fact the first three indices must sum to zero. Referring to the figure (which looks down the **c** vector), the (other two) primitive vectors **a** and **b** are shown in red, and the reciprocal-lattice primitives are in blue. An alternative choice for the primitive vector **b** is shown in yellow, and use of it changes the reciprocal vector **a*** to the one shown in green.  The third miller index is the multiplier for **a*** if the yellow **b** primitive were used.  Miller indices for three planes are indicated using the four-index scheme.
 
-![](<./Miller hexagonal.gif>)
+![](./Miller_hexagonal.gif)
 
 A *direction* in a lattice is distinct from the concept of a plane.  Unlike plane specifications, directions are described in terms of multiples of the direct-lattice primitive vectors.  The notation for directions uses square brackets: [*hkl*].  So [100] is in the direction of **a**, [120] is **a** + 2**b**, *etc*.

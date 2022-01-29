@@ -2,7 +2,7 @@
 
 The entities occupying the sites of a lattice are usually not single atoms, but multiatomic molecules, and the arrangement of these atoms at each site is referred to as the *basis*.  The term *crystal structure* generally implies a lattice and a basis. A lattice with a basis can also be used to generate regular arrays of points that are not lattices. The honeycomb structure is not a lattice, but can be formed using a hexagonal lattices with a two-point basis, as shown here
 
-![](<./Honeycomb basis.gif>)
+![](./Honeycomb_basis.gif)
 
 The red (or blue) sites by themselves are arranged onto a hexagonal lattice (highlighted by the red lines). The basis is formed by a red and blue atom taken together (as indicated by the ovals), and when arranged as shown, they give rise to the honeycomb structure (highlighted by the black lines).
 

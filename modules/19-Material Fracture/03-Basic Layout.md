@@ -4,7 +4,7 @@ When the Stress Strain Fracture Simulation is loaded a basic layout, as shown be
 
 
 
-![](<./MaterialFracture exampic1.jpg>)
+![](./MaterialFracture_exampic1.jpg)
 
 
 

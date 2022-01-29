@@ -5,7 +5,7 @@ A 2D fluid is composed of two methane molecules (MW=16, diam=0.36nm) with (x,y) 
 
 (a) Sketch the system and draw an arrow representing the velocity of each particle.  Note that x-components of velocity are both positive. It is large for the first particle.  The y-components are both negative.  The magnitude of the velocities are identical so the same size arrow is used, only the direction is rotated.
 
-![](<./DMD Ex1.jpg>)
+![](./DMD_Ex1.jpg)
 (b) Estimate the time (ns) and nature of the first collision.  From the sketch, it is clear that particle 2 will hit the south wall before the two particles can collide.  The particle center will be one radius from the wall at the time of collision.  So we can write 0.18 = 1 - 613*t where dimensions are in nm and ns. (Note: m/s=nm/ns).  Solving gives t = (1-0.18)/613 = 0.00134ns 
 
 (c) Estimate the temperature of this fluid according to the ideal gas model. 

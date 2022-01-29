@@ -39,8 +39,8 @@ Homework: [Problem 1.2.5](http://rheneas.eng.buffalo.edu/wiki/DMD:Problems:Level
 ```
 <table width="90%">
 <td width="50%">
-![](<./PBC 1.jpg>)
+![](./PBC_1.jpg)
 <td width="50%">
-![](<./PBC 2.jpg>)
+![](./PBC_2.jpg)
 </table>
 ```

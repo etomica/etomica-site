@@ -29,7 +29,7 @@ $d$ = width of the interface
 
 
 
-![](<./VL interface.gif>)
+![](./VL_interface.gif)
 
 
 
@@ -46,7 +46,7 @@ $N$ = total number of particles
 
 
 
-![](<./PE interface.gif>)
+![](./PE_interface.gif)
 
 
 
@@ -116,7 +116,7 @@ In the figure below (taken from a representative simulation), the interfacial te
 
 
 
-![](<./ST profile.gif>)
+![](./ST_profile.gif)
 
 
 
@@ -153,7 +153,7 @@ In the figure below (taken from a representative simulation), the chemical poten
 
 
 
-![](<./Chemical potential.gif>)
+![](./Chemical_potential.gif)
 
 
 

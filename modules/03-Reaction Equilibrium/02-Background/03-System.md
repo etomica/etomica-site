@@ -2,7 +2,7 @@
 
 The system we look at here consists of two atomic species.  We distinguish them by their color, red or black.  These atoms can combine to form three dimer species.  All five species are depicted here
 
-![](<./ReactionEquilibrium Fivespecies.gif>)
+![](./ReactionEquilibrium_Fivespecies.gif)
 
 Among these we can form three independent reactions
 

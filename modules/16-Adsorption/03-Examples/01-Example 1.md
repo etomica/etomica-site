@@ -22,16 +22,16 @@ may be required. This kind of behavior is easy to see in the simulation window.
 The isotherm under these conditions looks very much like the BET prediction for a strongly
 adsorbing material:
 
-![](<./Isotherm eps7.5 T1.0 small.png>)
+![](./Isotherm_eps7.5_T1.0_small.png)
 
 At low pressures a monolayer forms by $P/P_0 = 0.1$. At higher pressures ($P/P_0 = 0.75$, specific adsorption approximately 1.6), a multilayer structure forms. This is quite disordered, as seen in the snapshot below.
 
-![](<./Snapshot eps7.5 P0.75 T1.0.png>)
+![](./Snapshot_eps7.5_P0.75_T1.0.png)
 
 The density profile normal to the surface (below) clearly shows the formation of a second monolayer
 (at much lower density than the first), and even a hint of a third.
 
-![](<./Profile eps7.5 P0.75 T1.0.png>)
+![](./Profile_eps7.5_P0.75_T1.0.png)
 
 In this figure the "x" variable measures the distance from the top of the simulation cell; the adsorbing
 wall as at the bottom.  The first monolayer corresponds to the high density region 

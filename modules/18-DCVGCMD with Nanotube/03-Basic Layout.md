@@ -4,7 +4,7 @@ When the DCVGCMD with nanotube application is started, it should look something 
 
 
 
-![](<./DCVGCMDNano DCVGCMD1.jpg>)
+![](./DCVGCMDNano_DCVGCMD1.jpg)
 
 
 
@@ -17,7 +17,7 @@ The next item on the "Control Panel" is the **cut tube button**. When the **cut 
 
 
 
-![](<./DCVGCMDNano DCVGCMD2.jpg>)
+![](./DCVGCMDNano_DCVGCMD2.jpg)
 
 
 

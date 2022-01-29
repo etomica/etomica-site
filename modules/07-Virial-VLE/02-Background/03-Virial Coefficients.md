@@ -19,7 +19,7 @@ where $\Gamma(x)$ is the [gamma function](http://mathworld.wolfram.com/GammaFunc
 
 The qualitative behavior of *B* as a function of *T* based on the LJ potential is shown in the figure below:
 
-![](<./VLE LJPotential.jpg>)
+![](./VLE_LJPotential.jpg)
 
 The general shape of this curve is in agreement with the data shown by Reid [[3]](VirialVLE/References#ref3) for Argon (see Fig. 1 in
 [Ref. 3](VirialVLE/References#ref3) which shows experimental data for Argon and a fit to a Maitland–Smith potential).

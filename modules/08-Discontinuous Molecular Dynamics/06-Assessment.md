@@ -11,7 +11,7 @@ A. 0.0101   B. 0.0085   C. 0.0110   D. 0.0088
 The picture below represents hard spheres colliding in a planar box (like an air hockey table).  Which represents the area of the box that should be used to compute density? (39%)
 A. The blue area    B. The area inside the grey/green lines    C. none of the above 
 
-![](<./DMD Lvl3 1.jpg>)
+![](./DMD_Lvl3_1.jpg)
 
 
 

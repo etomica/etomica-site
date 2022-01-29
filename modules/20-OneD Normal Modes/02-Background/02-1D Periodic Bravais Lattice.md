@@ -4,7 +4,7 @@ The easiest way to picture a Bravais Lattice is to picture lined up atoms attach
 
 
 
-![](<./Harmonic1DMD Image001.jpg>)
+![](./Harmonic1DMD_Image001.jpg)
 
 
 
@@ -14,7 +14,7 @@ Periodic boundary conditions allow us discard anomalies that can pop up at end b
 
 
 
-![](<./Harmonic1DMD Image004.jpg>)
+![](./Harmonic1DMD_Image004.jpg)
 
 
 

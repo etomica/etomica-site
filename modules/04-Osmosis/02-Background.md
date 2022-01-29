@@ -50,7 +50,7 @@ When an animal cell or a plant cell is placed in a medium, which is a water solu
 **2.**If the **water concentration** inside the cell is the **same** as that in the surrounding medium (i.e. the medium is a **isotonic** solution) there will exist a **dynamic equilibrium** between the number of molecules of water entering and leaving the cell and so the cell will **retain** its original size.
 For example, the red blood cell in the blood plasma retains its shape because of the isotonic nature of the plasma.
 
-![](<./Osmosis Rbc iso.gif>)
+![](./Osmosis_Rbc_iso.gif)
 
 
 **3.**If the **water concentration** inside the cell is **higher** then that of the medium (i.e. the medium is a **hypertonic** solution) the number of water molecules diffusing out will be more than that entering and the cell will **shrink** and shrivel due to osmosis.
@@ -67,7 +67,7 @@ When a plant cell is placed in an isotonic solution, a phenomenon called **incip
 
 Animal cells do not have cell walls. In hypotonic solutions, animal cells swell up and explode as they cannot become turgid because there is no cell wall to prevent the cell from bursting. When the cell is in danger of bursting, organelles called contractile vacuoles will pump water out of the cell to prevent this. In hypertonic solutions, water diffuses out of the cell due to osmosis and the cell shrinks. Thus, the animal cell has always to be surrounded by an isotonic solution. In the human body, the kidneys provide the necessary regulatory mechanism for the blood plasma and the concentration of water and salt removed from the blood by the kidneys is controlled by a part of the brain called the hypothalamus. The process of regulating the concentration of water and mineral salts in the blood is called **osmoregulation** Animals which live on dry land must conserve water and so must animals which live in the salty sea water, but animals which live in freshwater have the opposite problem; they must get rid of excess water as fast as it gets into their bodies by osmosis.
 
-![](<./Osmosis Animal.jpg>)
+![](./Osmosis_Animal.jpg)
 
 ## Dialysis
 

@@ -14,7 +14,7 @@ where *r* is the distance between the centers of the pair of atoms, and $\sigma$
 
 
 
-![](<./LJ potential.gif>)
+![](./LJ_potential.gif)
 
 
 
@@ -26,4 +26,4 @@ Quantities involving time require an additional fundamental unit to be made dime
 
 
 
-![](<./LJ Image.jpg>)
+![](./LJ_Image.jpg)

@@ -7,7 +7,7 @@ Zero dimensional imperfections associated with the crystalline lattice are calle
 
 
 
-![](<./MaterialFracture Defect1.jpg>)
+![](./MaterialFracture_Defect1.jpg)
 
 
 
@@ -17,5 +17,5 @@ Origin of cracks comes from the nucleation of defecs or/and a local disorder of 
 
 
 
-![](<./MaterialFracture Crack1.gif>)
+![](./MaterialFracture_Crack1.gif)
 

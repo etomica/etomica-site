@@ -1,6 +1,6 @@
 
 
-![](<./Bead spring model.png>)
+![](./Bead_spring_model.png)
 
 The model of a polymer molecule used in this module consists of bead and springs forming a chain.  The beads are hydrodynamics resistance sites that are dragged on by the suspending fluid.  They also experience random Brownian forces caused by the thermal fluctuations in the fluid which are significant on the molecular scale.  The spring is an entropic force pulling the adjacent beads together.  In fact, the spring represents many monomer units that can coil and uncoil in response to the forces.  This model is a reasonable representation of the polymer chain dynamics that actual polymer molecules undergo.  By using a force balance which ignores the inertia effects, which have been shown to be small, and combining with a continuity statement, which guarantees that the chain configurations are conserved, a diffusion equation for the probability distribution function $\Psi(\mathbf{r}_1,\mathbf{r}_2,\mathbf{r}_3,\ldots,t)$ can be derived:
 

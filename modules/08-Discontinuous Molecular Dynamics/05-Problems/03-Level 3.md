@@ -15,8 +15,8 @@
 ```
 <table width="50%">
 <tr>
-<td width="50%">![](<./DMD Lvl3 1.jpg>)
-<td width="50%">![](<./DMD Lvl3 2.jpg>)
+<td width="50%">![](./DMD_Lvl3_1.jpg)
+<td width="50%">![](./DMD_Lvl3_2.jpg)
 </tr>
 </table>
 ```

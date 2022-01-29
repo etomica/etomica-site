@@ -22,8 +22,8 @@ The "Graphics Panel" contains a visualization of the simulation and data plots d
 
 The "Configuration" tab contains the piston-cylinder graphic (as shown on the picture above) which shows the atoms as filled circles, and the piston-cylinder as the walls surrounding them.  The "Plots" tab presents the system density (density graph), temperature (temperature graph) and pressure (pressure graph) in a graphical format (as shown on the picture below). For the temperature and pressure, both measured and target values are displayed. The target values are those set by the sliders on the "Control Panel". The measured temperature is derived from the total kinetic energy of the atoms, which when averaged appropriately should equal the thermodynamic temperature. Fluctuations in the kinetic energy lead to fluctuation in the target temperature. Likewise, the measured pressure is derived from the forces of collision of the atoms with the piston surface. It too is a fluctuating quantity. You might notice that the magnitude of the fluctuations in temperature and pressure diminish as you select larger numbers of molecules in the simulated system.
 
-![](<./PistonCylinder plots.jpg>)
+![](./PistonCylinder_plots.jpg)
 
 The "Metrics" tab display the current and average temperature (temperature boxes), density (density boxes) and pressure (pressure boxes) (average using data taken since the beginning of the simulation, or since the last time the reset button was pressed).
 
-![](<./PistonCylinder metrics.jpg>)
+![](./PistonCylinder_metrics.jpg)

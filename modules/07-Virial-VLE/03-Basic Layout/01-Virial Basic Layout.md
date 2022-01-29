@@ -2,7 +2,7 @@
 
 When the Virial component of the application is started, it looks like this:
 
-![](<./Virial BL1.jpg>)
+![](./Virial_BL1.jpg)
 
 The left side of the display is used for numerical data input (*B* at different temperatures). At the bottom are
 three sliders and input fields which are used to adjust the basic parameters of the LJ potential ($\varepsilon$ (“epsilon”) and $\sigma$ (“sigma”) according to Eq. (4)) and the quadrupole moment *Q*. At the center of the interface is the
@@ -13,7 +13,7 @@ Display. If any of the sliders is moved the function B(T) will change accordingl
 parameters one can bring the calculated B(T) curve to agree with the experimental data, as shown in the
 screenshot below:
 
-![](<./Virial BL2.jpg>)
+![](./Virial_BL2.jpg)
 
 This way, the LJ parameters and the quadrupole moment can be obtained from experimentally determined
 virial coefficients *B*. These potential parameters can be used for subsequent Molecular Dynamics (MD) or

@@ -42,13 +42,13 @@ of what a simulation typically looks like after roughly 2000 ps (following the e
 
 
 
-![](<./IT pic4.gif>)
+![](./IT_pic4.gif)
 
 
 
 
 *Density Tab
-![](<./VL interface.gif>)
+![](./VL_interface.gif)
 
 
 
@@ -60,7 +60,7 @@ of what a simulation typically looks like after roughly 2000 ps (following the e
 
 
 *Tension Profile
-![](<./ST profile.gif>)
+![](./ST_profile.gif)
 
 
 

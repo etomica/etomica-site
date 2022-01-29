@@ -21,7 +21,7 @@ Isothermal with Default Temperature
 
 **Start Program**
 
-![](<./Clip image003.jpg>)
+![](./Clip_image003.jpg)
 
 You will observe reverse osmosis in the system with ideal selectivity. You will see blue molecules that constitute
 the solvent molecules crossing the membrane while the red molecules that are the solute do not cross the membrane.
@@ -31,7 +31,7 @@ to solvent side will stop, when the chemical potential (or fugacity) of the solv
 
 # An interesting Aside
 
-![](<./Clip image004.jpg>)
+![](./Clip_image004.jpg)
 
 Now change the membrane parameters with all the other settings the same, but the tethering constant 1.E4 -- this will effectively 
 increase the pore size of the membrane, since with a smaller tethering constant the amplitude of oscillations is larger (you should

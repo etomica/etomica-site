@@ -6,4 +6,4 @@ A plane can be specified by selecting an orientation (*i.e.*, the orientation of
 
 The following figure presents a 2-dimensional lattice with planes showing two orientations (in 2-D the planes are now just lines). Two adjacent planes are shown for each orientation.  The red vectors are the normal vectors for each orientation, and one can see how the spacing between the planes is different for each orientation.
 
-![](<./Planes illustration.gif>)
+![](./Planes_illustration.gif)

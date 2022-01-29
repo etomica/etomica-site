@@ -14,7 +14,7 @@ Start the simulation by pushing the start button and then pushing the piston but
 
 Click on the tab labeled "Plots". You should now see graphs that look something like the following (NOTE : If enough time has passed since the pressure slider was changed to 1000, the transition will not be seen on the graph as that data has already scrolled off the graph) :
 
-![](<./PistonCylinder step.jpg>)
+![](./PistonCylinder_step.jpg)
 
 This graph shows a recent history of the values of several of the system properties. The graph may not show all of the data since the simulation was started. Once the maximum amount of data is displayed on the graph, old data will be scrolled off the graph to the left as new data is added to the right. Four properties are shown.
 

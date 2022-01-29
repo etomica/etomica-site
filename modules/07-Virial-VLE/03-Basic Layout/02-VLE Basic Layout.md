@@ -3,7 +3,7 @@
 When the VLE module is started it looks like this:
 
 
-![](<./VLE BL1.jpg>)
+![](./VLE_BL1.jpg)
 
 
 The left side of the display, referred to as the "Control Panel", contains controls that allow the user to interact with the simulation. 

@@ -6,6 +6,6 @@ Understanding fundamental mechanism of the deformation can be easily achieved in
 
 *Schematic feature of the device and Atomic-Scale Relationship*
 
-![](<./MaterialFracture TTPicture3.jpg>)
+![](./MaterialFracture_TTPicture3.jpg)
 
 The area of the gage length is the place where any significant deformation at higher stress is localized at. The size of the specimen depends on the size of the device - detectable elongation from nanometer to macro scale.
