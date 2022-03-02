@@ -27,12 +27,12 @@ html[data-theme='dark'] {
   --ifm-background-surface-color: #121212;
 }
 
-.navbar__brand {
+/* .navbar__brand {
   height: 3.5rem;
-}
+} */
 
 .navbar__logo {
-  height: 3.5rem;
+  height: 56px;
 }
 
 .docusaurus-highlight-code-line {

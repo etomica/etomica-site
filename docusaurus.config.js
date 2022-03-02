@@ -29,6 +29,7 @@ module.exports = {
       logo: {
         alt: 'Etomica Logo',
         src: 'img/logo_small.png',
+        height: '56px'
       },
       items: [
         {
