@@ -4,29 +4,29 @@ import mods from '../modules.json'
 import Link from '@docusaurus/Link'
 import styles from './ModuleIndex.module.css'
 import clsx from 'clsx'
+import Image from "@theme/IdealImage"
 
 const ModuleCard = (props) => {
     return (
-        <div className={clsx('card', styles.moduleCard)}>
-            <div className='card__header'>
-                <Link to={props.link}>
-                    <h3>{props.title}</h3>
-                </Link>
-            </div>
-            { props.thumb &&
-
-                <div className={clsx('card__image', styles.moduleThumbSection)}>
-                    <img src={`/img/module_thumbs/${props.thumb}`}></img>
-                </div>
-            }
-            <div className="card__body">
-                <p>
-                    {props.desc}
-                </p>
-            </div>
-
+      <div className={clsx("card", styles.moduleCard)}>
+        <div className="card__header">
+          <Link to={props.link}>
+            <h3>{props.title}</h3>
+          </Link>
         </div>
-    )
+        {props.thumb && (
+          <Link to={props.link}>
+            <div className={clsx("card__image", styles.moduleThumbSection)}>
+              {/* <img src={`/img/module_thumbs/${props.thumb}`}></img> */}
+              <Image img={require(`/img/module_thumbs/${props.thumb}`)}></Image>
+            </div>
+          </Link>
+        )}
+        <div className="card__body">
+          <p>{props.desc}</p>
+        </div>
+      </div>
+    );
 }
 
 export default () => {

@@ -6,65 +6,80 @@
     },
     {
         "title": "Crystal Viewer",
+        "thumb": "Crystal_Viewer.png",
         "description": "Permits viewing of static 3-dimensional lattices and the planes they define. Various elementary lattices can be selected, and any plane or surface can be viewed by specifying it via its Miller indices. Image can be rotated to permit viewing from any angle."
     },
     {
         "title": "Reaction Equilibrium",
+        "thumb": "reaction-equilibrium.png",
         "description": "Simple reaction equlibrium involving two atomic species and the three dimeric molecules they can form. Atoms move about via 2-D molecular dynamics, and can &quot;react&quot; to form dimers. Dynamic equilibria is demonstrated through constant recombining of atoms, and equilibria can be quantified and analyzed with thermodynamic reaction equilibria models."
     },
     {
         "title": "Osmosis",
+        "thumb": "Osmosis.png",
         "description": "Simulation of a system of two species and a semipermeable membrane.  Allows measurement of the osmotic pressure (the difference in pressure between the phases on each side of the membrane) as a function of density and mixture mole fraction."
     },
     {
         "title": "Lennard-Jones Molecular Dynamics",
+        "thumb": "ljmd.png",
         "description": "Molecular dynamics of a 2-dimensional mono-atomic Lennard-Jones system.  The Lennard-Jones model is a simple but widely-used approximation for the way atoms interact.  Elementary molecular features of this model's dynamical and structural behavior are calculated in this simulation.  More appropriate for a graduate-level student."
     },
     {
         "title": "Polymerization",
+        "thumb": "chainequilibrium.png",
         "description": "Model of two fundamental polymerization reaction types: stepwise growth and chain addition. The difference between the reaction mechanisms can be visualized, the resulting products of each can be observed, and calculations of molecular weights, molecular weight distributions, and kinetics can be conducted."
     },
     {
         "title": "Virial-VLE",
+        "thumb": "VirialVLE.png",
         "description": "A molecular model is fit to experimental data for the 2nd virial coefficient, and the vapor-liquid equilibrium (VLE) behavior of the fitted model is examined by Gibbs-ensemble molecular simulation.  Resulting data can be compared to experimental VLE data for the system used to fit the model."
     },
     {
         "title": "Discontinuous Molecular Dynamics",
+        "thumb": "swmd.png",
         "description": "An integrated tutorial on pressure, temperature, density, and model equations through the piston/cylinder module combined with 2D and 3D simulations using periodic boundary conditions.  The simulations are based on the square well potential, which characterizes the fundamental repulsions and attractions in a discontinuous but simple manner."
     },
     {
         "title": "Monolayer",
+        "thumb": "sam.png",
         "description": "Demonstration of mechanical properties of tethered monolayers. The module can be used as a supplement in materials science and engineering courses to illustrate the molecular basis of stress and strain."
     },
     {
         "title": "Interfacial tension",
+        "thumb": "interfacial.png",
         "description": "Model of an explicit vapor-liquid interface, permitting computation of the surface tension and other thermodynamic and structural properties at various conditions.",
         "startPath": "Background/Theory"
     },
     {
         "title": "Droplet",
+        "thumb": "droplet.png",
         "description": "This module discusses curvature of the surface of a liquid drop, and also liquid-liquid interfacial tension."
     },
     {
         "title": "Chemical Potential",
+        "thumb": "chemical-potential.png",
         "description": "This module presents an interactive molecular simulation that shows how diffusion is related to the chemical potential, and how the chemical potential depends on factors such as concentration, pressure, temperature and molecular properties."
     },
     {
         "title": "Polymer Rheology",
+        "thumb": "rheology.png",
         "description": "This module presents a Brownian dynamics simulation of a polymer in which the user may interact by adjusting important model parameters and flow conditions.",
         "startPath": "Background/Polymer Chain Dynamics"
     },
     {
         "title": "Catalysis",
+        "thumb": "catalysis.png",
         "description": "Demonstrates the dynamical molecular-level interactions and events relevant to heterogeneous catalysis, and provides a framework for applying catalytic reaction engineering principles."
     },
     {
         "title": "Interfacial colloid brushes",
+        "thumb": "colloid.png",
         "description": "This module shows that colloid brush-surface interactions are dictated by a balance between entropic and enthalpic phenomena due to the grafted polymer chains.",
         "startPath": "Background/Theory"
     },
     {
         "title": "Adsorption",
+        "thumb": "adsorption.png",
         "description": "This module explores the thermodynamics of adsorption through molecular simulation. The principal focus is on physisorption and its applications, though many of the same models and concepts are also applicable to chemisorption."
     },
     {
@@ -73,10 +88,12 @@
     },
     {
         "title": "DCVGCMD with Nanotube",
+        "thumb": "DCVGCMD.png",
         "description": "An extension of the previous DCVGCMD module.  The atoms must diffuse through a tube composed of hexagonally arranged atoms."
     },
     {
         "title": "Material Fracture",
+        "thumb": "materialfracture.png",
         "description": "2-D simulation of a monatomic species in the solid phase. Stress is applied and the resulting strain may be observed to and beyond the point of fracture. Vacancy defects may be introduced to examine their effect on the material's strength."
     },
     {
