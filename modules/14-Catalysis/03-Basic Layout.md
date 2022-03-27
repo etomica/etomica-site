@@ -25,24 +25,14 @@ The heterogeneous catalysis module simulates a batch catalytic reactor, with an 
 * “Reset Averages” – resets the values recorded on the “Metrics”, “Temperature”, and “Density” windows
 
 The module makes use of a color coding scheme to identify different species in the overall reaction system.  The key to this scheme is listed in the table below:
-{| border="1" cellspacing="0" cellpadding="20" align="center"
-! Species	
-! Color
-|-
-| Carbon atoms in CO, gas-phase	
-| Blue
-|-
-| Oxygen atoms in CO, O<sub>2</sub>, and CO<sub>2</sub>, gas-phase
-| Red
-|-
-| Carbon atoms in adsorbed CO on surface
-| Cyan
-|-
-| Oxygen atoms adsorbed onto surface
-| Light Grey
-|-
-| Carbon atoms in CO<sub>2</sub>, gas-phase
-| Yellow
-|}
+
+| Species                                                          | Color      |
+|------------------------------------------------------------------|------------|
+| Carbon atoms in CO, gas-phase                                    | Blue       |
+| Oxygen atoms in CO, O<sub>2</sub>, and CO<sub>2</sub>, gas-phase | Red        |
+| Carbon atoms in adsorbed CO on surface                           | Cyan       |
+| Oxygen atoms adsorbed onto surface                               | Light Grey |
+| Carbon atoms in CO<sub>2</sub>, gas-phase                        | Yellow     |
+
 
 After setting up a given initial reactor configuration, press the start button to begin.  Gas-phase molecules move throughout the vapor phase and interact with the catalyst surface.  The module now allows for the simultaneous evolution of both spatial and temporal changes in the catalytic system. Spatially, one can view the dynamics and interactions of the reacting species. Temporally, the dynamics of the surface chemistry evolve, thereby revealing the overall, apparent reaction kinetics.  The system is now ready for characterization using techniques learned from chemical reaction engineering courses.
