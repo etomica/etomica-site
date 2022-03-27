@@ -1,7 +1,7 @@
 
 
 We will focus on the B–coefficient here. The Virial module has been inspired by a paper by Reid in *J. Chem. Educ.* which was concerned with obtaining inter–molecular interaction potentials from the knowledge of
-the second virial coefficient [[3]](VirialVLE/References#ref3). Assuming pairwise inter–molecular interaction potentials that depend only
+the second virial coefficient [[3]](../References#ref3). Assuming pairwise inter–molecular interaction potentials that depend only
 on the distance *r* between two molecules (such as the LJ potential), one can show that the *B* coefficient can
 be obtained from a simple one–dimensional integration over the potential *U*(*r*) as follows:
 
