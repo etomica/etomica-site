@@ -162,10 +162,3 @@ Setup a Chain Addition (Free Radical) experiment with the following conditions:
 1. Plot the conversion as a function of time for initiators concentrations of 10, 20, and 50.
 1. Set the combination probability to 0.  How does this affect your answer to parts 1 and 2?
 1. Set the combination probability to 0.5, what values do Xn, Xw, and PDI approach?
-
-
-
-
-
-
-Last edited by [Wchirdon](User/Wchirdon) 00:47, 17 December 2008 (UTC)

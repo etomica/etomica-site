@@ -6,7 +6,7 @@ In practice, determination of surface area from adsorption at a single pressure 
 
 surface area = monolayer capacity / monolayer density 
 
-where the inverse monolayer density is the area per molecule in the monolayer.  This last quantity is mostly a property of the adsorbing gas, and mostly independent of the nature of the adsorbent.  For instance, the area occupied by an adsorbed nitrogen molecule is frequently taken to be 14 $\AA^2$ (14 square Angstroms). For a typical adsorbent with a surface area of 100 $m^2/g$, the monolayer capacity would be approximately $8.5\times10^{-5}$ mol/g.
+where the inverse monolayer density is the area per molecule in the monolayer.  This last quantity is mostly a property of the adsorbing gas, and mostly independent of the nature of the adsorbent.  For instance, the area occupied by an adsorbed nitrogen molecule is frequently taken to be 14 $\text{\AA}^2$ (14 square Angstroms). For a typical adsorbent with a surface area of 100 $m^2/g$, the monolayer capacity would be approximately $8.5\times10^{-5}$ mol/g.
 
 In experimental work, amounts of gas are often given in units of cc(STP) - cubic centimeters of gas at Standard Temperature and Pressure (1.0 atm, 273.15 K); the monolayer capacity in these units would be 1.9 cc(STP)/g.
 

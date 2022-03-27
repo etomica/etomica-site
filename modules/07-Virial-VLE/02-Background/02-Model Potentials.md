@@ -35,7 +35,7 @@ the interaction potential depends not only on the distance *R* but also on the r
 molecules and has a somewhat different distance dependence. For molecules without permanent dipole
 moments (example: CO<sub>2</sub>) the lowest–order electrostatic term relevant here is the quadrupole–quadrupole
 interaction. Given a charge density $\rho$ of the molecule, the elements of a traceless electric quadrupole
-moment tensor can be defined as [[1]](VirialVLE/References#ref1)
+moment tensor can be defined as [[1]](../References#ref1)
 
 $Q_{\alpha\beta} = \frac{1}{2} \int dr \dot \rho(r)(3r_{\alpha}r_{\beta} - r^2 \delta_{\alpha\beta})$    ..... (Equation 5)
 
@@ -50,7 +50,7 @@ $V_Q = \frac{1}{4\pi\epsilon_0}\sum_{\alpha\beta} \frac{R_{\alpha}R_{\beta}Q_{\a
 
 along with a non–uniform electric field $E = - \nabla_R V$. The field is seen to decay with the 4th inverse power
 of *R* at large distances *R*. Another quadrupolar molecule can interact with the *gradient* components $\nabla_{\alpha} E_{\beta}$
-of this electric field [[2]](VirialVLE/References#ref2); the interaction energy U is proportional to $R^{-5}$ at large distances and therefore
+of this electric field [[2]](../References#ref2); the interaction energy U is proportional to $R^{-5}$ at large distances and therefore
 provides an important contribution to the PES of neutral unpolar molecules such as CO<sub>2</sub>. Note that without
 a quadrupole–quadrupole term we would be missing some longer–range interactions in the PES; the $R^{-6}$
 term of the LJ potential does not reach as far out.

@@ -105,7 +105,7 @@ The three diagonal components of the virial tensor will typically all be equal i
 
 
 ## Interfacial Tension 
-One of the primary quantities of interest in these simulations is the interfacial tension.  The interfacial tension can be calculated in these simulations according to Equation 1 ([Interfacial_tension/Theory](Interfacial_tension/Theory)).  In this equation (repeated below), the interfacial tension is written as a difference of the diagonal components of the pressure tensor (Equation 8).
+One of the primary quantities of interest in these simulations is the interfacial tension.  The interfacial tension can be calculated in these simulations according to Equation 1 ([Theory](Theory)).  In this equation (repeated below), the interfacial tension is written as a difference of the diagonal components of the pressure tensor (Equation 8).
 
 $\gamma = \frac{L_x}{2} \left [ <P_{xx}> - 0.5(<P_{yy}> + <P_{zz}>) \right ]$, where
 
@@ -128,22 +128,27 @@ The chemical potential profile of the box gives an indication of the equilibrati
 
 
 
-$\mu_{\text{liquid}} = \displaystyle \mu_{\text{gas}}$ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Equation 9)
+$$
+\tag{Equation 9} \mu_{\text{liquid}} = \displaystyle \mu_{\text{gas}}
+$$
 
 
 
 
-In order to calculate the chemical potential of the fluid, Widom's test particle insertion method is used [[5]](Interfacial_tension/References#ref_widom).  This approach separates the ideal ($\mu^{\text{ideal}}$) and excess ($\mu^{\text{excess}}$) chemical potential into two terms (Equation 10).  During the course of the simulation, periodic sampling is performed to evaluate the excess chemical potential term (Equation 11), where the brackets in Equation 11 denote an ensemble average.  The sampling involves performing "ghost" insertions into the fluid, and evaluating the change in potential energy ($dU_{\text{ghost}}$) associated with these trial moves.  These ghost insertions are performed at random locations in the fluid, but since these are ghost insertions, these moves are never accepted.  Hence, the total number of particles in the simulations always remains fixed.  
+In order to calculate the chemical potential of the fluid, Widom's test particle insertion method is used 
+[[5]](Interfacial_tension/References#ref_widom). <!-- TODO --> 
+This approach separates the ideal ($\mu^{\text{ideal}}$) and excess ($\mu^{\text{excess}}$) chemical potential into two terms (Equation 10).  During the course of the simulation, periodic sampling is performed to evaluate the excess chemical potential term (Equation 11), where the brackets in Equation 11 denote an ensemble average.  The sampling involves performing "ghost" insertions into the fluid, and evaluating the change in potential energy ($dU_{\text{ghost}}$) associated with these trial moves.  These ghost insertions are performed at random locations in the fluid, but since these are ghost insertions, these moves are never accepted.  Hence, the total number of particles in the simulations always remains fixed.  
+
+$$
+\tag{Equation 10} \mu^{\text{excess}}= \displaystyle \mu - \mu^{\text{ideal}} 
+$$ 
 
 
 
 
-$\mu^{\text{excess}}= \displaystyle \mu - \mu^{\text{ideal}} $ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Equation 10)
-
-
-
-
-$\mu^{\text{excess}}=-k_B T \text{ln} \langle \text{exp} \left( \frac{-dU_{\text{ghost}}}{k_BT} \right) \rangle $ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Equation 11)
+$$
+\tag{Equation 11} \mu^{\text{excess}}=-k_B T \text{ln} \langle \text{exp} \left( \frac{-dU_{\text{ghost}}}{k_BT} \right) \rangle 
+$$
 
 
 

@@ -1,7 +1,7 @@
 
 
-= Step-wise Growth Simulation Example =
-## Importance of Stoichiometry
+## Step-wise Growth Simulation Example
+### Importance of Stoichiometry
 First, run the stepwise growth simulation.  The program should look like this after opening: 
 
 
@@ -55,7 +55,7 @@ Next, setup the following experiment:
 Note that the mono-ol (which can only react with one blue dot), has the same end-capping effect as excess alcohol groups, so that the number average degree of polymerization for this experiment also should converge to 5. 
 
 
-## Temperature Effects 
+### Temperature Effects 
 This model reversibly bonds the molecules together using the reaction energy to indicate both the strength of the bond and the heat of reaction.   To see the effects of temperature on a polymerization reaction, set the following: 
 
 * Mono-ol:  0
@@ -71,7 +71,7 @@ This is a realistic concern as polymerization reactions can be very exothermic. 
 
 
 
-## Gelation 
+### Gelation 
 
 To model gelation, again set the simulation to run isothermal at 300K. 
 
@@ -100,20 +100,19 @@ By tracing along the polymer chain, one can observe regions where the polymer en
  
 Pressing “0” will return to the original window.  Considering the periodic boundary condition, this would mean the polymer has an infinite molecular weight.  This is not just an artifact of the periodic boundary condition, but rather it is a real effect known as gelation!  Gelation is the formation of this interconnected structure, where the polymer ceases to be a high molecular weight fluid and becomes a solid of infinite molecular weight.  A common household analogy would be that of gelatin, where the dissolved gelatin molecules will cross-link over time to become an increasingly viscous fluid and then suddenly become a solid.
 
-## Model Output 
+### Model Output 
 There are several ways of visualizing the output of the simulation.  Across the top, the “configuration” tab shows the visualization of the polymerization, the “Metrics” tab gives the current data, the “Temperature” tab give the temperature history, the “Composition” tab gives a histogram of the chain lengths, the “Molecular Weight” tab shows the number-average and weight-average degrees of polymerization as functions of time, and the “Conversion” tab shows the fraction of alcohol and acid groups that have been consumed over time (Note, there will be two separate lines if the reactants are imbalanced).  One of the most important features of these tabs is that the user can click on a tab, such as “Conversion”, then right-click on the graph to get a table of the raw data.  This data table can then be copied and then imported into a spreadsheet so that the user can perform his/her own calculations.  For instance, a user can right-click on the conversion, copy and paste the data into Microsoft Excel, calculate the amount of unreacted groups from the conversion over time, and then model the kinetics of the reaction and determine the reactions rate constants and order.  The order of the reaction determined can then be compared to what the user might expect from theory.
 
 
 
-
-= Free Radical Chain Addition Example =
+## Free Radical Chain Addition Example
 First, run the free radical chain addition simulation.  The program should look like this after opening: 
 
 
  
 ![400px| Free Radical Chain Startup](<./Exf5.JPG>)
 
-## Initiators
+### Initiators
 Again, set the simulation to run isothermally at 300K.  Then click on the “Number of Molecules” tab on the left to enter:
 
 * Initiator: 20
@@ -129,7 +128,7 @@ The first energy is the energy that holds the initiator together, the second ene
 
 Start the simulation.  Note each of pair of blue dots represent one initiator.  Over time, the thermal energy will overcome the bonding energy of the initiator, splitting the initiator into two free radical species (shown in green).  This will occur more often if the bonding energy is lower, or if the temperature is higher.  Hence, a common strategy for initializing polymerization reactions is to mix the polymer with the initiator, then heat the mixture to activate the free radicals when the engineer wishes to begin polymerization.
 
-## Initiator to Monomer Ratio 
+### Initiator to Monomer Ratio 
 Now, set the simulation to run isothermally at 300K.  Then click on the “Number of Molecules” tab on the left to enter:
 
 * Initiator: 50
@@ -145,10 +144,6 @@ Next, click on the “Reaction Energy” tab and set the following reaction ener
 
 Setting the initiator bonding energy to 0 will allow for instant disassociation of the initiator, speed up the polymerization, and make some of the results more repeatable.  Set the fraction heat transfer to solvent to 1.000 and the combination probability to 0.000.  At high conversions, the number-average molecular weight should be near 5, because this value can be calculated by dividing the number of monomers (500) by the number of free radical initiators (50 x 2).  The number found in the simulation may be slightly higher, since not all of the initiators may have formed growing chains.  Again, if the same simulation is run with a combination probability of 1, then the number average molecular weight should approximately double to 10.  Note that increasing the amount of initiator should increase the rate of conversion, but every time the amount of initiator is doubled, the resultant molecular weight is cut in half.
 
-## Note on Temperature Effects
+### Note on Temperature Effects
 
 Polymers made from free radical chain addition are also vulnerable to thermal degradation, but the depolymerization reactions are not allowed in this model.  However, under adiabatic conditions, this type of reaction is similarly auto-accelerating.  One positive thermal feedback loop is that the heat of reaction causes faster movement of molecules, allowing for faster reactions.  In addition, this increased heat will allow more initiators to split to form free radicals which will form more propagating chains, which will generate more heat.  Further polymerization makes the solution more viscous and unable to dissipate heat, which exacerbates the temperature rise.  This increase in viscosity can also reduce the rate of termination in what is known as the “gel effect.”  This auto-acceleration is also known as the Trommsdorf effect, which is important safety issue, since the temperature rise in the presence of monomer or solvent could result in an explosion.
-
-
-
-Last edited by [Wchirdon](User/Wchirdon) 08:34, 16 December 2008 (UTC)

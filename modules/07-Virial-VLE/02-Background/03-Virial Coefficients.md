@@ -21,8 +21,8 @@ The qualitative behavior of *B* as a function of *T* based on the LJ potential i
 
 ![](./VLE_LJPotential.jpg)
 
-The general shape of this curve is in agreement with the data shown by Reid [[3]](VirialVLE/References#ref3) for Argon (see Fig. 1 in
-[Ref. 3](VirialVLE/References#ref3) which shows experimental data for Argon and a fit to a Maitland–Smith potential).
+The general shape of this curve is in agreement with the data shown by Reid [[3]](../References#ref3) for Argon (see Fig. 1 in
+[Ref. 3](../References#ref3) which shows experimental data for Argon and a fit to a Maitland–Smith potential).
 In the presence of the quadrupole (*Q*) term, the potential *U* in Eq. (7) has additional terms from *Q*
 which can be added by considering an expansion of *U*(*r*) at large distances. The potential also becomes
 dependent on the relative orientation of the two molecules, which means the integral in (7) has additional
@@ -71,27 +71,11 @@ $
 
 and the first few coefficients *q*<sub>n</sub> are given in the following table.
 
-{| border = "1"
-|+** **
-|-
-! n
-! *q*<sub>n</sub>
-|-
-| width="50pt" align="center"| 1 
-| width="50pt" align="center"| $0$
-|-
-| width="50pt" align="center"| 2 
-| width="50pt" align="center"| $-\frac{7\pi}{60\cdot2^{1/6}}$
-|-
-| width="50pt" align="center"| 3
-| width="50pt" align="center"| $\frac{3\pi}{245}$
-|-
-| width="50pt" align="center"| 4 
-| width="50pt" align="center"| $-\frac{71\pi}{1960\cdot2^{5/6}}$
-|-
-| width="50pt" align="center"| 5 
-| width="50pt" align="center"| $\frac{16\pi\cdot2^{1/3}}{4235}$
-|-
-| width="50pt" align="center"| 6 
-| width="50pt" align="center"| $-\frac{18033\pi}{4580576\cdot2^{1/2}}$
-|}
+| n                           | *q*<sub>n</sub> |
+|-----------------------------|:-----------------:|
+| 1               | $0$                                     |
+| 2               | $-\frac{7\pi}{60\cdot2^{1/6}}$          |
+| 3               | $\frac{3\pi}{245}$                      |
+| 4               | $-\frac{71\pi}{1960\cdot2^{5/6}}$       |
+| 5               | $\frac{16\pi\cdot2^{1/3}}{4235}$        |
+| 6               | $-\frac{18033\pi}{4580576\cdot2^{1/2}}$ |

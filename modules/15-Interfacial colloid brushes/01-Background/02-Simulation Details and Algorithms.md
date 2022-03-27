@@ -27,7 +27,7 @@ The length of each grafted polymer chain is treated as a parameter within this m
 
 ## Interaction Potentials 
 
-All simulations are conducted using the [discontinuous molecular dynamics algorithm](DMD). To be consistent, all interactions are described with square-well potentials.
+All simulations are conducted using the [discontinuous molecular dynamics algorithm](</modules/Discontinuous Molecular Dynamics>). To be consistent, all interactions are described with square-well potentials.
 
 The interactions of interest are: repulsive wall – colloid, repulsive wall – polymer segment; attractive wall – colloid, attractive wall – polymer segment, polymer segment – polymer segment, and colloid – polymer segment.
 
