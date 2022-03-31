@@ -21,10 +21,17 @@ module.exports = {
     },
   ],
   scripts: [
+    // {
+    //   src: "//gc.zgo.at/count.js",
+    //   async: true,
+    //   "data-goatcounter": "https://etomica.goatcounter.com/count",
+    // },
+
+    // <script defer data-domain="etomica.org" src="https://plausible.io/js/plausible.js"></script>
     {
-      src: "//gc.zgo.at/count.js",
-      async: true,
-      "data-goatcounter": "https://etomica.goatcounter.com/count",
+      src: "https://plausible.io/js/plausible.js",
+      defer: true,
+      "data-domain": "etomica.org"
     }
   ],
   themeConfig: {
