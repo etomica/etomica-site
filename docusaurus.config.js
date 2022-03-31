@@ -139,6 +139,19 @@ module.exports = {
 
   ],
 
+  themes: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        hashed: true,
+        indexPages: true,
+        docsRouteBasePath: ["/docs", "/modules"],
+        docsDir: ["docs", "modules"]
+
+      }
+    ]
+  ]
+
   // webpack: {
   //   jsLoader: (isServer) => ({
   //     loader: require.resolve('esbuild-loader'),
