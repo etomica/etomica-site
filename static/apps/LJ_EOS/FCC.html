@@ -75,15 +75,9 @@
           opts.append(("--vdh",""))
         eos = getEOS('fcc', opts)
         T = document['inputT'].value
-        if not T.isnumeric():
-          InfoDialog("Trouble", f"Must provide a valid temperature")
-          return
         T = float(T)
         if document["checkP"].checked:
           P = document['inputP'].value
-          if not P.isnumeric():
-            InfoDialog("Trouble", f"Must provide a valid pressure")
-            return
           P = float(P)
           rho = eos.rhoForProps(T, {'P': P})
         elif document["checkNrho"].checked:
@@ -91,16 +85,10 @@
             InfoDialog("Trouble", f"Need to have vacancies to do atom (instead of lattice) density")
             return
           rho = document['inputRho'].value
-          if not rho.isnumeric():
-            InfoDialog("Trouble", f"Must provide a valid density")
-            return
           rho = float(rho)
           rho = eos.latRhoForNRho(T, rho)
         else:
           rho = document['inputRho'].value
-          if not rho.isnumeric():
-            InfoDialog("Trouble", f"Must provide a valid density")
-            return
           rho = float(rho)
         props = eos.eval(T,rho)
         document['T'].textContent = T

@@ -75,9 +75,6 @@
           InfoDialog("Trouble", f"Must provide a valid temperature")
           return
         if document["checkP"].checked:
-          if not P.isnumeric():
-            InfoDialog("Trouble", f"Must provide a valid pressure")
-            return
           try:
             P = float(document['inputP'].value)
           except ValueError:
