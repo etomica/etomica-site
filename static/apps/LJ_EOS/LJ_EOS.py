@@ -5,6 +5,7 @@ from subprocess import check_output
 from math import pow,log
 import sys
 import math
+import virialLJ
 
 def findTriplePoint(eos1, eos2, eos3, Tguess, Pguess, verbose=0):
   T=Tguess
@@ -282,6 +283,8 @@ def getEOS(name, opts):
         vac=True
       elif o == '--alpha0':
         alpha0 = True
+      elif o == '--Adidharma':
+        return AdidharmaHCP()
     hcp = HCP(level,'',rc,N,rcc,Nc,ss,vac,alpha0)
     hcp.setIncludeLRC(lrc)
     return hcp
@@ -456,35 +459,58 @@ class VEOS(EOS):
     self.B = {}
     self.dBdT = {}
     self.askForG = True
+    self.Bobj = {}
+    if True:
+      if n>=2:
+        self.Bobj[2] = virialLJ.makeB(2)
+        self.maxB = 2
+      if n>=3:
+        self.Bobj[3] = virialLJ.makeB(3)
+        self.maxB = 3
+      for i in range(4,n+1):
+        if virialLJ.LJBfit.checkN(i):
+          self.Bobj[i] = virialLJ.makeB(i)
+          foo = self.Bobj[i].B(1)
+          self.maxB = i
+        else:
+          break
 
   def refreshB(self,T):
     self.lastT = T
     self.B = {}
     self.dBdT = {}
     self.d2BdT2 = {}
-    allB = check_output(['getB.sh', '{0:25.15e}'.format(T)]).decode("utf-8").split();
-    i=2
-    for Bi in allB:
-      if (i>self.maxB):
-        break
-      self.B[i] = float(Bi)
-      i+=1
+    if False:
+      allB = check_output(['getB.sh', '{0:25.15e}'.format(T)]).decode("utf-8").split();
+      i=2
+      for Bi in allB:
+        if (i>self.maxB):
+          break
+        self.B[i] = float(Bi)
+        i+=1
 
-    alldBdT = check_output(['getdBdT.sh', '{0:25.15e}'.format(T)]).decode("utf-8").split();
-    i=2
-    for dBidT in alldBdT:
-      if (i>self.maxB):
-        break
-      self.dBdT[i] = float(dBidT)
-      i+=1
+      alldBdT = check_output(['getdBdT.sh', '{0:25.15e}'.format(T)]).decode("utf-8").split();
+      i=2
+      for dBidT in alldBdT:
+        if (i>self.maxB):
+          break
+        self.dBdT[i] = float(dBidT)
+        i+=1
 
-    alld2BdT2 = check_output(['getd2BdT2.sh', '{0:25.15e}'.format(T)]).decode("utf-8").split();
-    i=2
-    for d2BidT2 in alld2BdT2:
-      if (i>self.maxB):
-        break
-      self.d2BdT2[i] = float(d2BidT2)
-      i+=1
+      alld2BdT2 = check_output(['getd2BdT2.sh', '{0:25.15e}'.format(T)]).decode("utf-8").split();
+      i=2
+      for d2BidT2 in alld2BdT2:
+        if (i>self.maxB):
+          break
+        self.d2BdT2[i] = float(d2BidT2)
+        i+=1
+    else:
+      self.Bobj[4].B(1)
+      for i in range(2,self.maxB+1):
+        data = self.Bobj[i].B(T)
+        self.B[i] = data[0]
+        self.dBdT[i] = data[1]
+        self.d2BdT2[i] = data[2]
 
   def getMaxRho(self,T):
     if self.maxB == 1:

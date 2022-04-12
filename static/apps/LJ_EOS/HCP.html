@@ -28,46 +28,51 @@
 
       def update(ev):
         opts = []
-        if document["checkLat"].checked:
-          opts.append(("--lattice",""))
-        elif document["checkHarmonic"].checked:
-          opts.append(("--harmonic",""))
-        if document["checkSS"].checked:
-          opts.append(("--ss",""))
-        doPhi = False # document["checkVac"].checked
-        if doPhi:
-          opts.append(("--vac",""))
-        doNrcc = document["checkNrcc"].checked
-        doLRC = document["checkLRC"].checked
-        if doNrcc and doLRC:
-          InfoDialog("Trouble", f"Cannot apply LRC to anharmonic")
-          return
-        if doLRC:
-          opts.append(("--lrc",""))
-        Nh = document["inputNh"].value
-        if Nh != "0":
-          if doNrcc:
-            opts.append(("--Nhc",Nh))
-          else:
-            opts.append(("--Nh",Nh))
-        rc = document["inputRc"].value
-        if rc != "0":
-          if doNrcc:
-            opts.append(("--rcc",rc))
-          else:
-            opts.append(("--rc",rc))
-          if Nh == "0":
-            InfoDialog("Trouble", f"Must use a finite system size to truncate")
+        selectedEOS = document["inputEOS"].value
+        alpha0 = True
+        if selectedEOS == "Schultz":
+          if document["checkLat"].checked:
+            opts.append(("--lattice",""))
+          elif document["checkHarmonic"].checked:
+            opts.append(("--harmonic",""))
+          if document["checkSS"].checked:
+            opts.append(("--ss",""))
+          doPhi = False # document["checkVac"].checked
+          if doPhi:
+            opts.append(("--vac",""))
+          doNrcc = document["checkNrcc"].checked
+          doLRC = document["checkLRC"].checked
+          if doNrcc and doLRC:
+            InfoDialog("Trouble", f"Cannot apply LRC to anharmonic")
             return
-        elif Nh != "0":
-          InfoDialog("Trouble", f"Must truncate when using a finite system size")
-          return
-        elif doLRC:
-          InfoDialog("Trouble", f"Must truncate to include LRC")
-          return
-        alpha0 = document["checkAlpha"].checked
-        if alpha0:
-          opts.append(("--alpha0", ""))
+          if doLRC:
+            opts.append(("--lrc",""))
+          Nh = document["inputNh"].value
+          if Nh != "0":
+            if doNrcc:
+              opts.append(("--Nhc",Nh))
+            else:
+              opts.append(("--Nh",Nh))
+          rc = document["inputRc"].value
+          if rc != "0":
+            if doNrcc:
+              opts.append(("--rcc",rc))
+            else:
+              opts.append(("--rc",rc))
+            if Nh == "0":
+              InfoDialog("Trouble", f"Must use a finite system size to truncate")
+              return
+          elif Nh != "0":
+            InfoDialog("Trouble", f"Must truncate when using a finite system size")
+            return
+          elif doLRC:
+            InfoDialog("Trouble", f"Must truncate to include LRC")
+            return
+          alpha0 = document["checkAlpha"].checked
+          if alpha0:
+            opts.append(("--alpha0", ""))
+        elif selectedEOS == "Adidharma":
+          opts.append(("--Adidharma",""))
         eos = getEOS('hcp', opts)
         T = document['inputT'].value
         if not T.isnumeric():
@@ -102,8 +107,6 @@
         document['rho'].textContent = rho
         for p in props:
           document[p].textContent = props[p]
-        if False and not doPhi:
-          document["phi"].textContent = ""
         if alpha0:
           document["alpha"].textContent = "1"
 
@@ -153,6 +156,17 @@
                 </div>
               </div>
               <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputEOS' class='col-form-label'>EOS</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputEOS'>
+                      <option value='Schultz' selected>Schultz</option>
+                      <option value='Adidharma'>Adidharma</option>
+                    </select>
+                  </div>
+                </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkLat'>
@@ -256,7 +270,6 @@
             dZdrho: <span id='dZdrho'></span><br>
             dPdrho: <span id='dPdrho'></span><br>
             dGdrho: <span id='dGdrho'></span><br>
-            Cv: <span id='Cv'></span><br>
             &alpha;: <span id='alpha'></span><br>
             <!-- vacancy fraction: <span id='phi'></span><br> -->
           </div>
