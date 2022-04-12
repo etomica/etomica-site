@@ -178,9 +178,16 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
 
 def getEOS(name, opts):
   if name == 'vapor':
+    maxB = 1000
+    log2nB3 = 12
+    nder = 2
     for o,val in opts:
       if o == '-n':
-        return VEOS(int(val))
+        maxB = int(val)
+      elif o == '--log2nB3':
+        log2nB3 = int(val)
+      elif o == '--nTder':
+        nder = int(val)
       elif o == '--vkolafa':
         return Kolafa(False)
       elif o == '--vjohnson':
@@ -189,7 +196,7 @@ def getEOS(name, opts):
         return Thol(False)
       elif o == '--vmay':
         return May(False)
-    return VEOS()
+    return VEOS(maxB, log2nB3, nder)
   elif name == 'liquid':
     liqDir=sys.path[0]
     Nl=4000
@@ -452,7 +459,7 @@ class EOS(object):
 
 class VEOS(EOS):
   """Virial EOS"""
-  def __init__(self,n=1000):
+  def __init__(self,n=1000, log2nB3=12, nder=2):
     EOS.__init__(self)
     self.lastT = 0
     self.maxB = n
@@ -465,12 +472,11 @@ class VEOS(EOS):
         self.Bobj[2] = virialLJ.makeB(2)
         self.maxB = 2
       if n>=3:
-        self.Bobj[3] = virialLJ.makeB(3)
+        self.Bobj[3] = virialLJ.makeB3(log2nB3, nder)
         self.maxB = 3
       for i in range(4,n+1):
         if virialLJ.LJBfit.checkN(i):
           self.Bobj[i] = virialLJ.makeB(i)
-          foo = self.Bobj[i].B(1)
           self.maxB = i
         else:
           break

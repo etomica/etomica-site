@@ -29,6 +29,7 @@
       def update(ev):
         opts = []
         selectedEOS = document["inputEOS"].value;
+        log2nB3 = 12
         if selectedEOS == "Johnson":
           opts.append(("--vjohnson",""))
         elif selectedEOS == "Kolafa":
@@ -37,6 +38,8 @@
           opts.append(("--vmay",""))
         elif selectedEOS == "Thol":
           opts.append(("--vthol",""))
+        elif selectedEOS == "Schultz":
+          opts.append(("--log2nB3",document["inputLog2nB3"].value))
         eos = getEOS('vapor', opts)
         try:
           T = float(document['inputT'].value)
@@ -119,6 +122,20 @@
                     </select>
                   </div>
                 </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputLog2nB3' class='col-form-label'>B3 FFT discretization (log<sub>2</sub>N)</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputLog2nB3'>
+                      <option value='12' selected>12</option>
+                      <option value='11'>11</option>
+                      <option value='10'>10</option>
+                      <option value='9'>9</option>
+                      <option value='8'>8</option>
+                    </select>
+                  </div>
+                </div>
               </div>
         </div>
         <div class='row g-3 py-1 align-items-center'>
@@ -142,6 +159,7 @@
             A: <span id='A'></span><br>
             G: <span id='G'></span><br>
             Z: <span id='Z'></span><br>
+            Cv: <span id='Cv'></span><br>
             dZdrho: <span id='dZdrho'></span><br>
             dPdrho: <span id='dPdrho'></span><br>
             dGdrho: <span id='dGdrho'></span><br>

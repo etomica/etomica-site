@@ -119,6 +119,7 @@ window.addEventListener("load", phasesUpdated);
         opts = []
         selectedEOS = document["inputEOS-"+p].value;
         if p == "vapor":
+          log2nB3 = 12
           if selectedEOS == "Johnson":
             opts.append(("--vjohnson",""))
           elif selectedEOS == "Kolafa":
@@ -127,6 +128,9 @@ window.addEventListener("load", phasesUpdated);
             opts.append(("--vmay",""))
           elif selectedEOS == "Thol":
             opts.append(("--vthol",""))
+          elif selectedEOS == "Schultz":
+            opts.append(("--log2nB3",document["inputLog2nB3"].value))
+            opts.append(("--nTder",0))
         elif p == "fcc":
           if selectedEOS == "Schultz":
             if document["checkLat-fcc"].checked:

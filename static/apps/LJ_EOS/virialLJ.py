@@ -61,10 +61,11 @@ def computeU(r):
   return 4 * (s6*s6 - s6)
 
 class LJB3(LJBn):
-  def __init__(self, nr, rc):
+  def __init__(self, nr, rc, nder=2):
     LJBn.__init__(self,3)
     self.nr = nr
     self.rc = rc
+    self.nder = nder
 
   def B(self,T):
     fr = fft.makeArray(self.nr)
@@ -97,19 +98,22 @@ class LJB3(LJBn):
     for i in range(0,self.nr):
       # (f*f)*f
       bsum += (ffr[i]*fr[i]*i)*i
-      # (f*f)*d1
-      d1sum += 3*(ffr[i]*frd1[i]*i)*i
-      # (f*f)*d2
-      d2sum += 3*(ffr[i]*frd2[i]*i)*i
+      if self.nder > 0:
+        # (f*f)*d1
+        d1sum += 3*(ffr[i]*frd1[i]*i)*i
+        if self.nder > 1:
+          # (f*f)*d2
+          d2sum += 3*(ffr[i]*frd2[i]*i)*i
 
-    fft.sineForward(frd1, fk, self.nr, dr)
-    for i in range(0, self.nr):
-      fk[i] *= fk[i]
+    if self.nder > 1:
+      fft.sineForward(frd1, fk, self.nr, dr)
+      for i in range(0, self.nr):
+        fk[i] *= fk[i]
 
-    fft.sineReverse(fk, ffr, self.nr, dr)
-    for i in range(0, self.nr):
-      # (d1*d1)*f
-      d2sum += 6*(ffr[i]*fr[i]*i)*i
+      fft.sineReverse(fk, ffr, self.nr, dr)
+      for i in range(0, self.nr):
+        # (d1*d1)*f
+        d2sum += 6*(ffr[i]*fr[i]*i)*i
 
     rv = [-4*math.pi*dr**3/3 * bsum,
           -4*math.pi*dr**3/3 * d1sum,
@@ -162,9 +166,12 @@ class LJBfit(LJBn):
     rv = [float(ty[0][k]) for k in range(3)]
     return rv
 
+def makeB3(log2n, nder):
+  return LJB3(2**log2n, 50.0, nder)
+
 def makeB(n):
   if n == 2:
     return LJB2()
   if n == 3:
-    return LJB3(2**12, 50.0)
+    return makeB3(12, 2)
   return LJBfit(n)

@@ -62,6 +62,7 @@ window.addEventListener("load", phasesUpdated);
         opts = []
         selectedEOS = document["inputEOS-"+p].value;
         if p == "vapor":
+          log2nB3 = 12
           if selectedEOS == "Johnson":
             opts.append(("--vjohnson",""))
           elif selectedEOS == "Kolafa":
@@ -70,6 +71,9 @@ window.addEventListener("load", phasesUpdated);
             opts.append(("--vmay",""))
           elif selectedEOS == "Thol":
             opts.append(("--vthol",""))
+          elif selectedEOS == "Schultz":
+            opts.append(("--log2nB3",document["inputLog2nB3"].value))
+            opts.append(("--nTder",0))
         elif p == "liquid":
           if selectedEOS == "Schultz":
             doLRC = document["checkLRC-liquid"].checked
@@ -314,6 +318,22 @@ window.addEventListener("load", phasesUpdated);
                       <option value='Kolafa'>Kolafa</option>
                       <option value='May'>May</option>
                       <option value='Thol'>Thol</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputLog2nB3' class='col-form-label'>B3 FFT discretization (log<sub>2</sub>N)</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputLog2nB3'>
+                      <option value='12' selected>12</option>
+                      <option value='11'>11</option>
+                      <option value='10'>10</option>
+                      <option value='9'>9</option>
+                      <option value='8'>8</option>
                     </select>
                   </div>
                 </div>
