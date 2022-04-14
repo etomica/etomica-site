@@ -41,7 +41,6 @@ function addRow(v1, v2, v3, v4, v5) {
 
 function collapse1Parameter(id) {
   var foo = document.getElementById("collapse"+id);
-  console.log(foo);
   new bootstrap.Collapse(foo, {toggle: false}).hide();
 }
 function collapseParameters() {
@@ -58,11 +57,14 @@ window.addEventListener("load", phasesUpdated);
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
 
+      def B3callback(T):
+        return window.grabB3(T)
+
+
       def optsForPhase(p):
         opts = []
         selectedEOS = document["inputEOS-"+p].value;
         if p == "vapor":
-          log2nB3 = 12
           if selectedEOS == "Johnson":
             opts.append(("--vjohnson",""))
           elif selectedEOS == "Kolafa":
@@ -72,8 +74,7 @@ window.addEventListener("load", phasesUpdated);
           elif selectedEOS == "Thol":
             opts.append(("--vthol",""))
           elif selectedEOS == "Schultz":
-            opts.append(("--log2nB3",document["inputLog2nB3"].value))
-            opts.append(("--nTder",0))
+            opts.append(("--B3func",B3callback))
         elif p == "liquid":
           if selectedEOS == "Schultz":
             doLRC = document["checkLRC-liquid"].checked
@@ -251,6 +252,11 @@ window.addEventListener("load", phasesUpdated);
       document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
       <h1>Vapor-Liquid Phase Coexistence for LJ</h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
@@ -318,22 +324,6 @@ window.addEventListener("load", phasesUpdated);
                       <option value='Kolafa'>Kolafa</option>
                       <option value='May'>May</option>
                       <option value='Thol'>Thol</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputLog2nB3' class='col-form-label'>B3 FFT discretization (log<sub>2</sub>N)</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputLog2nB3'>
-                      <option value='12' selected>12</option>
-                      <option value='11'>11</option>
-                      <option value='10'>10</option>
-                      <option value='9'>9</option>
-                      <option value='8'>8</option>
                     </select>
                   </div>
                 </div>
@@ -430,5 +420,7 @@ window.addEventListener("load", phasesUpdated);
         </div>
       </div>
     </div>
+    <script src='emscripten.js'></script>
+    <script async type="text/javascript" src="virial.js"></script>
   </body>
 </html>
