@@ -20,15 +20,21 @@ class LJB2(LJBn):
   def B(self,T):
     beta = 1.0/T
     bsum = 0
-    for i in range(0,101):
+    lastTerm = -1
+    for i in range(0,1001):
       term = (4*beta)**(0.5*i)
       if i < 1:
         term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
       else:
-        term *= math.exp(math.lgamma(-0.25+0.5*i) - math.lgamma(i+1))
+        x = math.lgamma(-0.25+0.5*i) - math.lgamma(i+1)
+        if x > -600:
+          term *= math.exp(x)
+        else:
+          y = math.exp(x/(0.5*i))
+          term = (4*beta*y)**(0.5*i)
 
+      lastTerm = i
       if bsum != 0 and math.fabs(term/bsum) < 1e-15:
-        lastTerm = i
         break
 
       bsum += term
@@ -42,7 +48,12 @@ class LJB2(LJBn):
       if i < 1:
         term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
       else:
-        term *= math.exp(math.lgamma(-0.25+0.5*i) - math.lgamma(i+1))
+        x = math.lgamma(-0.25+0.5*i) - math.lgamma(i+1)
+        if x > -600:
+          term *= math.exp(x)
+        else:
+          y = math.exp(x/(0.5*i))
+          term = (4*beta*y)**(0.5*i)
 
       bsum += term
       d1sum -= 0.5*i*term
@@ -59,6 +70,11 @@ def computeU(r):
     return float("inf")
   s6 = r**-6
   return 4 * (s6*s6 - s6)
+
+def myExp(x):
+  if x < -700:
+    return 0
+  return math.exp(x)
 
 class LJB3(LJBn):
   def __init__(self, nr, rc, nder=2):
@@ -78,7 +94,7 @@ class LJB3(LJBn):
       r = i*dr
       u = computeU(r)
       x = -beta*u
-      e = math.exp(x)
+      e = myExp(x)
       f = e-1
       fr[i] = f
       if e > 0:
@@ -175,3 +191,10 @@ def makeB(n):
   if n == 3:
     return makeB3(12, 2)
   return LJBfit(n)
+
+class Bwrapper(object):
+  def __init__(self,Bfunc):
+    self.Bfunc = Bfunc
+
+  def B(self,T):
+    return self.Bfunc(T)

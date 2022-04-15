@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Vapor-Liquid Phase Coexistence for LJ</title>
+    <title>Vapor-Solid Phase Coexistence for LJ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link href='main.css' rel='stylesheet'>
@@ -12,7 +12,8 @@
     <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <script>
       function myUpdatePlotCoex() {
-        updatePlotCoex("vapor", "liquid", Infinity, Infinity, 'auto', 'auto');
+        var phase2 = document.getElementById("phase2").value;
+        updatePlotCoex("vapor", phase2, Infinity, Infinity, 'auto', 'auto');
       }
       window.addEventListener("load", function() {
         var plotModalEl = document.getElementById("plotModal");
@@ -21,7 +22,7 @@
         });
       });
 function phasesUpdated() {
-  var allPhases = ["vapor","liquid"];
+  var allPhases = ["vapor","fcc","hcp"];
   for (var i=0; i<allPhases.length; i++) {
     var x = "parametersDiv-"+allPhases[i];
     document.getElementById(x).style.display = "none";
@@ -37,14 +38,16 @@ function clearAllRows() {
   empty(tbody);
 }
   
-var copyText0 = "T,rho1,rho2,P,G\n";
+var copyText0 = "T,rho1,rho2,P,G,phi\n";
 var copyText = copyText0;
 var allData = [];
 function addRow(T, props1, props2) {
   var tbody = document.getElementById("coex-table");
   var row = makeElement("TR", tbody);
   allData.push({T: T, props1: props1, props2: props2});
-  var v = [T, props1['rho'], props2['rho'], props1['P'], props1['G']];
+  var G = isNaN(props1.G) ? props2.G : props1.G;
+  var phi = 'phi' in props2 ? props2.phi : 0;
+  var v = [T, props1['rho'], props2['rho'], props1['P'], G, phi];
   for (var i=0; i<v.length; i++) {
     makeElement("TD", row, {textContent: v[i]});
   }
@@ -57,7 +60,8 @@ function collapse1Parameter(id) {
 }
 function collapseParameters() {
   collapse1Parameter("parametersDiv-vapor");
-  collapse1Parameter("parametersDiv-liquid");
+  collapse1Parameter("parametersDiv-fcc");
+  collapse1Parameter("parametersDiv-hcp");
 }
 window.addEventListener("load", phasesUpdated);
     </script>
@@ -71,7 +75,6 @@ window.addEventListener("load", phasesUpdated);
 
       def B3callback(T):
         return window.grabB3(T)
-
 
       def optsForPhase(p):
         opts = []
@@ -200,19 +203,20 @@ window.addEventListener("load", phasesUpdated);
             opts.append(("--Adidharma",""))
         return opts
 
-      eos1 = None
-      eos2 = None
-      myInterval = None
-      T = 0
-      Pguess = 0
+      eos1 = eos2 = myInterval = None
+      T = Pguess = 0
+      doPhi = False
 
       def doOneCoex():
-        global eos1, eos2, myInterval, iT, Pguess
-        Tstep = float(document["inputTstep"].value)
-        T = iT*Tstep
-        if T > 0.9000001:
+        global eos1, eos2, myInterval, iT, Pguess, doPhi
+        if iT > 750:
           stopUpdate()
           return
+        T = iT*0.001
+        if iT == 0:
+          iT = 20
+        else:
+          iT += 1
         props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
         if not 'rho' in props1:
           InfoDialog("Trouble", f"Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
@@ -221,7 +225,9 @@ window.addEventListener("load", phasesUpdated);
         window.addRow(T, props1, props2);
 
         Pguess = props1['P']
-        iT += 1
+        if iT > 750:
+          stopUpdate()
+          return
 
       def stopUpdate():
         global eos1, eos2
@@ -231,7 +237,7 @@ window.addEventListener("load", phasesUpdated);
         eos2 = None
 
       def update(ev):
-        global eos1, eos2, myInterval, iT, Pguess
+        global eos1, eos2, myInterval, iT, Pguess, doPhi
         if not eos1 == None:
           print("stopping!")
           stopUpdate()
@@ -250,9 +256,11 @@ window.addEventListener("load", phasesUpdated);
         opts = optsForPhase(phase2)
         if opts is None:
           return
+        doPhi = False
+        if phase2 == "fcc":
+          doPhi = document["checkVac-fcc"].checked
         eos2 = getEOS(phase2, opts)
-        Tstep = float(document["inputTstep"].value)
-        iT = int(0.67 / Tstep)
+        iT = 0
         Pguess = 0
         window.clearAllRows()
         window.copyText = window.copyText0
@@ -266,7 +274,7 @@ window.addEventListener("load", phasesUpdated);
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-      <h1>Vapor-Liquid Phase Coexistence for LJ</h1>
+      <h1>Vapor-Solid Phase Coexistence for LJ</h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Parameters</a></h2>
@@ -291,16 +299,9 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase2' onchange='phasesUpdated()'>
-                    <option value='liquid' selected>Liquid</option>
+                    <option value='fcc' selected>FCC</option>
+                    <option value='hcp'>HCP</option>
                   </select>
-                </div>
-              </div>
-              <div class='row g-3 py-1 align-items-center'>
-                <div class='col-auto'>
-                  <label for='inputTstep' class='col-form-label'>T step</label>
-                </div>
-                <div class='col-auto'>
-                  <input type='text' id='inputTstep' class='form-control' value='0.001'>
                 </div>
               </div>
             </div>
@@ -342,69 +343,89 @@ window.addEventListener("load", phasesUpdated);
         </div>
       </div>
 
-      <div id='parametersDiv-liquid' class='card mb-4'>
-        <div id='headingParameters-liquid' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-liquid' aria-expanded='true' aria-controls='colapseparametersDiv-liquid'>Liquid Parameters</a></h2>
+
+      <div id='parametersDiv-hcp' class='card mb-4'>
+        <div id='headingParameters-hcp' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-hcp' aria-expanded='true' aria-controls='colapseparametersDiv-hcp'>HCP Parameters</a></h2>
         </div>
-        <div id='collapseparametersDiv-liquid' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-liquid'>
+        <div id='collapseparametersDiv-hcp' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-hcp'>
           <div class='card-body'>
             <div class='row'>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputEOS-liquid' class='col-form-label'>EOS</label>
+                    <label for='inputEOS-hcp' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-liquid'>
+                    <select class='form-select' id='inputEOS-hcp'>
                       <option value='Schultz' selected>Schultz</option>
-                      <option value='Johnson'>Johnson</option>
-                      <option value='Kolafa'>Kolafa</option>
-                      <option value='May'>May</option>
-                      <option value='Thol'>Thol</option>
+                      <option value='Adidharma'>Adidharma</option>
                     </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLat-hcp'>
+                    <label class='form-check-label' for='checkLat-hcp'>lattice properties</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-hcp'>
+                    <label class='form-check-label' for='checkHarmonic-hcp'>lattice+harmonic properties</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAlpha'>
+                    <label class='form-check-label' for='checkAlpha'>impose &alpha;=1</label>
                   </div>
                 </div>
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputNl' class='col-form-label'># of atoms</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputNl'>
-                      <option value='0' selected>&infin;</option>
-                      <option value='4000'>4000</option>
-                      <option value='2000'>2000</option>
-                      <option value='1000'>1000</option>
-                      <option value='500'>500</option>
-                      <option value='250'>250</option>
-                    </select>
-                  </div>
-                </div>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='rc-liquid' class='col-form-label'>cutoff</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputRc-liquid'>
-                  <option value='-1' selected>&infin;</option>
+              <div class='col-auto'>
+                <label for='inputNh' class='col-form-label'># of atoms</label>
+              </div>
+              <div class='col-auto'>
+                <select class='form-select' id='inputNh'>
+                  <option value='0' selected>&infin;</option>
+                  <option value='4096'>4096</option>
+                  <option value='1728'>1728</option>
+                  <option value='1200'>1200</option>
+                  <option value='1000'>1000</option>
+                  <option value='512'>512</option>
+                </select>
+              </div>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto'>
+                <label for='rc-hcp' class='col-form-label'>cutoff</label>
+              </div>
+              <div class='col-auto'>
+                <select class='form-select' id='inputRc-hcp'>
+                  <option value='0' selected>&infin;</option>
+                  <option value='11'>11</option>
                   <option value='9'>9</option>
-                  <option value='8'>8</option>
-                  <option value='7'>7</option>
+                  <option value='7.5'>7.5</option>
                   <option value='6'>6</option>
                   <option value='5'>5</option>
                   <option value='4'>4</option>
+                  <option value='3.5'>3.5</option>
                   <option value='3'>3</option>
-                  <option value='2'>2</option>
-                  <option value='1'>1</option>
-                  <option value='0'>0</option>
                 </select>
               </div>
             </div>
             <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC-liquid'>
-                <label class='form-check-label' for='checkLRC-liquid'>include LRC</label>
+                <input class='form-check-input' type='checkbox' value='' id='checkNrcc-hcp'>
+                <label class='form-check-label' for='checkNrcc-hcp'>apply only to anharmonic</label>
+              </div>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto' class=form-check'>
+                <input class='form-check-input' type='checkbox' value='' id='checkLRC-hcp'>
+                <label class='form-check-label' for='checkLRC-hcp'>include LRC</label>
               </div>
             </div>
           </div>
@@ -413,6 +434,97 @@ window.addEventListener("load", phasesUpdated);
         </div>
       </div>
 
+      <div id='parametersDiv-fcc' class='card mb-4'>
+        <div id='headingParameters-fcc' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a></h2>
+        </div>
+        <div id='collapseparametersDiv-fcc' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-fcc'>
+          <div class='card-body'>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputEOS-fcc' class='col-form-label'>EOS</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputEOS-fcc'>
+                      <option value='Schultz' selected>Schultz</option>
+                      <option value='Adidharma'>Adidharma</option>
+                      <option value='dePablo'>de Pablo</option>
+                      <option value='vdh'>van der Hoef</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLat-fcc'>
+                    <label class='form-check-label' for='checkLat-fcc'>lattice properties</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-fcc'>
+                    <label class='form-check-label' for='checkHarmonic-fcc'>lattice+harmonic properties</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc'>
+                    <label class='form-check-label' for='checkVac-fcc'>include vacancies</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto'>
+                <label for='inputNf' class='col-form-label'># of atoms</label>
+              </div>
+              <div class='col-auto'>
+                <select class='form-select' id='inputNf'>
+                  <option value='0' selected>&infin;</option>
+                  <option value='4000'>4000</option>
+                  <option value='2048'>2048</option>
+                  <option value='864'>864</option>
+                  <option value='500'>500</option>
+                  <option value='256'>256</option>
+                </select>
+              </div>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto'>
+                <label for='rc-fcc' class='col-form-label'>cutoff</label>
+              </div>
+              <div class='col-auto'>
+                <select class='form-select' id='inputRc-fcc'>
+                  <option value='0' selected>&infin;</option>
+                  <option value='11'>11</option>
+                  <option value='9'>9</option>
+                  <option value='7.5'>7.5</option>
+                  <option value='6'>6</option>
+                  <option value='5'>5</option>
+                  <option value='4'>4</option>
+                  <option value='3.5'>3.5</option>
+                  <option value='3'>3</option>
+                </select>
+              </div>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto' class=form-check'>
+                <input class='form-check-input' type='checkbox' value='' id='checkNrcc-fcc'>
+                <label class='form-check-label' for='checkNrcc-fcc'>apply only to anharmonic</label>
+              </div>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto' class=form-check'>
+                <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
+                <label class='form-check-label' for='checkLRC-fcc'>include LRC</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <div id='resultsDiv' class='card'>
       <div id='headingResults' class='card-header' role='tab'>
@@ -423,7 +535,7 @@ window.addEventListener("load", phasesUpdated);
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
         <table class='table table-sm'>
-          <thead><tr><th>T</th><th>&rho;1</th><th>&rho;2</th><th>P</th><th>G</th></tr></thead>
+          <thead><tr><th>T</th><th>&rho;1</th><th>&rho;2</th><th>P</th><th>G</th><th>&phi;</th></tr></thead>
           <tbody id='coex-table'></tbody>
         </table>
       </div>
@@ -460,6 +572,7 @@ window.addEventListener("load", phasesUpdated);
                       <option value='dZdrho'>dZdrho</option>
                       <option value='dZdrho'>dPdrho</option>
                       <option value='dGdrho'>dGdrho</option>
+                      <option value='phi'>&phi;</option>
                     </select>
                   </div>
                 </div>
@@ -481,6 +594,7 @@ window.addEventListener("load", phasesUpdated);
                       <option value='dZdrho'>dZdrho</option>
                       <option value='dZdrho'>dPdrho</option>
                       <option value='dGdrho'>dGdrho</option>
+                      <option value='phi'>&phi;</option>
                     </select>
                   </div>
                 </div>

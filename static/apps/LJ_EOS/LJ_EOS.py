@@ -181,11 +181,14 @@ def getEOS(name, opts):
     maxB = 1000
     log2nB3 = 12
     nder = 2
+    B3func = None
     for o,val in opts:
       if o == '-n':
         maxB = int(val)
       elif o == '--log2nB3':
         log2nB3 = int(val)
+      elif o == '--B3func':
+        B3func = val
       elif o == '--nTder':
         nder = int(val)
       elif o == '--vkolafa':
@@ -196,7 +199,7 @@ def getEOS(name, opts):
         return Thol(False)
       elif o == '--vmay':
         return May(False)
-    return VEOS(maxB, log2nB3, nder)
+    return VEOS(maxB, log2nB3, nder, B3func)
   elif name == 'liquid':
     liqDir=sys.path[0]
     Nl=4000
@@ -459,7 +462,7 @@ class EOS(object):
 
 class VEOS(EOS):
   """Virial EOS"""
-  def __init__(self,n=1000, log2nB3=12, nder=2):
+  def __init__(self,n=1000, log2nB3=12, nder=2, B3func=None):
     EOS.__init__(self)
     self.lastT = 0
     self.maxB = n
@@ -472,7 +475,10 @@ class VEOS(EOS):
         self.Bobj[2] = virialLJ.makeB(2)
         self.maxB = 2
       if n>=3:
-        self.Bobj[3] = virialLJ.makeB3(log2nB3, nder)
+        if B3func is None:
+          self.Bobj[3] = virialLJ.makeB3(log2nB3, nder)
+        else:
+          self.Bobj[3] = virialLJ.Bwrapper(B3func)
         self.maxB = 3
       for i in range(4,n+1):
         if virialLJ.LJBfit.checkN(i):

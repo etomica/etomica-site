@@ -30,6 +30,7 @@ window.addEventListener("load", phasesUpdated);
       from browser import document
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
+      import math
 
       def optsForPhase(p):
         opts = []
@@ -180,8 +181,14 @@ window.addEventListener("load", phasesUpdated);
           return
         document['rho1'].textContent = props1['rho']
         document['rho2'].textContent = props2['rho']
-        document['P'].textContent = props1['P']
-        document['G'].textContent = props1['G']
+        resultP = props1['P']
+        if math.isnan(resultP):
+          resultP = props2['P']
+        document['P'].textContent = resultP
+        resultG = props1['G']
+        if math.isnan(resultG):
+          resultG = props2['G']
+        document['G'].textContent = resultG
 
       document["btnUpdate"].bind("click", update)
     </script>
