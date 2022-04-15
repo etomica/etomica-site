@@ -9,7 +9,17 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython_stdlib.js"></script>
     <script type='text/javascript' src='util.js'></script>
+    <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <script>
+      function myUpdatePlotCoex() {
+        updatePlotCoex("vapor", "liquid", Infinity, Infinity, 'auto', 'auto');
+      }
+      window.addEventListener("load", function() {
+        var plotModalEl = document.getElementById("plotModal");
+        plotModalEl.addEventListener("show.bs.modal", function(event) {
+            myUpdatePlotCoex();
+        });
+      });
 function phasesUpdated() {
   var allPhases = ["vapor","liquid"];
   for (var i=0; i<allPhases.length; i++) {
@@ -29,10 +39,12 @@ function clearAllRows() {
   
 var copyText0 = "T,rho1,rho2,P,G,phi\n";
 var copyText = copyText0;
-function addRow(v1, v2, v3, v4, v5) {
+var allData = [];
+function addRow(T, props1, props2) {
   var tbody = document.getElementById("coex-table");
   var row = makeElement("TR", tbody);
-  var v = [v1, v2, v3, v4, v5];
+  allData.push({T: T, props1: props1, props2: props2});
+  var v = [T, props1['rho'], props2['rho'], props1['P'], props1['G']];
   for (var i=0; i<v.length; i++) {
     makeElement("TD", row, {textContent: v[i]});
   }
@@ -206,7 +218,7 @@ window.addEventListener("load", phasesUpdated);
           InfoDialog("Trouble", f"Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
           stopUpdate()
           return
-        window.addRow(T, props1['rho'], props2['rho'], props1['P'], props1['G'])
+        window.addRow(T, props1, props2);
 
         Pguess = props1['P']
         iT += 1
@@ -409,6 +421,7 @@ window.addEventListener("load", phasesUpdated);
       <div id='headingResults' class='card-header' role='tab'>
         <h2 class='h5 mb-0' style='float: left'>Results</h2>
         <button class='btn btn-info btn-sm' style='float: right' onclick='copyToClipboard(copyText)'>Copy</button>
+        <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
     </div>
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
@@ -422,5 +435,66 @@ window.addEventListener("load", phasesUpdated);
     </div>
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>
+
+    <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="plotModalLabel">Plot</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="plotDiv" style="width:100%;height:500px;"></div>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputXprop' class='col-form-label'>X:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlotCoex()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='dZdrho'>dZdrho</option>
+                      <option value='dZdrho'>dPdrho</option>
+                      <option value='dGdrho'>dGdrho</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputYprop' class='col-form-label'>Y:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlotCoex()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='dZdrho'>dZdrho</option>
+                      <option value='dZdrho'>dPdrho</option>
+                      <option value='dGdrho'>dGdrho</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

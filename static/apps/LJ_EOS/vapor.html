@@ -8,6 +8,8 @@
     <link href='main.css' rel='stylesheet'>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython_stdlib.js"></script>
+    <script type='text/javascript' src='util.js'></script>
+    <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
   </head>
   <body onload='brython()'>
     <script type='text/javascript'>
@@ -19,17 +21,84 @@
         document.getElementById("input"+e).removeAttribute("disabled");
       }
       window.addEventListener("load", updateRhoP);
+      window.addEventListener("load", updateX);
+      window.addEventListener("load", function() {
+        var plotModalEl = document.getElementById("plotModal");
+        plotModalEl.addEventListener("show.bs.modal", function(event) {
+            updatePlot();
+        });
+      });
+
+var copyText0 = "T,rho,P,U,A,G,Z,Cv,dZdrho,dPdrho,dGdrho\n";
+var copyText = copyText0;
+var allData = [];
+function addParametricRow(T, rho, props) {
+  var tbody = document.getElementById("parametricResults");
+  var row = makeElement("TR", tbody);
+  var v = [];
+  props['T'] = T;
+  props['rho'] = rho;
+  allData.push(props);
+  var pnames = ['T','rho','P','U','A','G','Z','Cv','dZdrho','dPdrho','dGdrho'];
+  for (var i=0; i<pnames.length; i++) {
+    v.push(pnames[i] in props ? props[pnames[i]] : "");
+  }
+  for (var i=0; i<v.length; i++) {
+    makeElement("TD", row, {textContent: v[i]});
+  }
+  copyText += v.join(",")+"\n";
+}
+function clearAllRows() {
+  var tbody = document.getElementById("parametricResults");
+  empty(tbody);
+  allData = [];
+}
     </script>
     <script type='text/python' src='LJ_EOS.py'></script>
     <script type='text/python'>
-      from browser import document, window
+      from browser import document, window, timer
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS
 
       def B3callback(T):
         return window.grabB3(T)
 
+      myInterval = eos = None
+      ix = numX = 0
+      Tstr = rhostr = Pstr = ""
+
+      def doOnePoint():
+        global myInterval, Tstr, rhostr, Pstr, eos, ix, numX
+        if ix > numX:
+          stopUpdate()
+        x = ix / numX
+        ix = ix + 1
+        T = eval(Tstr)
+        if document["checkP"].checked:
+          P = eval(Pstr)
+          rho = eos.rhoForProps(T, {'P': P})
+        else:
+          rho = eval(rhostr)
+        props = eos.eval(T,rho)
+        window.addParametricRow(T, rho, props)
+        if ix > numX:
+          stopUpdate()
+
+      def stopUpdate():
+        global eos, myInterval
+        timer.clear_interval(myInterval)
+        document["btnUpdate"].textContent = "Update"
+        eos = None
+
       def update(ev):
+        global myInterval, Tstr, rhostr, Pstr, eos, ix, numX
+        if not eos == None:
+          print("stopping!")
+          stopUpdate()
+          return
+        window.clearAllRows()
+        window.copyText = window.copyText0
+
         opts = []
         try:
           T = float(document['inputT'].value)
@@ -47,19 +116,39 @@
           opts.append(("--vthol",""))
         elif selectedEOS == "Schultz":
           opts.append(("--B3func",B3callback))
-        print(opts)
         
         eos = getEOS('vapor', opts)
+
+        Tstr = document['inputT'].value
+        Pstr = document['inputP'].value
+        rhostr = document['inputRho'].value
+
+        useX = document["checkX"].checked
+        if useX:
+          document["btnUpdate"].textContent = "Stop"
+          ix = 0
+          numX = int(document["inputXnum"].value)
+          if numX < 1:
+            InfoDialog("Trouble", f"Need at least 1 x value")
+            return
+          myInterval = timer.set_interval(doOnePoint, 0)
+          return
+
+        try:
+          T = float(Tstr)
+        except ValueError:
+          InfoDialog("Trouble", f"Must provide a valid temperature")
+          return
         if document["checkP"].checked:
           try:
-            P = float(document['inputP'].value)
+            P = float(Pstr)
           except ValueError:
             InfoDialog("Trouble", f"Must provide a valid pressure")
             return
           rho = eos.rhoForProps(T, {'P': P})
         else:
           try:
-            rho = float(document['inputRho'].value)
+            rho = float(rhostr)
           except ValueError:
             InfoDialog("Trouble", f"Must provide a valid density ")
             return
@@ -115,6 +204,18 @@
                     <label class='form-check-label' for='checkP'>compute &rho; for P</label>
                   </div>
                 </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputXnum' class='col-form-label'>#</label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputXnum' class='form-control' disabled placeholder='# of x values'>
+                  </div>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkX' onclick='updateX()'>
+                    <label class='form-check-label' for='checkX'>use T(x), &rho;(x) P(x) (0&lt;=x&lt;=1)</label>
+                  </div>
+                </div>
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
@@ -143,10 +244,13 @@
       </div>
       <div id='resultsDiv' class='card'>
         <div id='headingResults' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Results</a></h2>
+          <h2 class='h5 mb-0' style='float: left'>Results</a></h2>
+        <button class='btn btn-info btn-sm' style='float: right' onclick='copyToClipboard(copyText)' id='copyBtn'>Copy</button>
+        <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
         </div>
         <div class='show' aria-labelledby='headingResults'>
           <div class='card-body'>
+            <div id='singleResultsDiv'>
             T: <span id='T'></span><br>
             &rho;: <span id='rho'></span><br>
             P: <span id='P'></span><br>
@@ -159,10 +263,83 @@
             dPdrho: <span id='dPdrho'></span><br>
             dGdrho: <span id='dGdrho'></span><br>
           </div>
+          <div class='overflow-auto' id='parametricResultsDiv' style='display: none;'>
+            <table class='table small'>
+              <thead><tr><th>T</th><th>&rho;</th><th>P</th><th>U</th><th>A</th><th>G</th><th>Z</th><th>Cv</th><th>dZdrho</th><th>dPdrho</th><th>dGdrho</th></tr></thead>
+              <tbody id='parametricResults'></tbody>
+            </table>
+          </div>
+          </div>
         </div>
       </div>
     </div>
+
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>
+
+    <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="plotModalLabel">Plot</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="plotDiv" style="width:100%;height:500px;"></div>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputXprop' class='col-form-label'>X:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputXprop' onchange='updatePlot()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='dZdrho'>dZdrho</option>
+                      <option value='dZdrho'>dPdrho</option>
+                      <option value='dGdrho'>dGdrho</option>
+                      <option value='Cv'>Cv</option>
+                      <option value='phi'>&phi;</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputYprop' class='col-form-label'>Y:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputYprop' onchange='updatePlot()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='dZdrho'>dZdrho</option>
+                      <option value='dZdrho'>dPdrho</option>
+                      <option value='dGdrho'>dGdrho</option>
+                      <option value='Cv'>Cv</option>
+                      <option value='phi'>&phi;</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

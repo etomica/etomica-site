@@ -9,7 +9,19 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython_stdlib.js"></script>
     <script type='text/javascript' src='util.js'></script>
+    <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <script>
+      function myUpdatePlotCoex() {
+        var xsets = document.getElementById("plotXDiff").checked ? "diff" : "single";
+        var ysets = document.getElementById("plotYDiff").checked ? "diff" : "single";
+        updatePlotCoex("fcc", "hcp", Infinity, Infinity, xsets, ysets);
+      }
+      window.addEventListener("load", function() {
+        var plotModalEl = document.getElementById("plotModal");
+        plotModalEl.addEventListener("show.bs.modal", function(event) {
+            myUpdatePlotCoex();
+        });
+      });
 function phasesUpdated() {
   var allPhases = ["fcc","hcp"];
   for (var i=0; i<allPhases.length; i++) {
@@ -30,15 +42,19 @@ function clearAllRows() {
 var copyText0 = "T,rho1,rho2,P,G,phi\n", copyText = "";
 var allData = [];
 var lastRow = null;
-function addRow(v1, v2, v3, v4, v5) {
+function addRow(T, props1, props2) {
   if (lastRow) {
     lastRow.className = "";
     lastRow = null;
   }
   var tbody = document.getElementById("coex-table");
   var row = makeElement("TR");
-  var v = [v1, v2, v3, v4, v5];
-  allData.push(v);
+  props1.v2 = 1/(props1.rho*props1.rho);
+  props2.v2 = 1/(props2.rho*props2.rho);
+  props1.Y = (T/4)*Math.pow(props1.rho,-4);
+  props2.Y = (T/4)*Math.pow(props2.rho,-4);
+  allData.push({T: T, props1: props1, props2: props2});
+  var v = [T, props1['rho'], props2['rho'], props1['P'], props1['G'], 'alpha' in props2 ? props2['alpha'] : 1];
   sortData();
   for (var i=0; i<v.length; i++) {
     makeElement("TD", row, {textContent: v[i]});
@@ -48,7 +64,7 @@ function addRow(v1, v2, v3, v4, v5) {
   for (var i=0; i<allRows.length; i++) {
     var iRow = allRows[i];
     var iP = Number(iRow.childNodes[3].textContent);
-    if (iP > v4) {
+    if (iP > v[4]) {
       tbody.insertBefore(row, iRow);
       success = true;
       break;
@@ -65,11 +81,12 @@ function setStage(s) {
 }
 function sortData() {
   allData.sort(function(a,b) {
-    return a[3] - b[3];
+    return a.props1['P'] - b.props1['P'];
   });
   copyText = "";
   for (var i=0; i<allData.length; i++) {
-    copyText += allData[i].join(",")+"\n";
+    var d = allData[i];
+    copyText += d.T+","+d.props1.rho+","+d.props2.rho+","+d.props1.P+","+d.props1.G+","+('alpha' in d.props2 ? d.props2.alpha : 1)+"\n";
   }
 }
 
@@ -283,7 +300,7 @@ window.addEventListener("load", phasesUpdated);
 
         if stage == 1:
           if addme:
-            window.addRow(T, props1['rho'], props2['rho'], props1['P'], props1['G'])
+            window.addRow(T, props1, props2);
 
           if T > Thigh:
             Thigh = T
@@ -302,7 +319,7 @@ window.addEventListener("load", phasesUpdated);
           Pg -= 0.5
         elif stage >= 3:
           if addme:
-            window.addRow(T, props1['rho'], props2['rho'], props1['P'], props1['G'])
+            window.addRow(T, props1, props2);
 
           if stage == 3 and (diT-18) < iteration/50 and iT%(1<<(diT+1)) == 0:
             # increment every 50 iterations or so
@@ -585,16 +602,99 @@ window.addEventListener("load", phasesUpdated);
       <div id='headingResults' class='card-header' role='tab'>
         <h2 class='h5 mb-0' style='float: left'>Results <span id='lowPbranch' style='display: none;'>(finding low-P branch)</span></h2>
         <button class='btn btn-info btn-sm' style='float: right' onclick='copyToClipboard(copyText)'>Copy</button>
+        <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
     </div>
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
         <table class='table table-sm'>
-          <thead><tr><th>T</th><th>&rho;1</th><th>&rho;2</th><th>P</th><th>G</th></tr></thead>
+          <thead><tr><th>T</th><th>&rho;1</th><th>&rho;2</th><th>P</th><th>G</th><th>&alpha;</th></tr></thead>
           <tbody id='coex-table'></tbody>
         </table>
       </div>
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="plotModalLabel">Plot</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="plotDiv" style="width:100%;height:500px;"></div>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputXprop' class='col-form-label'>X:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlotCoex()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='dZdrho'>dZdrho</option>
+                      <option value='dZdrho'>dPdrho</option>
+                      <option value='dGdrho'>dGdrho</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v<sup>2</sup></option>
+                      <option value='Y'>Y</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputYprop' class='col-form-label'>Y:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlotCoex()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='dZdrho'>dZdrho</option>
+                      <option value='dZdrho'>dPdrho</option>
+                      <option value='dGdrho'>dGdrho</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v<sup>2</sup></option>
+                      <option value='Y'>Y</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotXDiff' onchange='myUpdatePlotCoex()'>
+                    <label class='form-check-label' for='plotXDiff'>x diff</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotYDiff' onchange='myUpdatePlotCoex()'>
+                    <label class='form-check-label' for='plotYDiff'>y diff</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
   </body>
 </html>
