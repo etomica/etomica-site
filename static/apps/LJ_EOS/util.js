@@ -123,7 +123,20 @@ function gimmeCoexData(row, prop) {
   return [row.props1[prop],row.props2[prop]];
 }
 
+function cleanOptsCoex(id, data) {
+  var sel = document.getElementById(id);
+  var opts = sel.options;
+  for (var i=0; i<opts.length; i++) {
+    var v = opts[i].value;
+    opts[i].style.display = (v in data || v in data.props1 || v in data.props2) ? "" : "none";
+  }
+}
 function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
+  if (allData.length > 0) {
+    var d = allData[0];
+    cleanOptsCoex("inputXprop", d);
+    cleanOptsCoex("inputYprop", d);
+  }
   var plotDiv = document.getElementById("plotDiv");
   var xprop = document.getElementById("inputXprop").value;
   var yprop = document.getElementById("inputYprop").value;
@@ -194,7 +207,19 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
                  sets,
                  { xaxis: {title: xtitle, exponentformat:'power'}, yaxis: {title: ytitle, exponentformat:'power'}, margin: { t: 0 } } );
 }
+function cleanOpts(id, data) {
+  var sel = document.getElementById(id);
+  var opts = sel.options;
+  for (var i=0; i<opts.length; i++) {
+    opts[i].style.display = (opts[i].value in data) ? "" : "none";
+  }
+}
 function updatePlot() {
+  if (allData.length > 0) {
+    var d = allData[0];
+    cleanOpts("inputXprop", d);
+    cleanOpts("inputYprop", d);
+  }
   var plotDiv = document.getElementById("plotDiv");
   var xprop = document.getElementById("inputXprop").value;
   var yprop = document.getElementById("inputYprop").value;
@@ -220,4 +245,32 @@ function updateX() {
   document.getElementById("parametricResultsDiv").style.display = useX ? "block" : "none";
   document.getElementById("copyBtn").style.display = useX ? "block" : "none";
   document.getElementById("plotBtn").style.display = useX ? "block" : "none";
+}
+
+function collapse1Parameter(id) {
+  var foo = document.getElementById("collapse"+id);
+  if (!foo) return;
+  new bootstrap.Collapse(foo, {toggle: false}).hide();
+}
+function collapseParameters() {
+  collapse1Parameter("parametersDiv-vapor");
+  collapse1Parameter("parametersDiv-liquid");
+  collapse1Parameter("parametersDiv-hcp");
+  collapse1Parameter("parametersDiv-fcc");
+}
+
+function phasesUpdated() {
+  var allPhases = ["vapor","liquid","fcc","hcp"];
+  for (var i=0; i<allPhases.length; i++) {
+    var x = "parametersDiv-"+allPhases[i];
+    var el = document.getElementById(x);
+    if (el) el.style.display = "none";
+  }
+
+  for (var i=1; i<=4; i++) {
+    var el = document.getElementById("phase"+i);
+    if (!el) break;
+    var p = el.value;
+    document.getElementById("parametersDiv-"+p).style.display = "block";
+  }
 }

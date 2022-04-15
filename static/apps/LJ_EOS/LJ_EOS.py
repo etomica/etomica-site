@@ -529,10 +529,12 @@ class VEOS(EOS):
     # P = Trho + TB2rho^2
     # dPdrho = T + 2TB2rho = 0
     # rho = -1/2B2
-    if T==0 or self.B[2] == -float('inf'):
+    if T == 0:
       return 0
     if T!=self.lastT:
       self.refreshB(T)
+    if self.B[2] == -float('inf'):
+      return 0
     return -0.5/self.B[2]
 
   def getMinRho(self,T):

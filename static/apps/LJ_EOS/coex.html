@@ -8,158 +8,25 @@
     <link href='main.css' rel='stylesheet'>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython_stdlib.js"></script>
+    <script src='util.js'></script>
     <script>
-function phasesUpdated() {
-  var allPhases = ["vapor","liquid","fcc","hcp"];
-  for (var i=0; i<allPhases.length; i++) {
-    var x = "parametersDiv-"+allPhases[i];
-    document.getElementById(x).style.display = "none";
-  }
-
-  var phase1 = document.getElementById("phase1").value;
-  document.getElementById("parametersDiv-"+phase1).style.display = "block";
-  var phase2 = document.getElementById("phase2").value;
-  document.getElementById("parametersDiv-"+phase2).style.display = "block";
-}
 window.addEventListener("load", phasesUpdated);
     </script>
   </head>
   <body onload='brython()'>
     <script type='text/python' src='LJ_EOS.py'></script>
+    <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
-      from browser import document
+      from browser import document, window
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
+      from EOS_util import optsForPhase
       import math
 
-      def optsForPhase(p):
-        opts = []
-        selectedEOS = document["inputEOS-"+p].value;
-        if p == "vapor":
-          if selectedEOS == "Johnson":
-            opts.append(("--vjohnson",""))
-          elif selectedEOS == "Kolafa":
-            opts.append(("--vkolafa",""))
-          elif selectedEOS == "May":
-            opts.append(("--vmay",""))
-          elif selectedEOS == "Thol":
-            opts.append(("--vthol",""))
-        elif p == "liquid":
-          if selectedEOS == "Schultz":
-            doLRC = document["checkLRC-liquid"].checked
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nl = document["inputNl"].value
-            if Nl != "0":
-              opts.append(("--Nl",Nl))
-            rc = document["inputRc-liquid"].value
-            if rc != "-1":
-              opts.append(("--rc",rc))
-              if Nl == "0":
-                InfoDialog("Trouble", f"Must use a finite liquid system size to truncate")
-                return None
-            elif Nl != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite liquid system size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC in liquid")
-              return None
-          elif selectedEOS == "Johnson":
-            opts.append(("--johnson",""))
-          elif selectedEOS == "Kolafa":
-            opts.append(("--kolafa",""))
-          elif selectedEOS == "May":
-            opts.append(("--lmay",""))
-          elif selectedEOS == "Thol":
-            opts.append(("--thol",""))
-        elif p == "fcc":
-          if selectedEOS == "Schultz":
-            if document["checkLat-fcc"].checked:
-              opts.append(("--lattice",""))
-            elif document["checkHarmonic-fcc"].checked:
-              opts.append(("--harmonic",""))
-            doPhi = document["checkVac-fcc"].checked
-            if doPhi:
-              opts.append(("--vac",""))
-            doNrcc = document["checkNrcc-fcc"].checked
-            doLRC = document["checkLRC-fcc"].checked
-            if doNrcc and doLRC:
-              InfoDialog("Trouble", f"Cannot apply LRC to anharmonic")
-              return None
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nf = document["inputNf"].value
-            if Nf != "0":
-              if doNrcc:
-                opts.append(("--Nfc",Nf))
-              else:
-                opts.append(("--Nf",Nf))
-            rc = document["inputRc-fcc"].value
-            if rc != "0":
-              if doNrcc:
-                opts.append(("--rcc",rc))
-              else:
-                opts.append(("--rc",rc))
-              if Nf == "0":
-                InfoDialog("Trouble", f"Must use a finite fcc system size to truncate")
-                return None
-            elif Nf != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite fccsystem size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC for fcc")
-              return None
-          elif selectedEOS == "Adidharma":
-            opts.append(("--Adidharma",""))
-          elif selectedEOS == "dePablo":
-            opts.append(("--dePablo",""))
-          elif selectedEOS == "vdh":
-            opts.append(("--vdh",""))
-        elif p == "hcp":
-          alpha0 = True
-          if selectedEOS == "Schultz":
-            if document["checkLat-hcp"].checked:
-              opts.append(("--lattice",""))
-            elif document["checkHarmonic-hcp"].checked:
-              opts.append(("--harmonic",""))
-            doNrcc = document["checkNrcc-fcc"].checked
-            doLRC = document["checkLRC-fcc"].checked
-            if doNrcc and doLRC:
-              InfoDialog("Trouble", f"Cannot apply LRC to anharmonic for HCP")
-              return None
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nh = document["inputNh"].value
-            if Nh != "0":
-              if doNrcc:
-                opts.append(("--Nhc",Nh))
-              else:
-                opts.append(("--Nh",Nh))
-            rc = document["inputRc-hcp"].value
-            if rc != "0":
-              if doNrcc:
-                opts.append(("--rcc",rc))
-              else:
-                opts.append(("--rc",rc))
-              if Nh == "0":
-                InfoDialog("Trouble", f"Must use a finite HCP system size to truncate")
-                return None
-            elif Nh != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite HCP system size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC for HCP")
-              return None
-            alpha0 = document["checkAlpha"].checked
-            if alpha0:
-              opts.append(("--alpha0", ""))
-          elif selectedEOS == "Adidharma":
-            opts.append(("--Adidharma",""))
-        return opts
-
       def update(ev):
+        window.collapseParameters()
         phase1 = document['phase1'].value
-        opts = optsForPhase(phase1)
+        opts = optsForPhase(phase1, document, window.grabB3)
         if opts is None:
           return
         eos1 = getEOS(phase1, opts)
@@ -167,7 +34,7 @@ window.addEventListener("load", phasesUpdated);
         if phase1 == phase2:
           InfoDialog("Trouble", f"The two phases must be different")
           return
-        opts = optsForPhase(phase2)
+        opts = optsForPhase(phase2, document, window.grabB3)
         if opts is None:
           return
         eos2 = getEOS(phase2, opts)
@@ -193,6 +60,11 @@ window.addEventListener("load", phasesUpdated);
       document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
       <h1>Phase Coexistence for LJ</h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
@@ -257,9 +129,9 @@ window.addEventListener("load", phasesUpdated);
 
       <div id='parametersDiv-vapor' class='card mb-4'>
         <div id='headingParameters-vapor' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Vapor Parameters</a></h2>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-vapor' aria-expanded='true' aria-controls='colapseparametersDiv-vapor'>Vapor Parameters</a></h2>
         </div>
-        <div class='show' aria-labelledby='headingParameters-vapor'>
+        <div id='collapseparametersDiv-vapor' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-vapor'>
           <div class='card-body'>
             <div class='row'>
               <div class='col-auto px-4'>
@@ -269,7 +141,7 @@ window.addEventListener("load", phasesUpdated);
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputEOS-vapor'>
-                      <option value='Schultz' selected>Schultz</option>
+                      <option value='Schultz' selected>Schultz (VEOS)</option>
                       <option value='Johnson'>Johnson</option>
                       <option value='Kolafa'>Kolafa</option>
                       <option value='May'>May</option>
@@ -282,12 +154,11 @@ window.addEventListener("load", phasesUpdated);
           </div>
         </div>
       </div>
-
       <div id='parametersDiv-liquid' class='card mb-4'>
         <div id='headingParameters-liquid' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Liquid Parameters</a></h2>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-liquid' aria-expanded='true' aria-controls='colapseparametersDiv-liquid'>Liquid Parameters</a></h2>
         </div>
-        <div class='show' aria-labelledby='headingParameters-liquid'>
+        <div id='collapseparametersDiv-liquid' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-liquid'>
           <div class='card-body'>
             <div class='row'>
               <div class='col-auto px-4'>
@@ -356,9 +227,9 @@ window.addEventListener("load", phasesUpdated);
 
       <div id='parametersDiv-hcp' class='card mb-4'>
         <div id='headingParameters-hcp' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>HCP Parameters</a></h2>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-hcp' aria-expanded='true' aria-controls='colapseparametersDiv-hcp'>HCP Parameters</a></h2>
         </div>
-        <div class='show' aria-labelledby='headingParameters-hcp'>
+        <div id='collapseparametersDiv-hcp' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-hcp'>
           <div class='card-body'>
             <div class='row'>
               <div class='col-auto px-4'>
@@ -443,12 +314,11 @@ window.addEventListener("load", phasesUpdated);
           </div>
         </div>
       </div>
-
       <div id='parametersDiv-fcc' class='card mb-4'>
         <div id='headingParameters-fcc' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>FCC Parameters</a></h2>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a></h2>
         </div>
-        <div class='show' aria-labelledby='headingParameters-fcc'>
+        <div id='collapseparametersDiv-fcc' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-fcc'>
           <div class='card-body'>
             <div class='row'>
               <div class='col-auto px-4'>
@@ -550,5 +420,7 @@ window.addEventListener("load", phasesUpdated);
         </div>
       </div>
     </div>
+    <script src='emscripten.js'></script>
+    <script async type="text/javascript" src="virial.js"></script>
   </body>
 </html>

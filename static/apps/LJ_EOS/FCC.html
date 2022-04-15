@@ -20,14 +20,15 @@
         document.getElementById("input"+d).setAttribute("disabled", "true");
         document.getElementById("input"+e).removeAttribute("disabled");
       }
+function myUpdatePlot() {
+  updatePlot();
+}
 
       window.addEventListener("load", updateRhoP);
       window.addEventListener("load", updateX);
       window.addEventListener("load", function() {
         var plotModalEl = document.getElementById("plotModal");
-        plotModalEl.addEventListener("show.bs.modal", function(event) {
-            updatePlot();
-        });
+        plotModalEl.addEventListener("show.bs.modal", muUpdatePlot);
       });
 
 var copyText0 = "T,rho,P,U,A,G,Z,dZdrho,dPdrho,dGdrho,Cv,phi\n";
@@ -56,10 +57,12 @@ function clearAllRows() {
 }
     </script>
     <script type='text/python' src='LJ_EOS.py'></script>
+    <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
       from browser import document, window, timer
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS
+      from EOS_util import optsForPhase
 
       myInterval = eos = None
       doNrho = doPhi = False
@@ -100,53 +103,9 @@ function clearAllRows() {
           return
         window.clearAllRows()
         window.copyText = window.copyText0
+        window.collapseParameters()
 
-        opts = []
-        selectedEOS = document["inputEOS"].value
-        if selectedEOS == "Schultz":
-          if document["checkLat"].checked:
-            opts.append(("--lattice",""))
-          elif document["checkHarmonic"].checked:
-            opts.append(("--harmonic",""))
-          if document["checkSS"].checked:
-            opts.append(("--ss",""))
-          doPhi = document["checkVac"].checked
-          if doPhi:
-            opts.append(("--vac",""))
-          doNrcc = document["checkNrcc"].checked
-          doLRC = document["checkLRC"].checked
-          if doNrcc and doLRC:
-            InfoDialog("Trouble", f"Cannot apply LRC to anharmonic")
-            return
-          if doLRC:
-            opts.append(("--lrc",""))
-          Nf = document["inputNf"].value
-          if Nf != "0":
-            if doNrcc:
-              opts.append(("--Nfc",Nf))
-            else:
-              opts.append(("--Nf",Nf))
-          rc = document["inputRc"].value
-          if rc != "0":
-            if doNrcc:
-              opts.append(("--rcc",rc))
-            else:
-              opts.append(("--rc",rc))
-            if Nf == "0":
-              InfoDialog("Trouble", f"Must use a finite system size to truncate")
-              return
-          elif Nf != "0":
-            InfoDialog("Trouble", f"Must truncate when using a finite system size")
-            return
-          elif doLRC:
-            InfoDialog("Trouble", f"Must truncate to include LRC")
-            return
-        elif selectedEOS == "Adidharma":
-          opts.append(("--Adidharma",""))
-        elif selectedEOS == "dePablo":
-          opts.append(("--dePablo",""))
-        elif selectedEOS == "vdh":
-          opts.append(("--vdh",""))
+        opts = optsForPhase("fcc", document, None)
         eos = getEOS('fcc', opts)
         Tstr = document['inputT'].value
         Pstr = document['inputP'].value
@@ -250,13 +209,30 @@ function clearAllRows() {
                   </div>
                 </div>
               </div>
+        </div>
+        <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto'>
+                <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id='parametersDiv-fcc' class='card mb-4'>
+        <div id='headingParameters-fcc' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a></h2>
+        </div>
+        <div id='collapseparametersDiv-fcc' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-fcc'>
+          <div class='card-body'>
+            <div class='row'>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputEOS' class='col-form-label'>EOS</label>
+                    <label for='inputEOS-fcc' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS'>
+                    <select class='form-select' id='inputEOS-fcc'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Adidharma'>Adidharma</option>
                       <option value='dePablo'>de Pablo</option>
@@ -266,26 +242,20 @@ function clearAllRows() {
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkLat'>
-                    <label class='form-check-label' for='checkLat'>lattice properties</label>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLat-fcc'>
+                    <label class='form-check-label' for='checkLat-fcc'>lattice properties</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic'>
-                    <label class='form-check-label' for='checkHarmonic'>lattice+harmonic properties</label>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-fcc'>
+                    <label class='form-check-label' for='checkHarmonic-fcc'>lattice+harmonic properties</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkSS'>
-                    <label class='form-check-label' for='checkSS'>soft-sphere properties</label>
-                  </div>
-                </div>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkVac'>
-                    <label class='form-check-label' for='checkVac'>include vacancies</label>
+                    <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc'>
+                    <label class='form-check-label' for='checkVac-fcc'>include vacancies</label>
                   </div>
                 </div>
               </div>
@@ -307,10 +277,10 @@ function clearAllRows() {
             </div>
             <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto'>
-                <label for='rc' class='col-form-label'>cutoff</label>
+                <label for='rc-fcc' class='col-form-label'>cutoff</label>
               </div>
               <div class='col-auto'>
-                <select class='form-select' id='inputRc'>
+                <select class='form-select' id='inputRc-fcc'>
                   <option value='0' selected>&infin;</option>
                   <option value='11'>11</option>
                   <option value='9'>9</option>
@@ -325,26 +295,21 @@ function clearAllRows() {
             </div>
             <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkNrcc'>
-                <label class='form-check-label' for='checkNrcc'>apply only to anharmonic</label>
+                <input class='form-check-input' type='checkbox' value='' id='checkNrcc-fcc'>
+                <label class='form-check-label' for='checkNrcc-fcc'>apply only to anharmonic</label>
               </div>
             </div>
             <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC'>
-                <label class='form-check-label' for='checkLRC'>include LRC</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
+                <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
+                <label class='form-check-label' for='checkLRC-fcc'>include LRC</label>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
       <div id='resultsDiv' class='card'>
         <div id='headingResults' class='card-header' role='tab'>
@@ -366,7 +331,7 @@ function clearAllRows() {
             dPdrho: <span id='dPdrho'></span><br>
             dGdrho: <span id='dGdrho'></span><br>
             Cv: <span id='Cv'></span><br>
-            vacancy fraction: <span id='phi'></span><br>
+            &phi;: <span id='phi'></span><br>
           </div>
           <div class='overflow-auto' id='parametricResultsDiv' style='display: none;'>
             <table class='table small'>
@@ -394,7 +359,7 @@ function clearAllRows() {
                     <label for='inputXprop' class='col-form-label'>X:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputXprop' onchange='updatePlot()'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -407,6 +372,11 @@ function clearAllRows() {
                       <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>
@@ -417,7 +387,7 @@ function clearAllRows() {
                     <label for='inputYprop' class='col-form-label'>Y:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputYprop' onchange='updatePlot()'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -430,6 +400,11 @@ function clearAllRows() {
                       <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>

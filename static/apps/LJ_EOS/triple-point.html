@@ -8,170 +8,19 @@
     <link href='main.css' rel='stylesheet'>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython_stdlib.js"></script>
+    <script src='util.js'></script>
     <script>
-function collapse1Parameter(id) {
-  var foo = document.getElementById("collapse"+id);
-  new bootstrap.Collapse(foo, {toggle: false}).hide();
-}
-function collapseParameters() {
-  collapse1Parameter("parametersDiv-vapor");
-  collapse1Parameter("parametersDiv-liquid");
-  collapse1Parameter("parametersDiv-hcp");
-  collapse1Parameter("parametersDiv-fcc");
-}
-function phasesUpdated() {
-  var allPhases = ["vapor","liquid","fcc","hcp"];
-  for (var i=0; i<allPhases.length; i++) {
-    var x = "parametersDiv-"+allPhases[i];
-    document.getElementById(x).style.display = "none";
-  }
-
-  var phase1 = document.getElementById("phase1").value;
-  document.getElementById("parametersDiv-"+phase1).style.display = "block";
-  var phase2 = document.getElementById("phase2").value;
-  document.getElementById("parametersDiv-"+phase2).style.display = "block";
-  var phase3 = document.getElementById("phase3").value;
-  document.getElementById("parametersDiv-"+phase3).style.display = "block";
-}
 window.addEventListener("load", phasesUpdated);
     </script>
   </head>
   <body onload='brython()'>
     <script type='text/python' src='LJ_EOS.py'></script>
+    <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
       from browser import document, window, timer
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
-
-      def B3callback(T):
-        return window.grabB3(T)
-
-      def optsForPhase(p):
-        opts = []
-        selectedEOS = document["inputEOS-"+p].value;
-        if p == "vapor":
-          if selectedEOS == "Johnson":
-            opts.append(("--vjohnson",""))
-          elif selectedEOS == "Kolafa":
-            opts.append(("--vkolafa",""))
-          elif selectedEOS == "May":
-            opts.append(("--vmay",""))
-          elif selectedEOS == "Thol":
-            opts.append(("--vthol",""))
-          elif selectedEOS == "Schultz":
-            opts.append(("--B3func",B3callback))
-        elif p == "liquid":
-          if selectedEOS == "Schultz":
-            doLRC = document["checkLRC-liquid"].checked
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nl = document["inputNl"].value
-            if Nl != "0":
-              opts.append(("--Nl",Nl))
-            rc = document["inputRc-liquid"].value
-            if rc != "-1":
-              opts.append(("--rc",rc))
-              if Nl == "0":
-                InfoDialog("Trouble", f"Must use a finite liquid system size to truncate")
-                return None
-            elif Nl != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite liquid system size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC in liquid")
-              return None
-          elif selectedEOS == "Johnson":
-            opts.append(("--johnson",""))
-          elif selectedEOS == "Kolafa":
-            opts.append(("--kolafa",""))
-          elif selectedEOS == "May":
-            opts.append(("--lmay",""))
-          elif selectedEOS == "Thol":
-            opts.append(("--thol",""))
-        elif p == "fcc":
-          if selectedEOS == "Schultz":
-            if document["checkLat-fcc"].checked:
-              opts.append(("--lattice",""))
-            elif document["checkHarmonic-fcc"].checked:
-              opts.append(("--harmonic",""))
-            doPhi = document["checkVac-fcc"].checked
-            if doPhi:
-              opts.append(("--vac",""))
-            doNrcc = document["checkNrcc-fcc"].checked
-            doLRC = document["checkLRC-fcc"].checked
-            if doNrcc and doLRC:
-              InfoDialog("Trouble", f"Cannot apply LRC to anharmonic")
-              return None
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nf = document["inputNf"].value
-            if Nf != "0":
-              if doNrcc:
-                opts.append(("--Nfc",Nf))
-              else:
-                opts.append(("--Nf",Nf))
-            rc = document["inputRc-fcc"].value
-            if rc != "0":
-              if doNrcc:
-                opts.append(("--rcc",rc))
-              else:
-                opts.append(("--rc",rc))
-              if Nf == "0":
-                InfoDialog("Trouble", f"Must use a finite fcc system size to truncate")
-                return None
-            elif Nf != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite fccsystem size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC for fcc")
-              return None
-          elif selectedEOS == "Adidharma":
-            opts.append(("--Adidharma",""))
-          elif selectedEOS == "dePablo":
-            opts.append(("--dePablo",""))
-          elif selectedEOS == "vdh":
-            opts.append(("--vdh",""))
-        elif p == "hcp":
-          alpha0 = True
-          if selectedEOS == "Schultz":
-            if document["checkLat-hcp"].checked:
-              opts.append(("--lattice",""))
-            elif document["checkHarmonic-hcp"].checked:
-              opts.append(("--harmonic",""))
-            doNrcc = document["checkNrcc-fcc"].checked
-            doLRC = document["checkLRC-fcc"].checked
-            if doNrcc and doLRC:
-              InfoDialog("Trouble", f"Cannot apply LRC to anharmonic for HCP")
-              return None
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nh = document["inputNh"].value
-            if Nh != "0":
-              if doNrcc:
-                opts.append(("--Nhc",Nh))
-              else:
-                opts.append(("--Nh",Nh))
-            rc = document["inputRc-hcp"].value
-            if rc != "0":
-              if doNrcc:
-                opts.append(("--rcc",rc))
-              else:
-                opts.append(("--rc",rc))
-              if Nh == "0":
-                InfoDialog("Trouble", f"Must use a finite HCP system size to truncate")
-                return None
-            elif Nh != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite HCP system size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC for HCP")
-              return None
-            alpha0 = document["checkAlpha"].checked
-            if alpha0:
-              opts.append(("--alpha0", ""))
-          elif selectedEOS == "Adidharma":
-            opts.append(("--Adidharma",""))
-        return opts
+      from EOS_util import optsForPhase
 
       eos1 = eos2 = eos3 = None
       T = Tstep = Tmin = Tmax = lastDT = stage = 0
@@ -237,7 +86,7 @@ window.addEventListener("load", phasesUpdated);
           T += lastDT
 
       def stopUpdate():
-        global eos1, eos2
+        global eos1, eos2, eos3
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
         eos1 = None
@@ -254,7 +103,7 @@ window.addEventListener("load", phasesUpdated);
         document["btnUpdate"].textContent = "Stop"
 
         phase1 = document['phase1'].value
-        opts = optsForPhase(phase1)
+        opts = optsForPhase(phase1, document, window.grabB3)
         if opts is None:
           return
         eos1 = getEOS(phase1, opts)
@@ -262,7 +111,7 @@ window.addEventListener("load", phasesUpdated);
         if phase1 == phase2:
           InfoDialog("Trouble", f"The three phases must be different")
           return
-        opts = optsForPhase(phase2)
+        opts = optsForPhase(phase2, document, window.grabB3)
         if opts is None:
           return
         eos2 = getEOS(phase2, opts)
@@ -270,7 +119,7 @@ window.addEventListener("load", phasesUpdated);
         if phase1 == phase3 or phase2 == phase3:
           InfoDialog("Trouble", f"The three phases must be different")
           return
-        opts = optsForPhase(phase3)
+        opts = optsForPhase(phase3, document, window.grabB3)
         if opts is None:
           return
         eos3 = getEOS(phase3, opts)
@@ -370,7 +219,7 @@ window.addEventListener("load", phasesUpdated);
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputEOS-vapor'>
-                      <option value='Schultz' selected>Schultz</option>
+                      <option value='Schultz' selected>Schultz (VEOS)</option>
                       <option value='Johnson'>Johnson</option>
                       <option value='Kolafa'>Kolafa</option>
                       <option value='May'>May</option>
@@ -383,7 +232,6 @@ window.addEventListener("load", phasesUpdated);
           </div>
         </div>
       </div>
-
       <div id='parametersDiv-liquid' class='card mb-4'>
         <div id='headingParameters-liquid' class='card-header' role='tab'>
           <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-liquid' aria-expanded='true' aria-controls='colapseparametersDiv-liquid'>Liquid Parameters</a></h2>
@@ -544,7 +392,6 @@ window.addEventListener("load", phasesUpdated);
           </div>
         </div>
       </div>
-
       <div id='parametersDiv-fcc' class='card mb-4'>
         <div id='headingParameters-fcc' class='card-header' role='tab'>
           <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a></h2>

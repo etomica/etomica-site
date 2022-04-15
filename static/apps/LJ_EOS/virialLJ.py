@@ -136,7 +136,6 @@ class LJB3(LJBn):
 
     for i in range(0,self.nr):
       # (f*f)*f
-      print(str(i)+" "+str(ffr[i])+" "+str(fr[i]))
       bsum += (ffr[i]*fr[i]*i)*i
       if self.nder > 0:
         # (f*f)*d1

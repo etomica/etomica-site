@@ -23,23 +23,24 @@
       window.addEventListener("load", updateRhoP);
       function updateRc() {
         var rc0 = 2.5;
-        var opts = document.getElementById("inputRc").options;
+        var opts = document.getElementById("inputRc-liquid").options;
         for (var i=0; i<opts.length; i++) {
           var irc = Number(opts[i].value);
           if (irc < 0) continue;
           opts[i].textContent = rc0 * Math.pow(1.2, irc);
         }
       }
+      function myUpdatePlot() {
+        updatePlot();
+      }
       window.addEventListener("load", updateRc);
       window.addEventListener("load", updateX);
       window.addEventListener("load", function() {
         var plotModalEl = document.getElementById("plotModal");
-        plotModalEl.addEventListener("show.bs.modal", function(event) {
-            updatePlot();
-        });
+        plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
 
-var copyText0 = "T,rho,P,U,A,G,Z,dZdrho,dPdrho,dGdrho,Cv,phi\n";
+var copyText0 = "T,rho,P,U,A,G,Z,dZdrho,dPdrho,dGdrho,Cv\n";
 var copyText = copyText0;
 var allData = [];
 function addParametricRow(T, rho, props) {
@@ -65,10 +66,12 @@ function clearAllRows() {
 }
     </script>
     <script type='text/python' src='LJ_EOS.py'></script>
+    <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
       from browser import document, window.timer
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS
+      from EOS_util import optsForPhase
 
       myInterval = eos = None
       ix = numX = 0
@@ -105,37 +108,9 @@ function clearAllRows() {
           return
         window.clearAllRows()
         window.copyText = window.copyText0
-        opts = []
-        selectedEOS = document["inputEOS"].value;
-        if selectedEOS == "Schultz":
-          if document["checkSS"].checked:
-            opts.append(("--ss",""))
-          doLRC = document["checkLRC"].checked
-          if doLRC:
-            opts.append(("--lrc",""))
-          Nl = document["inputNl"].value
-          if Nl != "0":
-            opts.append(("--Nl",Nl))
-          rc = document["inputRc"].value
-          if rc != "-1":
-            opts.append(("--rc",rc))
-            if Nl == "0":
-              InfoDialog("Trouble", f"Must use a finite system size to truncate")
-              return
-          elif Nl != "0":
-            InfoDialog("Trouble", f"Must truncate when using a finite system size")
-            return
-          elif doLRC:
-            InfoDialog("Trouble", f"Must truncate to include LRC")
-            return
-        elif selectedEOS == "Johnson":
-          opts.append(("--johnson",""))
-        elif selectedEOS == "Kolafa":
-          opts.append(("--kolafa",""))
-        elif selectedEOS == "May":
-          opts.append(("--lmay",""))
-        elif selectedEOS == "Thol":
-          opts.append(("--thol",""))
+        window.collapseParameters()
+
+        opts = optsForPhase("liquid", document, None)
         eos = getEOS('liquid', opts)
         Tstr = document['inputT'].value
         Pstr = document['inputP'].value
@@ -231,25 +206,36 @@ function clearAllRows() {
                   </div>
                 </div>
               </div>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto'>
+                <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id='parametersDiv-liquid' class='card mb-4'>
+        <div id='headingParameters-liquid' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-liquid' aria-expanded='true' aria-controls='colapseparametersDiv-liquid'>Liquid Parameters</a></h2>
+        </div>
+        <div id='collapseparametersDiv-liquid' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-liquid'>
+          <div class='card-body'>
+            <div class='row'>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputEOS' class='col-form-label'>EOS</label>
+                    <label for='inputEOS-liquid' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS'>
+                    <select class='form-select' id='inputEOS-liquid'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Johnson'>Johnson</option>
                       <option value='Kolafa'>Kolafa</option>
                       <option value='May'>May</option>
                       <option value='Thol'>Thol</option>
                     </select>
-                  </div>
-                </div>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkSS'>
-                    <label class='form-check-label' for='checkSS'>soft-sphere properties</label>
                   </div>
                 </div>
               </div>
@@ -271,10 +257,10 @@ function clearAllRows() {
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc' class='col-form-label'>cutoff</label>
+                    <label for='rc-liquid' class='col-form-label'>cutoff</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputRc'>
+                    <select class='form-select' id='inputRc-liquid'>
                   <option value='-1' selected>&infin;</option>
                   <option value='9'>9</option>
                   <option value='8'>8</option>
@@ -291,20 +277,16 @@ function clearAllRows() {
             </div>
             <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC'>
-                <label class='form-check-label' for='checkLRC'>include LRC</label>
+                <input class='form-check-input' type='checkbox' value='' id='checkLRC-liquid'>
+                <label class='form-check-label' for='checkLRC-liquid'>include LRC</label>
               </div>
             </div>
           </div>
         </div>
-        <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
+
 
       <div id='resultsDiv' class='card'>
         <div id='headingResults' class='card-header' role='tab'>
@@ -353,7 +335,7 @@ function clearAllRows() {
                     <label for='inputXprop' class='col-form-label'>X:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputXprop' onchange='updatePlot()'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -366,6 +348,11 @@ function clearAllRows() {
                       <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>
@@ -376,7 +363,7 @@ function clearAllRows() {
                     <label for='inputYprop' class='col-form-label'>Y:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputYprop' onchange='updatePlot()'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -389,6 +376,11 @@ function clearAllRows() {
                       <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>

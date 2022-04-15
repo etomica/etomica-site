@@ -11,29 +11,15 @@
     <script type='text/javascript' src='util.js'></script>
     <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <script>
-      function myUpdatePlotCoex() {
+      function myUpdatePlot() {
         var xsets = document.getElementById("plotXDiff").checked ? "diff" : "single";
         var ysets = document.getElementById("plotYDiff").checked ? "diff" : "single";
         updatePlotCoex("fcc", "hcp", Infinity, Infinity, xsets, ysets);
       }
       window.addEventListener("load", function() {
         var plotModalEl = document.getElementById("plotModal");
-        plotModalEl.addEventListener("show.bs.modal", function(event) {
-            myUpdatePlotCoex();
-        });
+        plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
-function phasesUpdated() {
-  var allPhases = ["fcc","hcp"];
-  for (var i=0; i<allPhases.length; i++) {
-    var x = "parametersDiv-"+allPhases[i];
-    document.getElementById(x).style.display = "none";
-  }
-
-  var phase1 = document.getElementById("phase1").value;
-  document.getElementById("parametersDiv-"+phase1).style.display = "block";
-  var phase2 = document.getElementById("phase2").value;
-  document.getElementById("parametersDiv-"+phase2).style.display = "block";
-}
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
@@ -90,14 +76,6 @@ function sortData() {
   }
 }
 
-function collapse1Parameter(id) {
-  var foo = document.getElementById("collapse"+id);
-  new bootstrap.Collapse(foo, {toggle: false}).hide();
-}
-function collapseParameters() {
-  collapse1Parameter("parametersDiv-hcp");
-  collapse1Parameter("parametersDiv-fcc");
-}
 function sortOutput() {
   var tbody = document.getElementById("coex-table");
   var rows = tbody.rows;
@@ -131,104 +109,6 @@ window.addEventListener("load", phasesUpdated);
       from browser import document, window, timer
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
-
-      def optsForPhase(p):
-        opts = []
-        selectedEOS = document["inputEOS-"+p].value;
-        if p == "vapor":
-          log2nB3 = 12
-          if selectedEOS == "Johnson":
-            opts.append(("--vjohnson",""))
-          elif selectedEOS == "Kolafa":
-            opts.append(("--vkolafa",""))
-          elif selectedEOS == "May":
-            opts.append(("--vmay",""))
-          elif selectedEOS == "Thol":
-            opts.append(("--vthol",""))
-          elif selectedEOS == "Schultz":
-            opts.append(("--log2nB3",document["inputLog2nB3"].value))
-            opts.append(("--nTder",0))
-        elif p == "fcc":
-          if selectedEOS == "Schultz":
-            if document["checkLat-fcc"].checked:
-              opts.append(("--lattice",""))
-            elif document["checkHarmonic-fcc"].checked:
-              opts.append(("--harmonic",""))
-            doNrcc = document["checkNrcc-fcc"].checked
-            doLRC = document["checkLRC-fcc"].checked
-            if doNrcc and doLRC:
-              InfoDialog("Trouble", f"Cannot apply LRC to anharmonic")
-              return None
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nf = document["inputNf"].value
-            if Nf != "0":
-              if doNrcc:
-                opts.append(("--Nfc",Nf))
-              else:
-                opts.append(("--Nf",Nf))
-            rc = document["inputRc-fcc"].value
-            if rc != "0":
-              if doNrcc:
-                opts.append(("--rcc",rc))
-              else:
-                opts.append(("--rc",rc))
-              if Nf == "0":
-                InfoDialog("Trouble", f"Must use a finite fcc system size to truncate")
-                return None
-            elif Nf != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite fccsystem size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC for fcc")
-              return None
-          elif selectedEOS == "Adidharma":
-            opts.append(("--Adidharma",""))
-          elif selectedEOS == "dePablo":
-            opts.append(("--dePablo",""))
-          elif selectedEOS == "vdh":
-            opts.append(("--vdh",""))
-        elif p == "hcp":
-          alpha0 = True
-          if selectedEOS == "Schultz":
-            if document["checkLat-hcp"].checked:
-              opts.append(("--lattice",""))
-            elif document["checkHarmonic-hcp"].checked:
-              opts.append(("--harmonic",""))
-            doNrcc = document["checkNrcc-fcc"].checked
-            doLRC = document["checkLRC-fcc"].checked
-            if doNrcc and doLRC:
-              InfoDialog("Trouble", f"Cannot apply LRC to anharmonic for HCP")
-              return None
-            if doLRC:
-              opts.append(("--lrc",""))
-            Nh = document["inputNh"].value
-            if Nh != "0":
-              if doNrcc:
-                opts.append(("--Nhc",Nh))
-              else:
-                opts.append(("--Nh",Nh))
-            rc = document["inputRc-hcp"].value
-            if rc != "0":
-              if doNrcc:
-                opts.append(("--rcc",rc))
-              else:
-                opts.append(("--rc",rc))
-              if Nh == "0":
-                InfoDialog("Trouble", f"Must use a finite HCP system size to truncate")
-                return None
-            elif Nh != "0":
-              InfoDialog("Trouble", f"Must truncate when using a finite HCP system size")
-              return None
-            elif doLRC:
-              InfoDialog("Trouble", f"Must truncate to include LRC for HCP")
-              return None
-            alpha0 = document["checkAlpha"].checked
-            if alpha0:
-              opts.append(("--alpha0", ""))
-          elif selectedEOS == "Adidharma":
-            opts.append(("--Adidharma",""))
-        return opts
 
       eos1 = None
       eos2 = None
@@ -344,7 +224,7 @@ window.addEventListener("load", phasesUpdated);
         window.collapseParameters()
         document["btnUpdate"].textContent = "Stop"
         phase1 = document['phase1'].value
-        opts = optsForPhase(phase1)
+        opts = optsForPhase(phase1, document, None)
         if opts is None:
           return
         eos1 = getEOS(phase1, opts)
@@ -352,7 +232,7 @@ window.addEventListener("load", phasesUpdated);
         if phase1 == phase2:
           InfoDialog("Trouble", f"The two phases must be different")
           return
-        opts = optsForPhase(phase2)
+        opts = optsForPhase(phase2, document, None)
         if opts is None:
           return
         eos2 = getEOS(phase2, opts)
@@ -414,7 +294,6 @@ window.addEventListener("load", phasesUpdated);
         </div>
       </div>
     </div>
-
 
       <div id='parametersDiv-hcp' class='card mb-4'>
         <div id='headingParameters-hcp' class='card-header' role='tab'>
@@ -505,7 +384,6 @@ window.addEventListener("load", phasesUpdated);
           </div>
         </div>
       </div>
-
       <div id='parametersDiv-fcc' class='card mb-4'>
         <div id='headingParameters-fcc' class='card-header' role='tab'>
           <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a></h2>
@@ -631,7 +509,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputXprop' class='col-form-label'>X:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputXprop' onchange='myUpdatePlotCoex()'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -642,9 +520,13 @@ window.addEventListener("load", phasesUpdated);
                       <option value='dZdrho'>dZdrho</option>
                       <option value='dZdrho'>dPdrho</option>
                       <option value='dGdrho'>dGdrho</option>
+                      <option value='Cv'>Cv</option>
+                      <option value='phi'>&phi;</option>
                       <option value='alpha'>&alpha;</option>
-                      <option value='v2'>v<sup>2</sup></option>
+                      <option value='v2'>v2</option>
                       <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>
@@ -655,7 +537,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputYprop' class='col-form-label'>Y:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputYprop' onchange='myUpdatePlotCoex()'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -666,26 +548,14 @@ window.addEventListener("load", phasesUpdated);
                       <option value='dZdrho'>dZdrho</option>
                       <option value='dZdrho'>dPdrho</option>
                       <option value='dGdrho'>dGdrho</option>
+                      <option value='Cv'>Cv</option>
+                      <option value='phi'>&phi;</option>
                       <option value='alpha'>&alpha;</option>
-                      <option value='v2'>v<sup>2</sup></option>
+                      <option value='v2'>v2</option>
                       <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='plotXDiff' onchange='myUpdatePlotCoex()'>
-                    <label class='form-check-label' for='plotXDiff'>x diff</label>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='plotYDiff' onchange='myUpdatePlotCoex()'>
-                    <label class='form-check-label' for='plotYDiff'>y diff</label>
                   </div>
                 </div>
               </div>
@@ -696,5 +566,6 @@ window.addEventListener("load", phasesUpdated);
           </div>
         </div>
       </div>
+    </div>
   </body>
 </html>

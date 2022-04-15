@@ -20,13 +20,14 @@
         document.getElementById("input"+d).setAttribute("disabled", "true");
         document.getElementById("input"+e).removeAttribute("disabled");
       }
+      function myUpdatePlot() {
+        updatePlot();
+      }
       window.addEventListener("load", updateRhoP);
       window.addEventListener("load", updateX);
       window.addEventListener("load", function() {
         var plotModalEl = document.getElementById("plotModal");
-        plotModalEl.addEventListener("show.bs.modal", function(event) {
-            updatePlot();
-        });
+        plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
 
 var copyText0 = "T,rho,P,U,A,G,Z,Cv,dZdrho,dPdrho,dGdrho\n";
@@ -59,9 +60,7 @@ function clearAllRows() {
       from browser import document, window, timer
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS
-
-      def B3callback(T):
-        return window.grabB3(T)
+      from EOS_util import optsForPhase
 
       myInterval = eos = None
       ix = numX = 0
@@ -98,25 +97,9 @@ function clearAllRows() {
           return
         window.clearAllRows()
         window.copyText = window.copyText0
+        window.collapseParameters()
 
-        opts = []
-        try:
-          T = float(document['inputT'].value)
-        except ValueError:
-          InfoDialog("Trouble", f"Must provide a valid temperature")
-          return
-        selectedEOS = document["inputEOS"].value;
-        if selectedEOS == "Johnson":
-          opts.append(("--vjohnson",""))
-        elif selectedEOS == "Kolafa":
-          opts.append(("--vkolafa",""))
-        elif selectedEOS == "May":
-          opts.append(("--vmay",""))
-        elif selectedEOS == "Thol":
-          opts.append(("--vthol",""))
-        elif selectedEOS == "Schultz":
-          opts.append(("--B3func",B3callback))
-        
+        opts = optsForPhase("vapor", document, window.grabB3)
         eos = getEOS('vapor', opts)
 
         Tstr = document['inputT'].value
@@ -217,22 +200,6 @@ function clearAllRows() {
                   </div>
                 </div>
               </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputEOS' class='col-form-label'>EOS</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputEOS'>
-                      <option value='Schultz' selected>Schultz</option>
-                      <option value='Johnson'>Johnson</option>
-                      <option value='Kolafa'>Kolafa</option>
-                      <option value='May'>May</option>
-                      <option value='Thol'>Thol</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
         </div>
         <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto'>
@@ -242,6 +209,35 @@ function clearAllRows() {
           </div>
         </div>
       </div>
+
+      <div id='parametersDiv-vapor' class='card mb-4'>
+        <div id='headingParameters-vapor' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-vapor' aria-expanded='true' aria-controls='colapseparametersDiv-vapor'>Vapor Parameters</a></h2>
+        </div>
+        <div id='collapseparametersDiv-vapor' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-vapor'>
+          <div class='card-body'>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputEOS-vapor' class='col-form-label'>EOS</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputEOS-vapor'>
+                      <option value='Schultz' selected>Schultz (VEOS)</option>
+                      <option value='Johnson'>Johnson</option>
+                      <option value='Kolafa'>Kolafa</option>
+                      <option value='May'>May</option>
+                      <option value='Thol'>Thol</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div id='resultsDiv' class='card'>
         <div id='headingResults' class='card-header' role='tab'>
           <h2 class='h5 mb-0' style='float: left'>Results</a></h2>
@@ -293,7 +289,7 @@ function clearAllRows() {
                     <label for='inputXprop' class='col-form-label'>X:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputXprop' onchange='updatePlot()'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -306,6 +302,11 @@ function clearAllRows() {
                       <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>
@@ -316,7 +317,7 @@ function clearAllRows() {
                     <label for='inputYprop' class='col-form-label'>Y:</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputYprop' onchange='updatePlot()'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
                       <option value='P'>P</option>
@@ -329,6 +330,11 @@ function clearAllRows() {
                       <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
                     </select>
                   </div>
                 </div>
