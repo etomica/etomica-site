@@ -22,13 +22,15 @@ class LJB2(LJBn):
     bsum = 0
     lastTerm = -1
     for i in range(0,1001):
-      term = (4*beta)**(0.5*i)
+      lnTerm = (0.5*i) * math.log(4*beta)
+      if lnTerm < 600:
+        term = math.exp(lnTerm)
       if i < 1:
         term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
       else:
         x = math.lgamma(-0.25+0.5*i) - math.lgamma(i+1)
         if x > -600:
-          term *= math.exp(x)
+          term = math.exp(lnTerm + x)
         else:
           y = math.exp(x/(0.5*i))
           term = (4*beta*y)**(0.5*i)
@@ -44,16 +46,23 @@ class LJB2(LJBn):
     d2sum = 0
 
     for i in range(lastTerm+1, -1, -1):
-      term = (4*beta)**(0.5*i)
+      lnTerm = (0.5*i) * math.log(4*beta)
+      if lnTerm < 600:
+        term = math.exp(lnTerm)
+      if i < 1:
+        term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
       if i < 1:
         term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
       else:
         x = math.lgamma(-0.25+0.5*i) - math.lgamma(i+1)
         if x > -600:
-          term *= math.exp(x)
+          term = math.exp(lnTerm + x)
         else:
           y = math.exp(x/(0.5*i))
-          term = (4*beta*y)**(0.5*i)
+          lnTerm = 0.5*i * math.log(4*beta*y)
+          if lnTerm > 700:
+            return [-float('inf'), -float('inf'), -float('inf')]
+          term = math.exp(lnTerm)
 
       bsum += term
       d1sum -= 0.5*i*term
@@ -74,6 +83,8 @@ def computeU(r):
 def myExp(x):
   if x < -700:
     return 0
+  if x > 700:
+    return float('inf')
   return math.exp(x)
 
 class LJB3(LJBn):
@@ -90,11 +101,17 @@ class LJB3(LJBn):
     fr[0] = -1
     dr = self.rc / self.nr
     beta = 1/T
+    if beta > 700:
+      rv = [-float('inf'),
+            -float('inf'),
+            -float('inf')]
+      return rv
     for i in range(0,self.nr):
       r = i*dr
       u = computeU(r)
       x = -beta*u
       e = myExp(x)
+
       f = e-1
       fr[i] = f
       if e > 0:
@@ -111,8 +128,15 @@ class LJB3(LJBn):
     bsum = 0
     d1sum = 0
     d2sum = 0
+    if ffr[0] == float('inf'):
+      rv = [-float('inf'),
+            -float('inf'),
+            -float('inf')]
+      return rv
+
     for i in range(0,self.nr):
       # (f*f)*f
+      print(str(i)+" "+str(ffr[i])+" "+str(fr[i]))
       bsum += (ffr[i]*fr[i]*i)*i
       if self.nder > 0:
         # (f*f)*d1
@@ -176,6 +200,8 @@ class LJBfit(LJBn):
   def B(self,T):
     beta=1/T
     Y=math.exp(self.a*beta**self.c)-1
+    if max(max([[(l-k)*math.log(Y) for l in range(k,len(self.b))] for k in range(3)])) > 700:
+      return [0 for k in range(3)]
     Yy = [sum([self.f[l]/self.f[l-k]*self.b[l]*Y**(l-k) for l in range(k,len(self.b))]) for k in range(3)]
     (tx, ty, ey, cov) = self.myDataTransformer.transform([Y], [Yy], None)
     (tx, ty, ey, cov) = self.myDataTransformerT.transform(tx, ty, None)

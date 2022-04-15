@@ -517,7 +517,6 @@ class VEOS(EOS):
         self.d2BdT2[i] = float(d2BidT2)
         i+=1
     else:
-      self.Bobj[4].B(1)
       for i in range(2,self.maxB+1):
         data = self.Bobj[i].B(T)
         self.B[i] = data[0]
@@ -530,7 +529,7 @@ class VEOS(EOS):
     # P = Trho + TB2rho^2
     # dPdrho = T + 2TB2rho = 0
     # rho = -1/2B2
-    if T==0:
+    if T==0 or self.B[2] == -float('inf'):
       return 0
     if T!=self.lastT:
       self.refreshB(T)

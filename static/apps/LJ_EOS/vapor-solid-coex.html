@@ -209,14 +209,11 @@ window.addEventListener("load", phasesUpdated);
 
       def doOneCoex():
         global eos1, eos2, myInterval, iT, Pguess, doPhi
-        if iT > 750:
+        if iT > 150:
           stopUpdate()
           return
-        T = iT*0.001
-        if iT == 0:
-          iT = 20
-        else:
-          iT += 1
+        T = iT*0.005
+        iT += 1
         props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
         if not 'rho' in props1:
           InfoDialog("Trouble", f"Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
@@ -225,7 +222,7 @@ window.addEventListener("load", phasesUpdated);
         window.addRow(T, props1, props2);
 
         Pguess = props1['P']
-        if iT > 750:
+        if iT > 150:
           stopUpdate()
           return
 
