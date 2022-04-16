@@ -51,8 +51,6 @@ class LJB2(LJBn):
         term = math.exp(lnTerm)
       if i < 1:
         term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
-      if i < 1:
-        term *= math.gamma(-0.25+0.5*i) / math.gamma(i+1)
       else:
         x = math.lgamma(-0.25+0.5*i) - math.lgamma(i+1)
         if x > -600:
