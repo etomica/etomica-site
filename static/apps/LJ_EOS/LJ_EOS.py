@@ -559,7 +559,7 @@ class VEOS(EOS):
       dZdrho=float('inf')
       if T>0 and 2 in self.B:
         dZdrho = self.B[2]
-      return {'A': float('nan'), 'P': 0, 'dPdrho': T, 'U': 0, 'G': float('nan'), 'dZdrho': dZdrho, 'dGdrho': float('nan'), 'Z': 1}
+      return {'A': float('nan'), 'P': 0, 'dPdrho': T, 'U': 0, 'G': float('nan'), 'dZdrho': dZdrho, 'dGdrho': float('nan'), 'Z': 1, 'Cv': 0}
 
     A = log(rho)-1
     Z = 1

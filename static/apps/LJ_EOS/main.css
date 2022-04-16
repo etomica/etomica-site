@@ -1,1 +1,3 @@
 body {padding: 1rem;}
+#singleResultsDiv {display: none;}
+#singleResultsDiv p {margin-bottom: 0}

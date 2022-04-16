@@ -241,8 +241,7 @@ function updateX() {
   else {
     document.getElementById("inputXnum").setAttribute("disabled", "true");
   }
-  document.getElementById("singleResultsDiv").style.display = useX ? "none" : "block";
-  document.getElementById("parametricResultsDiv").style.display = useX ? "block" : "none";
+  document.getElementById(useX ? "singleResultsDiv" : "parametricResultsDiv").style.display = "none";
   document.getElementById("copyBtn").style.display = useX ? "block" : "none";
   document.getElementById("plotBtn").style.display = useX ? "block" : "none";
 }
@@ -272,5 +271,52 @@ function phasesUpdated() {
     if (!el) break;
     var p = el.value;
     document.getElementById("parametersDiv-"+p).style.display = "block";
+  }
+}
+
+function addParametricRow(T, rho, props) {
+  document.getElementById("parametricResultsDiv").style.display = "block";
+  var tbody = document.getElementById("parametricResults");
+  var row = makeElement("TR", tbody);
+  var v = [];
+  props['T'] = T;
+  props['rho'] = rho;
+  var cols = document.getElementById("parametricTH").childNodes;
+  var myProps = [];
+  for (var i=0; i<cols.length; i++) {
+    var p = cols[i].id.replace("_col","");
+    if (!(p in props)) {
+      cols[i].style.display = "none";
+      makeElement("TD", row, {style: {display: "none"}});
+      continue;
+    }
+    cols[i].style.display = "";
+    makeElement("TD", row, {textContent: props[p]});
+    myProps.push(p);
+    v.push(props[p]);
+  }
+  if (!copyText) copyText += myProps.join(",")+"\n";
+  copyText += v.join(",")+"\n";
+  // add H and S for plot
+  props.H = props.U + props.P/rho;
+  props.S = (props.A - props.U)/T;
+  allData.push(props);
+}
+
+function showResults(T, rho, props) {
+  props.T = T;
+  props.rho = rho;
+  document.getElementById("singleResultsDiv").style.display = "block";
+  var resultsRows = document.getElementById("singleResultsDiv").childNodes;
+  for (var i=0; i<resultsRows.length; i++) {
+    var row = resultsRows[i];
+    if (row.nodeName != "P") continue;
+    var prop = row.id.replace("_row", "");
+    if (!(prop in props)) {
+      row.style.display = "none";
+      continue;
+    }
+    if (!document.getElementById(prop)) console.log("oops, no "+prop);
+    document.getElementById(prop).textContent = props[prop];
   }
 }
