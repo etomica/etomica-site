@@ -293,6 +293,23 @@ function phaseChoiceUpdated(phase) {
     citation.style.display = "block";
     oldCitation[phase] = citation;
   }
+
+  var schultzFields = {
+    vapor: ["inputVEOSN"],
+    liquid: ["inputNl","inputRc-liquid","checkLRC-liquid"],
+    fcc: ["checkLat-fcc","checkHarmonic-fcc","checkVac-fcc","inputNf","inputRc-fcc","checkNrcc-fcc","checkLRC-fcc"],
+    hcp: ["checkLat-hcp","checkHarmonic-hcp","checkAlpha","inputNh","inputRc-hcp","checkNrcc-hcp","checkLRC-hcp"]
+  }
+  if (eos == "Schultz") {
+    for (var i=0; i<schultzFields[phase].length; i++) {
+      document.getElementById(schultzFields[phase][i]).removeAttribute("disabled");
+    }
+  }
+  else {
+    for (var i=0; i<schultzFields[phase].length; i++) {
+      document.getElementById(schultzFields[phase][i]).setAttribute("disabled","true");
+    }
+  }
 }
 window.addEventListener("load", function() {
   phaseChoiceUpdated('vapor');
