@@ -218,6 +218,8 @@ function cleanOpts(id, data) {
   }
 }
 function updatePlot() {
+  document.getElementById("plotXDiff").parentNode.parentNode.parentNode.style.display = "none";
+  document.getElementById("plotYDiff").parentNode.parentNode.parentNode.style.display = "none";
   if (allData.length > 0) {
     var d = allData[0];
     cleanOpts("inputXprop", d);

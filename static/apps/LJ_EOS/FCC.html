@@ -115,7 +115,6 @@ function myUpdatePlot() {
 
       document["btnUpdate"].bind("click", update)
 
-      document["btnUpdate"].bind("click", update)
     </script>
 
     <div class='container'>
@@ -323,15 +322,12 @@ function myUpdatePlot() {
                   <div class='col-auto'>
                     <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
-                      <option value='rho'>&rho;</option>
+                      <option value='rho' selected>&rho;</option>
                       <option value='P'>P</option>
                       <option value='U'>U</option>
                       <option value='A'>A</option>
                       <option value='G'>G</option>
                       <option value='Z'>Z</option>
-                      <option value='dZdrho'>dZdrho</option>
-                      <option value='dZdrho'>dPdrho</option>
-                      <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
                       <option value='alpha'>&alpha;</option>
@@ -352,14 +348,11 @@ function myUpdatePlot() {
                     <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
                       <option value='T'>T</option>
                       <option value='rho'>&rho;</option>
-                      <option value='P'>P</option>
+                      <option value='P' selected>P</option>
                       <option value='U'>U</option>
                       <option value='A'>A</option>
                       <option value='G'>G</option>
                       <option value='Z'>Z</option>
-                      <option value='dZdrho'>dZdrho</option>
-                      <option value='dZdrho'>dPdrho</option>
-                      <option value='dGdrho'>dGdrho</option>
                       <option value='Cv'>Cv</option>
                       <option value='phi'>&phi;</option>
                       <option value='alpha'>&alpha;</option>
@@ -368,6 +361,22 @@ function myUpdatePlot() {
                       <option value='H'>H</option>
                       <option value='S'>S</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotXDiff' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotXDiff'>X diff</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotYDiff' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotXDiff'>Y diff</label>
                   </div>
                 </div>
               </div>
