@@ -3,6 +3,7 @@
 def optsForPhase(p, document, B3callback=None):
   opts = []
   selectedEOS = document["inputEOS-"+p].value;
+  VEOSn = 1000
   if p == "vapor":
     if selectedEOS == "Johnson":
       opts.append(("--vjohnson",""))
@@ -14,6 +15,8 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--vthol",""))
     elif selectedEOS == "Schultz":
       opts.append(("--B3func",B3callback))
+      VEOSn = document["inputVEOSN"].value
+      opts.append(("-n",VEOSn))
   elif p == "liquid":
     if selectedEOS == "Schultz":
       doLRC = document["checkLRC-liquid"].checked
