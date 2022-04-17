@@ -55,10 +55,9 @@ window.addEventListener("load", phasesUpdated);
 
       eos1 = eos2 = myInterval = None
       T = Pguess = 0
-      doPhi = False
 
       def doOneCoex():
-        global eos1, eos2, myInterval, iT, Pguess, doPhi
+        global eos1, eos2, myInterval, iT, Pguess
         if iT > 150:
           stopUpdate()
           return
@@ -77,35 +76,27 @@ window.addEventListener("load", phasesUpdated);
           return
 
       def stopUpdate():
-        global eos1, eos2
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        eos1 = None
-        eos2 = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
-        global eos1, eos2, myInterval, iT, Pguess, doPhi
-        if not eos1 == None:
-          print("stopping!")
+        global eos1, eos2, myInterval, iT, Pguess
+        if not myInterval == None:
           stopUpdate()
           return
         window.collapseParameters()
         document["btnUpdate"].textContent = "Stop"
         phase1 = document['phase1'].value
-        opts = optsForPhase(phase1, document, window.grabB3)
-        if opts is None:
-          return
-        eos1 = getEOS(phase1, opts)
         phase2 = document['phase2'].value
         if phase1 == phase2:
           InfoDialog("Trouble", f"The two phases must be different")
           return
+        opts = optsForPhase(phase1, document, window.grabB3)
+        eos1 = getEOS(phase1, opts)
         opts = optsForPhase(phase2, document, window.grabB3)
-        if opts is None:
-          return
-        doPhi = False
-        if phase2 == "fcc":
-          doPhi = document["checkVac-fcc"].checked
         eos2 = getEOS(phase2, opts)
         iT = 0
         Pguess = 0

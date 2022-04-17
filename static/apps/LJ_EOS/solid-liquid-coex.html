@@ -58,15 +58,11 @@ window.addEventListener("load", phasesUpdated);
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
 
-      eos1 = None
-      eos2 = None
-      myInterval = None
-      T = 0
-      Pguess = 0
-      doPhi = False
+      eos1 = eos2 = myInterval = None
+      T = Pguess = 0
 
       def doOneCoex():
-        global eos1, eos2, myInterval, T, Pguess, doPhi
+        global eos1, eos2, myInterval, T, Pguess
         props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
         if not 'rho' in props1:
           InfoDialog("Trouble", f"Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
@@ -80,16 +76,15 @@ window.addEventListener("load", phasesUpdated);
           stopUpdate()
 
       def stopUpdate():
-        global eos1, eos2, myInterval
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        eos1 = None
-        eos2 = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
-        global eos1, eos2, myInterval, T, Pguess, doPhi
-        if not eos1 == None:
-          print("stopping!")
+        global eos1, eos2, myInterval, T, Pguess
+        if not myInterval == None:
           stopUpdate()
           return
         window.collapseParameters()
@@ -106,9 +101,6 @@ window.addEventListener("load", phasesUpdated);
         opts = optsForPhase(phase2, document, None)
         if opts is None:
           return
-        doPhi = False
-        if phase2 == "fcc":
-          doPhi = document["checkVac-fcc"].checked
         eos2 = getEOS(phase2, opts)
         T = 0.68
         Pguess = 0

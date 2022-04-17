@@ -116,7 +116,7 @@ window.addEventListener("load", phasesUpdated);
       eos1 = None
       eos2 = None
       myInterval = None
-      iteration = T = dT = diT = Pguess = stage = Pg = Thigh = Plow = iT = 0
+      iteration = dT = diT = Pguess = stage = Pg = Thigh = Plow = iT = 0
       doneiT = {}
       maxdiT = 27
       # stage 1: increase T from 0 while P decreases
@@ -125,14 +125,13 @@ window.addEventListener("load", phasesUpdated);
       # stage 4: decrease T (with deceleration) along low-P branch from max to P~=0
 
       def doOneCoex():
-        global stage, eos1, eos2, myInterval, T, diT, maxdiT, dT, Pguess, Pg, iT, Thigh, Plow, iteration, doneiT
+        global stage, eos1, eos2, myInterval, diT, maxdiT, dT, Pguess, Pg, iT, Thigh, Plow, iteration, doneiT
         iteration += 1
         T = 0.01*iT/(1<<maxdiT)
         if stage == 2:
           Pgg = Pg
         else:
           Pgg = Pguess[iT]
-        #print("doOneCoex "+str(stage)+" "+str(T)+" "+str(iT)+" "+str(diT)+" "+str(Pgg))
         if iT in doneiT:
           (props1,props2) = doneiT[iT]
           addme = False
@@ -211,17 +210,15 @@ window.addEventListener("load", phasesUpdated);
           Pguess[iT] = props1['P']
 
       def stopUpdate():
-        global eos1, eos2
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        window.sortData()
-        eos1 = None
-        eos2 = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
-        global stage, eos1, eos2, myInterval, T, dT, diT, maxdiT, Pguess, Plow, Thigh, iT, iteration
-        if not eos1 == None:
-          print("stopping!")
+        global stage, eos1, eos2, myInterval, dT, diT, maxdiT, Pguess, Plow, Thigh, iT, iteration
+        if not myInterval == None:
           stopUpdate()
           return
         window.collapseParameters()
@@ -241,7 +238,6 @@ window.addEventListener("load", phasesUpdated);
         eos2 = getEOS(phase2, opts)
         stage = 1
         window.setStage(stage)
-        T = 0
         dT = 0.01
         diT = maxdiT
         Pguess = {0: 800}

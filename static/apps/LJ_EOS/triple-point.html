@@ -88,17 +88,15 @@ window.addEventListener("load", phasesUpdated);
           T += lastDT
 
       def stopUpdate():
-        global eos1, eos2, eos3
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        eos1 = None
-        eos2 = None
-        eos3 = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
         global myInterval, stage, eos1, eos2, eos3, props1a, props2a, props2b, props3b, lastDT, Tstep, Tmin, Tmax, T
-        if not eos1 == None:
-          print("stopping!")
+        if not myInterval == None:
           stopUpdate()
           return
         window.collapseParameters()

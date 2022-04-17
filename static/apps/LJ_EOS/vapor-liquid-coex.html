@@ -61,11 +61,11 @@ window.addEventListener("load", phasesUpdated);
 
       eos1 = eos2 = None
       myInterval = None
-      Pguess = T = 0
+      Pguess = 0
 
       def doOneCoex():
         global eos1, eos2, myInterval, iT, Pguess
-        Tstep = float(document["inputTstep"].value)
+        Tstep = 0.001
         T = iT*Tstep
         if T > 0.9000001:
           stopUpdate()
@@ -81,16 +81,15 @@ window.addEventListener("load", phasesUpdated);
         iT += 1
 
       def stopUpdate():
-        global eos1, eos2
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        eos1 = None
-        eos2 = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
         global eos1, eos2, myInterval, iT, Pguess
-        if not eos1 == None:
-          print("stopping!")
+        if not myInterval == None:
           stopUpdate()
           return
         window.collapseParameters()
@@ -108,7 +107,7 @@ window.addEventListener("load", phasesUpdated);
         if opts is None:
           return
         eos2 = getEOS(phase2, opts)
-        Tstep = float(document["inputTstep"].value)
+        Tstep = 0.001
         iT = int(0.67 / Tstep)
         Pguess = 0
         window.clearAllRows()
@@ -150,14 +149,6 @@ window.addEventListener("load", phasesUpdated);
                   <select class='form-select' id='phase2' onchange='phasesUpdated()'>
                     <option value='liquid' selected>Liquid</option>
                   </select>
-                </div>
-              </div>
-              <div class='row g-3 py-1 align-items-center'>
-                <div class='col-auto'>
-                  <label for='inputTstep' class='col-form-label'>T step</label>
-                </div>
-                <div class='col-auto'>
-                  <input type='text' id='inputTstep' class='form-control' value='0.001'>
                 </div>
               </div>
             </div>

@@ -25,8 +25,6 @@
         plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
 
-var copyText = "";
-var allData = [];
     </script>
     <script type='text/python' src='LJ_EOS.py'></script>
     <script type='text/python' src='EOS_util.py'></script>
@@ -119,6 +117,7 @@ var allData = [];
     </script>
     <div class='container'>
       <h1>Equation of state for liquid phase of LJ</h1>
+
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Parameters</a></h2>
@@ -141,6 +140,10 @@ var allData = [];
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputRho' class='form-control'>
+                  </div>
+                  <div class='col-auto' class=form-check' style='display: none'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkNrho'>
+                    <label class='form-check-label' for='checkNrho'>atom density</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
