@@ -120,7 +120,7 @@ document.title = "LJ EOS for HCP";
 
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Parameters</a></h2>
+          <h2 class='h5 mb-0'>State Condition</a></h2>
         </div>
         <div class='show' aria-labelledby='headingParameters'>
           <div class='card-body'>
@@ -175,11 +175,36 @@ document.title = "LJ EOS for HCP";
             <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto'>
                 <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
+                <button id='btnDoc' class='btn btn-sm btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoEOSModal">Info</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+    <div class="modal fade" id="infoEOSModal" tabindex="-1" aria-labelledby="infoEOSModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoEOSModalLabel">EOS Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>The EOS pages allows you to generate thermodynamic properties as a function of temperature, density or pressure.  The page can operate in one of two modes.</p>
+            <ol>
+              <li>In the first mode, you can compute properties at a single given state point.  You must choose the temperature and then either the density or pressure.  If setting the pressure, the EOS will be used to determine the density for that pressure (be careful to choose a pressure that exists at the given temperature). Results are presented in a simple table.</li>
+              <li>In the second mode, you can compute properties at a series of state points.  As in the first mode, you can set the temperature and either the density or pressure.  Now, however, each may be expressed as a function of a parametric varialbe, <i>x</i>.  The <i>x</i> variable varies from 0 to 1 (inclusive) visiting as many points you specify in the # input field (it will actually visit one additional point; if you specific "100", x will take values 0, 0.01, 0.02..., 1.0).  The properties are reported in a table with a column for each property and a row for each state point.  You may copy all of the data as comma-separated data or also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  You may copy data or open the plot while the data is generated, but the page may be slow to respond.</li>
+            </ol>
+
+            <p>You can choose the EOS to use to generate properties.  The citation is provided for the chosen EOS.  Each EOS has its own limits on range of applicability (temperatures and densities, etc).  Please refer to the published paper for details.  Different EOS choices may also result in different available properties due to complexity of property calcluation (such as C<sub>V</sub>).</p>
+            <p>If you choose the Schultz EOS, then there are various additional parameters that can be set.  This allows you to examine approximations such as using the harmonic approximation or examining the effects of finite system size and potential truncation.  The properties computed may depend on the parameters chose; vacancy fraction will be reported if they are included in the EOS, but C<sub>V</sub> will not because the vacancy contribution to C<sub>V</sub> is too complicated.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
       <div id='parametersDiv-hcp' class='card mb-4'>
         <div id='headingParameters-hcp' class='card-header' role='tab'>
@@ -194,7 +219,7 @@ document.title = "LJ EOS for HCP";
                     <label for='inputEOS-hcp' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-hcp'>
+                    <select class='form-select' id='inputEOS-hcp' onchange='phaseChoiceUpdated("hcp")'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Adidharma'>Adidharma</option>
                     </select>
@@ -221,52 +246,58 @@ document.title = "LJ EOS for HCP";
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <label for='inputNh' class='col-form-label'># of atoms</label>
+                  <div class='col-auto'>
+                    <label for='inputNh' class='col-form-label'># of atoms</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputNh'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='4096'>4096</option>
+                      <option value='1728'>1728</option>
+                      <option value='1200'>1200</option>
+                      <option value='1000'>1000</option>
+                      <option value='512'>512</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='rc-hcp' class='col-form-label'>cutoff</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputRc-hcp'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='11'>11</option>
+                      <option value='9'>9</option>
+                      <option value='7.5'>7.5</option>
+                      <option value='6'>6</option>
+                      <option value='5'>5</option>
+                      <option value='4'>4</option>
+                      <option value='3.5'>3.5</option>
+                      <option value='3'>3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkNrcc-hcp'>
+                    <label class='form-check-label' for='checkNrcc-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-hcp'>
+                    <label class='form-check-label' for='checkLRC-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                  </div>
+                </div>
               </div>
-              <div class='col-auto'>
-                <select class='form-select' id='inputNh'>
-                  <option value='0' selected>&infin;</option>
-                  <option value='4096'>4096</option>
-                  <option value='1728'>1728</option>
-                  <option value='1200'>1200</option>
-                  <option value='1000'>1000</option>
-                  <option value='512'>512</option>
-                </select>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='hcp-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
+                  <div class='citation' id='hcp-ref-Adidharma'>EOS Citation: H. Adidharma and S. P. Tan, "<a href='https://doi.org/10.1063/1.4955061'>Accurate Monte Carlo simulations on FCC and HCP Lennard-Jones solids at very low temperatures and high reduced densities up to 1.30</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>145</span>, 014503 (2016).</div>
+                </div>
               </div>
             </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <label for='rc-hcp' class='col-form-label'>cutoff</label>
-              </div>
-              <div class='col-auto'>
-                <select class='form-select' id='inputRc-hcp'>
-                  <option value='0' selected>&infin;</option>
-                  <option value='11'>11</option>
-                  <option value='9'>9</option>
-                  <option value='7.5'>7.5</option>
-                  <option value='6'>6</option>
-                  <option value='5'>5</option>
-                  <option value='4'>4</option>
-                  <option value='3.5'>3.5</option>
-                  <option value='3'>3</option>
-                </select>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkNrcc-hcp'>
-                <label class='form-check-label' for='checkNrcc-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC-hcp'>
-                <label class='form-check-label' for='checkLRC-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
-              </div>
-            </div>
-          </div>
-        </div>
           </div>
         </div>
       </div>

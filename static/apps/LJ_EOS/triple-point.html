@@ -27,6 +27,7 @@ window.addEventListener("load", phasesUpdated);
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
 
+      myInterval = None
       eos1 = eos2 = eos3 = None
       T = Tstep = Tmin = Tmax = lastDT = stage = 0
       props1a = props2a = props2b = props3b = None
@@ -148,7 +149,7 @@ window.addEventListener("load", phasesUpdated);
       <h1>Triple Point for LJ</h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Parameters</a></h2>
+          <h2 class='h5 mb-0'>Phase Choices</a></h2>
       </div>
       <div class='show' aria-labelledby='headingParameters'>
         <div class='card-body'>
@@ -202,6 +203,7 @@ window.addEventListener("load", phasesUpdated);
           <div class='row g-3 py-1 align-items-center'>
             <div class='col-auto'>
               <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
+              <button class='btn btn-sm btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoTPModal">Info</button>
             </div>
           </div>
         </div>
@@ -221,7 +223,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputEOS-vapor' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-vapor'>
+                    <select class='form-select' id='inputEOS-vapor' onchange='phaseChoiceUpdated("vapor")'>
                       <option value='Schultz' selected>Schultz (VEOS)</option>
                       <option value='Johnson'>Johnson</option>
                       <option value='Kolafa'>Kolafa</option>
@@ -229,6 +231,15 @@ window.addEventListener("load", phasesUpdated);
                       <option value='Thol'>Thol</option>
                     </select>
                   </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='vapor-ref-Schultz'>EOS Citation: A. J. Schultz and D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span>, <span class='volume'>107</span>, 2309 (2009); includes additional coefficients computed more recently, fits for B<sub>4</sub>-B<sub>9</sub> as described in <a href='https://doi.org/10.1002/aic.17072'>https://doi.org/10.1002/aic.17072</a></div>
+                  <div class='citation' id='vapor-ref-Johnson'>EOS Citation: J. Johnson, J. Zollweg, and K. Gubbins, "<a href='https://doi.org/10.1080/00268979300100411'>The Lennard-Jones equation of state revisited</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>78</span>, 591–618 (1993).</div>
+                  <div class='citation' id='vapor-ref-Kolafa'>EOS Citation: J. Kolafa and I. Nezbeda, "<a href='https://doi.org/10.1016/0378-3812(94)80001-4'>The Lennard-Jones fluid: An accurate analytic and theoretically-based equation of state</a>", <span class='pubName'>Fluid Phase Equilib.</span> <span class='volume'>100</span>, 1 (1994).</div>
+                  <div class='citation' id='vapor-ref-May'>EOS Citation: H.-O. May and P. Mausbach, "<a href='https://doi.org/10.1103/PhysRevE.85.031201'>Riemannian geometry study of vapor-liquid phase equilibria and supercritical behavior of the Lennard-Jones fluid</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>86</span>, 059905 (2012).</div>
+                  <div class='citation' id='vapor-ref-Thol'>EOS Citation: M. Thol, G. Rutkai, A. K ̈oster, R. Lustig, R. Span, and J. Vrabec, "<a href='https://doi.org/10.1063/1.4945000'>Equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>J. Phys. Chem. Ref. Data</span> <span class='volume'>45</span>, 023101 (2016).</div>
                 </div>
               </div>
             </div>
@@ -248,7 +259,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputEOS-liquid' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-liquid'>
+                    <select class='form-select' id='inputEOS-liquid' onchange='phaseChoiceUpdated("liquid")'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Johnson'>Johnson</option>
                       <option value='Kolafa'>Kolafa</option>
@@ -280,28 +291,37 @@ window.addEventListener("load", phasesUpdated);
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-liquid'>
-                  <option value='-1' selected>&infin;</option>
-                  <option value='9'>9</option>
-                  <option value='8'>8</option>
-                  <option value='7'>7</option>
-                  <option value='6'>6</option>
-                  <option value='5'>5</option>
-                  <option value='4'>4</option>
-                  <option value='3'>3</option>
-                  <option value='2'>2</option>
-                  <option value='1'>1</option>
-                  <option value='0'>0</option>
-                </select>
+                      <option value='-1' selected>&infin;</option>
+                      <option value='9'>9</option>
+                      <option value='8'>8</option>
+                      <option value='7'>7</option>
+                      <option value='6'>6</option>
+                      <option value='5'>5</option>
+                      <option value='4'>4</option>
+                      <option value='3'>3</option>
+                      <option value='2'>2</option>
+                      <option value='1'>1</option>
+                      <option value='0'>0</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-liquid'>
+                    <label class='form-check-label' for='checkLRC-liquid'>include LRC</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='liquid-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
+                  <div class='citation' id='liquid-ref-Johnson'>EOS Citation: J. Johnson, J. Zollweg, and K. Gubbins, "<a href='https://doi.org/10.1080/00268979300100411'>The Lennard-Jones equation of state revisited</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>78</span>, 591–618 (1993).</div>
+                  <div class='citation' id='liquid-ref-Kolafa'>EOS Citation: J. Kolafa and I. Nezbeda, "<a href='https://doi.org/10.1016/0378-3812(94)80001-4'>The Lennard-Jones fluid: An accurate analytic and theoretically-based equation of state</a>", <span class='pubName'>Fluid Phase Equilib.</span> <span class='volume'>100</span>, 1 (1994).</div>
+                  <div class='citation' id='liquid-ref-May'>EOS Citation: H.-O. May and P. Mausbach, "<a href='https://doi.org/10.1103/PhysRevE.85.031201'>Riemannian geometry study of vapor-liquid phase equilibria and supercritical behavior of the Lennard-Jones fluid</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>86</span>, 059905 (2012).</div>
+                  <div class='citation' id='liquid-ref-Thol'>EOS Citation: M. Thol, G. Rutkai, A. K ̈oster, R. Lustig, R. Span, and J. Vrabec, "<a href='https://doi.org/10.1063/1.4945000'>Equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>J. Phys. Chem. Ref. Data</span> <span class='volume'>45</span>, 023101 (2016).</div>
+                </div>
               </div>
             </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC-liquid'>
-                <label class='form-check-label' for='checkLRC-liquid'>include LRC</label>
-              </div>
-            </div>
-          </div>
-        </div>
           </div>
         </div>
       </div>
@@ -319,7 +339,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputEOS-hcp' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-hcp'>
+                    <select class='form-select' id='inputEOS-hcp' onchange='phaseChoiceUpdated("hcp")'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Adidharma'>Adidharma</option>
                     </select>
@@ -346,52 +366,58 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <label for='inputNh' class='col-form-label'># of atoms</label>
+                  <div class='col-auto'>
+                    <label for='inputNh' class='col-form-label'># of atoms</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputNh'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='4096'>4096</option>
+                      <option value='1728'>1728</option>
+                      <option value='1200'>1200</option>
+                      <option value='1000'>1000</option>
+                      <option value='512'>512</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='rc-hcp' class='col-form-label'>cutoff</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputRc-hcp'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='11'>11</option>
+                      <option value='9'>9</option>
+                      <option value='7.5'>7.5</option>
+                      <option value='6'>6</option>
+                      <option value='5'>5</option>
+                      <option value='4'>4</option>
+                      <option value='3.5'>3.5</option>
+                      <option value='3'>3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkNrcc-hcp'>
+                    <label class='form-check-label' for='checkNrcc-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-hcp'>
+                    <label class='form-check-label' for='checkLRC-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                  </div>
+                </div>
               </div>
-              <div class='col-auto'>
-                <select class='form-select' id='inputNh'>
-                  <option value='0' selected>&infin;</option>
-                  <option value='4096'>4096</option>
-                  <option value='1728'>1728</option>
-                  <option value='1200'>1200</option>
-                  <option value='1000'>1000</option>
-                  <option value='512'>512</option>
-                </select>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='hcp-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
+                  <div class='citation' id='hcp-ref-Adidharma'>EOS Citation: H. Adidharma and S. P. Tan, "<a href='https://doi.org/10.1063/1.4955061'>Accurate Monte Carlo simulations on FCC and HCP Lennard-Jones solids at very low temperatures and high reduced densities up to 1.30</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>145</span>, 014503 (2016).</div>
+                </div>
               </div>
             </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <label for='rc-hcp' class='col-form-label'>cutoff</label>
-              </div>
-              <div class='col-auto'>
-                <select class='form-select' id='inputRc-hcp'>
-                  <option value='0' selected>&infin;</option>
-                  <option value='11'>11</option>
-                  <option value='9'>9</option>
-                  <option value='7.5'>7.5</option>
-                  <option value='6'>6</option>
-                  <option value='5'>5</option>
-                  <option value='4'>4</option>
-                  <option value='3.5'>3.5</option>
-                  <option value='3'>3</option>
-                </select>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkNrcc-hcp'>
-                <label class='form-check-label' for='checkNrcc-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC-hcp'>
-                <label class='form-check-label' for='checkLRC-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
-              </div>
-            </div>
-          </div>
-        </div>
           </div>
         </div>
       </div>
@@ -408,7 +434,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputEOS-fcc' class='col-form-label'>EOS</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-fcc'>
+                    <select class='form-select' id='inputEOS-fcc' onchange='phaseChoiceUpdated("fcc")'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Adidharma'>Adidharma</option>
                       <option value='dePablo'>de Pablo</option>
@@ -437,55 +463,63 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <label for='inputNf' class='col-form-label'># of atoms</label>
+                  <div class='col-auto'>
+                    <label for='inputNf' class='col-form-label'># of atoms</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputNf'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='4000'>4000</option>
+                      <option value='2048'>2048</option>
+                      <option value='864'>864</option>
+                      <option value='500'>500</option>
+                      <option value='256'>256</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='rc-fcc' class='col-form-label'>cutoff</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputRc-fcc'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='11'>11</option>
+                      <option value='9'>9</option>
+                      <option value='7.5'>7.5</option>
+                      <option value='6'>6</option>
+                      <option value='5'>5</option>
+                      <option value='4'>4</option>
+                      <option value='3.5'>3.5</option>
+                      <option value='3'>3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkNrcc-fcc'>
+                    <label class='form-check-label' for='checkNrcc-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
+                    <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                  </div>
+                </div>
               </div>
-              <div class='col-auto'>
-                <select class='form-select' id='inputNf'>
-                  <option value='0' selected>&infin;</option>
-                  <option value='4000'>4000</option>
-                  <option value='2048'>2048</option>
-                  <option value='864'>864</option>
-                  <option value='500'>500</option>
-                  <option value='256'>256</option>
-                </select>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto'>
-                <label for='rc-fcc' class='col-form-label'>cutoff</label>
-              </div>
-              <div class='col-auto'>
-                <select class='form-select' id='inputRc-fcc'>
-                  <option value='0' selected>&infin;</option>
-                  <option value='11'>11</option>
-                  <option value='9'>9</option>
-                  <option value='7.5'>7.5</option>
-                  <option value='6'>6</option>
-                  <option value='5'>5</option>
-                  <option value='4'>4</option>
-                  <option value='3.5'>3.5</option>
-                  <option value='3'>3</option>
-                </select>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkNrcc-fcc'>
-                <label class='form-check-label' for='checkNrcc-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
-              </div>
-            </div>
-            <div class='row g-3 py-1 align-items-center'>
-              <div class='col-auto' class=form-check'>
-                <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
-                <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='fcc-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
+                  <div class='citation' id='fcc-ref-Adidharma'>EOS Citation: H. Adidharma and S. P. Tan, "<a href='https://doi.org/10.1063/1.4955061'>Accurate Monte Carlo simulations on FCC and HCP Lennard-Jones solids at very low temperatures and high reduced densities up to 1.30</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>145</span>, 014503 (2016).</div>
+                  <div class='citation' id='fcc-ref-dePablo'>EOS Citation: E. A. Mastny and J. J. de Pablo, "<a href='https://doi.org/10.1063/1.2753149'>Melting line of the Lennard-Jones system, infinite size, and full potential</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>127</span>, 104504 (2007).</div>
+                  <div class='citation' id='fcc-ref-vdh'>EOS Citation: M. A. van der Hoef, "<a href='https://doi.org/10.1063/1.1314342'>Free energy of the Lennard-Jones solid</a>", <span class='pubName'>J. Chem.  Phys.</span> <span class='volume'>113</span>, 8142 (2000).</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
     <div id='resultsDiv' class='card'>
       <div id='headingResults' class='card-header' role='tab'>
@@ -510,5 +544,25 @@ window.addEventListener("load", phasesUpdated);
     </div>
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>
+
+    <div class="modal fade" id="infoTPModal" tabindex="-1" aria-labelledby="infoTPModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoTPModalLabel">EOS Triple Point Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>The EOS triple point page allows you to determine the triple point for any three phases.  An estimate of the triple point temperature is necessary, but even a poor estimate may be sufficient.</p>
+            <p>You may choose between vapor, liquid, FCC and HCP for the three phases.  For each choice of phase, you may also choose the EOS and any EOS parameters to describe its behavior.  Choosing inappropriate parameters may result in failure to find triple point; a solid described with lattice dynamics is likely to have no equilibrium with the liquid.  Likewise, a model with short truncation (and no LRC) may not have a triple point within range of validity of the EOS.</p>
+            <p>Finding the triple point requires finding coexistence at a estimate of the triple point temperature and then improving that estimate via bisection.  The coexistence properties at these temperatures are reported in the results table with one column for the results of coexistence between the phase1 and phase2 and another column for the coexistence between phase2 and phase3.  The gaps in properties that should be the same (P, G and the density of the intermediate phase2) are reported in the last column to give you an idea of progress.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>

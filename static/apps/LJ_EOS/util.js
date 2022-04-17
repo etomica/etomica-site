@@ -279,6 +279,28 @@ function phasesUpdated() {
   }
 }
 
+var oldCitation = {};
+function phaseChoiceUpdated(phase) {
+  if (phase in oldCitation) {
+    oldCitation[phase].style.display = "none";
+    delete(oldCitation[phase]);
+  }
+  var eos = document.getElementById("inputEOS-"+phase);
+  if (!eos) return;
+  var eos = eos.value;
+  var citation = document.getElementById(phase+"-ref-"+eos);
+  if (citation) {
+    citation.style.display = "block";
+    oldCitation[phase] = citation;
+  }
+}
+window.addEventListener("load", function() {
+  phaseChoiceUpdated('vapor');
+  phaseChoiceUpdated('liquid');
+  phaseChoiceUpdated('fcc');
+  phaseChoiceUpdated('hcp');
+});
+
 function addParametricRow(T, rho, props) {
   document.getElementById("parametricResultsDiv").style.display = "block";
   var tbody = document.getElementById("parametricResults");
