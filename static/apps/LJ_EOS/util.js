@@ -117,6 +117,9 @@ function copyToClipboard(text) {
   }
 }
 
+var copyText = "";
+var allData = [];
+
 function gimmeCoexData(row, prop) {
   if (prop == "T") return row.T;
   if (prop == "G" || prop == "P") return row.props1[prop];
@@ -319,4 +322,28 @@ function showResults(T, rho, props) {
     if (!document.getElementById(prop)) console.log("oops, no "+prop);
     document.getElementById(prop).textContent = props[prop];
   }
+}
+
+function updateRhoP() {
+  var rhoForP = document.getElementById("checkP").checked;
+  var d = rhoForP ? "Rho" : "P";
+  var e = rhoForP ? "P" : "Rho";
+  document.getElementById("input"+d).setAttribute("disabled", "true");
+  document.getElementById("input"+e).removeAttribute("disabled");
+}
+function updateLiquidRc() {
+  var rc0 = 2.5;
+  var opts = document.getElementById("inputRc-liquid").options;
+  for (var i=0; i<opts.length; i++) {
+    var irc = Number(opts[i].value);
+    if (irc < 0) continue;
+    opts[i].textContent = rc0 * Math.pow(1.2, irc);
+  }
+}
+function clearAllSimple() {
+  var tbody = document.getElementById("parametricResults");
+  empty(tbody);
+  allData = [];
+  copyText = "";
+  collapseParameters();
 }

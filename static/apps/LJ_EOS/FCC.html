@@ -13,31 +13,17 @@
   </head>
   <body onload='brython()'>
     <script type='text/javascript'>
-      function updateRhoP() {
-        var rhoForP = document.getElementById("checkP").checked;
-        var d = rhoForP ? "Rho" : "P";
-        var e = rhoForP ? "P" : "Rho";
-        document.getElementById("input"+d).setAttribute("disabled", "true");
-        document.getElementById("input"+e).removeAttribute("disabled");
-      }
 function myUpdatePlot() {
   updatePlot();
 }
 
-      window.addEventListener("load", updateRhoP);
-      window.addEventListener("load", updateX);
       window.addEventListener("load", function() {
+          updateRhoP();
+          updateX();
         var plotModalEl = document.getElementById("plotModal");
         plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
 
-var copyText = "";
-var allData = [];
-function clearAllRows() {
-  var tbody = document.getElementById("parametricResults");
-  empty(tbody);
-  allData = [];
-}
     </script>
     <script type='text/python' src='LJ_EOS.py'></script>
     <script type='text/python' src='EOS_util.py'></script>
@@ -47,56 +33,61 @@ function clearAllRows() {
       from LJ_EOS import getEOS
       from EOS_util import optsForPhase
 
-      myInterval = eos = None
-      doNrho = doPhi = False
-      ix = numX = 0
-      Tstr = rhostr = Pstr = ""
-
-      def doOnePoint():
-        global myInterval, Tstr, rhostr, Pstr, doPhi, doNrho, eos, ix, numX
-        if ix > numX:
-          stopUpdate()
-        x = ix / numX
-        ix = ix + 1
-        T = eval(Tstr)
-        if document["checkP"].checked:
+      def gimmeRhoFCC(T, rhostr, Pstr, x, eos, doc):
+        if doc["checkP"].checked:
           P = eval(Pstr)
           rho = eos.rhoForProps(T, {'P': P})
-        elif doNrho:
+        elif doc["checkNrho"].checked:
           rho = eval(rhostr)
           rho = eos.latRhoForNRho(T, rho)
         else:
           rho = eval(rhostr)
+        return rho
+
+      thisGimmeRho = gimmeRhoFCC
+      phaseName = "fcc"
+
+      myInterval = None
+      ix = 0
+
+      def doOnePoint(stuff):
+        global myInterval, ix, thisGimmeRho
+        doc,eos,myGimmeRho = stuff
+        numX = int(doc["inputXnum"].value)
+        if ix > numX:
+          stopUpdate()
+        x = ix / numX
+        ix = ix + 1
+        Tstr = doc['inputT'].value
+        Pstr = doc['inputP'].value
+        rhostr = doc['inputRho'].value
+        T = eval(Tstr)
+        rho = myGimmeRho(T, rhostr, Pstr, x, eos, doc)
         props = eos.eval(T,rho)
         window.addParametricRow(T, rho, props)
         if ix > numX:
           stopUpdate()
 
       def stopUpdate():
-        global eos, myInterval
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        eos = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
-        global myInterval, Tstr, rhostr, Pstr, doPhi, doNrho, eos, ix, numX
-        if not eos == None:
-          print("stopping!")
+        global myInterval, ix, phaseName
+        if not myInterval == None:
           stopUpdate()
           return
-        window.clearAllRows()
-        window.copyText = ""
-        window.collapseParameters()
+        window.clearAllSimple()
 
-        opts = optsForPhase("fcc", document, None)
-        eos = getEOS('fcc', opts)
-        Tstr = document['inputT'].value
-        Pstr = document['inputP'].value
-        rhostr = document['inputRho'].value
-        dhoNrho = document["checkNrho"].checked
-        if doNrho and not doPhi:
-          InfoDialog("Trouble", f"Need to have vacancies to do atom (instead of lattice) density")
-          return
+        B3callback = None
+        if 'grabB3' in window:
+          B3callback = window.grabB3
+
+        opts = optsForPhase(phaseName, document, B3callback)
+        eos = getEOS(phaseName, opts)
 
         useX = document["checkX"].checked
         if useX:
@@ -106,32 +97,27 @@ function clearAllRows() {
           if numX < 1:
             InfoDialog("Trouble", f"Need at least 1 x value")
             return
-          myInterval = timer.set_interval(doOnePoint, 0)
+          myInterval = timer.set_interval(doOnePoint, 0, [document,eos,thisGimmeRho])
           return
+
+        Tstr = document['inputT'].value
+        Pstr = document['inputP'].value
+        rhostr = document['inputRho'].value
 
         try:
           T = float(Tstr)
         except ValueError:
           InfoDialog("Trouble", f"Must provide a valid temperature")
           return
-        if document["checkP"].checked:
-          try:
-            P = float(Pstr)
-          except ValueError:
-            InfoDialog("Trouble", f"Must provide a valid pressure")
-            return
-          rho = eos.rhoForProps(T, {'P': P})
-        else:
-          try:
-            rho = float(rhostr)
-          except ValueError:
-            InfoDialog("Trouble", f"Must provide a valid density ")
-            return
+        rho = thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
         props = eos.eval(T,rho)
         window.showResults(T, rho, props)
 
       document["btnUpdate"].bind("click", update)
+
+      document["btnUpdate"].bind("click", update)
     </script>
+
     <div class='container'>
       <h1>Equation of State for FCC phase of LJ</h1>
       <div id='parametersDiv' class='card mb-4'>
@@ -187,8 +173,8 @@ function clearAllRows() {
                   </div>
                 </div>
               </div>
-        </div>
-        <div class='row g-3 py-1 align-items-center'>
+            </div>
+            <div class='row g-3 py-1 align-items-center'>
               <div class='col-auto'>
                 <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
               </div>

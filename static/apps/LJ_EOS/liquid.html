@@ -13,40 +13,19 @@
   </head>
   <body onload='brython()'>
     <script type='text/javascript'>
-      function updateRhoP() {
-        var rhoForP = document.getElementById("checkP").checked;
-        var d = rhoForP ? "Rho" : "P";
-        var e = rhoForP ? "P" : "Rho";
-        document.getElementById("input"+d).setAttribute("disabled", "true");
-        document.getElementById("input"+e).removeAttribute("disabled");
-      }
-      window.addEventListener("load", updateRhoP);
-      function updateRc() {
-        var rc0 = 2.5;
-        var opts = document.getElementById("inputRc-liquid").options;
-        for (var i=0; i<opts.length; i++) {
-          var irc = Number(opts[i].value);
-          if (irc < 0) continue;
-          opts[i].textContent = rc0 * Math.pow(1.2, irc);
-        }
-      }
       function myUpdatePlot() {
         updatePlot();
       }
-      window.addEventListener("load", updateRc);
-      window.addEventListener("load", updateX);
+      window.addEventListener("load", updateLiquidRc);
       window.addEventListener("load", function() {
+        updateRhoP();
+        updateX();
         var plotModalEl = document.getElementById("plotModal");
         plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
 
 var copyText = "";
 var allData = [];
-function clearAllRows() {
-  var tbody = document.getElementById("parametricResults");
-  empty(tbody);
-  allData = [];
-}
     </script>
     <script type='text/python' src='LJ_EOS.py'></script>
     <script type='text/python' src='EOS_util.py'></script>
@@ -56,48 +35,59 @@ function clearAllRows() {
       from LJ_EOS import getEOS
       from EOS_util import optsForPhase
 
-      myInterval = eos = None
-      ix = numX = 0
-      Tstr = rhostr = Pstr = ""
+      phaseName = "liquid"
 
-      def doOnePoint():
-        global myInterval, Tstr, rhostr, Pstr, eos, ix, numX
-        if ix > numX:
-          stopUpdate()
-        x = ix / numX
-        ix = ix + 1
-        T = eval(Tstr)
-        if document["checkP"].checked:
+
+      def gimmeRhoSimple(T, rhostr, Pstr, x, eos, doc):
+        if doc["checkP"].checked:
           P = eval(Pstr)
           rho = eos.rhoForProps(T, {'P': P})
         else:
           rho = eval(rhostr)
+        return rho
+
+      thisGimmeRho = gimmeRhoSimple
+      myInterval = None
+      ix = 0
+
+      def doOnePoint(stuff):
+        global myInterval, ix, thisGimmeRho
+        doc,eos,myGimmeRho = stuff
+        numX = int(doc["inputXnum"].value)
+        if ix > numX:
+          stopUpdate()
+        x = ix / numX
+        ix = ix + 1
+        Tstr = doc['inputT'].value
+        Pstr = doc['inputP'].value
+        rhostr = doc['inputRho'].value
+        T = eval(Tstr)
+        rho = myGimmeRho(T, rhostr, Pstr, x, eos, doc)
         props = eos.eval(T,rho)
         window.addParametricRow(T, rho, props)
         if ix > numX:
           stopUpdate()
 
       def stopUpdate():
-        global eos, myInterval
+        global myInterval
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
-        eos = None
+        myInterval = None
+        print("stopped")
 
       def update(ev):
-        global myInterval, Tstr, rhostr, Pstr, eos, ix, numX
-        if not eos == None:
-          print("stopping!")
+        global myInterval, ix, phaseName
+        if not myInterval == None:
           stopUpdate()
           return
-        window.clearAllRows()
-        window.copyText = window.copyText0
-        window.collapseParameters()
+        window.clearAllSimple()
 
-        opts = optsForPhase("liquid", document, None)
-        eos = getEOS('liquid', opts)
-        Tstr = document['inputT'].value
-        Pstr = document['inputP'].value
-        rhostr = document['inputRho'].value
+        B3callback = None
+        if 'grabB3' in window:
+          B3callback = window.grabB3
+
+        opts = optsForPhase(phaseName, document, B3callback)
+        eos = getEOS(phaseName, opts)
 
         useX = document["checkX"].checked
         if useX:
@@ -107,31 +97,24 @@ function clearAllRows() {
           if numX < 1:
             InfoDialog("Trouble", f"Need at least 1 x value")
             return
-          myInterval = timer.set_interval(doOnePoint, 0)
+          myInterval = timer.set_interval(doOnePoint, 0, [document,eos,thisGimmeRho])
           return
+
+        Tstr = document['inputT'].value
+        Pstr = document['inputP'].value
+        rhostr = document['inputRho'].value
 
         try:
           T = float(Tstr)
         except ValueError:
           InfoDialog("Trouble", f"Must provide a valid temperature")
           return
-        if document["checkP"].checked:
-          try:
-            P = float(Pstr)
-          except ValueError:
-            InfoDialog("Trouble", f"Must provide a valid pressure")
-            return
-          rho = eos.rhoForProps(T, {'P': P})
-        else:
-          try:
-            rho = float(rhostr)
-          except ValueError:
-            InfoDialog("Trouble", f"Must provide a valid density ")
-            return
+        rho = thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
         props = eos.eval(T,rho)
         window.showResults(T, rho, props)
 
       document["btnUpdate"].bind("click", update)
+
     </script>
     <div class='container'>
       <h1>Equation of state for liquid phase of LJ</h1>

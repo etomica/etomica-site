@@ -24,6 +24,7 @@
         var plotModalEl = document.getElementById("plotModal");
         plotModalEl.addEventListener("show.bs.modal", mUpdatePlot);
       });
+      window.addEventListener("load", updateLiquidRc);
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
