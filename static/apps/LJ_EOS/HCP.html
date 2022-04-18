@@ -52,7 +52,12 @@ document.title = "LJ EOS for HCP";
       def doOnePoint(stuff):
         global myInterval, ix, thisGimmeRho
         doc,eos,myGimmeRho = stuff
-        numX = int(doc["inputXnum"].value)
+        try:
+          numX = int(doc["inputXnum"].value)
+        except ValueError:
+          InfoDialog("Trouble", f"Must provide a valid # of x points")
+          stopUpdate()
+          return
         if ix > numX:
           stopUpdate()
         x = ix / numX
@@ -92,7 +97,11 @@ document.title = "LJ EOS for HCP";
         if useX:
           document["btnUpdate"].textContent = "Stop"
           ix = 0
-          numX = int(document["inputXnum"].value)
+          try:
+            numX = int(document["inputXnum"].value)
+          except ValueError:
+            InfoDialog("Trouble", f"Must provide a valid # of x points")
+            return
           if numX < 1:
             InfoDialog("Trouble", f"Need at least 1 x value")
             return
