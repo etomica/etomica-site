@@ -15,13 +15,16 @@
     <script>
 document.title = "Solid-Liquid Phase Coexistence for LJ";
       function myUpdatePlot() {
+          var xsets = document.getElementById("plotXDiff").checked ? "diff" : "auto";
+          var ysets = document.getElementById("plotYDiff").checked ? "diff" : "auto";
+
         var rhoMax = document.getElementById("inputRhoMax").value;
         if (!rhoMax) rhoMax = Infinity; // 0 or blank
         var Tmax = document.getElementById("inputTMax").value;
         if (!Tmax) Tmax = Infinity;
         var phase1 = document.getElementById("phase1").value;
         var phase2 = document.getElementById("phase2").value;
-        updatePlotCoex(phase1, phase2, rhoMax, Tmax, false, 'auto', 'auto');
+        updatePlotCoex(phase1, phase2, rhoMax, Tmax, false, xsets, ysets);
       }
       window.addEventListener("load", function() {
         document.getElementById("SLE-max-inputs").style.display = "flex";

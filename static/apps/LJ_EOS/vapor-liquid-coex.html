@@ -15,7 +15,9 @@
     <script>
 document.title = "Vapor-Liquid Phase Coexistence for LJ";
       function myUpdatePlot() {
-        updatePlotCoex("vapor", "liquid", Infinity, Infinity, 'auto', 'auto');
+        var xsets = document.getElementById("plotXDiff").checked ? "diff" : "auto";
+        var ysets = document.getElementById("plotYDiff").checked ? "diff" : "auto";
+        updatePlotCoex("vapor", "liquid", Infinity, Infinity, xsets, ysets);
       }
       window.addEventListener("load", function() {
         var plotModalEl = document.getElementById("plotModal");
