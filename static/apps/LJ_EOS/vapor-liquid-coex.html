@@ -64,23 +64,38 @@ window.addEventListener("load", phasesUpdated);
       eos1 = eos2 = None
       myInterval = None
       Pguess = 0
+      success = True
 
       def doOneCoex():
-        global eos1, eos2, myInterval, iT, Pguess
-        Tstep = 0.001
+        global eos1, eos2, myInterval, iT, Pguess, success
+        if not success:
+          stopUpdate()
+          return
+        success = False
+        try:
+          Tstep = float(document["inputTstep"].value)
+        except ValueError:
+          InfoDialog("Trouble", f"Must provide a valid Tstep")
+          return
         T = iT*Tstep
-        if T > 0.9000001:
+        try:
+          Tmax = float(document["inputTmax"].value)
+        except ValueError:
+          InfoDialog("Trouble", f"Must provide a valid Tmax")
+          return
+        if T > Tmax+0.000000001:
           stopUpdate()
           return
         props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
         if not 'rho' in props1:
-          InfoDialog("Trouble", f"Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
+          InfoDialog("Trouble", f"Could not find coexistence for T="+str(T)+", Pguess="+str(Pguess))
           stopUpdate()
           return
         window.addRow(T, props1, props2);
 
         Pguess = props1['P']
         iT += 1
+        success = True
 
       def stopUpdate():
         global myInterval
@@ -90,10 +105,11 @@ window.addEventListener("load", phasesUpdated);
         print("stopped")
 
       def update(ev):
-        global eos1, eos2, myInterval, iT, Pguess
+        global eos1, eos2, myInterval, iT, Pguess, success
         if not myInterval == None:
           stopUpdate()
           return
+        success = True
         window.collapseParameters()
         document["btnUpdate"].textContent = "Stop"
         phase1 = document['phase1'].value
@@ -109,8 +125,17 @@ window.addEventListener("load", phasesUpdated);
         if opts is None:
           return
         eos2 = getEOS(phase2, opts)
-        Tstep = 0.001
-        iT = int(0.67 / Tstep)
+        try:
+          Tstep = float(document["inputTstep"].value)
+        except ValueError:
+          InfoDialog("Trouble", f"Must provide a valid Tstep")
+          return
+        try:
+          Tmin = float(document["inputTmin"].value)
+        except ValueError:
+          InfoDialog("Trouble", f"Must provide a valid Tmin")
+          return
+        iT = int(Tmin / Tstep)
         Pguess = 0
         window.clearAllRows()
         window.copyText = window.copyText0
@@ -124,7 +149,8 @@ window.addEventListener("load", phasesUpdated);
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-      <h1>Vapor-Liquid Phase Coexistence for LJ</h1>
+      <h1>Vapor-Liquid Phase Coexistence for LJ
+      <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoVaporLiquidCoexModal">Info</button></h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Phase Choices</a></h2>
@@ -135,7 +161,7 @@ window.addEventListener("load", phasesUpdated);
             <div class='col-auto px-4'>
               <div class='row g-3 py-1 align-items-center'>
                 <div class='col-auto'>
-                  <label for='rc' class='col-form-label'>Phase 1</label>
+                  <label for='phase1' class='col-form-label'>Phase 1</label>
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase1' onchange='phasesUpdated()'>
@@ -145,12 +171,32 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='row g-3 py-1 align-items-center'>
                 <div class='col-auto'>
-                  <label for='rc' class='col-form-label'>Phase 2</label>
+                  <label for='phase2' class='col-form-label'>Phase 2</label>
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase2' onchange='phasesUpdated()'>
                     <option value='liquid' selected>Liquid</option>
                   </select>
+                </div>
+              </div>
+              <div class='row g-3 py-1 align-items-center'>
+                <div class='col-auto'>
+                  <label for='inputTmin' class='col-form-label'>T<sub>min</sub></label>
+                </div>
+                <div class='col-auto'>
+                  <input type='text' class='form-control' id='inputTmin' style='width: 5rem;' value='0.67'>
+                </div>
+                <div class='col-auto'>
+                  <label for='inputTstep' class='col-form-label'>T<sub>step</sub></label>
+                </div>
+                <div class='col-auto'>
+                  <input type='text' class='form-control' id='inputTstep' style='width: 5rem;' value='0.001'>
+                </div>
+                <div class='col-auto'>
+                  <label for='inputTmax' class='col-form-label'>T<sub>max</sub></label>
+                </div>
+                <div class='col-auto'>
+                  <input type='text' class='form-control' id='inputTmax' style='width: 5rem;' value='0.9'>
                 </div>
               </div>
             </div>
@@ -208,7 +254,7 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='citation' id='vapor-ref-Schultz'>EOS Citation: A. J. Schultz and D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span>, <span class='volume'>107</span>, 2309 (2009); includes additional coefficients computed more recently, fits for B<sub>4</sub>-B<sub>9</sub> as described in <a href='https://doi.org/10.1002/aic.17072'>https://doi.org/10.1002/aic.17072</a></div>
+                  <div class='citation' id='vapor-ref-Schultz'>EOS Citations: Virial coefficients taken from A. J. Schultz and D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span>, <span class='volume'>107</span>, 2309 (2009); N. S. Barlow, A. J. Schultz, D. A. Kofke, S. J. Weinstein, "<a href='https://doi.org/0.1002/aic.14531'>Critical Isotherms from Virial Series Using Asymptotically Consistent Approximants</a>", <span class='pubName'>AIChE J.</span> <span class='volume'>60</span>, 3336-3349 (2014); C. Feng, A. J. Schultz, V. Chaudhary, D. A. Kofke, "<a href='https://doi.org/10.1063/1.4927339'>Eighth to sixteenth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>143</span>, 044504 (2015); includes additional coefficients computed more recently; fits for B<sub>4</sub>-B<sub>9</sub> as described in N. Gokul, A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1002/aic.17072'>Properties of supercritical N2, O2, CO2, and NH3 mixtures from the virial equation of state</a>", <span class='pubName'>AIChE J.</span> <span class='volume'>67</span>, e17072 (2021).</div>
                   <div class='citation' id='vapor-ref-Johnson'>EOS Citation: J. Johnson, J. Zollweg, and K. Gubbins, "<a href='https://doi.org/10.1080/00268979300100411'>The Lennard-Jones equation of state revisited</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>78</span>, 591–618 (1993).</div>
                   <div class='citation' id='vapor-ref-Kolafa'>EOS Citation: J. Kolafa and I. Nezbeda, "<a href='https://doi.org/10.1016/0378-3812(94)80001-4'>The Lennard-Jones fluid: An accurate analytic and theoretically-based equation of state</a>", <span class='pubName'>Fluid Phase Equilib.</span> <span class='volume'>100</span>, 1 (1994).</div>
                   <div class='citation' id='vapor-ref-May'>EOS Citation: H.-O. May and P. Mausbach, "<a href='https://doi.org/10.1103/PhysRevE.85.031201'>Riemannian geometry study of vapor-liquid phase equilibria and supercritical behavior of the Lennard-Jones fluid</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>86</span>, 059905 (2012).</div>
@@ -436,6 +482,23 @@ window.addEventListener("load", phasesUpdated);
           <div class="modal-body">
             <p>The EOS coexistence curve pages allows you to construct a coexistence curve for two phases.  You can choose the EOS (and any EOS parameters) to use to generate thermodynamic properties for each phase.  Each page understands how to step through temperatures to construct the full curve and uses estimates of pressure from the result of the previous temperature.</p>
             <p>The coexistence densities, pressure and Gibbs free energy are reported for each temperature in the results table.  You may copy the data as comma-separated data and also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  If the chosen properties are the same for the two phases (T, P or G), then only a single set is plotted.  If one is different for the two phases, the a separate curve is shown for each phase.  Alternatively, you may choose to plot the difference in such a property to collapse back to a single curve.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="infoVaporLiquidCoexModal" tabindex="-1" aria-labelledby="infoVaporLiquidCoexModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoVaporLiquidCoexModalLabel">Vapor-Liquid Coexistence Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>The Lennard-Jones vapor and liquid phases are in equilibrium starting at the vapor-liquid-FCC triple point and terminating a critical point.  This page starts below the triple point temperature, where the liquid is metastable and traces the curve until terminating at the specified T<sub>max</sub>.  The default T<sub>max</sub> is 0.9, beyond which the Schultz EOS for the liquid is not valid.  Use of a different liquid EOS allows you to follow the curve to higher temperature.  The script may have trouble finding coexistence near the critical point.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

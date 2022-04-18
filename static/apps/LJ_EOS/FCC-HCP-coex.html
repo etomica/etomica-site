@@ -256,7 +256,8 @@ window.addEventListener("load", phasesUpdated);
       document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
-      <h1>FCC-HCP Phase Coexistence for LJ</h1>
+      <h1>FCC-HCP Phase Coexistence for LJ
+          <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoFCCHCPCoexModal">Info</button></h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Phase Choices</a></h2>
@@ -267,7 +268,7 @@ window.addEventListener("load", phasesUpdated);
             <div class='col-auto px-4'>
               <div class='row g-3 py-1 align-items-center'>
                 <div class='col-auto'>
-                  <label for='rc' class='col-form-label'>Phase 1</label>
+                  <label for='phase1' class='col-form-label'>Phase 1</label>
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase1' onchange='phasesUpdated()'>
@@ -277,7 +278,7 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='row g-3 py-1 align-items-center'>
                 <div class='col-auto'>
-                  <label for='rc' class='col-form-label'>Phase 2</label>
+                  <label for='phase2' class='col-form-label'>Phase 2</label>
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase2' onchange='phasesUpdated()'>
@@ -626,6 +627,24 @@ window.addEventListener("load", phasesUpdated);
           <div class="modal-body">
             <p>The EOS coexistence curve pages allows you to construct a coexistence curve for two phases.  You can choose the EOS (and any EOS parameters) to use to generate thermodynamic properties for each phase.  Each page understands how to step through temperatures to construct the full curve and uses estimates of pressure from the result of the previous temperature.</p>
             <p>The coexistence densities, pressure and Gibbs free energy are reported for each temperature in the results table.  You may copy the data as comma-separated data and also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  If the chosen properties are the same for the two phases (T, P or G), then only a single set is plotted.  If one is different for the two phases, the a separate curve is shown for each phase.  Alternatively, you may choose to plot the difference in such a property to collapse back to a single curve.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="infoFCCHCPCoexModal" tabindex="-1" aria-labelledby="infoFCCHCPCoexModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoFCCHCPCoexModalLabel">FCC-HCP Coexistence Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Both FCC and HCP have regions of stability for the Lennard-Jones solid.  HCP is more stable at low density and low temperature, while FCC is more stable at all other conditions.  Both structures are close-packed (FCC has A-B-C hexagonal layers while HCP has A-B) and their properties are very similar along the coexistence curve.</p>
+            <p>At low temperature, a low-density HCP phase exists in equilibrium with a high-density FCC phase.  As the temperature is increased, the densities approach one another until a maximum in temperature is reached.  Continuing along the curve from there, the temperature decreases along a branch where a high-density HCP phase is in equilibrium with a low-density FCC phase.  The curve terminates at the FCC-HCP-vapor triple point.  This page will trace both parts of the curve (increasing and decreasing temperature) and finally searches for a point where P=0 (which should be close to the triple point).  The FCC-HCP-vapor triple point can be found on the <a href='triple-point.html'>triple point page</a>.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

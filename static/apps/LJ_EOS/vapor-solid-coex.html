@@ -114,7 +114,8 @@ window.addEventListener("load", phasesUpdated);
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-      <h1>Vapor-Solid Phase Coexistence for LJ</h1>
+      <h1>Vapor-Solid Phase Coexistence for LJ
+      <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoVaporSolidCoexModal">Info</button></h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Phase Choices</a></h2>
@@ -125,7 +126,7 @@ window.addEventListener("load", phasesUpdated);
             <div class='col-auto px-4'>
               <div class='row g-3 py-1 align-items-center'>
                 <div class='col-auto'>
-                  <label for='rc' class='col-form-label'>Phase 1</label>
+                  <label for='phase1' class='col-form-label'>Phase 1</label>
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase1' onchange='phasesUpdated()'>
@@ -135,7 +136,7 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='row g-3 py-1 align-items-center'>
                 <div class='col-auto'>
-                  <label for='rc' class='col-form-label'>Phase 2</label>
+                  <label for='phase2' class='col-form-label'>Phase 2</label>
                 </div>
                 <div class='col-auto'>
                   <select class='form-select' id='phase2' onchange='phasesUpdated()'>
@@ -199,7 +200,7 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='citation' id='vapor-ref-Schultz'>EOS Citation: A. J. Schultz and D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span>, <span class='volume'>107</span>, 2309 (2009); includes additional coefficients computed more recently, fits for B<sub>4</sub>-B<sub>9</sub> as described in <a href='https://doi.org/10.1002/aic.17072'>https://doi.org/10.1002/aic.17072</a></div>
+                  <div class='citation' id='vapor-ref-Schultz'>EOS Citations: Virial coefficients taken from A. J. Schultz and D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span>, <span class='volume'>107</span>, 2309 (2009); N. S. Barlow, A. J. Schultz, D. A. Kofke, S. J. Weinstein, "<a href='https://doi.org/0.1002/aic.14531'>Critical Isotherms from Virial Series Using Asymptotically Consistent Approximants</a>", <span class='pubName'>AIChE J.</span> <span class='volume'>60</span>, 3336-3349 (2014); C. Feng, A. J. Schultz, V. Chaudhary, D. A. Kofke, "<a href='https://doi.org/10.1063/1.4927339'>Eighth to sixteenth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>143</span>, 044504 (2015); includes additional coefficients computed more recently; fits for B<sub>4</sub>-B<sub>9</sub> as described in N. Gokul, A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1002/aic.17072'>Properties of supercritical N2, O2, CO2, and NH3 mixtures from the virial equation of state</a>", <span class='pubName'>AIChE J.</span> <span class='volume'>67</span>, e17072 (2021).</div>
                   <div class='citation' id='vapor-ref-Johnson'>EOS Citation: J. Johnson, J. Zollweg, and K. Gubbins, "<a href='https://doi.org/10.1080/00268979300100411'>The Lennard-Jones equation of state revisited</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>78</span>, 591–618 (1993).</div>
                   <div class='citation' id='vapor-ref-Kolafa'>EOS Citation: J. Kolafa and I. Nezbeda, "<a href='https://doi.org/10.1016/0378-3812(94)80001-4'>The Lennard-Jones fluid: An accurate analytic and theoretically-based equation of state</a>", <span class='pubName'>Fluid Phase Equilib.</span> <span class='volume'>100</span>, 1 (1994).</div>
                   <div class='citation' id='vapor-ref-May'>EOS Citation: H.-O. May and P. Mausbach, "<a href='https://doi.org/10.1103/PhysRevE.85.031201'>Riemannian geometry study of vapor-liquid phase equilibria and supercritical behavior of the Lennard-Jones fluid</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>86</span>, 059905 (2012).</div>
@@ -541,6 +542,24 @@ window.addEventListener("load", phasesUpdated);
           <div class="modal-body">
             <p>The EOS coexistence curve pages allows you to construct a coexistence curve for two phases.  You can choose the EOS (and any EOS parameters) to use to generate thermodynamic properties for each phase.  Each page understands how to step through temperatures to construct the full curve and uses estimates of pressure from the result of the previous temperature.</p>
             <p>The coexistence densities, pressure and Gibbs free energy are reported for each temperature in the results table.  You may copy the data as comma-separated data and also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  If the chosen properties are the same for the two phases (T, P or G), then only a single set is plotted.  If one is different for the two phases, the a separate curve is shown for each phase.  Alternatively, you may choose to plot the difference in such a property to collapse back to a single curve.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="infoVaporSolidCoexModal" tabindex="-1" aria-labelledby="infoVaporSolidCoexModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoVaporSolidCoexModalLabel">Vapor-Solid Coexistence Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>The Lennard-Jones vapor and solid phases are in equilibrium starting at T=0 and extending up to a triple point with the liquid.  Although HCP is more stable than FCC at low T and FCC more stable than HCP at higher T, both are at least metastable for T=0 up to the liquid triple point and this page will trace the whole curve for either choice.  The FCC-HCP-vapor triple point (where the low-T HCP curve terminates and the high-T FCC curve starts) and the FCC-liquid-vapor triple points can be identified on the <a href='triple-point.html'>triple point page</a>.</p>
+            <p>At extremely low temperature, the page reports the vapor density and pressure are 0 due to underflow.  Coexistence is found properly, but the vapor density and pressure values are less than 10<sup>-324</sup> and cannot be represented as standard numbers that CPUs handle natively.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
