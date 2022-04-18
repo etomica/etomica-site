@@ -198,11 +198,11 @@ function myUpdatePlot() {
             <p>The EOS pages allows you to generate thermodynamic properties as a function of temperature, density or pressure.  The page can operate in one of two modes.</p>
             <ol>
               <li>In the first mode, you can compute properties at a single given state point.  You must choose the temperature and then either the density or pressure.  If setting the pressure, the EOS will be used to determine the density for that pressure (be careful to choose a pressure that exists at the given temperature). Results are presented in a simple table.</li>
-              <li>In the second mode, you can compute properties at a series of state points.  As in the first mode, you can set the temperature and either the density or pressure.  Now, however, each may be expressed as a function of a parametric varialbe, <i>x</i>.  The <i>x</i> variable varies from 0 to 1 (inclusive) visiting as many points you specify in the # input field (it will actually visit one additional point; if you specific "100", x will take values 0, 0.01, 0.02..., 1.0).  The properties are reported in a table with a column for each property and a row for each state point.  You may copy all of the data as comma-separated data or also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  You may copy data or open the plot while the data is generated, but the page may be slow to respond.</li>
+              <li>In the second mode, you can compute properties at a series of state points.  As in the first mode, you can set the temperature and either the density or pressure.  Now, however, each may be expressed as a function of a parametric variable, <i>x</i>.  The <i>x</i> variable varies from 0 to 1 (inclusive) visiting as many points you specify in the # input field (it will actually visit one additional point; if you specific "100", x will take values 0, 0.01, 0.02..., 1.0).  The properties are reported in a table with a column for each property and a row for each state point.  You may copy all of the data as comma-separated data or also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  You may copy data or open the plot while the data is generated, but the page may be slow to respond.</li>
             </ol>
 
             <p>You can choose the EOS to use to generate properties.  The citation is provided for the chosen EOS.  Each EOS has its own limits on range of applicability (temperatures and densities, etc).  Please refer to the published paper for details.  Different EOS choices may also result in different available properties due to complexity of property calcluation (such as C<sub>V</sub>).</p>
-            <p>If you choose the Schultz EOS, then there are various additional parameters that can be set.  This allows you to examine approximations such as using the harmonic approximation or examining the effects of finite system size and potential truncation.  The properties computed may depend on the parameters chose; vacancy fraction will be reported if they are included in the EOS, but C<sub>V</sub> will not because the vacancy contribution to C<sub>V</sub> is too complicated.</p>
+            <p>If you choose the Schultz EOS, then there are various additional parameters that can be set.  This allows you to examine approximations such as using the harmonic approximation or examining the effects of finite system size and potential truncation.  The properties computed may depend on the parameters chosen; vacancy fraction will be reported if they are included in the EOS, but C<sub>V</sub> will not because the vacancy contribution to C<sub>V</sub> is too complicated.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -349,7 +349,7 @@ function myUpdatePlot() {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div id="plotDiv" style="width:100%;height:500px;"></div>
+            <div id="plotDiv"></div>
             <div class='row'>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
@@ -414,6 +414,28 @@ function myUpdatePlot() {
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='plotYDiff' onchange='myUpdatePlot()'>
                     <label class='form-check-label' for='plotXDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot a single set as the value for phase2 - phase1 instead of separate sets">Y diff</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='row' style='display: none;' id='SLE-max-inputs'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputTMax' class='col-form-label'>T<sub>max</sub></label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputTMax' class='form-control' value='2' style='width: 4rem;' onchange='myUpdatePlot()'>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputRhoMax' class='col-form-label'>&rho;<sub>max</sub></label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputRhoMax' class='form-control' value='1.5' style='width: 4rem;' onchange='myUpdatePlot()'>
                   </div>
                 </div>
               </div>

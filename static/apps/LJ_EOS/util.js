@@ -208,7 +208,12 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
   var ytitle = (ypropSingle || ysets == 'auto') ? yprop : (ysets == 'single' ? (yprop+" "+phase1) : ("Δ"+yprop));
   Plotly.newPlot(plotDiv,
                  sets,
-                 { xaxis: {title: xtitle, exponentformat:'power'}, yaxis: {title: ytitle, exponentformat:'power'}, margin: { t: 0 } } );
+                 { autosize: true,
+                   xaxis: {title: xtitle, exponentformat:'power'},
+                   yaxis: {title: ytitle, exponentformat:'power'},
+                   margin: { t: 0 }
+                 },
+                 { responsive: true} );
 }
 function cleanOpts(id, data) {
   var sel = document.getElementById(id);
@@ -235,7 +240,12 @@ function updatePlot() {
   }
   Plotly.newPlot(plotDiv,
                  [{ x: xdata, y: ydata }],
-                 { xaxis: {title: xprop, exponentformat:'power'}, yaxis: {title: yprop, exponentformat:'power'}, margin: { t: 0 } } );
+                 { autosize: true,
+                   xaxis: {title: xprop, exponentformat:'power'},
+                   yaxis: {title: yprop, exponentformat:'power'},
+                   margin: { t: 0 }
+                 },
+                 { responsive: true} );
 }
 
 function updateX() {
