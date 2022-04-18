@@ -256,7 +256,7 @@ document.title = "LJ EOS for HCP";
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNh' class='col-form-label'># of atoms</label>
+                    <label for='inputNh' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputNh'>
@@ -271,7 +271,7 @@ document.title = "LJ EOS for HCP";
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc-hcp' class='col-form-label'>cutoff</label>
+                    <label for='rc-hcp' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="use EOS for the given potential truncation; can be corrected by long-range correction (LRC)">cutoff</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-hcp'>

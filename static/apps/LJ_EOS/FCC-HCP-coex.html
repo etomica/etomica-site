@@ -339,7 +339,7 @@ window.addEventListener("load", phasesUpdated);
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNh' class='col-form-label'># of atoms</label>
+                    <label for='inputNh' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputNh'>
@@ -354,7 +354,7 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc-hcp' class='col-form-label'>cutoff</label>
+                    <label for='rc-hcp' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="use EOS for the given potential truncation; can be corrected by long-range correction (LRC)">cutoff</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-hcp'>
@@ -429,14 +429,14 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc'>
-                    <label class='form-check-label' for='checkVac-fcc'>include vacancies</label>
+                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution to thermodynamic properties due to the existence of lattice vacancies">include vacancies</label>
                   </div>
                 </div>
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNf' class='col-form-label'># of atoms</label>
+                    <label for='inputNf' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputNf'>
@@ -451,7 +451,7 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc-fcc' class='col-form-label'>cutoff</label>
+                    <label for='rc-fcc' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="use EOS for the given potential truncation; can be corrected by long-range correction (LRC)">cutoff</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-fcc'>
@@ -476,7 +476,7 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
-                    <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                    <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction for potential truncation.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
                   </div>
                 </div>
               </div>

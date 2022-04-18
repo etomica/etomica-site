@@ -15,8 +15,8 @@
     <script>
 document.title = "Solid-Liquid Phase Coexistence for LJ";
       function myUpdatePlot() {
-          var xsets = document.getElementById("plotXDiff").checked ? "diff" : "auto";
-          var ysets = document.getElementById("plotYDiff").checked ? "diff" : "auto";
+        var xsets = document.getElementById("plotXDiff").checked ? "diff" : "auto";
+        var ysets = document.getElementById("plotYDiff").checked ? "diff" : "auto";
 
         var rhoMax = document.getElementById("inputRhoMax").value;
         if (!rhoMax) rhoMax = Infinity; // 0 or blank
@@ -43,6 +43,10 @@ var allData = [];
 function addRow(T, props1, props2) {
   var tbody = document.getElementById("coex-table");
   var row = makeElement("TR", tbody);
+  props1.v2 = 1/(props1.rho*props1.rho);
+  props2.v2 = 1/(props2.rho*props2.rho);
+  props1.Y = (T/4)*Math.pow(props1.rho,-4);
+  props2.Y = (T/4)*Math.pow(props2.rho,-4);
   allData.push({T: T, props1: props1, props2: props2});
   var v = [T, props1['rho'], props2['rho'], props1['P'], props1['G']];
   v.push('phi' in props2 ? props2.phi : 0);
@@ -186,7 +190,7 @@ window.addEventListener("load", phasesUpdated);
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNl' class='col-form-label'># of atoms</label>
+                    <label for='inputNl' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations"># of atoms</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputNl'>
@@ -201,7 +205,7 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc-liquid' class='col-form-label'>cutoff</label>
+                    <label for='rc-liquid' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="use EOS for the given potential truncation; can be corrected by long-range correction (LRC)">cutoff</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-liquid'>
@@ -222,7 +226,7 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkLRC-liquid'>
-                    <label class='form-check-label' for='checkLRC-liquid'>include LRC</label>
+                    <label class='form-check-label' for='checkLRC-liquid' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction for potential truncation">include LRC</label>
                   </div>
                 </div>
               </div>
@@ -281,7 +285,7 @@ window.addEventListener("load", phasesUpdated);
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNh' class='col-form-label'># of atoms</label>
+                    <label for='inputNh' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputNh'>
@@ -296,7 +300,7 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc-hcp' class='col-form-label'>cutoff</label>
+                    <label for='rc-hcp' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="use EOS for the given potential truncation; can be corrected by long-range correction (LRC)">cutoff</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-hcp'>
@@ -371,14 +375,14 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc'>
-                    <label class='form-check-label' for='checkVac-fcc'>include vacancies</label>
+                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution to thermodynamic properties due to the existence of lattice vacancies">include vacancies</label>
                   </div>
                 </div>
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNf' class='col-form-label'># of atoms</label>
+                    <label for='inputNf' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputNf'>
@@ -393,7 +397,7 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='rc-fcc' class='col-form-label'>cutoff</label>
+                    <label for='rc-fcc' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="use EOS for the given potential truncation; can be corrected by long-range correction (LRC)">cutoff</label>
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-fcc'>
@@ -418,7 +422,7 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
-                    <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                    <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction for potential truncation.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
                   </div>
                 </div>
               </div>
@@ -585,7 +589,7 @@ window.addEventListener("load", phasesUpdated);
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>The Lennard-Jones solid and liquid phases are in equilibrium starting at the vapor-liquid-FCC triple point and extending to the soft-sphere limit at infinite temperature and density.  This page will trace the whole curve from triple point to the soft-sphere limit.</p>
+            <p>The Lennard-Jones solid and liquid phases are in equilibrium starting at the vapor-liquid-FCC triple point and extending to the soft-sphere limit at infinite temperature and density.  This page will trace the whole curve from triple point to the soft-sphere limit.  Because the very-high temperature data will throw off the scale of most coexistence plots, maximum values density and temperature can be set.  Alternatively, you can plot v<sup>2</sup> = &rho;<sup>-2</sup> and Y = (4/T)&rho;<sup>-4</sup>, which remain finite over the whole curve.</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
