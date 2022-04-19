@@ -147,7 +147,6 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
   var ypropSingle = ["T","P","G"].indexOf(yprop) > -1;
   var xpropSingleEff = xpropSingle || xsets == 'single' || xsets == 'diff';
   var ypropSingleEff = ypropSingle || ysets == 'single' || ysets == 'diff';
-  console.log(ysets+" "+ypropSingle+" "+ypropSingleEff);
   var sets = [];
   if (xpropSingleEff && ypropSingleEff) {
     document.getElementById("inputNTieLines").setAttribute("disabled", "true");
@@ -180,7 +179,6 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
       if (allData[i].T > Tmax) continue;
       var skip1 = allData[i].props1.rho > rhoMax, skip2 = allData[i].props2.rho > rhoMax;
       if (skip1 && skip2) continue;
-      console.log(i+" "+skip1+" "+skip2);
       var xx = gimmeCoexData(allData[i], xprop);
       if (xpropSingleEff) {
         if (xsets == 'single') xx = xx[0];
@@ -191,7 +189,6 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
         if (ysets == 'single') yy = yy[0];
         else if (ysets == 'diff') yy = yy[1] - yy[0];
       }
-      console.log(i+" "+xx+" "+yy);
       var xy1 = null, xy2 = null;
       if (!skip1) {
         xy1 = [xpropSingleEff ? xx : xx[0], ypropSingleEff ? yy : yy[0]];
@@ -208,10 +205,6 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
         sets.push({showlegend: false, x: [xy1[0],xy2[0]], y: [xy1[1],xy2[1]], mode: 'lines', line: {color: "black", width: 0.5, dash: 'dash'}});
       }
     }
-    console.log("x1data "+x1data);
-    console.log("x2data "+x2data);
-    console.log("y1data "+y1data);
-    console.log("y2data "+y2data);
     sets.push({ name: phase1, x: x1data, y: y1data, line: {color: "blue"} });
     sets.push({ name: phase2, x: x2data, y: y2data, line: {color: "red"} });
   }
