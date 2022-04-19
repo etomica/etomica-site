@@ -37,7 +37,7 @@
         <li><a href='triple-point.html'>Triple Point</a>
         <button class='btn btn-xs btn-info' type='button' data-content='triple' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></li>
       </ul>
-      <h2>Publication</h2>
+      <h2 class='h3'>Publication</h2>
       <ul>
         <li><a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>
           <ul>
@@ -53,7 +53,9 @@
             <h5 class="modal-title" id="infoModalLabel">Info</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body" id='infoModalBody'>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -410,17 +410,21 @@ window.addEventListener("load", function() {
   });
 });
 
+var infoTitles = [
+                  {name: "LJ", title: "Lennard-Jones EOS"},
+                  {name: "EOS", title: "Basic EOS"},
+                  {name: "coex", title: "EOS Coexistence"},
+                  {name: "coex-curve", title: "EOS Coexistence Curve"},
+                  {name: "solid-liquid", title: "Solid-Liquid Coexistence"},
+                  {name: "FCC-HCP", title: "FCC-HCP Coexistence"},
+                  {name: "vapor-liquid", title: "Vapor-Liquid Coexistence"},
+                  {name: "vapor-solid", title: "Vapor-Solid Coexistence"},
+                  {name: "triple", title: "Triple Point"}
+                  ], infoTitleMap = null;
 function loadModalContent(content) {
-  var titles = {"coex-curve": "EOS Coexistence Curve Info",
-                "coex": "EOS Coexistence Info",
-                "FCC-HCP": "FCC-HCP Coexistence Info",
-                "LJ": "Lennard-Jones EOS Info",
-                "solid-liquid": "Solid-Liquid Coexistence Info",
-                "triple": "Triple Point Info",
-                "EOS": "EOS Info",
-                "vapor-liquid": "Vapor-Liquid Coexistence Info",
-                "vapor-solid": "Vapor-Solid Coexistence Info"};
-  document.getElementById("infoModalLabel").textContent = titles[content];
+  document.getElementById("infoModalLabel").textContent = infoTitleMap[content];
+  var sel = document.getElementById("info-modal-select");
+  sel.value = content;
 
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open("GET", content+".html");
@@ -435,10 +439,22 @@ function loadModalContent(content) {
   xmlHttp.send(null);
 }
 
+function replaceInfoContent() {
+  var sel = document.getElementById("info-modal-select");
+  loadModalContent(sel.value);
+}
+
 window.addEventListener("load", function() {
   var infoModal = document.getElementById("infoModal");
   if (!infoModal) return;
-  console.log("here!");
+  infoTitleMap = {};
+  var sel = document.getElementById("info-modal-select");
+  for (var i=0; i<infoTitles.length; i++) {
+    var n = infoTitles[i].name, t = infoTitles[i].title;
+    infoTitleMap[n] = t;
+    makeElement("OPTION", sel, {value: n, textContent: t});
+  }
+  sel.addEventListener("change", replaceInfoContent);
   infoModal.addEventListener("show.bs.modal", function(event) {
     var content = event.relatedTarget.getAttribute("data-content");
     if (!/^[a-zA-Z0-9-]*/.test(content)) return;
