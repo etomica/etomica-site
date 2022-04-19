@@ -410,3 +410,38 @@ window.addEventListener("load", function() {
   });
 });
 
+function loadModalContent(content) {
+  var titles = {"coex-curve": "EOS Coexistence Curve Info",
+                "coex": "EOS Coexistence Info",
+                "FCC-HCP": "FCC-HCP Coexistence Info",
+                "LJ": "Lennard-Jones EOS Info",
+                "solid-liquid": "Solid-Liquid Coexistence Info",
+                "triple": "Triple Point Info",
+                "EOS": "EOS Info",
+                "vapor-liquid": "Vapor-Liquid Coexistence Info",
+                "vapor-solid": "Vapor-Solid Coexistence Info"};
+  document.getElementById("infoModalLabel").textContent = titles[content];
+
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.open("GET", content+".html");
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState == 4) {
+      var response = xmlHttp.responseText;
+      var body = document.getElementById("infoModalBody");
+      body.innerHTML = response;
+    }
+  };
+  xmlHttp.open("GET", content+"-info.html");
+  xmlHttp.send(null);
+}
+
+window.addEventListener("load", function() {
+  var infoModal = document.getElementById("infoModal");
+  if (!infoModal) return;
+  console.log("here!");
+  infoModal.addEventListener("show.bs.modal", function(event) {
+    var content = event.relatedTarget.getAttribute("data-content");
+    if (!/^[a-zA-Z0-9-]*/.test(content)) return;
+    loadModalContent(content);
+  });
+});
