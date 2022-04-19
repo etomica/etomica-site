@@ -149,6 +149,7 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
   var ypropSingleEff = ypropSingle || ysets == 'single' || ysets == 'diff';
   var sets = [];
   if (xpropSingleEff && ypropSingleEff) {
+    document.getElementById("inputNTieLines").setAttribute("disabled", "true");
     var xdata = [], ydata = [];
     for (var i=0; i<allData.length; i++) {
       if (allData[i].T > Tmax) continue;
@@ -169,7 +170,11 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
     sets.push({ x: xdata, y: ydata });
   }
   else {
+    document.getElementById("inputNTieLines").removeAttribute("disabled");
     var x1data = [], y1data = [], x2data = [], y2data = [];
+    var nTieLines = document.getElementById("inputNTieLines").value;
+    nTieLines = nTieLines ? Number(nTieLines) : 0;
+    var nTieLinesInterval = nTieLines > 0 ? Math.max(1,Math.floor(allData.length / nTieLines)) : 0;
     for (var i=0; i<allData.length; i++) {
       if (allData[i].T > Tmax) continue;
       var skip1 = allData[i].props1.rho > rhoMax, skip2 = allData[i].props2.rho > rhoMax;
@@ -184,25 +189,24 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
         if (ysets == 'single') yval = yval[0];
         else if (ysets == 'diff') yval = yval[1] - yval[0];
       }
-      if (xpropSingle) {
-        if (!skip1) x1data.push(xx);
-        if (!skip2) x2data.push(xx);
+      var xy1 = null, xy2 = null;
+      if (!skip1) {
+        xy1 = [xpropSingle ? xx : xx[0], ypropSingle ? yy : yy[0]];
+        x1data.push(xy1[0]);
+        y1data.push(xy1[1]);
       }
-      else {
-        if (!skip1) x1data.push(xx[0]);
-        if (!skip2) x2data.push(xx[1]);
+      if (!skip2) {
+        xy2 = [xpropSingle ? xx : xx[1], ypropSingle ? yy : yy[1]];
+        x2data.push(xy2[0]);
+        y2data.push(xy2[1]);
       }
-      if (ypropSingle) {
-        if (!skip1) y1data.push(yy);
-        if (!skip1) y2data.push(yy);
-      }
-      else {
-        if (!skip1) y1data.push(yy[0]);
-        if (!skip2) y2data.push(yy[1]);
+      if (nTieLinesInterval > 0 && !skip1 && !skip2 && i % nTieLinesInterval == 0) {
+        // tie line
+        sets.push({showlegend: false, x: [xy1[0],xy2[0]], y: [xy1[1],xy2[1]], mode: 'lines', line: {color: "black", width: 0.5, dash: 'dash'}});
       }
     }
-    sets.push({ name: phase1, x: x1data, y: y1data });
-    sets.push({ name: phase2, x: x2data, y: y2data });
+    sets.push({ name: phase1, x: x1data, y: y1data, line: {color: "blue"} });
+    sets.push({ name: phase2, x: x2data, y: y2data, line: {color: "red"} });
   }
   var xtitle = (xpropSingle || xsets == 'auto') ? xprop : (xsets == 'single' ? (xprop+" "+phase1) : ("Δ"+xprop));
   var ytitle = (ypropSingle || ysets == 'auto') ? yprop : (ysets == 'single' ? (yprop+" "+phase1) : ("Δ"+yprop));
