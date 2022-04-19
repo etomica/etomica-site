@@ -204,7 +204,7 @@ window.addEventListener("load", phasesUpdated);
           <div class='row g-3 py-1 align-items-center'>
             <div class='col-auto'>
               <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
-              <button class='btn btn-sm btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoTPModal">Info</button>
+              <button class='btn btn-sm btn-info' type='button' data-content='triple' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
             </div>
           </div>
         </div>
@@ -564,17 +564,14 @@ window.addEventListener("load", phasesUpdated);
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>
 
-    <div class="modal fade" id="infoTPModal" tabindex="-1" aria-labelledby="infoTPModalLabel" aria-hidden="true">
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="infoTPModalLabel">EOS Triple Point Info</h5>
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <p>The EOS triple point page allows you to determine the triple point for any three phases.  An estimate of the triple point temperature is necessary, but even a poor estimate may be sufficient.</p>
-            <p>You may choose between vapor, liquid, FCC and HCP for the three phases.  For each choice of phase, you may also choose the EOS and any EOS parameters to describe its behavior.  Choosing inappropriate parameters may result in failure to find triple point; a solid described with lattice dynamics is likely to have no equilibrium with the liquid.  Likewise, a model with short truncation (and no LRC) may not have a triple point within range of validity of the EOS.</p>
-            <p>Finding the triple point requires finding coexistence at a estimate of the triple point temperature and then improving that estimate via bisection.  The coexistence properties at these temperatures are reported in the results table with one column for the results of coexistence between the phase1 and phase2 and another column for the coexistence between phase2 and phase3.  The gaps in properties that should be the same (P, G and the density of the intermediate phase2) are reported in the last column to give you an idea of progress.</p>
+          <div class="modal-body" id='infoModalBody'>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

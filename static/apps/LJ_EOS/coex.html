@@ -126,7 +126,7 @@ window.addEventListener("load", phasesUpdated);
           <div class='row g-3 py-1 align-items-center'>
             <div class='col-auto'>
               <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
-              <button class='btn btn-sm btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoCoexModal">Info</button>
+              <button class='btn btn-sm btn-info' type='button' data-content='coex' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
             </div>
           </div>
         </div>
@@ -479,17 +479,14 @@ window.addEventListener("load", phasesUpdated);
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>
 
-    <div class="modal fade" id="infoCoexModal" tabindex="-1" aria-labelledby="infoCoexModalLabel" aria-hidden="true">
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="infoCoexModalLabel">EOS Coexistence Info</h5>
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <p>The EOS coexistence page allows you to determine a coexistence point between two phases for a given temperature.  A guess for the coexistence pressure is necessary, but even a poor guess is typically sufficient.  Unlike the EOS pages, there is no way to parametrically step through temperatures.  There are separate pages capable of stepping through the coexistence curve for each pair of phases.</p>
-            <p>You may choose between vapor, liquid, FCC and HCP for the two phases.  For each choice of phase, you may also choose the EOS and any EOS parameters to describe its behavior.  Choosing inappropriate parameters may result in failure to find coexistence; a solid described with lattice dynamics is likely to have no equilibrium with the liquid.  Likewise, a model with short truncation (and no LRC) may not have coexistence within range of validity of the EOS.</p>
-            <p> Having found the coexistence point, the coexisting densities, the pressure and Gibbs free enery are reported.</p>
+          <div class="modal-body" id='infoModalBody'>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

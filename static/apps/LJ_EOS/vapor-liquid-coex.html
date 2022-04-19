@@ -154,7 +154,7 @@ window.addEventListener("load", phasesUpdated);
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Vapor-Liquid Phase Coexistence for LJ
-      <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoVaporLiquidCoexModal">Info</button></h1>
+      <button class='btn btn-xs btn-info' type='button' data-content='vapor-liquid' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Phase Choices</a></h2>
@@ -208,7 +208,7 @@ window.addEventListener("load", phasesUpdated);
           <div class='row g-3 py-1 align-items-center'>
             <div class='col-auto'>
               <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Trace coexistence</button>
-              <button class='btn btn-sm btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoCoexCurveModal">Info</button>
+              <button class='btn btn-sm btn-info' type='button' data-content='coex-curve' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
             </div>
           </div>
         </div>
@@ -486,33 +486,14 @@ window.addEventListener("load", phasesUpdated);
       </div>
     </div>
 
-    <div class="modal fade" id="infoCoexCurveModal" tabindex="-1" aria-labelledby="infoCoexCurveModalLabel" aria-hidden="true">
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="infoCoexCurveModalLabel">EOS Coexistence Curve Info</h5>
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <p>The EOS coexistence curve pages allows you to construct a coexistence curve for two phases.  You can choose the EOS (and any EOS parameters) to use to generate thermodynamic properties for each phase.  Each page understands how to step through temperatures to construct the full curve and uses estimates of pressure from the result of the previous temperature.</p>
-            <p>The coexistence densities, pressure and Gibbs free energy are reported for each temperature in the results table.  You may copy the data as comma-separated data and also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  If the chosen properties are the same for the two phases (T, P or G), then only a single set is plotted.  If one is different for the two phases, the a separate curve is shown for each phase.  Alternatively, you may choose to plot the difference in such a property to collapse back to a single curve.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="infoVaporLiquidCoexModal" tabindex="-1" aria-labelledby="infoVaporLiquidCoexModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoVaporLiquidCoexModalLabel">Vapor-Liquid Coexistence Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>The Lennard-Jones vapor and liquid phases are in equilibrium starting at the vapor-liquid-FCC triple point and terminating a critical point.  This page starts below the triple point temperature, where the liquid is metastable and traces the curve until terminating at the specified T<sub>max</sub>.  The default T<sub>max</sub> is 0.9, beyond which the Schultz EOS for the liquid is not valid.  Use of a different liquid EOS allows you to follow the curve to higher temperature.  The script may have trouble finding coexistence near the critical point.</p>
+          <div class="modal-body" id='infoModalBody'>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

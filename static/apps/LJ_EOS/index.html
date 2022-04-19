@@ -7,15 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link href='main.css' rel='stylesheet'>
+    <script src='util.js'></script>
     <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <div class='container'>
       <h1 class='h2'><i class="fa-solid fa-house"></i> Equation of State for LJ
-          <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoLJModal">Info</button></h1>
+          <button class='btn btn-xs btn-info' type='button' data-content='LJ' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
       <ul>
         <li>Single-point EOS calculation
-          <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoEOSModal">Info</button></li>
+          <button class='btn btn-xs btn-info' type='button' data-content='EOS' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></li>
           <ul>
             <li><a href='vapor.html'>Vapor</a></li>
             <li><a href='liquid.html'>Liquid</a></li>
@@ -24,9 +25,9 @@
           </ul>
         </li>
         <li><a href='coex.html'>Phase Coexistence Points</a>
-          <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoCoexModal">Info</button></li>
+          <button class='btn btn-xs btn-info' type='button' data-content='coex' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></li>
         <li>Coexistence Curves
-          <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoCoexCurveModal">Info</button></li>
+          <button class='btn btn-xs btn-info' type='button' data-content='coex-curve' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></li>
         <ul>
           <li><a href='solid-liquid-coex.html'>Solid-Liquid</a></li>
           <li><a href='FCC-HCP-coex.html'>FCC-HCP</a></li>
@@ -34,7 +35,7 @@
           <li><a href='vapor-solid-coex.html'>Vapor-Solid</a></li>
         </ul>
         <li><a href='triple-point.html'>Triple Point</a>
-        <button class='btn btn-xs btn-info' type='button' data-bs-toggle="modal" data-bs-target="#infoTPModal">Info</button></li>
+        <button class='btn btn-xs btn-info' type='button' data-content='triple' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></li>
       </ul>
       <h2>Publication</h2>
       <ul>
@@ -45,115 +46,14 @@
           </ul>
         </li>
     </div>
-    <div class="modal fade" id="infoLJModal" tabindex="-1" aria-labelledby="infoLJModalLabel" aria-hidden="true">
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="infoLJModalLabel">Lennard-Jones Info</h5>
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <p>These pages describe the thermodynamic properties of the <a href='https://en.wikipedia.org/wiki/Lennard-Jones_potential'>Lennard-Jones (LJ) model</a> via equations of state (EOS).  The LJ potential has the form</p>
-            <p style='margin-left: 2rem'>U(r) = 4 &epsilon; ((&sigma;/r)<sup>12</sup> - (&sigma;/r)<sup>6</sup>)</p>
-            <p>Where r is the separation distance between any pair of atoms.  The potential has an attractive well with depth &epsilon; and repulsive core.  The potential goes through 0 at r=&sigma;.</p>
-            <p>On this site, we report thermodynamic properties reduced by both &epsilon; and &sigma;; temperature is reported in terms of k<sub>B</sub>T/&epsilon; and pressure is reported in terms of P&sigma;<sup>3</sup>/&epsilon;, etc.  The resulting values are dimensionless.  They can be converted to values with units for a chemical model by using the appropriate values of &sigma; and &epsilon; for the model.  All thermodynamic properties are intensive &mdash; the values are independent of system size.  Quantities such as potential energy are reported as the potential energy per atom to make them intensive.</p>
-            <p>The table below lists the thermodynamic properties used on this site</p>
-            <table class='table'>
-              <thead><tr><th>Symbol</th><th>Reduced Form</th><th>Name</th></tr></thead>
-              <tbody>
-              <tr><td>T</td><td>k<sub>B</sub> T / &epsilon;</td><td>Temperature</td></tr>
-              <tr><td>&rho;</td><td>&rho; &sigma;<sup>3</sup></td><td>Density</td></tr>
-              <tr><td>P</td><td>P &sigma;<sup>3</sup> / &epsilon;</td><td>Pressure</td></tr>
-              <tr><td>U</td><td>U / &epsilon;</td><td>Potential Energy</td></tr>
-              <tr><td>A</td><td>A / &epsilon;</td><td>Helmholtz Free Energy</td></tr>
-              <tr><td>G</td><td>G / &epsilon;</td><td>Gibbs Free Energy</td></tr>
-              <tr><td>Z</td><td>Z</td><td>Compressibility Factor</td></tr>
-              <tr><td>C<sub>V</sub></td><td>C<sub>V</sub></td><td>Heat Capacity</td></tr>
-              <tr><td>&phi;</td><td>&phi;</td><td>Vacancy Fraction</td></tr>
-              <tr><td>&alpha;</td><td>&alpha;</td><td>HCP lattice deviation from ideality ((c/a)(3/8)<sup>1/2</sup>)</td></tr>
-              <tr><td>H</td><td>H / &epsilon;</td><td>Enthalpy</td></tr>
-              <tr><td>S</td><td>S / k<sub>B</sub></td><td>Entropy</td></tr>
-              <tr><td>v<sup>2</sup></td><td>v<sup>2</sup> / &sigma;<sup>6</sup></td><td>Squared specific volume</td></tr>
-              <tr><td>Y</td><td>Y</td><td>(k<sub>B</sub> T / 4 &epsilon;) &rho;<sup>-4</sup> &sigma;<sup>-12</sup></td></tr>
-              </tbody>
-            </table>
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="infoEOSModal" tabindex="-1" aria-labelledby="infoEOSModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoEOSModalLabel">EOS Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>The EOS pages allows you to generate thermodynamic properties as a function of temperature, density or pressure.  The page can operate in one of two modes.</p>
-            <ol>
-              <li>In the first mode, you can compute properties at a single given state point.  You must choose the temperature and then either the density or pressure.  If setting the pressure, the EOS will be used to determine the density for that pressure (be careful to choose a pressure that exists at the given temperature). Results are presented in a simple table.</li>
-              <li>In the second mode, you can compute properties at a series of state points.  As in the first mode, you can set the temperature and either the density or pressure.  Now, however, each may be expressed as a function of a parametric variable, <i>x</i>.  The <i>x</i> variable varies from 0 to 1 (inclusive) visiting as many points you specify in the # input field (it will actually visit one additional point; if you specific "100", x will take values 0, 0.01, 0.02..., 1.0).  The properties are reported in a table with a column for each property and a row for each state point.  You may copy all of the data as comma-separated data or also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  You may copy data or open the plot while the data is generated, but the page may be slow to respond.</li>
-            </ol>
-
-            <p>You can choose the EOS to use to generate properties.  The citation is provided for the chosen EOS.  Each EOS has its own limits on range of applicability (temperatures and densities, etc).  Please refer to the published paper for details.  Different EOS choices may also result in different available properties due to complexity of property calcluation (such as C<sub>V</sub>).</p>
-            <p>If you choose the Schultz EOS, then there are various additional parameters that can be set.  This allows you to examine approximations such as using the harmonic approximation or examining the effects of finite system size and potential truncation.  The properties computed may depend on the parameters chosen; vacancy fraction will be reported if they are included in the EOS, but C<sub>V</sub> will not because the vacancy contribution to C<sub>V</sub> is too complicated.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="infoCoexModal" tabindex="-1" aria-labelledby="infoCoexModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoCoexModalLabel">EOS Coexistence Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>The EOS coexistence page allows you to determine a coexistence point between two phases for a given temperature.  A guess for the coexistence pressure is necessary, but even a poor guess is typically sufficient.  Unlike the EOS pages, there is no way to parametrically step through temperatures.  There are separate pages capable of stepping through the coexistence curve for each pair of phases.</p>
-            <p>You may choose between vapor, liquid, FCC and HCP for the two phases.  For each choice of phase, you may also choose the EOS and any EOS parameters to describe its behavior.  Choosing inappropriate parameters may result in failure to find coexistence; a solid described with lattice dynamics is likely to have no equilibrium with the liquid.  Likewise, a model with short truncation (and no LRC) may not have coexistence within range of validity of the EOS.</p>
-            <p> Having found the coexistence point, the coexisting densities, the pressure and Gibbs free enery are reported.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="infoCoexCurveModal" tabindex="-1" aria-labelledby="infoCoexCurveModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoCoexCurveModalLabel">EOS Coexistence Curve Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>The EOS coexistence curve pages allows you to construct a coexistence curve for two phases.  You can choose the EOS (and any EOS parameters) to use to generate thermodynamic properties for each phase.  Each page understands how to step through temperatures to construct the full curve and uses estimates of pressure from the result of the previous temperature.</p>
-            <p>The coexistence densities, pressure and Gibbs free energy are reported for each temperature in the results table.  You may copy the data as comma-separated data and also open a plot.  For the plot, you can choose the properties plotted for the x and y axes.  If the chosen properties are the same for the two phases (T, P or G), then only a single set is plotted.  If one is different for the two phases, the a separate curve is shown for each phase.  Alternatively, you may choose to plot the difference in such a property to collapse back to a single curve.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="infoTPModal" tabindex="-1" aria-labelledby="infoTPModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoTPModalLabel">EOS Triple Point Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>The EOS triple point page allows you to determine the triple point for any three phases.  An estimate of the triple point temperature is necessary, but even a poor estimate may be sufficient.</p>
-            <p>You may choose between vapor, liquid, FCC and HCP for the three phases.  For each choice of phase, you may also choose the EOS and any EOS parameters to describe its behavior.  Choosing inappropriate parameters may result in failure to find triple point; a solid described with lattice dynamics is likely to have no equilibrium with the liquid.  Likewise, a model with short truncation (and no LRC) may not have a triple point within range of validity of the EOS.</p>
-            <p>Finding the triple point requires finding coexistence at a estimate of the triple point temperature and then improving that estimate via bisection.  The coexistence properties at these temperatures are reported in the results table with one column for the results of coexistence between the phase1 and phase2 and another column for the coexistence between phase2 and phase3.  The gaps in properties that should be the same (P, G and the density of the intermediate phase2) are reported in the last column to give you an idea of progress.</p>
+          <div class="modal-body" id='infoModalBody'>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
