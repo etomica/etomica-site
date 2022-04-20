@@ -475,7 +475,7 @@ window.addEventListener("load", phasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc' onchange='updateVacancyCitation()'>
                     <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution to thermodynamic properties due to the existence of lattice vacancies">include vacancies</label>
                   </div>
                 </div>
@@ -529,7 +529,7 @@ window.addEventListener("load", phasesUpdated);
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='citation' id='fcc-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
+                  <div class='citation' id='fcc-ref-Schultz'>EOS Citations: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018)<span style='display: none;' id='vacancy-citation'>; A. Purohit, A. J. Schultz, S. G. Moustafa, J. R. Errington, D. A. Kofke, "<a href='https://doi.org/10.1080/00268976.2018.1481542'>Free energy and concentration of crystalline vacancies by molecular simulation</a>", Mol. Phys. 116, 3027-3041 (2018)</span>.</div>
                   <div class='citation' id='fcc-ref-Adidharma'>EOS Citation: H. Adidharma and S. P. Tan, "<a href='https://doi.org/10.1063/1.4955061'>Accurate Monte Carlo simulations on FCC and HCP Lennard-Jones solids at very low temperatures and high reduced densities up to 1.30</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>145</span>, 014503 (2016).</div>
                   <div class='citation' id='fcc-ref-dePablo'>EOS Citation: E. A. Mastny and J. J. de Pablo, "<a href='https://doi.org/10.1063/1.2753149'>Melting line of the Lennard-Jones system, infinite size, and full potential</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>127</span>, 104504 (2007).</div>
                   <div class='citation' id='fcc-ref-vdh'>EOS Citation: M. A. van der Hoef, "<a href='https://doi.org/10.1063/1.1314342'>Free energy of the Lennard-Jones solid</a>", <span class='pubName'>J. Chem.  Phys.</span> <span class='volume'>113</span>, 8142 (2000).</div>

@@ -374,7 +374,6 @@ function showResults(T, rho, props) {
       row.style.display = "none";
       continue;
     }
-    if (!document.getElementById(prop)) console.log("oops, no "+prop);
     document.getElementById(prop).textContent = props[prop];
   }
 }
@@ -460,4 +459,12 @@ window.addEventListener("load", function() {
     if (!/^[a-zA-Z0-9-]*/.test(content)) return;
     loadModalContent(content);
   });
+});
+
+function updateVacancyCitation() {
+  var doVac = document.getElementById("checkVac-fcc").checked;
+  document.getElementById("vacancy-citation").style.display = doVac ? "inline" : "none";
+}
+window.addEventListener("load", function() {
+  if (document.getElementById("checkVac-fcc")) updateVacancyCitation();
 });
