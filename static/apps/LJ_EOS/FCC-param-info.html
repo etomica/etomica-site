@@ -1,0 +1,23 @@
+<ul>
+  <li>Schultz EOS is an equation of state that is split into lattice, harmonic, anharmonic and vacancy contributions.  Each contribution was computed separately using methods appropriate to each.
+  <ul>
+    <li>The lattice contribution is independent of system size and sensitive to cutoff, but can be computed for extremely long cutoffs.</li>
+    <li>The harmonic contribution can be computed using <a href='https://doi.org/10.1017/CBO9780511619885'>lattice dynamics</a>.  Lattice dynamics is much cheaper than molecular simulations and yield free energy directly.  The harmonic contribution is sensitive to system size and cutoff, but results were collected for various system sizes and cutoffs, including very large systems with long truncation.</li>
+    <li>The anharmonic contribution was computed via harmonically-mapped averaging, which is capable of focusing on just the anharmonic part increasing the resulting precision.  The anharmonic properties also tend to be relatively insensitive to both system size and cutoff.
+      <ul>
+        <li>Simulations were run for various system sizes (number of atoms) and EOS coefficients were determined for each system size.  You can choose the system size via the "# of atoms" parameter.</li>
+        <li>Thermodynamic properties for many different cutoffs were measured from each molecular simulation; the simulations sampled a short cutoff, but measured longer cutoffs via reweighting.</li>
+        <li>During the simulations, the interacting neighbors were fixed based on the imposed cutoff and iniital configuration.  Atoms that drifted together from outside the cutoff did not interact while atoms that started within the cutoff, but drifted apart continued to interact with an untruncated potential.</li>
+        <li>The cutoff was scaled as a function of density (cutoff = 3 means that r<sub>c</sub>&rho;<sup>1/3</sup> = 3) such that the neighbors do not vary with density.</li>
+        <li>While you can choose a cutoff to examine the effect of truncation on thermodynamic properties (and the tradeoff between computational cost and accuracy), the properties do not correspond to Lennard Jones with any specific density-independent cutoff.  Only by including the long range correction (LRC) can proper thermodynamic properties be computed.</li>
+    </ul>
+    </li>
+    <li>The vacancy contribution was measured by grand-canonical simulations that measure the free energy change when forming vacancies and determining the vacancy concentration that equalizes the grand-canonical pressure and the measured virial pressure.
+    <ul>
+      <li>Like the EOS for a perfect lattice (without vacancies), the contribution due to vacancies can also be broken down into lattice, harmonic and anharmonic contributions.  Although the grand-canonical simulations were only capable of measuring the full free energy of the vacancies, the lattice and harmonic contributions can still be subtracted to yield an anharmonic contribution.  While this does not improve the precision, the anharmonic contribution for vacancies tends to be insensitive to system size and cutoff.</li>
+    </ul>
+  </li>
+  <li>Adidharma's EOS split the free energy contributions into a lattice contribution, a term to fix the absolute free energy and a polynomial correction in T and &rho;.  The polynomial coefficients were fit to simulation data for 8788-10976 atoms and a cutoff of 10.  The absolute free energy term was chosen to obtain the triple point predicition made by <a href='https://doi.org/10.1063/1.2753149'>Mastny and de Pablo</a> when matched with Johnson's EOS to describe both the liquid and vapor.</li>
+  <li>Mastny and de Pablo took van der Hoef's EOS and adjusted a single parameter (that set the absolute free energy) so that the EOS better described their solid-liquid coexistence data.</li>
+  <li>van der Hoef's EOS splits the free energy contributions into a lattice, harmonic and anharmonic contributions.  The harmonic and anharmonic contributions were fit to simulation data with the absolute free energy set so that the triple point prediction when coupled with Johnson's EOS to describe both vapor and liquid would match a prediction made by <a href='https://doi.org/10.1080/00268979500100921'>Agrawal and Kofke</a>.</li>
+</ul>

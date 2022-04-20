@@ -1,0 +1,18 @@
+<ul>
+  <li>Schultz EOS is an equation of state that uses the free energy soft-sphere as a starting point at &rho;=&infin;, adding a correction fit to Lennard-Jones molecular dynamics data as a polynomial in v<sup>2</sup> and (1/Y)=(4/T)&rho;<sup>4</sup>.
+    <ul>
+      <li>Simulations were run for various system sizes (number of atoms) and polynomial coefficients were determined for each system size.  You can choose the system size via the "# of atoms" parameter.</li>
+      <li>Thermodynamic properties for many different cutoffs were measured from each molecular simulation; the simulations sampled a short cutoff, but measured longer cutoffs via reweighting.
+      <ul>
+        <li>The cutoff was scaled as a function of density (cutoff = 3 means that r<sub>c</sub>&rho;<sup>1/3</sup> = 3) such that the typical number of neighbors does not vary with density.</li>
+        <li>While you can choose a cutoff to examine the effect of truncation on thermodynamic properties (and the tradeoff between computational cost and accuracy), the properties do not correspond to Lennard Jones with any specific density-independent cutoff.  Only by including the long range correction (LRC) can proper thermodynamic properties be computed.</li>
+      </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Johnson's EOS uses a modified Benedict-Webb-Rubin empirical form to fit molecular simulation data collected with a mix of molecular dynamics with 864 atoms and Monte Carlo with 500, both with a potential truncation of at least 4 and included a long-range correction.</li>
+  <li>Kolafa's EOS uses a semi-empircal form (incorporating a fit to the second virial coefficient and perturbation from a hard sphere reference) to fit molecular simulation data curated from the literature, augmented with additional simulation data. An <a href='https://doi-org.gate.lib.buffalo.edu/10.1016/j.fluid.2020.112772'>assesssment</a> in 2020 found that Kolafa's EOS to have the best overall performance in terms of both precision and robustness.</li>
+  <li>May's EOS uses a modified Benedict-Webb-Rubin empirical form to fit simulation data at 348 state points.</li>
+  <li>Mecke's EOS uses a semi-empircal form (perturbing from a hard sphere reference) to fit molecular simulation data taken from the literature, augmented with additional simulation data.</li>
+  <li>Thol's EOS uses an empirical form to fit data from Monte Carlo molecular simulations containing 1372 atoms at about 200 state points.</li>
+</ul>

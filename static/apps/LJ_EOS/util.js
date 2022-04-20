@@ -410,15 +410,19 @@ window.addEventListener("load", function() {
 });
 
 var infoTitles = [
-                  {name: "LJ", title: "Lennard-Jones EOS"},
-                  {name: "EOS", title: "Basic EOS"},
-                  {name: "coex", title: "EOS Coexistence"},
-                  {name: "coex-curve", title: "EOS Coexistence Curve"},
-                  {name: "solid-liquid", title: "Solid-Liquid Coexistence"},
-                  {name: "FCC-HCP", title: "FCC-HCP Coexistence"},
-                  {name: "vapor-liquid", title: "Vapor-Liquid Coexistence"},
-                  {name: "vapor-solid", title: "Vapor-Solid Coexistence"},
-                  {name: "triple", title: "Triple Point"}
+                  {name: "LJ", title: "Lennard-Jones EOS", level: 1},
+                  {name: "EOS", title: "Basic EOS", level: 1},
+                  {name: "vapor-param", title: "Vapor EOS and parameters", level: 2},
+                  {name: "liquid-param", title: "Liquid EOS and parameters", level: 2},
+                  {name: "FCC-param", title: "FCC EOS and parameters", level: 2},
+                  {name: "HCP-param", title: "HCP EOS and parameters", level: 2},
+                  {name: "coex", title: "EOS Coexistence", level: 1},
+                  {name: "coex-curve", title: "EOS Coexistence Curve", level: 1},
+                  {name: "solid-liquid", title: "Solid-Liquid Coexistence", level: 2},
+                  {name: "FCC-HCP", title: "FCC-HCP Coexistence", level: 2},
+                  {name: "vapor-liquid", title: "Vapor-Liquid Coexistence", level: 2},
+                  {name: "vapor-solid", title: "Vapor-Solid Coexistence", level: 2},
+                  {name: "triple", title: "Triple Point", level: 1}
                   ], infoTitleMap = null;
 function loadModalContent(content) {
   document.getElementById("infoModalLabel").textContent = infoTitleMap[content];
@@ -451,6 +455,7 @@ window.addEventListener("load", function() {
   for (var i=0; i<infoTitles.length; i++) {
     var n = infoTitles[i].name, t = infoTitles[i].title;
     infoTitleMap[n] = t;
+    if (infoTitles[i].level == 2) t = "• "+t;
     makeElement("OPTION", sel, {value: n, textContent: t});
   }
   sel.addEventListener("change", replaceInfoContent);

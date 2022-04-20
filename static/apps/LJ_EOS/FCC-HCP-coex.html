@@ -302,7 +302,8 @@ window.addEventListener("load", phasesUpdated);
 
       <div id='parametersDiv-hcp' class='card mb-4'>
         <div id='headingParameters-hcp' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-hcp' aria-expanded='true' aria-controls='colapseparametersDiv-hcp'>HCP Parameters</a></h2>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-hcp' aria-expanded='true' aria-controls='colapseparametersDiv-hcp'>HCP Parameters</a>
+            <button class='btn btn-xs btn-info' type='button' data-content='HCP-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
         </div>
         <div id='collapseparametersDiv-hcp' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-hcp'>
           <div class='card-body'>
@@ -397,7 +398,8 @@ window.addEventListener("load", phasesUpdated);
       </div>
       <div id='parametersDiv-fcc' class='card mb-4'>
         <div id='headingParameters-fcc' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a></h2>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a>
+            <button class='btn btn-xs btn-info' type='button' data-content='FCC-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
         </div>
         <div id='collapseparametersDiv-fcc' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-fcc'>
           <div class='card-body'>
@@ -411,7 +413,7 @@ window.addEventListener("load", phasesUpdated);
                     <select class='form-select' id='inputEOS-fcc' onchange='phaseChoiceUpdated("fcc")'>
                       <option value='Schultz' selected>Schultz</option>
                       <option value='Adidharma'>Adidharma</option>
-                      <option value='dePablo'>de Pablo</option>
+                      <option value='dePablo'>Mastny</option>
                       <option value='vdh'>van der Hoef</option>
                     </select>
                   </div>
@@ -630,7 +632,7 @@ window.addEventListener("load", phasesUpdated);
     </div>
 
     <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="infoModalLabel">Info</h5>
