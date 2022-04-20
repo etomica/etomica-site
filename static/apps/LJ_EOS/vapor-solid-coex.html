@@ -50,11 +50,12 @@ function addRow(T, props1, props2) {
 window.addEventListener("load", phasesUpdated);
     </script>
   </head>
-  <body onload='brython()'>
+  <body>
     <script type='text/python' src='LJ_EOS.py'></script>
     <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
       from browser import document, window, timer
+      window.removeBrythonSpinner()
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase

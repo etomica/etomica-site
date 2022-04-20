@@ -1,3 +1,19 @@
+var brythonSpinner = null;
+window.addEventListener("load", function() {
+  if (typeof __BRYTHON__ != "undefined") {
+    var div = makeElement("DIV", null, {className: "align-items-center"});
+    makeElement("DIV", div, {style: {marginRight: "1rem"}, className: "spinner-border ms-auto", role: "status", "aria-hidden": "true"});
+    makeElement("SPAN", div, {textContent: "Loading brython..."});
+    var h1 = document.getElementsByTagName("h1")[0];
+    h1.parentNode.insertBefore(div, h1.nextSibling);
+    brythonSpinner = div;
+    brython();
+  }
+});
+
+function removeBrythonSpinner() {
+  brythonSpinner.parentNode.removeChild(brythonSpinner);
+}
 
 function makeText(str, parentNode) {
   if (!str) return;
@@ -473,3 +489,4 @@ function updateVacancyCitation() {
 window.addEventListener("load", function() {
   if (document.getElementById("checkVac-fcc")) updateVacancyCitation();
 });
+

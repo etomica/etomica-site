@@ -13,7 +13,7 @@
     <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
   </head>
-  <body onload='brython()'>
+<body>
     <script type='text/javascript'>
 document.title = "LJ EOS for FCC";
 function myUpdatePlot() {
@@ -33,9 +33,11 @@ function myUpdatePlot() {
     <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
       from browser import document, window, timer
+      window.removeBrythonSpinner()
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS
       from EOS_util import optsForPhase
+
 
       def gimmeRhoFCC(T, rhostr, Pstr, x, eos, doc):
         if doc["checkP"].checked:
@@ -124,6 +126,9 @@ function myUpdatePlot() {
           return
         rho = thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
         props = eos.eval(T,rho)
+        if phaseName == "vapor":
+          Gres = props['G'] - (T*(math.log(rho)-1) + props['P']/rho)
+          props['phi'] = math.exp(Gres)
         window.showResults(T, rho, props)
 
       document["btnUpdate"].bind("click", update)
