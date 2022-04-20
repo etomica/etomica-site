@@ -121,9 +121,6 @@ document.title = "LJ EOS for HCP";
           return
         rho = thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
         props = eos.eval(T,rho)
-        if phaseName == "vapor":
-          Gres = props['G'] - (T*(math.log(rho)-1) + props['P']/rho)
-          props['phi'] = math.exp(Gres)
         window.showResults(T, rho, props)
 
       document["btnUpdate"].bind("click", update)
@@ -317,7 +314,7 @@ document.title = "LJ EOS for HCP";
           <button class='btn btn-info btn-sm' style='float: right' onclick='copyToClipboard(copyText)' id='copyBtn'>Copy</button>
           <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
         </div>
-        <div class='show' aria-labelledby='headingResults'>
+        <div class='collapse' id='resultsBody' aria-labelledby='headingResults'>
           <div class='card-body'>
             <div id='singleResultsDiv'>
               <p id='T_row'>T: <span id='T'></span></p>

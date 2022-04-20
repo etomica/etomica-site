@@ -349,6 +349,7 @@ window.addEventListener("load", function() {
 });
 
 function addParametricRow(T, rho, props) {
+  document.getElementById("resultsBody").className = "show";
   document.getElementById("parametricResultsDiv").style.display = "block";
   var tbody = document.getElementById("parametricResults");
   var row = makeElement("TR", tbody);
@@ -380,6 +381,7 @@ function addParametricRow(T, rho, props) {
 function showResults(T, rho, props) {
   props.T = T;
   props.rho = rho;
+  document.getElementById("resultsBody").className = "show";
   document.getElementById("singleResultsDiv").style.display = "block";
   var resultsRows = document.getElementById("singleResultsDiv").childNodes;
   for (var i=0; i<resultsRows.length; i++) {
