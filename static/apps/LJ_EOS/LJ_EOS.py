@@ -193,6 +193,8 @@ def getEOS(name, opts):
         nder = int(val)
       elif o == '--vkolafa':
         return Kolafa(False)
+      elif o == '--vmecke':
+        return Mecke(False)
       elif o == '--vjohnson':
         return Johnson(False)
       elif o == '--vthol':
@@ -214,6 +216,8 @@ def getEOS(name, opts):
         ss=True
       elif o == '--kolafa':
         return Kolafa()
+      elif o == '--lmecke':
+        return Mecke()
       elif o == '--johnson':
         return Johnson()
       elif o == '--thol':
@@ -1190,6 +1194,98 @@ class Liquid(EOS):
     dPdrho = -T*dbAdvdrho
     dZdrho = (dPdrho - Z*T)/(rho*T)
     dGdrho = dPdrho/rho
+    return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho}
+
+class Mecke(EOS):
+  """Mecke EOS"""
+  def __init__(self,liquid=True):
+    EOS.__init__(self)
+    self.liquid = liquid
+    self.askForG = not self.askForG
+    self.rhoc = 0.3107
+    self.Tc = 1.328
+    f = open("mecke-eos.dat", 'r')
+    self.c = []
+    self.m = []
+    self.n = []
+    self.p = []
+    self.q = []
+    for line in f:
+      bits = line.split()
+      if bits[0] == 'c':
+        continue
+      self.c.append(float(bits[0]))
+      self.m.append(float(bits[1]))
+      self.n.append(float(bits[2]))
+      self.p.append(float(bits[3]))
+      self.q.append(float(bits[4]))
+    f.close()
+
+  def guessRhoForG(self,T,G):
+    # G = A + PV
+    #   = T log(rho) - T + T
+    #   = T log(rho)
+    if T==0:
+      return 0
+    return math.exp(G/T)
+
+  def getMaxRho(self,T):
+    if T<0.7:
+      print ("T must be greater than 0.7")
+    if T>6:
+      print ("T must be less than 10")
+    if not self.liquid:
+      return 0.3
+    return 1.10*(0.376419 + 0.574495*pow(T,0.237538))
+
+  def getMinRho(self,T):
+    if not self.liquid or T>1.3:
+      return 0
+    discr = 0.97*0.97 - 1.02*1.08*T
+    if discr > 0:
+      v2 = 2*(0.97 - math.sqrt(discr))/(1.08*T)
+      return 1/math.sqrt(v2)
+    return 0.3
+
+  def eval2(self,T,rho):
+    if rho==0:
+      dZdrho=float('inf')
+      return {'A': float('nan'), 'P': 0, 'dPdrho': T, 'U': 0, 'G': float('nan'), 'dZdrho': dZdrho, 'dGdrho': float('nan'), 'Z': 1}
+
+
+    zeta0 = 0.1617/(0.689+0.311*(T/self.Tc)**0.3674)
+    dzeta0dbeta = -0.1617/(0.689+0.311*(T/self.Tc)**0.3674)**2*(-0.3674*0.311*(T/self.Tc)**0.3674*T)
+    rhostar = rho/self.rhoc
+    zeta = rhostar*zeta0
+    dzetadbeta = rhostar*dzeta0dbeta
+    Tstar = T/self.Tc;
+    FH = (4*zeta-3*zeta*zeta)/(1-zeta)**2
+    bUH = ((4*dzetadbeta-6*zeta*dzetadbeta)/(1-zeta)**2 + 2*FH/(1-zeta)*dzetadbeta)/T
+    ZH = (4*zeta-6*zeta*zeta)/(1-zeta)**2 + 2*zeta*FH/(1-zeta)
+    dZHdrho = (4*zeta/rho - 12*zeta*zeta/rho)/(1-zeta)**2 + 2*(4*zeta-6*zeta*zeta)/(1-zeta)**3*(zeta/rho) \
+            + 2*zeta/rho*FH/(1-zeta) + 2*zeta*FH/(1-zeta)**2*zeta/rho + 2*zeta*ZH/rho/(1-zeta)
+
+    FA = sum(self.c[j]*Tstar**self.m[j] * rhostar**self.n[j] * math.exp(self.p[j]*rhostar**self.q[j]) for j in range(len(self.c)))
+    ZA = sum(self.c[j]*Tstar**self.m[j] * (self.n[j]+self.p[j]*self.q[j]*rhostar**self.q[j]) * rhostar**self.n[j] * math.exp(self.p[j]*rhostar**self.q[j]) for j in range(len(self.c)))
+    dZAdrho = sum(self.c[j]*Tstar**self.m[j] * ((self.p[j]*self.q[j]**2*rhostar**self.q[j]/rho)*rhostar**self.n[j] + \
+                                                 self.n[j]*(self.n[j] + self.p[j]*self.q[j]*rhostar**self.q[j])*rhostar**self.n[j]/rho + \
+                                                 (self.n[j]+self.p[j]*self.q[j]*rhostar**self.q[j]) * rhostar**self.n[j] * self.p[j]*self.q[j]*rhostar**self.q[j] / rho) \
+                                               * math.exp(self.p[j]*rhostar**self.q[j]) for j in range(len(self.c)))
+    bUA = sum(self.c[j]*(-self.m[j])*Tstar**self.m[j]*rhostar**self.n[j]*math.exp(self.p[j]*rhostar**self.q[j]) for j in range(len(self.c)))
+    A = T * (math.log(rho)-1 + FH + FA)
+    Z = 1 + ZH + ZA
+    P = rho*T*Z
+    U = T*(bUH+bUA)
+    G = A + Z*T
+    dZdrho = dZHdrho + dZAdrho
+
+    dPdrho = Z*T + dZdrho*T*rho
+    if rho>0:
+      G = A+P/rho
+      dGdrho = (P/rho)/rho + T*dZdrho
+    else:
+      G = float('nan')
+      dGdrho = float('nan')
     return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho}
 
 class Kolafa(EOS):
