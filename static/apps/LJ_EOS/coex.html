@@ -66,12 +66,10 @@ window.addEventListener("load", phasesUpdated);
       document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
-    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
-    <div class="emscripten" id="status">Downloading...</div>
-    <div class="emscripten">
-      <progress value="0" max="100" id="progress" hidden=1></progress>  
-    </div>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Phase Coexistence for LJ</h1>
+    <div class="align-items-center" id="emscripten-status-div">
+      <div style='margin-right: 1rem;' class='spinner-border ms-auto' role="status" aria-hidden="true"></div><span id='emscripten-status-text'>emscripten loading...</span>
+    </div>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>State Condition and Phase Choices</a></h2>

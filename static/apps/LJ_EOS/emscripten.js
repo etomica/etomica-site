@@ -1,6 +1,6 @@
 var stage = "";
-var statusElement = document.getElementById('status');
-var progressElement = document.getElementById('progress');
+var statusText = document.getElementById('emscripten-status-text');
+var statusDiv = document.getElementById('emscripten-status-div');
 var spinnerElement = document.getElementById('spinner');
 var Module = {
   preRun: [],
@@ -29,17 +29,10 @@ var Module = {
             if (m && now - Date.now() < 150) return; // if this is a progress update, skip it if too soon
             if (m) {
               text = m[1];
-              progressElement.value = parseInt(m[2])*100;
-              progressElement.max = parseInt(m[4])*100;
-              progressElement.hidden = false;
-              spinnerElement.hidden = false;
             } else {
-              progressElement.value = null;
-              progressElement.max = null;
-              progressElement.hidden = true;
-              if (!text) spinnerElement.hidden = true;
             }
-            statusElement.innerHTML = text;
+            statusText.textContent = "emscripten "+text;
+            statusDiv.style.display = text ? "block" : "none";
             },
             totalDependencies: 0,
             monitorRunDependencies: function(left) {
