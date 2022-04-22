@@ -93,6 +93,9 @@ document.title = "LJ EOS for HCP";
           B3callback = window.grabB3
 
         opts = optsForPhase(phaseName, document, B3callback)
+        if isinstance(opts,str):
+          window.alert(opts)
+          return
         eos = getEOS(phaseName, opts)
 
         useX = document["checkX"].checked
@@ -443,6 +446,14 @@ document.title = "LJ EOS for HCP";
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputNTieLines' class='form-control' value='0' style='width: 3rem;' onchange='myUpdatePlot()'>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4' style='display: none;' id='plot-cor-div'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotCor' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotCor' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot correlation for coexistence properties">correlation</label>
                   </div>
                 </div>
               </div>

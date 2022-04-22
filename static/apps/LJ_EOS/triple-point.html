@@ -110,7 +110,8 @@ window.addEventListener("load", phasesUpdated);
 
         phase1 = document['phase1'].value
         opts = optsForPhase(phase1, document, window.grabB3)
-        if opts is None:
+        if isinstance(opts,str):
+          window.alert(opts)
           return
         eos1 = getEOS(phase1, opts)
         phase2 = document['phase2'].value
@@ -118,7 +119,8 @@ window.addEventListener("load", phasesUpdated);
           InfoDialog("Trouble", f"The three phases must be different")
           return
         opts = optsForPhase(phase2, document, window.grabB3)
-        if opts is None:
+        if isinstance(opts,str):
+          window.alert(opts)
           return
         eos2 = getEOS(phase2, opts)
         phase3 = document['phase3'].value
@@ -126,7 +128,8 @@ window.addEventListener("load", phasesUpdated);
           InfoDialog("Trouble", f"The three phases must be different")
           return
         opts = optsForPhase(phase3, document, window.grabB3)
-        if opts is None:
+        if isinstance(opts,str):
+          window.alert(opts)
           return
         eos3 = getEOS(phase3, opts)
         Tguess = document['inputT'].value

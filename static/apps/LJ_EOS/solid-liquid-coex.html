@@ -28,9 +28,11 @@ document.title = "Solid-Liquid Phase Coexistence for LJ";
         updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets);
       }
       window.addEventListener("load", function() {
+        document.getElementById("subtractCorCheckboxDiv").style.display = "block";
         document.getElementById("SLE-Tmax-div").style.display = "block";
         document.getElementById("SLE-rhomax-div").style.display = "block";
         document.getElementById("tie-lines-div").style.display = "block";
+        document.getElementById("plot-cor-div").style.display = "block";
         var plotModalEl = document.getElementById("plotModal");
         plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
@@ -38,25 +40,63 @@ document.title = "Solid-Liquid Phase Coexistence for LJ";
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
+  copyText = copyText0;
+  allData = [];
+  allCorrelations = {};
+  tableCorrelationData = [];
 }
   
 var copyText0 = "T,rho1,rho2,P,G,phi\n";
 var copyText = copyText0;
-var allData = [];
-function addRow(T, props1, props2) {
+var allData = [], allCorrelations = {}, tableCorrelationData = [];
+var tableCor = "Schultz";
+
+function myPhasesUpdated() {
+  var phase2 = document.getElementById("phase2").value;
+  if (phase2 == "fcc") {
+    document.getElementById("tabulateCorDiff").removeAttribute("disabled");
+  }
+  else {
+    document.getElementById("tabulateCorDiff").setAttribute("disabled","true");
+  }
+}
+
+function makeTableData(i) {
+  var iData = allData[i];
+  var v = [iData.T, iData.props1['rho'], iData.props2['rho'], iData.props1['P'], iData.props1['G']];
+  v.push('phi' in iData.props2 ? iData.props2.phi : 0);
+  if (document.getElementById("tabulateCorDiff").checked) {
+    var cprops1 = allCorrelations[tableCor][i].props1;
+    var cprops2 = allCorrelations[tableCor][i].props2;
+    v = [iData.T,
+      iData.props1['rho']-cprops1['rho'], iData.props2['rho']-cprops2['rho'],
+      iData.props1['P']-cprops1['P'], iData.props1['G']-cprops1['G']];
+    v.push('phi' in iData.props2 ? '-' : 0);
+  }
+  return v;
+}
+function addRow(T, props1, props2, correlations) {
   var tbody = document.getElementById("coex-table");
-  var row = makeElement("TR", tbody);
   props1.v2 = 1/(props1.rho*props1.rho);
   props2.v2 = 1/(props2.rho*props2.rho);
   props1.Y = (T/4)*Math.pow(props1.rho,-4);
   props2.Y = (T/4)*Math.pow(props2.rho,-4);
   allData.push({T: T, props1: props1, props2: props2});
-  var v = [T, props1['rho'], props2['rho'], props1['P'], props1['G']];
-  v.push('phi' in props2 ? props2.phi : 0);
-  for (var i=0; i<v.length; i++) {
-    makeElement("TD", row, {textContent: v[i]});
+  for (var c in correlations) {
+    if (!(c in allCorrelations)) allCorrelations[c] = [];
+    var iCor = correlations[c];
+    iCor.props1.v2 = 1/(iCor.props1.rho*iCor.props1.rho);
+    iCor.props2.v2 = 1/(iCor.props2.rho*iCor.props2.rho);
+    iCor.props1.Y = (T/4)*Math.pow(iCor.props1.rho,-4);
+    iCor.props2.Y = (T/4)*Math.pow(iCor.props2.rho,-4);
+    allCorrelations[c].push({T: T, props1: iCor.props1, props2: iCor.props2});
+    if (c == tableCor) {
+      var vCor = [T, iCor.props1['rho'], iCor.props2['rho'], iCor.props1['P'], iCor.props1['G']];
+      vCor.push('phi' in iCor.props2 ? iCor.props2.phi : 0);
+      tableCorrelationData.push(vCor);
+    }
   }
-  copyText += v.join(",")+"\n";
+  tbody.appendChild(makeTableRow(allData.length-1));
 }
 
 window.addEventListener("load", phasesUpdated);
@@ -70,22 +110,36 @@ window.addEventListener("load", phasesUpdated);
       window.removeBrythonSpinner()
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
-      from EOS_util import optsForPhase
+      from EOS_util import optsForPhase, CoexCorrelator
 
       eos1 = eos2 = myInterval = None
       T = Pguess = 0
+      correlator = None
+      success = False
 
       def doOneCoex():
-        global eos1, eos2, myInterval, T, Pguess
+        global eos1, eos2, myInterval, T, Pguess, correlator, success
+        if not success:
+          success = True
+          InfoDialog("Trouble", f"Unknown trouble.  Stopping")
+          stopUpdate()
+          return
+        success = False
         props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
         if not 'rho' in props1:
+          success = True
           InfoDialog("Trouble", f"Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
           stopUpdate()
           return
-        window.addRow(T, props1, props2);
+        cors = {}
+        if document['phase2'].value == "fcc":
+          cor = correlator.propsForCoexCorrelation("liq-fcc", T, props1, props2)
+          cors["Schultz"] = {"props1": cor[0], "props2": cor[1]}
+        window.addRow(T, props1, props2, cors)
 
         Pguess = props1['P']
         T += 0.01 * T**1.5
+        success = True
         if T > 1e6:
           stopUpdate()
 
@@ -97,15 +151,18 @@ window.addEventListener("load", phasesUpdated);
         print("stopped")
 
       def update(ev):
-        global eos1, eos2, myInterval, T, Pguess
+        global eos1, eos2, myInterval, T, Pguess, correlator, success
         if not myInterval == None:
           stopUpdate()
           return
         window.collapseParameters()
         document["btnUpdate"].textContent = "Stop"
+        if correlator == None:
+          correlator = CoexCorrelator()
         phase1 = document['phase1'].value
         opts = optsForPhase(phase1, document, None)
-        if opts is None:
+        if isinstance(opts,str):
+          window.alert(opts)
           return
         eos1 = getEOS(phase1, opts)
         phase2 = document['phase2'].value
@@ -113,13 +170,15 @@ window.addEventListener("load", phasesUpdated);
           InfoDialog("Trouble", f"The two phases must be different")
           return
         opts = optsForPhase(phase2, document, None)
-        if opts is None:
+        if isinstance(opts,str):
+          window.alert(opts)
           return
         eos2 = getEOS(phase2, opts)
         T = 0.68
         Pguess = 0
         window.clearAllRows()
         window.copyText = window.copyText0
+        success = True
         myInterval = timer.set_interval(doOneCoex, 0)
 
       document["btnUpdate"].bind("click", update)
@@ -150,7 +209,7 @@ window.addEventListener("load", phasesUpdated);
                   <label for='phase2' class='col-form-label'>Phase 2</label>
                 </div>
                 <div class='col-auto'>
-                  <select class='form-select' id='phase2' onchange='phasesUpdated()'>
+                  <select class='form-select' id='phase2' onchange='myPhasesUpdated()'>
                     <option value='fcc' selected>FCC</option>
                     <option value='hcp'>HCP</option>
                   </select>
@@ -448,11 +507,15 @@ window.addEventListener("load", phasesUpdated);
         </div>
       </div>
 
-    <div id='resultsDiv' class='card'>
-      <div id='headingResults' class='card-header' role='tab'>
-        <h2 class='h5 mb-0' style='float: left'>Results</h2>
-        <button class='btn btn-info btn-sm' style='float: right' onclick='copyToClipboard(copyText)'>Copy</button>
-        <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
+  <div id='resultsDiv' class='card'>
+    <div id='headingResults' class='card-header' role='tab'>
+      <h2 class='h5 mb-0' style='float: left'>Results</h2>
+      <button class='btn btn-info btn-sm float-end' onclick='copyToClipboard(copyText)'>Copy</button>
+      <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem;' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
+      <div class='float-end form-check' style='margin-right: 1rem;' id='subtractCorCheckboxDiv'>
+        <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable()'>
+        <label class='form-check-label' for='tabulateCorDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Replaces data in table (except for T) with differences from correlation (based on Schultz predictions) for coexistence properties">subtract correlation</label>
+      </div>
     </div>
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
@@ -570,6 +633,14 @@ window.addEventListener("load", phasesUpdated);
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputNTieLines' class='form-control' value='0' style='width: 3rem;' onchange='myUpdatePlot()'>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4' style='display: none;' id='plot-cor-div'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotCor' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotCor' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot correlation for coexistence properties">correlation</label>
                   </div>
                 </div>
               </div>

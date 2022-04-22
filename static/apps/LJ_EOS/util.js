@@ -137,7 +137,7 @@ var copyText = "";
 var allData = [];
 
 function gimmeCoexData(row, prop) {
-  if (prop == "T") return row.T;
+  if (prop == "T") return 'T' in row.props1 ? row.props1.T : row.T;
   if (prop == "G" || prop == "P") return row.props1[prop];
   return [row.props1[prop],row.props2[prop]];
 }
@@ -164,66 +164,80 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
   var xpropSingleEff = xpropSingle || xsets == 'single' || xsets == 'diff';
   var ypropSingleEff = ypropSingle || ysets == 'single' || ysets == 'diff';
   var sets = [];
-  if (xpropSingleEff && ypropSingleEff) {
-    document.getElementById("inputNTieLines").setAttribute("disabled", "true");
-    var xdata = [], ydata = [];
-    for (var i=0; i<allData.length; i++) {
-      if (allData[i].T > Tmax) continue;
-      if (allData[i].props1.rho > rhoMax && allData[i].props2.rho > rhoMax) continue;
-      var xval = gimmeCoexData(allData[i], xprop);
-      if (!xpropSingle) {
-        if (xsets == 'single') xval = xval[0];
-        else if (xsets == 'diff') xval = xval[1] - xval[0];
-      }
-      var yval = gimmeCoexData(allData[i], yprop);
-      if (!ypropSingle) {
-        if (ysets == 'single') yval = yval[0];
-        else if (ysets == 'diff') yval = yval[1] - yval[0];
-      }
-      xdata.push(xval);
-      ydata.push(yval);
-    }
-    sets.push({ x: xdata, y: ydata });
+  var allDataCor = [allData];
+  var allDataNames = ["EOS"];
+  if (document.getElementById("plotCor").checked) {
+    allDataCor.push(allCorrelations.Schultz);
+    allDataNames.push("Correlation");
   }
-  else {
-    document.getElementById("inputNTieLines").removeAttribute("disabled");
-    var x1data = [], y1data = [], x2data = [], y2data = [];
-    var nTieLines = document.getElementById("inputNTieLines").value;
-    nTieLines = nTieLines ? Number(nTieLines) : 0;
-    var nTieLinesInterval = nTieLines > 0 ? Math.max(1,Math.floor(allData.length / nTieLines)) : 0;
-    for (var i=0; i<allData.length; i++) {
-      if (allData[i].T > Tmax) continue;
-      var skip1 = allData[i].props1.rho > rhoMax, skip2 = allData[i].props2.rho > rhoMax;
-      if (skip1 && skip2) continue;
-      var xx = gimmeCoexData(allData[i], xprop);
-      if (xpropSingleEff) {
-        if (xsets == 'single') xx = xx[0];
-        else if (xsets == 'diff') xx = xx[1] - xx[0];
+  var allColors = [["blue","red"],["cyan","purple"],["green","magenta"]];
+  for (var q=0; q<allDataCor.length; q++) {
+    var thisAllData = allDataCor[q];
+
+    if (xpropSingleEff && ypropSingleEff) {
+      document.getElementById("inputNTieLines").setAttribute("disabled", "true");
+      var xdata = [], ydata = [];
+      for (var i=0; i<thisAllData.length; i++) {
+        if (thisAllData[i].T > Tmax) continue;
+        if (thisAllData[i].props1.rho > rhoMax && thisAllData[i].props2.rho > rhoMax) continue;
+        var xval = gimmeCoexData(thisAllData[i], xprop);
+        if (!xpropSingle) {
+          if (xsets == 'single') xval = xval[0];
+          else if (xsets == 'diff') xval = xval[1] - xval[0];
+        }
+        var yval = gimmeCoexData(thisAllData[i], yprop);
+        if (!ypropSingle) {
+          if (ysets == 'single') yval = yval[0];
+          else if (ysets == 'diff') yval = yval[1] - yval[0];
+        }
+        xdata.push(xval);
+        ydata.push(yval);
       }
-      var yy = gimmeCoexData(allData[i], yprop);
-      if (ypropSingleEff) {
-        if (ysets == 'single') yy = yy[0];
-        else if (ysets == 'diff') yy = yy[1] - yy[0];
-      }
-      var xy1 = null, xy2 = null;
-      if (!skip1) {
-        xy1 = [xpropSingleEff ? xx : xx[0], ypropSingleEff ? yy : yy[0]];
-        x1data.push(xy1[0]);
-        y1data.push(xy1[1]);
-      }
-      if (!skip2) {
-        xy2 = [xpropSingleEff ? xx : xx[1], ypropSingleEff ? yy : yy[1]];
-        x2data.push(xy2[0]);
-        y2data.push(xy2[1]);
-      }
-      if (nTieLinesInterval > 0 && !skip1 && !skip2 && i % nTieLinesInterval == 0) {
-        // tie line
-        sets.push({showlegend: false, x: [xy1[0],xy2[0]], y: [xy1[1],xy2[1]], mode: 'lines', line: {color: "black", width: 0.5, dash: 'dash'}});
-      }
+      sets.push({ name: allDataNames[q], x: xdata, y: ydata });
     }
-    sets.push({ name: phase1, x: x1data, y: y1data, line: {color: "blue"} });
-    sets.push({ name: phase2, x: x2data, y: y2data, line: {color: "red"} });
+    else {
+      document.getElementById("inputNTieLines").removeAttribute("disabled");
+      var x1data = [], y1data = [], x2data = [], y2data = [];
+      var nTieLines = document.getElementById("inputNTieLines").value;
+      nTieLines = nTieLines ? Number(nTieLines) : 0;
+      var nTieLinesInterval = nTieLines > 0 ? Math.max(1,Math.floor(thisAllData.length / nTieLines)) : 0;
+      for (var i=0; i<thisAllData.length; i++) {
+        if (thisAllData[i].T > Tmax) continue;
+        var skip1 = thisAllData[i].props1.rho > rhoMax, skip2 = thisAllData[i].props2.rho > rhoMax;
+        if (skip1 && skip2) continue;
+        var xx = gimmeCoexData(thisAllData[i], xprop);
+        if (xpropSingleEff) {
+          if (xsets == 'single') xx = xx[0];
+          else if (xsets == 'diff') xx = xx[1] - xx[0];
+        }
+        var yy = gimmeCoexData(thisAllData[i], yprop);
+        if (ypropSingleEff) {
+          if (ysets == 'single') yy = yy[0];
+          else if (ysets == 'diff') yy = yy[1] - yy[0];
+        }
+        var xy1 = null, xy2 = null;
+        if (!skip1) {
+          xy1 = [xpropSingleEff ? xx : xx[0], ypropSingleEff ? yy : yy[0]];
+          x1data.push(xy1[0]);
+          y1data.push(xy1[1]);
+        }
+        if (!skip2) {
+          xy2 = [xpropSingleEff ? xx : xx[1], ypropSingleEff ? yy : yy[1]];
+          x2data.push(xy2[0]);
+          y2data.push(xy2[1]);
+        }
+        if (nTieLinesInterval > 0 && !skip1 && !skip2 && i % nTieLinesInterval == 0) {
+          // tie line
+          sets.push({showlegend: false, x: [xy1[0],xy2[0]], y: [xy1[1],xy2[1]], mode: 'lines', line: {color: "black", width: 0.5, dash: 'dash'}});
+        }
+      }
+      var qSetName = allDataCor.length>1 ? (" "+allDataNames[q]) : "";
+      var colors = q<allColors.length ? allColors[q] : ["",""];
+      sets.push({ name: phase1+qSetName, x: x1data, y: y1data, line: {color: colors[0]} });
+      sets.push({ name: phase2+qSetName, x: x2data, y: y2data, line: {color: colors[1]} });
+    }
   }
+  if (sets.length == 1) delete(sets[0]['name']);
   var xtitle = (xpropSingle || xsets == 'auto') ? xprop : (xsets == 'single' ? (xprop+" "+phase1) : ("Δ"+xprop));
   var ytitle = (ypropSingle || ysets == 'auto') ? yprop : (ysets == 'single' ? (yprop+" "+phase1) : ("Δ"+yprop));
   Plotly.newPlot(plotDiv,
@@ -492,3 +506,25 @@ window.addEventListener("load", function() {
   if (document.getElementById("checkVac-fcc")) updateVacancyCitation();
 });
 
+function reconstructTable() {
+  var tbody = document.getElementById("coex-table");
+  empty(tbody);
+  var doSubCor = document.getElementById("tabulateCorDiff").checked;
+  for (var i=0; i<allData.length; i++) {
+    v = makeTableData(i);
+    var row = makeElement("TR", tbody);
+    for (var j=0; j<v.length; j++) {
+      makeElement("TD", row, {textContent: v[j]});
+    }
+  }
+}
+
+function makeTableRow(i) {
+  var v = makeTableData(i);
+  copyText += v.join(",")+"\n";
+  var row = makeElement("TR");
+  for (var i=0; i<v.length; i++) {
+    makeElement("TD", row, {textContent: v[i]});
+  }
+  return row;
+}
