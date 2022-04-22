@@ -151,6 +151,7 @@ function cleanOptsCoex(id, data) {
   }
 }
 function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
+  document.getElementById("plotModalLabel").textContent = "Coexistence Plot";
   if (allData.length > 0) {
     var d = allData[0];
     cleanOptsCoex("inputXprop", d);
