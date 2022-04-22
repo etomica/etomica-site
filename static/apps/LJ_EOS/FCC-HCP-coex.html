@@ -179,11 +179,11 @@ window.addEventListener("load", phasesUpdated);
           addme = False
         else:
           props1, props2 = findCoexistence(T, eos1, eos2, Pgg, False)
+          addme = True
           if stage != 2:
             # in stage 2, we vary Pguess and look for failure
             # we never repeat, so just don't store our failures
             doneiT[iT] = (props1,props2)
-          addme = True
         if not 'rho' in props1 or (stage >= 3 and props1['P'] < 0):
           if stage == 1:
             diT -= 1
@@ -690,7 +690,7 @@ window.addEventListener("load", phasesUpdated);
                     <label for='inputRhoMax' class='col-form-label'>&rho;<sub>max</sub></label>
                   </div>
                   <div class='col-auto'>
-                    <input type='text' id='inputRhoMax' class='form-control' value='1.5' style='width: 4rem;' onchange='myUpdatePlot()'>
+                    <input type='text' id='inputRhoMax' class='form-control' value='1.2' style='width: 4rem;' onchange='myUpdatePlot()'>
                   </div>
                 </div>
               </div>
