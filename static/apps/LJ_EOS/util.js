@@ -200,8 +200,14 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
       var x1data = [], y1data = [], x2data = [], y2data = [];
       var nTieLines = document.getElementById("inputNTieLines").value;
       nTieLines = nTieLines ? Number(nTieLines) : 0;
-      var nTieLinesInterval = nTieLines > 0 ? Math.max(1,Math.floor(thisAllData.length / nTieLines)) : 0;
+      var pointCount = 0;
       for (var i=0; i<thisAllData.length; i++) {
+        if (thisAllData[i].T > Tmax) continue;
+        var skip1 = thisAllData[i].props1.rho > rhoMax, skip2 = thisAllData[i].props2.rho > rhoMax;
+        if (!skip1 && !skip2) pointCount++;
+      }
+      var nTieLinesInterval = (nTieLines > 0 && pointCount > 0) ? Math.max(1,Math.floor(pointCount / nTieLines)) : 0;
+      for (var i=0,j=0; i<thisAllData.length; i++) {
         if (thisAllData[i].T > Tmax) continue;
         var skip1 = thisAllData[i].props1.rho > rhoMax, skip2 = thisAllData[i].props2.rho > rhoMax;
         if (skip1 && skip2) continue;
@@ -226,10 +232,11 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
           x2data.push(xy2[0]);
           y2data.push(xy2[1]);
         }
-        if (nTieLinesInterval > 0 && !skip1 && !skip2 && i % nTieLinesInterval == 0) {
+        if (nTieLinesInterval > 0 && !skip1 && !skip2 && j % nTieLinesInterval == 0) {
           // tie line
           sets.push({showlegend: false, x: [xy1[0],xy2[0]], y: [xy1[1],xy2[1]], mode: 'lines', line: {color: "black", width: 0.5, dash: 'dash'}});
         }
+        if (!skip1 && !skip2) j++;
       }
       var qSetName = allDataCor.length>1 ? (" "+allDataNames[q]) : "";
       var colors = q<allColors.length ? allColors[q] : ["",""];
