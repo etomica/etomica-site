@@ -4,6 +4,7 @@ body {padding: 1rem;}
 .pubName { font-style: italic; }
 .volume { font-weight: bold; }
 .citation { font-size: 90%; display: none; }
+#subtractCorCheckboxDiv { display: none; }
 
 .btn-group-xs > .btn, .btn-xs {
   padding: .4rem .3rem;
