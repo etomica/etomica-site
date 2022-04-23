@@ -18,6 +18,10 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--vmecke",""))
     elif selectedEOS == "Thol":
       opts.append(("--vthol",""))
+    elif selectedEOS == "Gottschalk":
+      opts.append(("--vgottschalk",""))
+    elif selectedEOS == "Nicholas":
+      opts.append(("--vnicholas",""))
     elif selectedEOS == "Schultz":
       opts.append(("--B3func",B3callback))
       VEOSn = document["inputVEOSN"].value
@@ -49,6 +53,10 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--lmecke",""))
     elif selectedEOS == "Thol":
       opts.append(("--thol",""))
+    elif selectedEOS == "Gottschalk":
+      opts.append(("--lgottschalk",""))
+    elif selectedEOS == "Nicholas":
+      opts.append(("--lnicholas",""))
   elif p == "fcc":
     if selectedEOS == "Schultz":
       if document["checkLat-fcc"].checked:

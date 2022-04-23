@@ -37,7 +37,7 @@
         <li><a href='triple-point.html'>Triple Point</a>
         <button class='btn btn-xs btn-info' type='button' data-content='triple' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></li>
       </ul>
-      <h2 class='h4'>Publication</h2>
+      <h2 class='h5'>Publication</h2>
       <ul>
         <li>A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).
           <ul>
@@ -46,13 +46,13 @@
           </ul>
         </li>
       </ul>
-      <h2 class='h4'>Further Reading</h2>
+      <h2 class='h5'>Further Reading</h2>
       <ul>
         <li>Wikipedia page for the <a href='https://en.wikipedia.org/wiki/Lennard-Jones_potential'>Lennard-Jones potential</a> provides a good overview of the potential and its behavior.</li>
         <li>NIST page for <a href='https://www.nist.gov/mml/csd/chemical-informatics-group/lennard-jones-fluid-properties'>Lennard-Jones fluid properties</a> tabulates thermodynamic data (both raw simulation data and coexistence) for the Lennard-Jones fluid so that other simulations (using the same parameters) can be checked against it.</li>
         <li><a href='https://webbook.nist.gov/chemistry/'>NIST Chemistry Webbook</a> provides thermodynamic properties and coexistence properties for real chemicals from equations of state.</li>
       </ul>
-      <h2 class='h4'>How this site works</h2>
+      <h2 class='h5'>How this site works</h2>
       <p>The equations of state and analysis scripts on this site are written in Python.  The site uses <a href='https://brython.info/'>Brython</a>, which allows Python 3 code to run in the browser and also provides the standard Python libraries.  Computing the third virial coefficient (B<sub>3</sub>) on the fly is particularly intensive and too slow via Brython.  Accordingly, the site uses a <a href='https://developer.mozilla.org/en-US/docs/WebAssembly'>WebAssembly</a> version of B<sub>3</sub> written in C and built with <a href='https://emscripten.org/'>emscripten</a>.</p>
       <p style='margin-top: 2rem; font-size: 90%;'>Please report bugs, errors, suggestions to <a href='https://engineering.buffalo.edu/chemical-biological/people/faculty-directory.host.html/content/shared/engineering/chemical-biological/profiles/faculty/schultz-andrew.detail.html'>Andrew Schultz</a> at <a href='mailto:ajs42@buffalo.edu'>ajs42@buffalo.edu</a>.</p>
     </div>

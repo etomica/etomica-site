@@ -201,6 +201,10 @@ def getEOS(name, opts):
         return Thol(False)
       elif o == '--vmay':
         return May(False)
+      elif o == '--vgottschalk':
+        return Gottschalk(False)
+      elif o == '--vnicholas':
+        return Nicholas(False)
     return VEOS(maxB, log2nB3, nder, B3func)
   elif name == 'liquid':
     liqDir=sys.path[0]
@@ -224,6 +228,10 @@ def getEOS(name, opts):
         return Thol()
       elif o == '--lmay':
         return May()
+      elif o == '--lgottschalk':
+        return Gottschalk()
+      elif o == '--lnicholas':
+        return Nicholas()
     if irc==-1:
       liqFit="{0}/v2yN{1}.fit".format(liqDir,Nl)
     else:
@@ -1317,17 +1325,17 @@ class Kolafa(EOS):
     if T>6:
       print ("T must be less than 6")
     if not self.liquid:
-      return 0.3
+      return 0.3109
     return 1.10*(0.376419 + 0.574495*pow(T,0.237538))
 
   def getMinRho(self,T):
-    if not self.liquid or T>1.3:
+    if not self.liquid or T>1.4:
       return 0
     discr = 0.97*0.97 - 1.02*1.08*T
     if discr > 0:
       v2 = 2*(0.97 - math.sqrt(discr))/(1.08*T)
       return 1/math.sqrt(v2)
-    return 0.3
+    return 0.3109
 
   def eval2(self,T,rho):
     if rho==0:
@@ -1539,6 +1547,40 @@ class May(MBWR):
       print ("T must be greater than 0.7")
     if T>100:
       print ("T must be less than 100")
+    if not self.liquid:
+      return 0.3
+    return 1.10*(0.376419 + 0.574495*pow(T,0.237538))
+
+  def getMinRho(self,T):
+    if not self.liquid:
+      return 0
+    discr = 0.97*0.97 - 1.02*1.08*T
+    if discr > 0:
+      v2 = 2*(0.97 - math.sqrt(discr))/(1.08*T)
+      return 1/math.sqrt(v2)
+    return 1/math.sqrt(1.8)
+
+class Nicholas(MBWR):
+  """Nicholas EOS"""
+  def __init__(self, liquid=True):
+    EOS.__init__(self)
+    self.liquid = liquid
+    self.askForG = not liquid
+    self.x = [ -0.44480725e-01, 0.72738221e+01, -0.14343368e+02,  0.38397096e+01,  
+               -0.20057745e+01, 0.19084472e+01, -0.57441787e+01,  0.25110073e+02,  
+               -0.45232787e+04, 0.89327162e-02,  0.98163358e+01, -0.61434572e+02,  
+                0.14161454e+02, 0.43353841e+02,  0.11078327e+04, -0.35429519e+02,  
+                0.10591298e+02, 0.49770046e+03, -0.35338542e+03,  0.45036093e+04,  
+                0.77805296e+01, 0.13567114e+05, -0.85818023e+01,  0.16646578e+05,  
+               -0.14092234e+02, 0.19386911e+05,  0.38585868e+02,  0.33800371e+04,  
+               -0.18567754e+03, 0.84874693e+04,  0.97508689e+02, -0.14483060e+02]
+    self.gamma = 3
+
+  def getMaxRho(self,T):
+    if T<0.6:
+      print ("T must be greater than 0.6")
+    if T>6:
+      print ("T must be less than 6")
     if not self.liquid:
       return 0.3
     return 1.10*(0.376419 + 0.574495*pow(T,0.237538))
@@ -2153,3 +2195,413 @@ class SSTai:
     dZdrho = dPdrho/T - Z
     dGdrho = dPdrho
     return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho}
+
+class Gottschalk(EOS):
+  """Gottschalk EOS based on VEOS"""
+  def __init__(self, liquid=True):
+    EOS.__init__(self)
+    self.liquid = liquid
+    self.askForG = not liquid
+    self.nMax = [0,0,0,13,13,13,10,11,11,10,10,9,9,8,8,7,7]
+    self.BnSS = [0.,0., 0.,3.79107,3.52751,2.11494,0.76953,2356.7731165164596,-3264.0396107103898,
+                 -78041.8601837662,473472.57945114834,-1.3178641913246436e6,2.146863057769624e6,
+                 -2.1652677787313396e6,1.335386749198714e6,-462873.9042053684,69229.1583534559]
+    self.a = [0.,0.,0.,1.5290318852494265,2.795121498280494,4.90383026680217,5.539252062417653,
+              4.85,4.85,4.85,4.85,4.85,4.85,4.85,4.85,4.85,4.85]
+    self.b = [
+              [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
+              [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
+              [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
+              [0.,0.12218447372882425,-2.5338147845534316,2.3210520469973184,-22.211169910871117,60.377236045386375,
+               -86.14627022616251,79.47702892556482,-50.13039388893521,21.793554521597688,-6.423839355844051,
+               1.2222009828801996,-0.13514350254579777,0.6519707092702824e-2,0.],
+              [0.,-0.18321330037805228e-1,-0.2221029066142811,-2.290140444600638,2.497587052996874,-1.4917516077584092,
+               0.5194910487892859,-0.7580241785834439e-1,-0.9570910251226536e-2,0.6444596962731758e-2,-0.13234848916569392e-2,
+               0.1400743960412047e-3,-7.861096502283832e-6,1.7490115547666188e-7,0.],
+              [0.,-0.5737837739083971e-1,0.23840595598016665,-0.3175043752041195,0.14112108735443388,-0.4065269634182239e-1,
+               0.7132450669126126e-2,-0.7501879315759716e-3,0.5000252419474253e-4,-2.224242683178403e-6,6.33452566646113e-8,
+               -1.1245718569910832e-9,1.1204068746251051e-11,-4.806632984080091e-14,0.],
+              [0.,-0.11071467938676133,0.36399678132797675,-0.17225553715065026,0.53558239128930804e-1,-0.9119290153987745e-2,
+               0.6312327707982165e-3,-6.471729316502104e-6,-6.635662425596408e-7,1.1456655743138217e-8,-5.093701998956416e-10,0.,0.,0.,0.],
+              [0.,-3848.6577121566934,1940.790807744979,-678.6775724597805,159.27267287851998,-27.333895315073026,
+               3.3057288013450625,-0.23963000048634442,0.810753257939362e-2,-0.52092099159436035e-4,-1.8638837238598149e-6,
+               6.7879579677519725e-9,0.,0.,0.],
+              [0.,12145.339526211426,-9125.315943862925,3397.150517263389,-735.5400822717274,120.79841825791812,
+               -15.956500074708638,1.3017375144575423,-0.4828021320855168e-1,0.47799188316934786e-3,4.808860996904753e-6,
+               -3.4332408221908623e-9,0.,0.,0.],
+              [0.,58419.98320526562,5336.019753152068,-6393.577020338419,1371.4200103624871,-184.35975782444902,
+               27.567654106288145,-2.7651200599911303,0.11077834360931374,-0.11004714322703224e-2,-4.538508711452275e-6,0.,0.,0.,0.],
+              [0.,-471725.73854556243,73387.96875070437,1526.1916547729295,-1479.8093485477357,103.37752789621194,
+               -17.62232710313579,3.029682620811326,-0.1382464463887135,0.10491864581066213e-2,1.45501260618199e-6,0.,0.,0.,0.],
+              [0.,1.4112443013396896e6,-287542.49257218424,21098.453103867425,964.8092326758483,-11.18483146459378,
+               -5.953997923175061,-1.7362881540052262,0.11028486173516663,-0.42335965469969544e-3,0.,0.,0.,0.,0.],
+              [0.,-2.385034755134271e6,541177.4951222722,-55329.411457924085,284.2688755970794,52.10586490274406,
+               15.693834408088735,0.25193754627000325,-0.5923068771635895e-1,0.5305829583506887e-4,0.,0.,0.,0.,0.],
+              [0.,2.465995272208254e6,-599002.2139421682,71749.67760410045,-1763.990306512928,
+               -112.18055271807766,-7.327702248487039,0.30578125765993797,0.19068684014749707e-1,0.,0.,0.,0.,0.,0.],
+              [0.,-1.5507925565236388e6,397118.61917770014,-53171.594936457455,2096.231490417242,
+               74.36426163205839,-1.0533560751772495,-0.16218866019670145,-0.25427291765540917e-2,0.,0.,0.,0.,0.,0.],
+              [0.,546603.2852957415,-146474.01102620212,21487.250039440005,-1141.3464570804758,
+               -13.339842251351024,1.6046832257385983,0.10677583401830388e-1,0.,0.,0.,0.,0.,0.,0.],
+              [0.,-83001.29371654194,23180.27844605677,-3684.2155238098185,244.33512608289874,
+               -2.185586771300271,-0.26455129172474134,0.3982533293041873e-2,0.,0.,0.,0.,0.,0.,0.]
+             ]
+    self.f = [0.,0.,1.,1./2.,1./3.,1./4.,1./5.,1./6.,1./7.,1./8.,1./9.,1./10.,1./11.,1./12.,1./13.,1./14.,1./15.]
+
+  def eval2(self,T,rho):
+    if rho==0:
+      dZdrho=float('inf')
+      return {'A': float('nan'), 'P': 0, 'dPdrho': T, 'U': 0, 'G': float('nan'), 'dZdrho': dZdrho, 'dGdrho': float('nan'), 'Z': 1}
+
+    # transform t to tau
+    tau = 1/T
+
+    # make deivatives (0-3) of the rho part
+    rhoD = [
+            [0.,0.,rho,rho**2.,rho**3.,rho**4.,rho**5.,rho**6.,rho**7.,rho**8.,
+             rho**9.,rho**10.,rho**11.,rho**12.,rho**13.,rho**14.,rho**15.],
+            [0.,0.,1.,2.*rho**1.,3.*rho**2.,4.*rho**3.,5.*rho**4.,6.*rho**5.,7.*rho**6.,
+             8.*rho**7.,9.*rho**8.,10.*rho**9.,11.*rho**10.,12.*rho**11.,13.*rho**12.,14.*rho**13.,15.*rho**14.],
+            [0.,0.,0.,2.,6.*rho**1.,12.*rho**2.,20.*rho**3.,30.*rho**4.,42.*rho**5.,56.*rho**6.,
+             72.*rho**7.,90.*rho**8.,110.*rho**9.,132.*rho**10.,156.*rho**11.,182.*rho**12.,210.*rho**13.],
+            [0.,0.,0.,0.,6.,24.*rho**1.,60.*rho**2.,120.*rho**3.,210.*rho**4.,
+             336.*rho**5.,504.*rho**6.,720.*rho**7.,990.*rho**8.,1320.*rho**9.,1716.*rho**10.,2184.*rho**11.,2730.*rho**12.]
+           ]
+
+    bD = [[0 for i in range(17)] for j in range(4)]
+    
+    # make b2 derivatives (0-3)
+    bD[0][2] = Gottschalk.b2tau0(tau)
+    bD[1][2] = Gottschalk.b2tau1(tau)
+    bD[2][2] = Gottschalk.b2tau2(tau)
+    bD[3][2] = Gottschalk.b2tau3(tau)
+    
+    # make b3-16 derivatives (0-3)
+    for i in range(3,17):
+      bD[0][i] = self.b3_16_0(i,tau)
+      bD[1][i] = self.b3_16_1(i,tau)
+      bD[2][i] = self.b3_16_2(i,tau)
+      bD[3][i] = self.b3_16_3(i,tau)
+    
+    
+    # make storrafe forf*rho*bD
+    frhoDbD = [[0 for i in range(17)] for j in range(16)]
+    
+    # make f*rho*bD deivatives (0-3)
+    
+    for i in range(2,17):
+      frhoDbD[0][i]  = self.f[i]*rhoD[0][i]*bD[0][i] # rho0 - tau0
+      frhoDbD[1][i]  = self.f[i]*rhoD[0][i]*bD[1][i] # rho0 - tau1
+      frhoDbD[2][i]  = self.f[i]*rhoD[0][i]*bD[2][i] # rho0 - tau2
+      frhoDbD[3][i]  = self.f[i]*rhoD[0][i]*bD[3][i] # rho0 - tau3
+        
+      frhoDbD[4][i]  = self.f[i]*rhoD[1][i]*bD[0][i] # rho1 - tau0
+      frhoDbD[5][i]  = self.f[i]*rhoD[1][i]*bD[1][i] # rho1 - tau1
+      frhoDbD[6][i]  = self.f[i]*rhoD[1][i]*bD[2][i] # rho1 - tau2
+      frhoDbD[7][i]  = self.f[i]*rhoD[1][i]*bD[3][i] # rho1 - tau3
+            
+      frhoDbD[8][i]  = self.f[i]*rhoD[2][i]*bD[0][i] # rho2 - tau0
+      frhoDbD[9][i]  = self.f[i]*rhoD[2][i]*bD[1][i] # rho2 - tau1
+      frhoDbD[10][i] = self.f[i]*rhoD[2][i]*bD[2][i] # rho2 - tau2
+      frhoDbD[11][i] = self.f[i]*rhoD[2][i]*bD[3][i] # rho2 - tau3
+
+      frhoDbD[12][i] = self.f[i]*rhoD[3][i]*bD[0][i] # rho3 - tau0
+      frhoDbD[13][i] = self.f[i]*rhoD[3][i]*bD[1][i] # rho3 - tau1
+      frhoDbD[14][i] = self.f[i]*rhoD[3][i]*bD[2][i] # rho3 - tau2
+      frhoDbD[15][i] = self.f[i]*rhoD[3][i]*bD[3][i] # rho3 - tau3
+            
+    #  alphaR[0]  -> Ar00
+    #  alphaR[1]  -> Ar10
+    #  alphaR[2]  -> Ar20
+    #  alphaR[3]  -> Ar30
+    #  alphaR[4]  -> Ar01
+    #  alphaR[5]  -> Ar11
+    #  alphaR[6]  -> Ar21
+    #  alphaR[7]  -> Ar31
+    #  alphaR[8]  -> Ar02
+    #  alphaR[9]  -> Ar12
+    #  alphaR[10] -> Ar22
+    #  alphaR[11] -> Ar32
+    #  alphaR[12] -> Ar03
+    #  alphaR[13] -> Ar13
+    #  alphaR[14] -> Ar23
+    #  alphaR[15] -> Ar33
+    alphaR = [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.]
+    
+    # sum it all up
+    for j in range(16):
+      for i in range(2,17):
+        alphaR[j] = alphaR[j] + frhoDbD[j][i]
+
+    # calculate AR
+    AR = [0 for i in range(16)]
+    AR[0]  = alphaR[0]
+    AR[1]  = alphaR[1]*tau
+    AR[2]  = alphaR[2]*tau*tau
+    AR[3]  = alphaR[3]*tau*tau*tau
+    AR[4]  = alphaR[4]*rho
+    AR[5]  = alphaR[5]*tau*rho
+    AR[6]  = alphaR[6]*tau*tau*rho
+    AR[7]  = alphaR[7]*tau*tau*tau*rho
+    AR[8]  = alphaR[8]*rho*rho
+    AR[9]  = alphaR[9]*tau*rho*rho
+    AR[10] = alphaR[10]*tau*tau*rho*rho
+    AR[11] = alphaR[11]*tau*tau*tau*rho*rho
+    AR[12] = alphaR[12]*rho*rho*rho
+    AR[13] = alphaR[13]*tau*rho*rho*rho
+    AR[14] = alphaR[14]*tau*tau*rho*rho*rho
+    AR[15] = alphaR[15]*tau*tau*tau*rho*rho*rho
+
+    Ar00 = AR[0]
+    Ar10 = AR[1]
+    Ar20 = AR[2]
+    Ar30 = AR[3]
+    Ar01 = AR[4]
+    Ar11 = AR[5]
+    Ar21 = AR[6]
+    Ar31 = AR[7]
+    Ar02 = AR[8]
+    Ar12 = AR[9]
+    Ar22 = AR[10]
+    Ar32 = AR[11]
+    Ar03 = AR[12]
+    Ar13 = AR[13]
+    Ar23 = AR[14]
+    Ar33 = AR[15]
+
+    a0 = math.log(rho) - 1
+    ao10 = 0 # U ig
+    ao20 = 0 # Cv ig
+    ao30 = 0
+
+    Ao00 = a0
+    Ao10 = T*ao10
+    Ao20 = T**2*ao20
+    Ao30 = T**3*ao30
+    Ao01 = 1
+    Ao02 = -1
+    Ao03 = 2
+
+    A = T * (Ao00 + Ar00)
+    Z = 1 + Ar01 
+    P = rho * T * Z
+    U = T * (Ao10 + Ar10)
+
+    G = T * (1 + Ao00 + Ar00 + Ar01)
+    dPdrho = T * (1 + 2*Ar01 + Ar02)
+    dZdrho = dPdrho/T - Z
+    dGdrho = (P/rho)/rho + T*dZdrho
+    Cv = -(Ao20 + Ar20)
+    
+    return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho, 'Cv': Cv}
+
+
+  # bessel function (for real values)
+  @staticmethod
+  def bessel(v, z):
+    # first term
+    b   = (0.5*z)**v
+    
+    # sencond term
+    sum = 0.
+    fack = 1
+    g = 0
+    if v < -1:
+      g = math.gamma(v+3) / (v+1) / (v+2)
+    elif v < 0:
+      g = math.gamma(v+2) / (v+1)
+    else:
+      g = math.gamma(v+1)
+    for k in range(11):
+      if k>0:
+        fack *= k
+      sum = sum + (0.25*z*z)**k/(fack*g)
+      g = g * (v + k + 1)
+    
+    # first term * sencond term
+    sum = b*sum
+    
+    # return value
+    return sum
+    
+
+  # b2
+  @staticmethod
+  def b2tau0(tau):
+    
+    # tau/2
+    tau2 = tau/2.
+    
+    # B2
+    vb2 = math.sqrt(2.)*math.pi*math.pi/3.*tau*math.exp(tau2)*(Gottschalk.bessel(-0.75,tau2)
+                                               + Gottschalk.bessel(0.75,tau2)
+                                               -  Gottschalk.bessel(-0.25,tau2)
+                                               - Gottschalk.bessel(0.25,tau2))
+    
+    return vb2
+
+  # b2 dev tau
+  @staticmethod
+  def b2tau1(tau):
+    
+    # tau/2
+    tau2 = tau/2.
+    
+    # B2 first derivative
+    vb2tau = -math.pi*math.pi*math.exp(tau2)/(6.*math.sqrt(2.)*tau)*(3.*tau*Gottschalk.bessel(-1.75,tau2)
+                                                    - tau*Gottschalk.bessel(-1.25,tau2)
+                                                    - (tau-9.)*Gottschalk.bessel(-0.75,tau2)
+                                                    + (3*tau-1.)*Gottschalk.bessel(-0.25,tau2))
+    
+    return vb2tau
+
+  # b2 dev 2*tau
+  @staticmethod
+  def b2tau2(tau):
+    
+    # tau/2
+    tau2 = tau/2.
+    
+    # B2 second derivative
+    vb2tau2 = math.pi*math.pi*math.exp(tau2)/(24*math.sqrt(2.)*tau*tau)*((3.-4.*tau)*tau*Gottschalk.bessel(-1.75,tau2)
+                                                         - (3.+4.*tau)*tau*Gottschalk.bessel(-1.25,tau2)
+                                                         + (9.-15.*tau-4.*tau*tau)*Gottschalk.bessel(-0.75,tau2)
+                                                         -(3.+tau+4.*tau*tau)*Gottschalk.bessel(-0.25,tau2))
+    
+    return vb2tau2
+
+  # b2 dev 3*tau
+  @staticmethod
+  def b2tau3(tau):
+    
+    # tau/2
+    tau2 = tau/2.
+    
+    # B2 third derivative
+    vb2tau3 = math.pi*math.pi*math.exp(tau2)/(96.*math.sqrt(2.)*tau*tau*tau)*(tau*(-15.+4.*(1.-4.*tau)*tau)*Gottschalk.bessel(-1.75,tau2)
+                                                              + tau*(21.+4.*(3.-4.*tau)*tau)*Gottschalk.bessel(-1.25,tau2)
+                                                              - (45.+tau*(-33.+4.*tau*(9.+4.*tau)))*Gottschalk.bessel(-0.75,tau2)
+                                                              - (-21.+tau*(3.+4.*tau*(3.+4.*tau)))*Gottschalk.bessel(-0.25,tau2))
+    
+    return vb2tau3
+
+  # b3_16 dev 0*tau
+  def b3_16_0(self,n,tau):
+    
+    # factor -> first term
+    d0f1 = (2)**(0.5*(n-1))*(1./tau)**((1-n)/4.)
+    
+    # second term
+    d0f2 = math.exp(self.a[n]*math.sqrt(tau)) - 1.
+    
+    # for constant
+    bn0 = self.BnSS[n]*d0f1
+    
+    # for sum
+    for k in range(1,self.nMax[n]+1):
+        bn0 = bn0 + d0f1*self.b[n][k]*(d0f2)**((2*k-1)/4.)
+    
+    # return bn0
+    return bn0
+
+  # b3_16 dev 1*tau
+  def b3_16_1(self,n,tau):
+    
+    # factor -> first term and its derivatives
+    d0f1 = (2)**(0.5*(n-1))*(1./tau)**((1-n)/4.)
+    d1f1 = (2)**(0.5*(n-5))*(1./tau)**((5-n)/4.)*(n-1)
+    
+    # second term
+    d0f2 = math.exp(self.a[n]*math.sqrt(tau)) - 1.
+    d1f2 = self.a[n]*math.exp(self.a[n]*math.sqrt(tau))/(2.*math.sqrt(tau))
+    
+     # for constant
+    bn1 = self.BnSS[n]*d1f1
+    
+    # for sum
+    for k in range(1, self.nMax[n]+1):
+        bn1 = bn1 + 1/4.*self.b[n][k]*(d0f2)**((2*k-5)/4.)*(4.*d1f1*d0f2 + (2*k-1)*d0f1*d1f2)
+    
+    # return bn1
+    return bn1
+    
+  # b3_16 dev 2*tau
+  def b3_16_2(self,n,tau):
+    
+    # factor -> first term and its derivatives
+    d0f1 = (2)**(0.5*(n-1))*(1./tau)**((1-n)/4.)
+    d1f1 = (2)**(0.5*(n-5))*(1./tau)**((5-n)/4.)*(n-1)
+    d2f1 = (2)**(0.5*(n-9))*(1./tau)**((9-n)/4.)*(n-1)*(n-5)
+    
+    # second term
+    d0f2 = math.exp(self.a[n]*math.sqrt(tau)) - 1.
+    d1f2 = self.a[n]*math.exp(self.a[n]*math.sqrt(tau))/(2.*math.sqrt(tau))
+    d2f2 = (self.a[n]*math.exp(self.a[n]*math.sqrt(tau))*(self.a[n]*math.sqrt(tau)-1.))/(4.*(tau)**1.5)
+    
+    # for constant
+    bn2 = self.BnSS[n]*d2f1
+    
+    # for sum
+    for k in range(1,self.nMax[n]+1):
+        bn2 = bn2 + 1/16.*self.b[n][k]*(d0f2)**((2*k-9)/4.)*((5-12*k+4*k*k)*d0f1*d1f2*d1f2
+                                                       + 16.*d0f2*d0f2*d2f1
+                                                       + 4.*(2*k-1)*d0f2*(2*d1f1*d1f2+d0f1*d2f2))
+        
+    # return bn2
+    return bn2
+
+  # b3_16 dev 3*tau
+  def b3_16_3(self,n,tau):
+    
+    # factor -> first term and its derivatives
+    d0f1 = (2)**(0.5*(n-1))*(1./tau)**((1-n)/4.)
+    d1f1 = (2)**(0.5*(n-5))*(1./tau)**((5-n)/4.)*(n-1)
+    d2f1 = (2)**(0.5*(n-9))*(1./tau)**((9-n)/4.)*(n-1)*(n-5)
+    d3f1 = (2)**(0.5*(n-13))*(1./tau)**((13-n)/4.)*(n-1)*(n-5)*(n-9)
+    
+    
+    # second term
+    d0f2 = math.exp(self.a[n]*math.sqrt(tau)) - 1.
+    d1f2 = self.a[n]*math.exp(self.a[n]*math.sqrt(tau))/(2.*math.sqrt(tau))
+    d2f2 = (self.a[n]*math.exp(self.a[n]*math.sqrt(tau))*(self.a[n]*math.sqrt(tau)-1.))/(4.*(tau)**1.5)
+    d3f2 = (self.a[n]*math.exp(self.a[n]*math.sqrt(tau))*(3.-3.*self.a[n]*math.sqrt(tau)+self.a[n]*self.a[n]*tau))/(8.*(tau)**2.5)
+    
+    # for constant
+    bn3 = self.BnSS[n]*d3f1
+
+    # for sum
+    for k in range(1, self.nMax[n]+1):
+        bn3 = bn3 + 1/64.*self.b[n][k]*(d0f2)**((2*k-13)/4.)*((-45+118*k-60*k*k+8*k*k*k)*d0f1*d1f2*d1f2*d1f2
+                                                         + 12.*(5-12*k+4*k*k)*d0f2*d1f2*(d1f1*d1f2+d0f1*d2f2)
+                                                         + 64.*d3f1*d0f2*d0f2*d0f2
+                                                         + 16.*(2*k-1)*d0f2*d0f2*(3*d1f2*d2f1+3*d1f1*d2f2+d0f1*d3f2))
+
+    # return bn3
+    return bn3
+
+  def guessRhoForG(self,T,G):
+    # G = A + PV
+    #   = T log(rho) - T + T
+    #   = T log(rho)
+    if T==0:
+      return 0
+    return math.exp(G/T)
+
+  def getMaxRho(self,T):
+    if T<0.65:
+      print ("T must be greater than 0.65")
+    if T>100:
+      print ("T must be less than 100")
+    if not self.liquid:
+      return 0.3164
+    return 1.10*(0.376419 + 0.574495*pow(T,0.237538))
+
+  def getMinRho(self,T):
+    if not self.liquid or T>1.4:
+      return 0
+    discr = 0.97*0.97 - 1.02*1.08*T
+    if discr > 0:
+      v2 = 2*(0.97 - math.sqrt(discr))/(1.08*T)
+      return 1/math.sqrt(v2)
+    return 0.3164
+
