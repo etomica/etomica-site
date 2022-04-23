@@ -437,6 +437,7 @@ function grabTableText(table) {
   
 function addParametricRow(T, rho, props, Bvalues) {
   document.getElementById("resultsBody").className = "show";
+  document.getElementById("virialsBtn").style.display = showingVirials ? "none" : "block";
   document.getElementById("parametricResultsDiv").style.display = showingVirials ? "none" : "block";
   document.getElementById("singleResultsVirialDiv").style.display = "none";
   var tbody = document.getElementById("parametricResults");
@@ -468,8 +469,8 @@ function addParametricRow(T, rho, props, Bvalues) {
       var tbody = document.getElementById("parametricVirialResults");
       var row = makeElement("TR", tbody);
       var v = [];
-      props['T'] = T;
       var cols = document.getElementById("parametricVirialTH").childNodes;
+      makeElement("TD", row, {textContent: T});
       for (var i=0; i<cols.length; i++) {
         var p = cols[i].id.replace("_col","");
         var n = Number(p.replace("B",""));
@@ -509,6 +510,7 @@ function showResults(T, rho, props, Bvalues) {
   props.T = T;
   props.rho = rho;
   document.getElementById("resultsBody").className = "show";
+  document.getElementById("virialsBtn").style.display = showingVirials ? "none" : "block";
   document.getElementById("singleResultsDiv").style.display = showingVirials ? "none" : "block";
   document.getElementById("singleResultsVirialDiv").style.display = showingVirials ? "block" : "none";
   var resultsRows = document.getElementById("singleResultsDiv").childNodes;
