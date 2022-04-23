@@ -331,7 +331,7 @@ function phasesUpdated() {
   }
 }
 
-var showingVirials = false;
+var showingVirials = false, iamvapor = false;
 function showVirials() {
   document.getElementById("singleResultsDiv").style.display = "none";
   document.getElementById("parametricResultsDiv").style.display = "none";
@@ -437,7 +437,7 @@ function grabTableText(table) {
   
 function addParametricRow(T, rho, props, Bvalues) {
   document.getElementById("resultsBody").className = "show";
-  document.getElementById("virialsBtn").style.display = showingVirials ? "none" : "block";
+  document.getElementById("virialsBtn").style.display = (!iamvapor || showingVirials) ? "none" : "block";
   document.getElementById("parametricResultsDiv").style.display = showingVirials ? "none" : "block";
   document.getElementById("singleResultsVirialDiv").style.display = "none";
   var tbody = document.getElementById("parametricResults");
@@ -457,7 +457,7 @@ function addParametricRow(T, rho, props, Bvalues) {
     makeElement("TD", row, {textContent: props[p]});
     v.push(props[p]);
   }
-  if (typeof Bvalues != "undefined") {
+  if (typeof Bvalues != "undefined" && Bvalues) {
     var useX = document.getElementById("checkX").checked;
     var Tstr = document.getElementById("inputT").value;
     var varT = useX && /x/.test(Tstr);
@@ -510,7 +510,7 @@ function showResults(T, rho, props, Bvalues) {
   props.T = T;
   props.rho = rho;
   document.getElementById("resultsBody").className = "show";
-  document.getElementById("virialsBtn").style.display = showingVirials ? "none" : "block";
+  document.getElementById("virialsBtn").style.display = (!iamvapor || showingVirials) ? "none" : "block";
   document.getElementById("singleResultsDiv").style.display = showingVirials ? "none" : "block";
   document.getElementById("singleResultsVirialDiv").style.display = showingVirials ? "block" : "none";
   var resultsRows = document.getElementById("singleResultsDiv").childNodes;
