@@ -6,6 +6,7 @@
       <ul>
         <li>The cutoff was scaled as a function of density (cutoff = 3 means that r<sub>c</sub>&rho;<sup>1/3</sup> = 3) such that the typical number of neighbors does not vary with density.</li>
         <li>While you can choose a cutoff to examine the effect of truncation on thermodynamic properties (and the tradeoff between computational cost and accuracy), the properties do not correspond to Lennard-Jones with any specific density-independent cutoff.  Only by including the long range correction (LRC) can proper thermodynamic properties be computed.</li>
+        <li>When setting r<sub>c</sub>=&infin;, the EOS is fit to the data with the longest truncation with the LRC included (rather than fitting to the longest truncation and then adding in the LRC when using the EOS).</li>
       </ul>
       </li>
     </ul>

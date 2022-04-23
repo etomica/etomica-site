@@ -246,10 +246,10 @@ window.addEventListener("load", myPhasesUpdated);
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputVEOSN' class='col-form-label'>VEOS order</label>
+                    <label for='inputVEOSN-vapor' class='col-form-label'>VEOS order</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputVEOSN'>
+                    <select class='form-select' id='inputVEOSN-vapor'>
                       <option value='9'>VEOS9</option>
                       <option value='8'>VEOS8</option>
                       <option value='7'>VEOS7</option>
@@ -300,31 +300,36 @@ window.addEventListener("load", myPhasesUpdated);
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkLat-hcp'>
-                    <label class='form-check-label' for='checkLat-hcp'>lattice properties</label>
+                  <div class='col-auto' class=form-check' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose which contributions to the free energy are included.">
+                    EOS contributions beyond lattice
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-hcp'>
-                    <label class='form-check-label' for='checkHarmonic-hcp'>lattice+harmonic properties</label>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-hcp' onchange='updateHarmContrib("hcp","harm")' checked>
+                    <label class='form-check-label' for='checkHarmonic-hcp'>harmonic</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkAlpha'>
-                    <label class='form-check-label' for='checkAlpha' data-bs-html='true' data-bs-toggle="tooltip" data-bs-placement="right" title="enforce 'ideal' c/a=(8/3)<sup>1/2</sup>; alpha = (c/a)(8/3)<sup>-1/2</sup>">impose &alpha;=1</label>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAnharmonic-hcp' onchange='updateHarmContrib("hcp","anh")' checked>
+                    <label class='form-check-label' for='checkAnharmonic-hcp'>anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAlpha-hcp' checked>
+                    <label class='form-check-label' for='checkAlpha-hcp' data-bs-html='true' data-bs-toggle="tooltip" data-bs-placement="right" title="allow c/a to deviate from (8/3)<sup>1/2</sup>; alpha = (c/a)(8/3)<sup>-1/2</sup>">allow &alpha;&ne;1</label>
                   </div>
                 </div>
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNh' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
+                    <label for='inputN-hcp' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputNh'>
+                    <select class='form-select' id='inputN-hcp'>
                       <option value='0' selected>&infin;</option>
                       <option value='4096'>4096</option>
                       <option value='1728'>1728</option>
@@ -340,7 +345,7 @@ window.addEventListener("load", myPhasesUpdated);
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-hcp'>
-                      <option value='0' selected>&infin;</option>
+                      <option value='-1' selected>&infin;</option>
                       <option value='11'>11</option>
                       <option value='9'>9</option>
                       <option value='7.5'>7.5</option>
@@ -398,31 +403,36 @@ window.addEventListener("load", myPhasesUpdated);
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkLat-fcc'>
-                    <label class='form-check-label' for='checkLat-fcc'>lattice properties</label>
+                  <div class='col-auto' class=form-check' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose which contributions to the free energy are included.">
+                    EOS contributions beyond lattice
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-fcc'>
-                    <label class='form-check-label' for='checkHarmonic-fcc'>lattice+harmonic properties</label>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-fcc' onchange='updateHarmContrib("fcc","harm")' checked>
+                    <label class='form-check-label' for='checkHarmonic-fcc'>harmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAnharmonic-fcc' onchange='updateHarmContrib("fcc","anh")' checked>
+                    <label class='form-check-label' for='checkAnharmonic-fcc'>anharmonic</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc' onchange='updateVacancyCitation()'>
-                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution to thermodynamic properties due to the existence of lattice vacancies">include vacancies</label>
+                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution to thermodynamic properties due to the existence of lattice vacancies">vacancy</label>
                   </div>
                 </div>
               </div>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto'>
-                    <label for='inputNf' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
+                    <label for='inputN-fcc' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
                   </div>
                   <div class='col-auto'>
-                    <select class='form-select' id='inputNf'>
+                    <select class='form-select' id='inputN-fcc'>
                       <option value='0' selected>&infin;</option>
                       <option value='4000'>4000</option>
                       <option value='2048'>2048</option>
@@ -438,7 +448,7 @@ window.addEventListener("load", myPhasesUpdated);
                   </div>
                   <div class='col-auto'>
                     <select class='form-select' id='inputRc-fcc'>
-                      <option value='0' selected>&infin;</option>
+                      <option value='-1' selected>&infin;</option>
                       <option value='11'>11</option>
                       <option value='9'>9</option>
                       <option value='7.5'>7.5</option>

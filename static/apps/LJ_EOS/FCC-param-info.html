@@ -10,6 +10,7 @@
         <li>During the simulations, the interacting neighbors were fixed based on the imposed cutoff and iniital configuration.  Atoms that drifted together from outside the cutoff did not interact while atoms that started within the cutoff, but drifted apart continued to interact with an untruncated potential.</li>
         <li>The cutoff was scaled as a function of density (cutoff = 3 means that r<sub>c</sub>&rho;<sup>1/3</sup> = 3) such that the neighbors do not vary with density.</li>
         <li>While you can choose a cutoff to examine the effect of truncation on thermodynamic properties (and the tradeoff between computational cost and accuracy), the properties do not correspond to Lennard-Jones with any specific density-independent cutoff.  Only by including the long range correction (LRC) can proper thermodynamic properties be computed.</li>
+        <li>When setting r<sub>c</sub>=&infin;, a cutoff for each contribution is used where the contribution has converged.</li>
     </ul>
     </li>
     <li>The vacancy contribution was measured by grand-canonical simulations that measure the free energy change when forming vacancies and determining the vacancy concentration that equalizes the grand-canonical pressure and the measured virial pressure.

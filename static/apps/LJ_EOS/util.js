@@ -328,8 +328,39 @@ function phasesUpdated() {
     if (!el) break;
     var p = el.value;
     document.getElementById("parametersDiv-"+p).style.display = "block";
+
   }
 }
+window.addEventListener("load", function() {
+  var all = ["fcc","hcp","liquid"];
+  for (var i=0; i<all.length; i++) {
+    let p = all[i];
+    let cb = document.getElementById("checkNrcc-"+p);
+    if (cb) {
+      let cbLRC = document.getElementById("checkLRC-"+p);
+      let cbAnh = document.getElementById("checkAnharmonic-"+p);
+      cb.addEventListener("change", function() {
+        if (cb.checked) {
+          cbLRC.checked = false;
+          cbAnh.checked = true;
+        }
+      });
+      cbLRC.addEventListener("change", function() {
+        cb.checked = false;
+      });
+      cbAnh.addEventListener("change", function() {
+        if (!cbAnh.checked) cb.checked = false;
+      });
+    }
+    let cbrc = document.getElementById("inputRc-"+p);
+    if (cbrc) {
+      let callback = function() {updateCutoff(p);}
+      cbrc.addEventListener("change", callback);
+      document.getElementById("inputN-"+p).addEventListener("change", callback);
+      callback();
+    }
+  }
+});
 
 var showingVirials = false, iamvapor = false;
 function showVirials() {
@@ -375,18 +406,19 @@ function phaseChoiceUpdated(phase) {
 
   var schultzFields = {
     vapor: ["inputVEOSN"],
-    liquid: ["inputNl","inputRc-liquid","checkLRC-liquid"],
-    fcc: ["checkLat-fcc","checkHarmonic-fcc","checkVac-fcc","inputNf","inputRc-fcc","checkNrcc-fcc","checkLRC-fcc"],
-    hcp: ["checkLat-hcp","checkHarmonic-hcp","checkAlpha","inputNh","inputRc-hcp","checkNrcc-hcp","checkLRC-hcp"]
+    liquid: ["inputN","inputRc","checkLRC"],
+    fcc: ["checkHarmonic","checkAnharmonic","checkVac","inputN","inputRc","checkNrcc","checkLRC"],
+    hcp: ["checkHarmonic","checkAnharmonic","checkAlpha","inputN","inputRc","checkNrcc","checkLRC"]
   }
   if (eos == "Schultz") {
     for (var i=0; i<schultzFields[phase].length; i++) {
-      document.getElementById(schultzFields[phase][i]).removeAttribute("disabled");
+      document.getElementById(schultzFields[phase][i]+"-"+phase).removeAttribute("disabled");
     }
+    updateCutoff(phase);
   }
   else {
     for (var i=0; i<schultzFields[phase].length; i++) {
-      document.getElementById(schultzFields[phase][i]).setAttribute("disabled","true");
+      document.getElementById(schultzFields[phase][i]+"-"+phase).setAttribute("disabled","true");
     }
   }
 }
@@ -623,6 +655,40 @@ function updateVacancyCitation() {
 window.addEventListener("load", function() {
   if (document.getElementById("checkVac-fcc")) updateVacancyCitation();
 });
+function updateHarmContrib(phase, c) {
+  if (c == "harm") {
+    var doHarm = document.getElementById("checkHarmonic-"+phase).checked;
+    if (!doHarm) document.getElementById("checkAnharmonic-"+phase).checked = false;
+  }
+  if (c == "anh") {
+    var doAnh = document.getElementById("checkAnharmonic-"+phase).checked;
+    if (doAnh) document.getElementById("checkHarmonic-"+phase).checked = true;
+  }
+}
+function updateCutoff(phase) {
+  var sel = document.getElementById("inputRc-"+phase);
+  if (!sel) return;
+  var selN = document.getElementById("inputN-"+phase);
+  if (selN.value == 0) {
+    sel.value = -1;
+    sel.setAttribute("disabled","true");
+  }
+  else {
+    sel.removeAttribute("disabled");
+  }
+  var rc = sel.value;
+  var cboxes = ["Nrcc","LRC"];
+  for (var i=0; i<cboxes.length; i++) {
+    var cb = document.getElementById("check"+cboxes[i]+"-"+phase);
+    if (!cb) continue;
+    if (sel.value == -1) {
+      cb.setAttribute("disabled","true");
+    }
+    else {
+      cb.removeAttribute("disabled");
+    }
+  }
+}
 
 function reconstructTable() {
   var tbody = document.getElementById("coex-table");

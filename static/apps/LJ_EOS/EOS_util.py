@@ -24,14 +24,14 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--vnicholas",""))
     elif selectedEOS == "Schultz":
       opts.append(("--B3func",B3callback))
-      VEOSn = document["inputVEOSN"].value
+      VEOSn = document["inputVEOSN-vapor"].value
       opts.append(("-n",VEOSn))
   elif p == "liquid":
     if selectedEOS == "Schultz":
       doLRC = document["checkLRC-liquid"].checked
       if doLRC:
         opts.append(("--lrc",""))
-      Nl = document["inputNl"].value
+      Nl = document["inputN-liquid"].value
       if Nl != "0":
         opts.append(("--Nl",Nl))
       rc = document["inputRc-liquid"].value
@@ -59,9 +59,9 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--lnicholas",""))
   elif p == "fcc":
     if selectedEOS == "Schultz":
-      if document["checkLat-fcc"].checked:
+      if not document["checkHarmonic-fcc"].checked:
         opts.append(("--lattice",""))
-      elif document["checkHarmonic-fcc"].checked:
+      elif not document["checkAnharmonic-fcc"].checked:
         opts.append(("--harmonic",""))
       doPhi = document["checkVac-fcc"].checked
       if doPhi:
@@ -72,14 +72,14 @@ def optsForPhase(p, document, B3callback=None):
         return "Cannot apply LRC to anharmonic"
       if doLRC:
         opts.append(("--lrc",""))
-      Nf = document["inputNf"].value
+      Nf = document["inputN-fcc"].value
       if Nf != "0":
         if doNrcc:
           opts.append(("--Nfc",Nf))
         else:
           opts.append(("--Nf",Nf))
       rc = document["inputRc-fcc"].value
-      if rc != "0":
+      if rc != "-1":
         if doNrcc:
           opts.append(("--rcc",rc))
         else:
@@ -99,9 +99,9 @@ def optsForPhase(p, document, B3callback=None):
   elif p == "hcp":
     alpha0 = True
     if selectedEOS == "Schultz":
-      if document["checkLat-hcp"].checked:
+      if not document["checkHarmonic-hcp"].checked:
         opts.append(("--lattice",""))
-      elif document["checkHarmonic-hcp"].checked:
+      elif not document["checkAnharmonic-hcp"].checked:
         opts.append(("--harmonic",""))
       doNrcc = document["checkNrcc-hcp"].checked
       doLRC = document["checkLRC-hcp"].checked
@@ -109,14 +109,14 @@ def optsForPhase(p, document, B3callback=None):
         return "Cannot apply LRC to anharmonic for HCP"
       if doLRC:
         opts.append(("--lrc",""))
-      Nh = document["inputNh"].value
+      Nh = document["inputN-hcp"].value
       if Nh != "0":
         if doNrcc:
           opts.append(("--Nhc",Nh))
         else:
           opts.append(("--Nh",Nh))
       rc = document["inputRc-hcp"].value
-      if rc != "0":
+      if rc != "-1":
         if doNrcc:
           opts.append(("--rcc",rc))
         else:
@@ -127,7 +127,7 @@ def optsForPhase(p, document, B3callback=None):
         return "Must truncate when using a finite HCP system size"
       elif doLRC:
         return "Must truncate to include LRC for HCP"
-      alpha0 = document["checkAlpha"].checked
+      alpha0 = not document["checkAlpha-hcp"].checked
       if alpha0:
         opts.append(("--alpha0", ""))
     elif selectedEOS == "Adidharma":
