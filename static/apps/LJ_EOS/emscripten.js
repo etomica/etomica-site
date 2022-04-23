@@ -1,7 +1,6 @@
 var stage = "";
 var statusText = document.getElementById('emscripten-status-text');
 var statusDiv = document.getElementById('emscripten-status-div');
-var spinnerElement = document.getElementById('spinner');
 var Module = {
   preRun: [],
   postRun: [],
@@ -43,7 +42,6 @@ var Module = {
                 Module.setStatus('Downloading...');
                 window.onerror = function() {
                   Module.setStatus('Exception thrown, see JavaScript console');
-                  spinnerElement.style.display = 'none';
                   Module.setStatus = function(text) {
                     if (text) Module.printErr('[post-exception status] ' + text);
                   };
