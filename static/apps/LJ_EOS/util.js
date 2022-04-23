@@ -436,9 +436,9 @@ function grabTableText(table) {
 }
   
 function addParametricRow(T, rho, props, Bvalues) {
-  console.log("T "+T+" "+Bvalues);
   document.getElementById("resultsBody").className = "show";
   document.getElementById("parametricResultsDiv").style.display = showingVirials ? "none" : "block";
+  document.getElementById("singleResultsVirialDiv").style.display = "none";
   var tbody = document.getElementById("parametricResults");
   var row = makeElement("TR", tbody);
   var v = [];
@@ -461,7 +461,6 @@ function addParametricRow(T, rho, props, Bvalues) {
     var Tstr = document.getElementById("inputT").value;
     var varT = useX && /x/.test(Tstr);
     if (!varT) {
-      console.log("parametric but not in T");
       showVirialResults(Bvalues);
     }
     else {
@@ -473,10 +472,7 @@ function addParametricRow(T, rho, props, Bvalues) {
       var cols = document.getElementById("parametricVirialTH").childNodes;
       for (var i=0; i<cols.length; i++) {
         var p = cols[i].id.replace("_col","");
-        console.log("p is "+p);
         var n = Number(p.replace("B",""));
-        console.log("column for B "+n);
-        console.log(n in Bvalues);
         if (!(n in Bvalues)) {
           cols[i].style.display = "none";
           makeElement("TD", row, {style: {display: "none"}});
@@ -494,6 +490,8 @@ function addParametricRow(T, rho, props, Bvalues) {
 }
 
 function showVirialResults(Bvalues) {
+  document.getElementById("parametricResultsVirialDiv").style.display = "none";
+  document.getElementById("singleResultsVirialDiv").style.display = showingVirials ? "block" : "none";
   var resultsRows = document.getElementById("singleResultsVirialDiv").childNodes;
   for (var i=0; i<resultsRows.length; i++) {
     var row = resultsRows[i];
@@ -508,7 +506,6 @@ function showVirialResults(Bvalues) {
   }
 }
 function showResults(T, rho, props, Bvalues) {
-  console.log(Bvalues)
   props.T = T;
   props.rho = rho;
   document.getElementById("resultsBody").className = "show";
