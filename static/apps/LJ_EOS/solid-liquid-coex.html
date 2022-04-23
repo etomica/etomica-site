@@ -338,13 +338,13 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-hcp' onchange='updateHarmContrib("hcp","harm")' checked>
-                    <label class='form-check-label' for='checkHarmonic-hcp'>harmonic</label>
+                    <label class='form-check-label' for='checkHarmonic-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="include harmonic contributions from lattice dynamics, giving properties simple temperature depenedence">harmonic</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkAnharmonic-hcp' onchange='updateHarmContrib("hcp","anh")' checked>
-                    <label class='form-check-label' for='checkAnharmonic-hcp'>anharmonic</label>
+                    <label class='form-check-label' for='checkAnharmonic-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="include anharmonic contributions from molecular simulations using harmonic mapped averaging">anharmonic</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
@@ -441,19 +441,19 @@ window.addEventListener("load", phasesUpdated);
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-fcc' onchange='updateHarmContrib("fcc","harm")' checked>
-                    <label class='form-check-label' for='checkHarmonic-fcc'>harmonic</label>
+                    <label class='form-check-label' for='checkHarmonic-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include harmonic contributions from lattice dynamics, giving properties simple temperature depenedence">harmonic</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkAnharmonic-fcc' onchange='updateHarmContrib("fcc","anh")' checked>
-                    <label class='form-check-label' for='checkAnharmonic-fcc'>anharmonic</label>
+                    <label class='form-check-label' for='checkAnharmonic-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include anharmonic contributions from molecular simulations using harmonic mapped averaging">anharmonic</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc' onchange='updateVacancyCitation()'>
-                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution to thermodynamic properties due to the existence of lattice vacancies">vacancy</label>
+                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution due to the existence of lattice vacancies">vacancy</label>
                   </div>
                 </div>
               </div>
