@@ -54,19 +54,23 @@ function myUpdatePlot() {
       phaseName = "fcc"
 
       myInterval = None
+      success = False
       ix = 0
 
       def doOnePoint(stuff):
-        global myInterval, ix, thisGimmeRho
+        global myInterval, ix, thisGimmeRho, success
+        if not success:
+          window.alert("Unexpected trouble while stepping through x")
+          stopUpdate()
+          return
+        success = False
         doc,eos,myGimmeRho = stuff
         try:
           numX = int(doc["inputXnum"].value)
         except ValueError:
-          InfoDialog("Trouble", f"Must provide a valid # of x points")
+          window.alert("Must provide a valid # of x points")
           stopUpdate()
           return
-        if ix > numX:
-          stopUpdate()
         x = ix / numX
         ix = ix + 1
         Tstr = doc['inputT'].value
@@ -79,6 +83,7 @@ function myUpdatePlot() {
         if phaseName == "vapor" and type(eos).__name__ == "VEOS":
           Bvalues = eos.B
         window.addParametricRow(T, rho, props, Bvalues)
+        success = True
         if ix > numX:
           stopUpdate()
 
@@ -87,10 +92,11 @@ function myUpdatePlot() {
         timer.clear_interval(myInterval)
         document["btnUpdate"].textContent = "Update"
         myInterval = None
+        success = False
         print("stopped")
 
       def update(ev):
-        global myInterval, ix, phaseName
+        global myInterval, ix, phaseName, success
         if not myInterval == None:
           stopUpdate()
           return
@@ -113,11 +119,12 @@ function myUpdatePlot() {
           try:
             numX = int(document["inputXnum"].value)
           except ValueError:
-            InfoDialog("Trouble", f"Must provide a valid # of x points")
+            window.alert("Must provide a valid # of x points")
             return
           if numX < 1:
-            InfoDialog("Trouble", f"Need at least 1 x value")
+            window.alert("Need at least 1 x value")
             return
+          success = True
           myInterval = timer.set_interval(doOnePoint, 0, [document,eos,thisGimmeRho])
           return
 
@@ -128,7 +135,7 @@ function myUpdatePlot() {
         try:
           T = float(Tstr)
         except ValueError:
-          InfoDialog("Trouble", f"Must provide a valid temperature")
+          window.alert("Must provide a valid temperature")
           return
         rho = thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
         props = eos.eval(T,rho)
