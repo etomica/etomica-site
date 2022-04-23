@@ -40,14 +40,11 @@ document.title = "Solid-Liquid Phase Coexistence for LJ";
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
-  copyText = copyText0;
   allData = [];
   allCorrelations = {};
   tableCorrelationData = [];
 }
   
-var copyText0 = "T,rho1,rho2,P,G,phi\n";
-var copyText = copyText0;
 var allData = [], allCorrelations = {}, tableCorrelationData = [];
 var tableCor = "Schultz";
 
@@ -177,7 +174,6 @@ window.addEventListener("load", phasesUpdated);
         T = 0.68
         Pguess = 0
         window.clearAllRows()
-        window.copyText = window.copyText0
         success = True
         myInterval = timer.set_interval(doOneCoex, 0)
 
@@ -510,7 +506,7 @@ window.addEventListener("load", phasesUpdated);
   <div id='resultsDiv' class='card'>
     <div id='headingResults' class='card-header' role='tab'>
       <h2 class='h5 mb-0' style='float: left'>Results</h2>
-      <button class='btn btn-info btn-sm float-end' onclick='copyToClipboard(copyText)'>Copy</button>
+      <button id='copyBtn' class='btn btn-info btn-sm float-end' onclick='copyActiveTable()'>Copy</button>
       <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem;' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
       <div class='float-end form-check' style='margin-right: 1rem;' id='subtractCorCheckboxDiv'>
         <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable()'>
@@ -519,14 +515,13 @@ window.addEventListener("load", phasesUpdated);
     </div>
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
-        <table class='table table-sm'>
-          <thead><tr><th>T</th><th>&rho;1</th><th>&rho;2</th><th>P</th><th>G</th><th>&phi;</th></tr></thead>
+        <table class='table table-sm' id='coexResults'>
+          <thead><tr><th id='T_col'>T</th><th id='rho1_col'>&rho;1</th><th id='rho2_col'>&rho;2</th><th id='P_col'>P</th><th id='G_col'>G</th><th id='phi_col'>&phi;</th></tr></thead>
           <tbody id='coex-table'></tbody>
         </table>
       </div>
-        </div>
-      </div>
     </div>
+  </div>
 
     <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">

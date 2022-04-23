@@ -1,6 +1,6 @@
 body {padding: 1rem;}
-#singleResultsDiv {display: none;}
-#singleResultsDiv p {margin-bottom: 0}
+#singleResultsDiv, #singleResultsVirialDiv {display: none;}
+#singleResultsDiv p, #singleResultsVirialDiv p {margin-bottom: 0}
 .pubName { font-style: italic; }
 .volume { font-weight: bold; }
 .citation { font-size: 90%; display: none; }

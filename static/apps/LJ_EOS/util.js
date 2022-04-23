@@ -133,7 +133,6 @@ function copyToClipboard(text) {
   }
 }
 
-var copyText = "";
 var allData = [];
 
 function gimmeCoexData(row, prop) {
@@ -299,6 +298,7 @@ function updateX() {
     document.getElementById("inputXnum").setAttribute("disabled", "true");
   }
   document.getElementById(useX ? "singleResultsDiv" : "parametricResultsDiv").style.display = "none";
+  document.getElementById(useX ? "singleResultsVirialDiv" : "parametricResultsVirialDiv").style.display = "none";
   document.getElementById("copyBtn").style.display = useX ? "block" : "none";
   document.getElementById("plotBtn").style.display = useX ? "block" : "none";
 }
@@ -330,6 +330,33 @@ function phasesUpdated() {
     document.getElementById("parametersDiv-"+p).style.display = "block";
   }
 }
+
+var showingVirials = false;
+function showVirials() {
+  document.getElementById("singleResultsDiv").style.display = "none";
+  document.getElementById("parametricResultsDiv").style.display = "none";
+  var useX = document.getElementById("checkX").checked;
+  var Tstr = document.getElementById("inputT").value;
+  var varT = useX && /x/.test(Tstr);
+  document.getElementById("singleResultsVirialDiv").style.display = varT ? "none" : "block";
+  document.getElementById("parametricResultsVirialDiv").style.display = varT ? "block" : "none";
+  document.getElementById("virialsBtn").style.display = "none";
+  document.getElementById("thermosBtn").style.display = "block";
+  document.getElementById("plotBtn").setAttribute("disabled","true");
+  showingVirials = true;
+}
+function showThermos() {
+  document.getElementById("singleResultsVirialDiv").style.display = "none";
+  document.getElementById("parametricResultsVirialDiv").style.display = "none";
+  var useX = document.getElementById("checkX").checked;
+  document.getElementById("singleResultsDiv").style.display = useX ? "none" : "block";
+  document.getElementById("parametricResultsDiv").style.display = useX ? "block" : "none";
+  document.getElementById("virialsBtn").style.display = "block";
+  document.getElementById("thermosBtn").style.display = "none";
+  document.getElementById("plotBtn").removeAttribute("disabled");
+  showingVirials = false;
+}
+
 
 var oldCitation = {};
 function phaseChoiceUpdated(phase) {
@@ -370,16 +397,54 @@ window.addEventListener("load", function() {
   phaseChoiceUpdated('hcp');
 });
 
-function addParametricRow(T, rho, props) {
+function parametricT() {
+  if (!document.getElementById("checkX").checked) return false;
+  return /x/.test(document.getElementById("inputT").value);
+}
+
+function copyActiveTable() {
+  var tableID = showingVirials ? "parametricResultsVirialDiv" : "parametricResultsDiv";
+  var table = document.getElementById(tableID);
+  if (!table) table = document.getElementById("coexResults");
+  copyToClipboard(grabTableText(table));
+  var copyBtn = document.getElementById("copyBtn");
+  copyBtn.textContent = "Copied!";
+  window.setTimeout(function() {copyBtn.textContent = "Copy";}, 1000);
+}
+function grabTableText(table) {
+  var thead = table.getElementsByTagName("THEAD")[0];
+  var cols = thead.rows[0].childNodes;
+  var myProps = [];
+  for (var i=0; i<cols.length; i++ ){
+    if (cols[i].style.display == "none") continue;
+    var p = cols[i].id.replace("_col","");
+    myProps.push(p);
+  }
+  var copyText = myProps.join(",")+"\n";
+  var tbody = table.getElementsByTagName("TBODY")[0];
+  var rows = tbody.rows;
+  for (var i=0; i<rows.length; i++) {
+    var vals = [];
+    for  (var j=0; j<rows[i].childNodes.length; j++) {
+      var col = rows[i].childNodes[j];
+      if (col.style.display == "none") continue;
+      vals.push(col.textContent);
+    }
+    copyText += vals.join(",")+"\n";
+  }
+  return copyText;
+}
+  
+function addParametricRow(T, rho, props, Bvalues) {
+  console.log("T "+T+" "+Bvalues);
   document.getElementById("resultsBody").className = "show";
-  document.getElementById("parametricResultsDiv").style.display = "block";
+  document.getElementById("parametricResultsDiv").style.display = showingVirials ? "none" : "block";
   var tbody = document.getElementById("parametricResults");
   var row = makeElement("TR", tbody);
   var v = [];
   props['T'] = T;
   props['rho'] = rho;
   var cols = document.getElementById("parametricTH").childNodes;
-  var myProps = [];
   for (var i=0; i<cols.length; i++) {
     var p = cols[i].id.replace("_col","");
     if (!(p in props)) {
@@ -389,22 +454,66 @@ function addParametricRow(T, rho, props) {
     }
     cols[i].style.display = "";
     makeElement("TD", row, {textContent: props[p]});
-    myProps.push(p);
     v.push(props[p]);
   }
-  if (!copyText) copyText += myProps.join(",")+"\n";
-  copyText += v.join(",")+"\n";
+  if (typeof Bvalues != "undefined") {
+    var useX = document.getElementById("checkX").checked;
+    var Tstr = document.getElementById("inputT").value;
+    var varT = useX && /x/.test(Tstr);
+    if (!varT) {
+      console.log("parametric but not in T");
+      showVirialResults(Bvalues);
+    }
+    else {
+      document.getElementById("parametricResultsVirialDiv").style.display = showingVirials ? "block" : "none";
+      var tbody = document.getElementById("parametricVirialResults");
+      var row = makeElement("TR", tbody);
+      var v = [];
+      props['T'] = T;
+      var cols = document.getElementById("parametricVirialTH").childNodes;
+      for (var i=0; i<cols.length; i++) {
+        var p = cols[i].id.replace("_col","");
+        console.log("p is "+p);
+        var n = Number(p.replace("B",""));
+        console.log("column for B "+n);
+        console.log(n in Bvalues);
+        if (!(n in Bvalues)) {
+          cols[i].style.display = "none";
+          makeElement("TD", row, {style: {display: "none"}});
+          continue;
+        }
+        cols[i].style.display = "";
+        makeElement("TD", row, {textContent: Bvalues[n]});
+      }
+    }
+  }
   // add H and S for plot
   props.H = props.U + props.P/rho;
   props.S = (props.A - props.U)/T;
   allData.push(props);
 }
 
-function showResults(T, rho, props) {
+function showVirialResults(Bvalues) {
+  var resultsRows = document.getElementById("singleResultsVirialDiv").childNodes;
+  for (var i=0; i<resultsRows.length; i++) {
+    var row = resultsRows[i];
+    if (row.nodeName != "P") continue;
+    var prop = row.id.replace("_row", "");
+    var n = Number(prop.replace("B",""));
+    if (!(n in Bvalues)) {
+      row.style.display = "none";
+      continue;
+    }
+    document.getElementById(prop).textContent = Bvalues[n];
+  }
+}
+function showResults(T, rho, props, Bvalues) {
+  console.log(Bvalues)
   props.T = T;
   props.rho = rho;
   document.getElementById("resultsBody").className = "show";
-  document.getElementById("singleResultsDiv").style.display = "block";
+  document.getElementById("singleResultsDiv").style.display = showingVirials ? "none" : "block";
+  document.getElementById("singleResultsVirialDiv").style.display = showingVirials ? "block" : "none";
   var resultsRows = document.getElementById("singleResultsDiv").childNodes;
   for (var i=0; i<resultsRows.length; i++) {
     var row = resultsRows[i];
@@ -415,6 +524,9 @@ function showResults(T, rho, props) {
       continue;
     }
     document.getElementById(prop).textContent = props[prop];
+  }
+  if (typeof Bvalues != "undefined") {
+    showVirialResults(Bvalues);
   }
 }
 
@@ -438,7 +550,6 @@ function clearAllSimple() {
   var tbody = document.getElementById("parametricResults");
   empty(tbody);
   allData = [];
-  copyText = "";
   collapseParameters();
 }
 
@@ -529,7 +640,6 @@ function reconstructTable() {
 
 function makeTableRow(i) {
   var v = makeTableData(i);
-  copyText += v.join(",")+"\n";
   var row = makeElement("TR");
   for (var i=0; i<v.length; i++) {
     makeElement("TD", row, {textContent: v[i]});

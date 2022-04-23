@@ -30,10 +30,8 @@ document.title = "FCC-HCP Phase Coexistence for LJ";
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
-  copyText = copyText0;
 }
   
-var copyText0 = "T,rho1,rho2,P,G,phi\n", copyText = "";
 var allData = [], allCorrelations = {}, tableCorrelationData = [];
 var tableCor = "Schultz";
 var lastRow = null;
@@ -104,11 +102,6 @@ function sortData() {
   allData.sort(sorter);
   for (var c in allCorrelations) {
     allCorrelations[c].sort(sorter);
-  }
-  copyText = "";
-  for (var i=0; i<allData.length; i++) {
-    var d = allData[i];
-    copyText += d.T+","+d.props1.rho+","+d.props2.rho+","+d.props1.P+","+d.props1.G+","+('alpha' in d.props2 ? d.props2.alpha : 1)+"\n";
   }
 }
 
@@ -329,7 +322,6 @@ window.addEventListener("load", phasesUpdated);
         Pg = 0
         iteration = 0
         window.clearAllRows()
-        window.copyText = []
         success = True
         myInterval = timer.set_interval(doOneCoex, 0)
 
@@ -578,7 +570,7 @@ window.addEventListener("load", phasesUpdated);
     <div id='resultsDiv' class='card'>
       <div id='headingResults' class='card-header' role='tab'>
         <h2 class='h5 mb-0' style='float: left'>Results <span id='lowPbranch' style='display: none;'>(finding low-P branch)</span></h2>
-        <button class='btn btn-info btn-sm' style='float: right' onclick='copyToClipboard(copyText)'>Copy</button>
+        <button id='copyBtn' class='btn btn-info btn-sm' style='float: right' onclick='copyActiveTable()'>Copy</button>
         <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
         <div class='float-end form-check' style='margin-right: 1rem;' id='subtractCorCheckboxDiv'>
           <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable()'>
@@ -587,14 +579,13 @@ window.addEventListener("load", phasesUpdated);
     </div>
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
-        <table class='table table-sm'>
-          <thead><tr><th>T</th><th>&rho;1</th><th>&rho;2</th><th>P</th><th>G</th><th>&alpha;</th></tr></thead>
+        <table class='table table-sm' id='coexResults'>
+          <thead><tr><th id='T_col'>T</th><th id='rho1_col'>&rho;1</th><th id='rho2_col'>&rho;2</th><th id='P_col'>P</th><th id='G_col'>G</th><th id='alpha_col'>&alpha;</th></tr></thead>
           <tbody id='coex-table'></tbody>
         </table>
       </div>
-        </div>
-      </div>
     </div>
+  </div>
 
     <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
