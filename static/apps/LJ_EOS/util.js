@@ -471,7 +471,7 @@ function addParametricRow(T, rho, props, Bvalues) {
       var v = [];
       var cols = document.getElementById("parametricVirialTH").childNodes;
       makeElement("TD", row, {textContent: T});
-      for (var i=0; i<cols.length; i++) {
+      for (var i=1; i<cols.length; i++) {
         var p = cols[i].id.replace("_col","");
         var n = Number(p.replace("B",""));
         if (!(n in Bvalues)) {
