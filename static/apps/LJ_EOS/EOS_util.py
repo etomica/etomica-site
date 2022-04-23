@@ -20,7 +20,7 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--vthol",""))
     elif selectedEOS == "Gottschalk":
       opts.append(("--vgottschalk",""))
-    elif selectedEOS == "Nicholas":
+    elif selectedEOS == "Nicolas":
       opts.append(("--vnicholas",""))
     elif selectedEOS == "Schultz":
       opts.append(("--B3func",B3callback))
@@ -55,7 +55,7 @@ def optsForPhase(p, document, B3callback=None):
       opts.append(("--thol",""))
     elif selectedEOS == "Gottschalk":
       opts.append(("--lgottschalk",""))
-    elif selectedEOS == "Nicholas":
+    elif selectedEOS == "Nicolas":
       opts.append(("--lnicholas",""))
   elif p == "fcc":
     if selectedEOS == "Schultz":

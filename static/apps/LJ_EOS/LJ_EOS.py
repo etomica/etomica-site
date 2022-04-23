@@ -204,7 +204,7 @@ def getEOS(name, opts):
       elif o == '--vgottschalk':
         return Gottschalk(False)
       elif o == '--vnicholas':
-        return Nicholas(False)
+        return Nicolas(False)
     return VEOS(maxB, log2nB3, nder, B3func)
   elif name == 'liquid':
     liqDir=sys.path[0]
@@ -231,7 +231,7 @@ def getEOS(name, opts):
       elif o == '--lgottschalk':
         return Gottschalk()
       elif o == '--lnicholas':
-        return Nicholas()
+        return Nicolas()
     if irc==-1:
       liqFit="{0}/v2yN{1}.fit".format(liqDir,Nl)
     else:
@@ -1560,8 +1560,8 @@ class May(MBWR):
       return 1/math.sqrt(v2)
     return 1/math.sqrt(1.8)
 
-class Nicholas(MBWR):
-  """Nicholas EOS"""
+class Nicolas(MBWR):
+  """Nicolas EOS"""
   def __init__(self, liquid=True):
     EOS.__init__(self)
     self.liquid = liquid
