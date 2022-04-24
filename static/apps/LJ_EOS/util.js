@@ -7,7 +7,7 @@ window.addEventListener("fullload", function() {
     var h1 = document.getElementsByTagName("h1")[0];
     h1.parentNode.insertBefore(div, h1.nextSibling);
     brythonSpinner = div;
-    brython();
+    brython({cache: true});
   }
 });
 
