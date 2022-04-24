@@ -8,14 +8,13 @@
           except (ValueError,SyntaxError) as err:
             window.alert("Trouble parsing P expression: {0}".format(err))
             return float("nan")
-          rho = eos.rhoForProps(T, {'P': P})
-        else:
-          try:
-            rho = eval(rhostr)
-          except (ValueError,SyntaxError) as err:
-            window.alert("Trouble parsing rho expression: {0}".format(err))
-            return float("nan")
-        return rho
+          return eos.rhoForProps(T, {'P': P})
+
+        try:
+          return eval(rhostr)
+        except (ValueError,SyntaxError) as err:
+          window.alert("Trouble parsing rho expression: {0}".format(err))
+          return float("nan")
 
       window.thisGimmeRho = gimmeRhoSimple
 </script>
