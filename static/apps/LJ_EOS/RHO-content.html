@@ -1,0 +1,13 @@
+<script type='text/python'>
+      from browser import window
+
+      def gimmeRhoSimple(T, rhostr, Pstr, x, eos, doc):
+        if doc["checkP"].checked:
+          P = eval(Pstr)
+          rho = eos.rhoForProps(T, {'P': P})
+        else:
+          rho = eval(rhostr)
+        return rho
+
+      window.thisGimmeRho = gimmeRhoSimple
+</script>

@@ -1,5 +1,5 @@
 var brythonSpinner = null;
-window.addEventListener("load", function() {
+window.addEventListener("fullload", function() {
   if (typeof __BRYTHON__ != "undefined") {
     var div = makeElement("DIV", null, {className: "align-items-center"});
     makeElement("DIV", div, {style: {marginRight: "1rem"}, className: "spinner-border ms-auto", role: "status", "aria-hidden": "true"});
@@ -331,7 +331,7 @@ function phasesUpdated() {
 
   }
 }
-window.addEventListener("load", function() {
+window.addEventListener("fullload", function() {
   var all = ["fcc","hcp","liquid"];
   for (var i=0; i<all.length; i++) {
     let p = all[i];
@@ -422,7 +422,7 @@ function phaseChoiceUpdated(phase) {
     }
   }
 }
-window.addEventListener("load", function() {
+window.addEventListener("fullload", function() {
   phaseChoiceUpdated('vapor');
   phaseChoiceUpdated('liquid');
   phaseChoiceUpdated('fcc');
@@ -531,7 +531,7 @@ function showVirialResults(Bvalues) {
     if (row.nodeName != "P") continue;
     var prop = row.id.replace("_row", "");
     var n = Number(prop.replace("B",""));
-    if (!(n in Bvalues)) {
+    if (!Bvalues || !(n in Bvalues)) {
       row.style.display = "none";
       continue;
     }
@@ -584,7 +584,7 @@ function clearAllSimple() {
   collapseParameters();
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("fullload", function() {
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -612,7 +612,6 @@ function loadModalContent(content) {
   sel.value = content;
 
   var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", content+".html");
   xmlHttp.onreadystatechange = function() {
     if (xmlHttp.readyState == 4) {
       var response = xmlHttp.responseText;
@@ -629,7 +628,7 @@ function replaceInfoContent() {
   loadModalContent(sel.value);
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("fullload", function() {
   var infoModal = document.getElementById("infoModal");
   if (!infoModal) return;
   infoTitleMap = {};
@@ -652,7 +651,7 @@ function updateVacancyCitation() {
   var doVac = document.getElementById("checkVac-fcc").checked;
   document.getElementById("vacancy-citation").style.display = doVac ? "inline" : "none";
 }
-window.addEventListener("load", function() {
+window.addEventListener("fullload", function() {
   if (document.getElementById("checkVac-fcc")) updateVacancyCitation();
 });
 function updateHarmContrib(phase, c) {
@@ -711,3 +710,32 @@ function makeTableRow(i) {
   }
   return row;
 }
+
+window.addEventListener("load", function() {
+  var ajaxDivs = document.getElementsByClassName("AJAX-div");
+  if (ajaxDivs.length == 0) {
+    const event = new Event('fullload');
+    window.dispatchEvent(event);
+    return;
+  }
+  console.log(ajaxDivs);
+  var nDivsDone = 0;
+  for (var i=0; i<ajaxDivs.length; i++) {
+    let name = ajaxDivs[i].getAttribute("data-content");
+    let xmlHttp = new XMLHttpRequest();
+    let myDiv = ajaxDivs[i];
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState == 4) {
+        var response = xmlHttp.responseText;
+        myDiv.innerHTML = response;
+        nDivsDone++;
+        if (nDivsDone == ajaxDivs.length) {
+          const event = new Event('fullload');
+          window.dispatchEvent(event);
+        }
+      }
+    };
+    xmlHttp.open("GET", name+"-content.html");
+    xmlHttp.send(null);
+  }
+});

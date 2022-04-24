@@ -20,15 +20,15 @@ document.title = "Vapor-Liquid Phase Coexistence for LJ";
         var ysets = document.getElementById("plotYDiff").checked ? "diff" : "auto";
         updatePlotCoex("vapor", "liquid", Infinity, Infinity, xsets, ysets);
       }
-      window.addEventListener("load", function() {
+      window.addEventListener("fullload", function() {
         updateSubtractCheckboxForT();
+        updateLiquidRc();
         document.getElementById("subtractCorCheckboxDiv").style.display = "block";
         document.getElementById("tie-lines-div").style.display = "block";
         document.getElementById("plot-cor-div").style.display = "block";
         var plotModalEl = document.getElementById("plotModal");
         plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
       });
-      window.addEventListener("load", updateLiquidRc);
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
@@ -77,17 +77,8 @@ function addRow(T, props1, props2, correlations) {
   tbody.appendChild(makeTableRow(allData.length-1));
 }
 
-function collapse1Parameter(id) {
-  var foo = document.getElementById("collapse"+id);
-  new bootstrap.Collapse(foo, {toggle: false}).hide();
-}
-function collapseParameters() {
-  collapse1Parameter("parametersDiv-vapor");
-  collapse1Parameter("parametersDiv-liquid");
-}
-window.addEventListener("load", phasesUpdated);
+window.addEventListener("fullload", phasesUpdated);
     </script>
-  </head>
   <body>
     <script type='text/python' src='LJ_EOS.py'></script>
     <script type='text/python' src='EOS_util.py'></script>
@@ -250,154 +241,8 @@ window.addEventListener("load", phasesUpdated);
       </div>
     </div>
 
-      <div id='parametersDiv-vapor' class='card mb-4'>
-        <div id='headingParameters-vapor' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-vapor' aria-expanded='true' aria-controls='colapseparametersDiv-vapor'>Vapor Parameters</a>
-            <button class='btn btn-xs btn-info' type='button' data-content='vapor-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
-        </div>
-        <div id='collapseparametersDiv-vapor' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-vapor'>
-          <div class='card-body'>
-            <div class='row'>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputEOS-vapor' class='col-form-label'>EOS</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-vapor' onchange='phaseChoiceUpdated("vapor")'>
-                      <option value='Schultz' selected>Schultz (VEOS)</option>
-                      <option value='Gottschalk'>Gottschalk</option>
-                      <option value='Johnson'>Johnson</option>
-                      <option value='Kolafa'>Kolafa</option>
-                      <option value='May'>May</option>
-                      <option value='Mecke'>Mecke</option>
-                      <option value='Nicolas'>Nicolas</option>
-                      <option value='Thol'>Thol</option>
-                    </select>
-                  </div>
-                </div>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputVEOSN-vapor' class='col-form-label'>VEOS order</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputVEOSN-vapor'>
-                      <option value='9'>VEOS9</option>
-                      <option value='8'>VEOS8</option>
-                      <option value='7'>VEOS7</option>
-                      <option value='6'>VEOS6</option>
-                      <option value='5'>VEOS5</option>
-                      <option value='4'>VEOS4</option>
-                      <option value='3'>VEOS3</option>
-                      <option value='2'>VEOS2</option>
-                      <option value='1'>ideal gas</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='citation' id='vapor-ref-Schultz'>EOS Citations: Virial coefficients taken from A. J. Schultz and D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span>, <span class='volume'>107</span>, 2309 (2009); N. S. Barlow, A. J. Schultz, D. A. Kofke, S. J. Weinstein, "<a href='https://doi.org/0.1002/aic.14531'>Critical Isotherms from Virial Series Using Asymptotically Consistent Approximants</a>", <span class='pubName'>AIChE J.</span> <span class='volume'>60</span>, 3336-3349 (2014); C. Feng, A. J. Schultz, V. Chaudhary, D. A. Kofke, "<a href='https://doi.org/10.1063/1.4927339'>Eighth to sixteenth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>143</span>, 044504 (2015); includes additional coefficients computed more recently; fits for B<sub>4</sub>-B<sub>9</sub> as described in N. Gokul, A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1002/aic.17072'>Properties of supercritical N2, O2, CO2, and NH3 mixtures from the virial equation of state</a>", <span class='pubName'>AIChE J.</span> <span class='volume'>67</span>, e17072 (2021).</div>
-                  <div class='citation' id='vapor-ref-Gottschalk'>EOS Citation: M. Gottschalk, "<a href='https://doi.org/10.1063/1.5119761'>An EOS for the Lennard-Jones fluid: A virial expansion approach</a>", <span class='pubName'>AIP Adv.</span> <span class='volume'>9</span>, 125206 (2019).</div>
-                  <div class='citation' id='vapor-ref-Johnson'>EOS Citation: J. Johnson, J. Zollweg, and K. Gubbins, "<a href='https://doi.org/10.1080/00268979300100411'>The Lennard-Jones equation of state revisited</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>78</span>, 591–618 (1993).</div>
-                  <div class='citation' id='vapor-ref-Kolafa'>EOS Citation: J. Kolafa and I. Nezbeda, "<a href='https://doi.org/10.1016/0378-3812(94)80001-4'>The Lennard-Jones fluid: An accurate analytic and theoretically-based equation of state</a>", <span class='pubName'>Fluid Phase Equilib.</span> <span class='volume'>100</span>, 1 (1994).</div>
-                  <div class='citation' id='vapor-ref-May'>EOS Citation: H.-O. May and P. Mausbach, "<a href='https://doi.org/10.1103/PhysRevE.85.031201'>Riemannian geometry study of vapor-liquid phase equilibria and supercritical behavior of the Lennard-Jones fluid</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>86</span>, 059905 (2012).</div>
-                  <div class='citation' id='vapor-ref-Mecke'>EOS Citation: M. Mecke, A. Müller, J. Winkelmann, J. Vrabec, J. Fischer, R. Span and W. Wagner, "<a href='https://doi.org/10.1007/BF01443399'>An accurate Van der Waals-type equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>Int. J. Thermophys.</span> <span class='volume'>17</span>, 391 (1996).</div>
-                  <div class='citation' id='vapor-ref-Nicolas'>EOS Citation: J. J. Nicolas, K. E. Gubbins, W. B. Street, D. J. Tildesley, "<a href='https://doi.org/10.1080/00268977900101051'>Equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>37</span>, 1429 (1979).</div>
-                  <div class='citation' id='vapor-ref-Thol'>EOS Citation: M. Thol, G. Rutkai, A. K ̈oster, R. Lustig, R. Span, and J. Vrabec, "<a href='https://doi.org/10.1063/1.4945000'>Equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>J. Phys. Chem. Ref. Data</span> <span class='volume'>45</span>, 023101 (2016).</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='parametersDiv-liquid' class='card mb-4'>
-        <div id='headingParameters-liquid' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-liquid' aria-expanded='true' aria-controls='colapseparametersDiv-liquid'>Liquid Parameters</a>
-            <button class='btn btn-xs btn-info' type='button' data-content='liquid-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
-        </div>
-        <div id='collapseparametersDiv-liquid' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-liquid'>
-          <div class='card-body'>
-            <div class='row'>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputEOS-liquid' class='col-form-label'>EOS</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputEOS-liquid' onchange='phaseChoiceUpdated("liquid")'>
-                      <option value='Schultz' selected>Schultz</option>
-                      <option value='Gottschalk'>Gottschalk</option>
-                      <option value='Johnson'>Johnson</option>
-                      <option value='Kolafa'>Kolafa</option>
-                      <option value='Mecke'>Mecke</option>
-                      <option value='May'>May</option>
-                      <option value='Nicolas'>Nicolas</option>
-                      <option value='Thol'>Thol</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputN-liquid' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations"># of atoms</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputN-liquid'>
-                      <option value='0' selected>&infin;</option>
-                      <option value='4000'>4000</option>
-                      <option value='2000'>2000</option>
-                      <option value='1000'>1000</option>
-                      <option value='500'>500</option>
-                      <option value='250'>250</option>
-                    </select>
-                  </div>
-                </div>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='rc-liquid' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="use EOS for the given scaled potential truncation (r<sub>c</sub> &rho;<sup>-1/3</sup>); can be corrected by long-range correction (LRC)">cutoff</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputRc-liquid'>
-                      <option value='-1' selected>&infin;</option>
-                      <option value='9'>9</option>
-                      <option value='8'>8</option>
-                      <option value='7'>7</option>
-                      <option value='6'>6</option>
-                      <option value='5'>5</option>
-                      <option value='4'>4</option>
-                      <option value='3'>3</option>
-                      <option value='2'>2</option>
-                      <option value='1'>1</option>
-                      <option value='0'>0</option>
-                    </select>
-                  </div>
-                </div>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-liquid'>
-                    <label class='form-check-label' for='checkLRC-liquid' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction for potential truncation">include LRC</label>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='citation' id='liquid-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
-                  <div class='citation' id='liquid-ref-Gottschalk'>EOS Citation: M. Gottschalk, "<a href='https://doi.org/10.1063/1.5119761'>An EOS for the Lennard-Jones fluid: A virial expansion approach</a>", <span class='pubName'>AIP Adv.</span> <span class='volume'>9</span>, 125206 (2019).</div>
-                  <div class='citation' id='liquid-ref-Johnson'>EOS Citation: J. Johnson, J. Zollweg, and K. Gubbins, "<a href='https://doi.org/10.1080/00268979300100411'>The Lennard-Jones equation of state revisited</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>78</span>, 591–618 (1993).</div>
-                  <div class='citation' id='liquid-ref-Kolafa'>EOS Citation: J. Kolafa and I. Nezbeda, "<a href='https://doi.org/10.1016/0378-3812(94)80001-4'>The Lennard-Jones fluid: An accurate analytic and theoretically-based equation of state</a>", <span class='pubName'>Fluid Phase Equilib.</span> <span class='volume'>100</span>, 1 (1994).</div>
-                  <div class='citation' id='liquid-ref-May'>EOS Citation: H.-O. May and P. Mausbach, "<a href='https://doi.org/10.1103/PhysRevE.85.031201'>Riemannian geometry study of vapor-liquid phase equilibria and supercritical behavior of the Lennard-Jones fluid</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>86</span>, 059905 (2012).</div>
-                  <div class='citation' id='liquid-ref-Mecke'>EOS Citation: M. Mecke, A. Müller, J. Winkelmann, J. Vrabec, J. Fischer, R. Span and W. Wagner, "<a href='https://doi.org/10.1007/BF01443399'>An accurate Van der Waals-type equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>Int. J. Thermophys.</span> <span class='volume'>17</span>, 391 (1996).</div>
-                  <div class='citation' id='liquid-ref-Nicolas'>EOS Citation: J. J. Nicolas, K. E. Gubbins, W. B. Street, D. J. Tildesley, "<a href='https://doi.org/10.1080/00268977900101051'>Equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>37</span>, 1429 (1979).</div>
-                  <div class='citation' id='liquid-ref-Thol'>EOS Citation: M. Thol, G. Rutkai, A. K ̈oster, R. Lustig, R. Span, and J. Vrabec, "<a href='https://doi.org/10.1063/1.4945000'>Equation of state for the Lennard-Jones fluid</a>", <span class='pubName'>J. Phys. Chem. Ref. Data</span> <span class='volume'>45</span>, 023101 (2016).</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class='AJAX-div' data-content='VAPOR'></div>
+      <div class='AJAX-div' data-content='LIQUID'></div>
 
   <div id='resultsDiv' class='card'>
     <div id='headingResults' class='card-header' role='tab'>
@@ -422,148 +267,8 @@ window.addEventListener("load", phasesUpdated);
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>
 
-    <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="plotModalLabel">Plot</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div id="plotDiv"></div>
-            <div class='row'>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputXprop' class='col-form-label'>X:</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
-                      <option value='T'>T</option>
-                      <option value='rho' selected>&rho;</option>
-                      <option value='P'>P</option>
-                      <option value='U'>U</option>
-                      <option value='A'>A</option>
-                      <option value='G'>G</option>
-                      <option value='Z'>Z</option>
-                      <option value='Cv'>Cv</option>
-                      <option value='phi'>&phi;</option>
-                      <option value='alpha'>&alpha;</option>
-                      <option value='v2'>v2</option>
-                      <option value='Y'>Y</option>
-                      <option value='H'>H</option>
-                      <option value='S'>S</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputYprop' class='col-form-label'>Y:</label>
-                  </div>
-                  <div class='col-auto'>
-                    <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
-                      <option value='T'>T</option>
-                      <option value='rho'>&rho;</option>
-                      <option value='P' selected>P</option>
-                      <option value='U'>U</option>
-                      <option value='A'>A</option>
-                      <option value='G'>G</option>
-                      <option value='Z'>Z</option>
-                      <option value='Cv'>Cv</option>
-                      <option value='phi'>&phi;</option>
-                      <option value='alpha'>&alpha;</option>
-                      <option value='v2'>v2</option>
-                      <option value='Y'>Y</option>
-                      <option value='H'>H</option>
-                      <option value='S'>S</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='plotXDiff' onchange='myUpdatePlot()'>
-                    <label class='form-check-label' for='plotXDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot a single set as the value for phase2 - phase1 instead of separate sets">X diff</label>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='plotYDiff' onchange='myUpdatePlot()'>
-                    <label class='form-check-label' for='plotYDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot a single set as the value for phase2 - phase1 instead of separate sets">Y diff</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class='row'>
-              <div class='col-auto px-4' style='display: none;' id='SLE-Tmax-div'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputTMax' class='col-form-label'>T<sub>max</sub></label>
-                  </div>
-                  <div class='col-auto'>
-                    <input type='text' id='inputTMax' class='form-control' value='2' style='width: 4rem;' onchange='myUpdatePlot()'>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4' style='display: none;' id='SLE-rhomax-div'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputRhoMax' class='col-form-label'>&rho;<sub>max</sub></label>
-                  </div>
-                  <div class='col-auto'>
-                    <input type='text' id='inputRhoMax' class='form-control' value='1.2' style='width: 4rem;' onchange='myUpdatePlot()'>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4' style='display: none;' id='tie-lines-div'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputNTieLines' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="bottom" title="tie lines will be drawn between coexisting points"># tie lines</label>
-                  </div>
-                  <div class='col-auto'>
-                    <input type='text' id='inputNTieLines' class='form-control' value='0' style='width: 3rem;' onchange='myUpdatePlot()'>
-                  </div>
-                </div>
-              </div>
-              <div class='col-auto px-4' style='display: none;' id='plot-cor-div'>
-                <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
-                    <input class='form-check-input' type='checkbox' value='' id='plotCor' onchange='myUpdatePlot()'>
-                    <label class='form-check-label' for='plotCor' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot correlation for coexistence properties">correlation</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoModalLabel">Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
-            <div id='infoModalBody'></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <div class='AJAX-div' data-content='PLOT'></div>
+      <div class='AJAX-div' data-content='INFO-MODAL'></div>
 
   </body>
 </html>

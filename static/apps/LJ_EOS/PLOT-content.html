@@ -1,0 +1,124 @@
+    <div class="modal fade" id="plotModal" tabindex="-1" aria-labelledby="plotModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="plotModalLabel">Plot</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="plotDiv"></div>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputXprop' class='col-form-label'>X:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputXprop' onchange='myUpdatePlot()'>
+                      <option value='T'>T</option>
+                      <option value='rho' selected>&rho;</option>
+                      <option value='P'>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='Cv'>Cv</option>
+                      <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputYprop' class='col-form-label'>Y:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputYprop' onchange='myUpdatePlot()'>
+                      <option value='T'>T</option>
+                      <option value='rho'>&rho;</option>
+                      <option value='P' selected>P</option>
+                      <option value='U'>U</option>
+                      <option value='A'>A</option>
+                      <option value='G'>G</option>
+                      <option value='Z'>Z</option>
+                      <option value='Cv'>Cv</option>
+                      <option value='phi'>&phi;</option>
+                      <option value='alpha'>&alpha;</option>
+                      <option value='v2'>v2</option>
+                      <option value='Y'>Y</option>
+                      <option value='H'>H</option>
+                      <option value='S'>S</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotXDiff' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotXDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot a single set as the value for phase2 - phase1 instead of separate sets">X diff</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotYDiff' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotYDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot a single set as the value for phase2 - phase1 instead of separate sets">Y diff</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='row'>
+              <div class='col-auto px-4' style='display: none;' id='SLE-Tmax-div'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputTMax' class='col-form-label'>T<sub>max</sub></label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputTMax' class='form-control' value='2' style='width: 4rem;' onchange='myUpdatePlot()'>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4' style='display: none;' id='SLE-rhomax-div'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputRhoMax' class='col-form-label'>&rho;<sub>max</sub></label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputRhoMax' class='form-control' value='1.2' style='width: 4rem;' onchange='myUpdatePlot()'>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4' style='display: none;' id='tie-lines-div'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputNTieLines' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="bottom" title="tie lines will be drawn between coexisting points"># tie lines</label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputNTieLines' class='form-control' value='0' style='width: 3rem;' onchange='myUpdatePlot()'>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4' style='display: none;' id='plot-cor-div'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='plotCor' onchange='myUpdatePlot()'>
+                    <label class='form-check-label' for='plotCor' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot correlation for coexistence properties">correlation</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>

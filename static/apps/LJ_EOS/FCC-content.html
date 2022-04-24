@@ -1,0 +1,105 @@
+      <div id='parametersDiv-fcc' class='card mb-4'>
+        <div id='headingParameters-fcc' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-fcc' aria-expanded='true' aria-controls='colapseparametersDiv-fcc'>FCC Parameters</a>
+            <button class='btn btn-xs btn-info' type='button' data-content='FCC-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
+        </div>
+        <div id='collapseparametersDiv-fcc' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-fcc'>
+          <div class='card-body'>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputEOS-fcc' class='col-form-label'>EOS</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputEOS-fcc' onchange='phaseChoiceUpdated("fcc")'>
+                      <option value='Schultz' selected>Schultz</option>
+                      <option value='Adidharma'>Adidharma</option>
+                      <option value='dePablo'>Mastny</option>
+                      <option value='vdh'>van der Hoef</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose which contributions to the free energy are included.">
+                    EOS contributions beyond lattice
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-fcc' onchange='updateHarmContrib("fcc","harm")' checked>
+                    <label class='form-check-label' for='checkHarmonic-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include harmonic contributions from lattice dynamics, giving properties simple temperature depenedence">harmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAnharmonic-fcc' onchange='updateHarmContrib("fcc","anh")' checked>
+                    <label class='form-check-label' for='checkAnharmonic-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include anharmonic contributions from molecular simulations using harmonic mapped averaging">anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkVac-fcc' onchange='updateVacancyCitation()'>
+                    <label class='form-check-label' for='checkVac-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="include contribution due to the existence of lattice vacancies">vacancy</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputN-fcc' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputN-fcc'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='4000'>4000</option>
+                      <option value='2048'>2048</option>
+                      <option value='864'>864</option>
+                      <option value='500'>500</option>
+                      <option value='256'>256</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='rc-fcc' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="use EOS for the given scaled potential truncation (r<sub>c</sub> &rho;<sup>-1/3</sup>); can be corrected by long-range correction (LRC)">cutoff</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputRc-fcc'>
+                      <option value='-1' selected>&infin;</option>
+                      <option value='11'>11</option>
+                      <option value='9'>9</option>
+                      <option value='7.5'>7.5</option>
+                      <option value='6'>6</option>
+                      <option value='5'>5</option>
+                      <option value='4'>4</option>
+                      <option value='3.5'>3.5</option>
+                      <option value='3'>3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkNrcc-fcc'>
+                    <label class='form-check-label' for='checkNrcc-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-fcc'>
+                    <label class='form-check-label' for='checkLRC-fcc' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction for potential truncation.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='fcc-ref-Schultz'>EOS Citations: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018)<span style='display: none;' id='vacancy-citation'>; A. Purohit, A. J. Schultz, S. G. Moustafa, J. R. Errington, D. A. Kofke, "<a href='https://doi.org/10.1080/00268976.2018.1481542'>Free energy and concentration of crystalline vacancies by molecular simulation</a>", Mol. Phys. 116, 3027-3041 (2018)</span>.</div>
+                  <div class='citation' id='fcc-ref-Adidharma'>EOS Citation: H. Adidharma and S. P. Tan, "<a href='https://doi.org/10.1063/1.4955061'>Accurate Monte Carlo simulations on FCC and HCP Lennard-Jones solids at very low temperatures and high reduced densities up to 1.30</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>145</span>, 014503 (2016).</div>
+                  <div class='citation' id='fcc-ref-dePablo'>EOS Citation: E. A. Mastny and J. J. de Pablo, "<a href='https://doi.org/10.1063/1.2753149'>Melting line of the Lennard-Jones system, infinite size, and full potential</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>127</span>, 104504 (2007).</div>
+                  <div class='citation' id='fcc-ref-vdh'>EOS Citation: M. A. van der Hoef, "<a href='https://doi.org/10.1063/1.1314342'>Free energy of the Lennard-Jones solid</a>", <span class='pubName'>J. Chem.  Phys.</span> <span class='volume'>113</span>, 8142 (2000).</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

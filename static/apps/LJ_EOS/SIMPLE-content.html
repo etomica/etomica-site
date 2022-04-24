@@ -1,0 +1,100 @@
+    <script type='text/python'>
+      from browser import document, window, timer
+      window.removeBrythonSpinner()
+      from browser.widgets.dialog import InfoDialog
+      from LJ_EOS import getEOS
+      from EOS_util import optsForPhase
+
+      myInterval = None
+      success = False
+      ix = 0
+
+      def doOnePoint(stuff):
+        global myInterval, ix, success
+        if not success:
+          window.alert("Unexpected trouble while stepping through x")
+          stopUpdate()
+          return
+        success = False
+        doc,eos,myGimmeRho = stuff
+        try:
+          numX = int(doc["inputXnum"].value)
+        except ValueError:
+          window.alert("Must provide a valid # of x points")
+          stopUpdate()
+          return
+        x = ix / numX
+        ix = ix + 1
+        Tstr = doc['inputT'].value
+        Pstr = doc['inputP'].value
+        rhostr = doc['inputRho'].value
+        T = eval(Tstr)
+        rho = myGimmeRho(T, rhostr, Pstr, x, eos, doc)
+        props = eos.eval(T,rho)
+        Bvalues = None
+        if window.phaseName == "vapor" and type(eos).__name__ == "VEOS":
+          Bvalues = eos.B
+        window.addParametricRow(T, rho, props, Bvalues)
+        success = True
+        if ix > numX:
+          stopUpdate()
+
+      def stopUpdate():
+        global myInterval
+        timer.clear_interval(myInterval)
+        document["btnUpdate"].textContent = "Update"
+        myInterval = None
+        success = False
+        print("stopped")
+
+      def update(ev):
+        global myInterval, ix, success
+        if not myInterval == None:
+          stopUpdate()
+          return
+        window.clearAllSimple()
+
+        B3callback = None
+        if 'grabB3' in window:
+          B3callback = window.grabB3
+
+        opts = optsForPhase(window.phaseName, document, B3callback)
+        if isinstance(opts,str):
+          window.alert(opts)
+          return
+        eos = getEOS(window.phaseName, opts)
+
+        useX = document["checkX"].checked
+        if useX:
+          document["btnUpdate"].textContent = "Stop"
+          ix = 0
+          try:
+            numX = int(document["inputXnum"].value)
+          except ValueError:
+            window.alert("Must provide a valid # of x points")
+            return
+          if numX < 1:
+            window.alert("Need at least 1 x value")
+            return
+          success = True
+          myInterval = timer.set_interval(doOnePoint, 0, [document,eos,window.thisGimmeRho])
+          return
+
+        Tstr = document['inputT'].value
+        Pstr = document['inputP'].value
+        rhostr = document['inputRho'].value
+
+        try:
+          T = float(Tstr)
+        except ValueError:
+          window.alert("Must provide a valid temperature")
+          return
+        rho = window.thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
+        props = eos.eval(T,rho)
+        Bvalues = None
+        if window.phaseName == "vapor" and type(eos).__name__ == "VEOS":
+          Bvalues = eos.B
+        window.showResults(T, rho, props, Bvalues)
+
+      document["btnUpdate"].bind("click", update)
+    </script>

@@ -1,0 +1,101 @@
+      <div id='parametersDiv-hcp' class='card mb-4'>
+        <div id='headingParameters-hcp' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseparametersDiv-hcp' aria-expanded='true' aria-controls='colapseparametersDiv-hcp'>HCP Parameters</a>
+            <button class='btn btn-xs btn-info' type='button' data-content='HCP-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
+        </div>
+        <div id='collapseparametersDiv-hcp' class='collapse show' role='tabpanel' aria-labelledby='headingParameters-hcp'>
+          <div class='card-body'>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputEOS-hcp' class='col-form-label'>EOS</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputEOS-hcp' onchange='phaseChoiceUpdated("hcp")'>
+                      <option value='Schultz' selected>Schultz</option>
+                      <option value='Adidharma'>Adidharma</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose which contributions to the free energy are included.">
+                    EOS contributions beyond lattice
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkHarmonic-hcp' onchange='updateHarmContrib("hcp","harm")' checked>
+                    <label class='form-check-label' for='checkHarmonic-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="include harmonic contributions from lattice dynamics, giving properties simple temperature depenedence">harmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAnharmonic-hcp' onchange='updateHarmContrib("hcp","anh")' checked>
+                    <label class='form-check-label' for='checkAnharmonic-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="include anharmonic contributions from molecular simulations using harmonic mapped averaging">anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkAlpha-hcp' checked>
+                    <label class='form-check-label' for='checkAlpha-hcp' data-bs-html='true' data-bs-toggle="tooltip" data-bs-placement="right" title="allow c/a to deviate from (8/3)<sup>1/2</sup>; alpha = (c/a)(8/3)<sup>-1/2</sup>">allow &alpha;&ne;1</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputN-hcp' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" title="# of atoms used for molecular simulations and lattice dynamics"># of atoms</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputN-hcp'>
+                      <option value='0' selected>&infin;</option>
+                      <option value='4096'>4096</option>
+                      <option value='1728'>1728</option>
+                      <option value='1200'>1200</option>
+                      <option value='1000'>1000</option>
+                      <option value='512'>512</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='rc-hcp' class='col-form-label' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="use EOS for the given scaled potential truncation (r<sub>c</sub> &rho;<sup>-1/3</sup>); can be corrected by long-range correction (LRC)">cutoff</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='inputRc-hcp'>
+                      <option value='-1' selected>&infin;</option>
+                      <option value='11'>11</option>
+                      <option value='9'>9</option>
+                      <option value='7.5'>7.5</option>
+                      <option value='6'>6</option>
+                      <option value='5'>5</option>
+                      <option value='4'>4</option>
+                      <option value='3.5'>3.5</option>
+                      <option value='3'>3</option>
+                    </select>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkNrcc-hcp'>
+                    <label class='form-check-label' for='checkNrcc-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Lattice and harmonic contributions will be taken from untruncated estimates">apply only to anharmonic</label>
+                  </div>
+                </div>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto' class=form-check'>
+                    <input class='form-check-input' type='checkbox' value='' id='checkLRC-hcp'>
+                    <label class='form-check-label' for='checkLRC-hcp' data-bs-toggle="tooltip" data-bs-placement="right" title="Include standard long-range correction.  This should not be used in conjunction with 'apply only to anharmonic' as the standard LRC primarily corrects the lattice energy">include LRC</label>
+                  </div>
+                </div>
+              </div>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='citation' id='hcp-ref-Schultz'>EOS Citation: A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1063/1.5053714'>Comprehensive high-precision high-accuracy equation of state and coexistence properties for classical Lennard-Jones crystals and low-temperature fluid phases</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>149</span>, 204508 (2018).</div>
+                  <div class='citation' id='hcp-ref-Adidharma'>EOS Citation: H. Adidharma and S. P. Tan, "<a href='https://doi.org/10.1063/1.4955061'>Accurate Monte Carlo simulations on FCC and HCP Lennard-Jones solids at very low temperatures and high reduced densities up to 1.30</a>", <span class='pubName'>J. Chem. Phys.</span> <span class='volume'>145</span>, 014503 (2016).</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
