@@ -7,11 +7,14 @@ window.addEventListener("fullload", function() {
     var h1 = document.getElementsByTagName("h1")[0];
     h1.parentNode.insertBefore(div, h1.nextSibling);
     brythonSpinner = div;
+    window.bstart = performance.now();
     brython({cache: true});
   }
 });
 
 function removeBrythonSpinner() {
+  var bstop = performance.now();
+  console.log("brython load time: "+(bstop-window.bstart)/1000);
   brythonSpinner.parentNode.removeChild(brythonSpinner);
 }
 
