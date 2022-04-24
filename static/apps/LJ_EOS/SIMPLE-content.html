@@ -28,8 +28,16 @@
         Tstr = doc['inputT'].value
         Pstr = doc['inputP'].value
         rhostr = doc['inputRho'].value
-        T = eval(Tstr)
+        try:
+          T = eval(Tstr)
+        except (ValueError,SyntaxError) as err:
+          window.alert("Trouble parsing T expression: {0}".format(err))
+          stopUpdate()
+          return
         rho = myGimmeRho(T, rhostr, Pstr, x, eos, doc)
+        if math.isnan(rho):
+          stopUpdate()
+          return
         props = eos.eval(T,rho)
         Bvalues = None
         if window.phaseName == "vapor" and type(eos).__name__ == "VEOS":
@@ -90,6 +98,9 @@
           window.alert("Must provide a valid temperature")
           return
         rho = window.thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
+        if math.isnan(rho):
+          stopUpdate()
+          return
         props = eos.eval(T,rho)
         Bvalues = None
         if window.phaseName == "vapor" and type(eos).__name__ == "VEOS":

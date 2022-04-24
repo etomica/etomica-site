@@ -35,13 +35,20 @@ function myUpdatePlot() {
     <script type='text/python'>
       def gimmeRhoFCC(T, rhostr, Pstr, x, eos, doc):
         if doc["checkP"].checked:
-          P = eval(Pstr)
+          try:
+            P = eval(Pstr)
+          except (ValueError,SyntaxError) as err:
+            window.alert("Trouble parsing P expression: {0}".format(err))
+            return float("nan")
           rho = eos.rhoForProps(T, {'P': P})
-        elif doc["checkNrho"].checked:
-          rho = eval(rhostr)
-          rho = eos.latRhoForNRho(T, rho)
         else:
-          rho = eval(rhostr)
+          try:
+            rho = eval(rhostr)
+          except (ValueError,SyntaxError) as err:
+            window.alert("Trouble parsing rho expression: {0}".format(err))
+            return float("nan")
+          if doc["checkNrho"].checked:
+            rho = eos.latRhoForNRho(T, rho)
         return rho
 
       from browser import window
