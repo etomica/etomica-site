@@ -35,6 +35,11 @@ function clearAllRows() {
   allData = [];
   allCorrelations = {};
   tableCorrelationData = [];
+  if (currentDataSaved>-1) {
+    document.getElementById("savedDataTableCell"+currentDataSaved).className = "";
+    document.getElementById("inputSaveName").value = "";
+    currentDataSaved = -1;
+  }
 }
 var running = false;
 function updateSubtractCheckboxForT() {

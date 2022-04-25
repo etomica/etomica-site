@@ -627,6 +627,7 @@ function clearAllSimple() {
   collapseParameters();
   if (currentDataSaved>-1) {
     document.getElementById("savedDataTableCell"+currentDataSaved).className = "";
+    document.getElementById("inputSaveName").value = "";
     currentDataSaved = -1;
   }
 }
@@ -832,7 +833,7 @@ function rebuildSavedStuff() {
     if (icol==0) {
       row = makeElement("TR", savedTable);
     }
-    var attr = {id: "savedDataTableCell"+i};
+    var attr = {id: "savedDataTableCell"+i, width: "25%"};
     if (i==currentDataSaved) attr.className = "table-primary";
     var cell = makeElement("TD", row, attr);
     makeText(allSavedDataNames[i]+" ", cell);
@@ -853,12 +854,12 @@ function rebuildSavedStuff() {
 function deleteSavedData(e) {
   var btn = e.target;
   var idx = Number(btn.getAttribute("data-savedIDX"));
-  // we won't actually delete (that would be hard!)  
   allSavedData[idx] = null;
-  rebuildSavedStuff();
   if (idx == currentDataSaved) {
     document.getElementById("inputSaveName").value = "";
+    currentDataSaved = -1;
   }
+  rebuildSavedStuff();
 }
 
 function saveData() {
