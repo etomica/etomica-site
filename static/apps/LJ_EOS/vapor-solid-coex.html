@@ -59,7 +59,7 @@ var tableCor = "Schultz";
 function makeTableData(i) {
   var savedIdx = document.getElementById("savedDataSel").value;
   var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
-  if (i>=myAllData[i].length) return null;
+  if (i>=myAllData.length) return null;
   var iData = myAllData[i];
   var G = isNaN(iData.props1.G) ? iData.props2.G : iData.props1.G;
   var v = [iData.T, iData.props1['rho'], iData.props2['rho'], iData.props1['P'], G];

@@ -63,7 +63,7 @@ function makeTableData(i) {
   console.log("savedIdx "+savedIdx);
   var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
   console.log(myAllData);
-  if (i>=myAllData[i].length) return null;
+  if (i>=myAllData.length) return null;
   var iData = myAllData[i];
   
   var v = [iData.T, iData.props1['rho'], iData.props2['rho'], iData.props1['P'], iData.props1['G']];

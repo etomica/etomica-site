@@ -47,7 +47,7 @@ var lastRow = null;
 function makeTableData(i) {
   var savedIdx = document.getElementById("savedDataSel").value;
   var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
-  if (i>=myAllData[i].length) return null;
+  if (i>=myAllData.length) return null;
   var iData = myAllData[i];
   var v = [iData.T, iData.props1['rho'], iData.props2['rho'], iData.props1['P'], iData.props1['G']];
   var a = 'alpha' in iData.props2 ? iData.props2.alpha : 1;
