@@ -608,6 +608,10 @@ function clearAllSimple() {
   empty(tbody);
   allData = [];
   collapseParameters();
+  if (currentDataSaved>-1) {
+    document.getElementById("savedDataTableCell"+currentDataSaved).className = "";
+    currentDataSaved = -1;
+  }
 }
 
 window.addEventListener("fullload", function() {
@@ -786,6 +790,59 @@ window.addEventListener("load", function() {
 });
 
 var allSavedData = [], allSavedDataNames = [], currentDataSaved = -1;
+
+function rebuildSavedStuff() {
+  var savedTable = document.getElementById("savedDataTable");
+  var plotDropdown = document.getElementById("plotSavedDataList");
+  var savedSel = document.getElementById("savedDataSel");
+  empty(savedTable);
+  empty(plotDropdown);
+  empty(savedSel);
+  makeElement("OPTION", savedSel, {value: "-1", textContent: "(current)"});
+  var icol = 0, row = null;
+  for (var i=0; i<allSavedData.length; i++) {
+    if (allSavedData[i] == null) continue;
+
+    var opt = makeElement("OPTION", null, {value: i, textContent: allSavedDataNames[i]});
+    if (savedSel.childNodes.length > 1) {
+      savedSel.insertBefore(opt, savedSel.childNodes[1]);
+    }
+    else {
+      savedSel.appendChild(opt);
+    }
+
+    if (icol==0) {
+      row = makeElement("TR", savedTable);
+    }
+    var attr = {id: "savedDataTableCell"+i};
+    if (i==currentDataSaved) attr.className = "table-primary";
+    var cell = makeElement("TD", row, attr);
+    makeText(allSavedDataNames[i]+" ", cell);
+    var savedDelBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-danger", "data-savedIDX": i});
+    savedDelBtn.addEventListener("click", deleteSavedData);
+    makeElement("i", savedDelBtn, {className: "fa-solid fa-trash-can"});
+    icol++;
+    if (icol==4) icol=0;
+
+    var li = makeElement("LI", plotDropdown);
+    var label = makeElement("LABEL", li, {className: "dropdown-item"});
+    var savedCB = makeElement("INPUT", label, {type: "checkbox", id: 'plotSavedData'+i, style: {marginRight: "1rem"}});
+    makeText(allSavedDataNames[i], label);
+    savedCB.addEventListener("change", myUpdatePlot);
+  }
+}
+
+function deleteSavedData(e) {
+  var btn = e.target;
+  var idx = Number(btn.getAttribute("data-savedIDX"));
+  // we won't actually delete (that would be hard!)  
+  allSavedData[idx] = null;
+  rebuildSavedStuff();
+  if (idx == currentDataSaved) {
+    document.getElementById("inputSaveName").value = "";
+  }
+}
+
 function saveData() {
   var name = document.getElementById("inputSaveName").value;
   if (name.length == 0) {
@@ -794,27 +851,17 @@ function saveData() {
   }
   if (currentDataSaved>=0) {
     allSavedDataNames[currentDataSaved] = name;
-    return;
-  }
-  allSavedData.push(allData);
-  currentDataSaved = allSavedData.length-1;
-  allSavedDataNames.push(name);
-  var savedSel = document.getElementById("savedDataSel");
-  var opt = makeElement("OPTION", null, {value: currentDataSaved, textContent: name});
-  if (savedSel.childNodes.length > 1) {
-    savedSel.insertBefore(opt, savedSel.childNodes[1]);
   }
   else {
-    savedSel.appendChild(opt);
-  }
-  savedSel.style.display = "block";
+    allSavedData.push(allData);
+    currentDataSaved = allSavedData.length-1;
+    allSavedDataNames.push(name);
+    var savedSel = document.getElementById("savedDataSel");
+    savedSel.style.display = "block";
 
-  var plotDropdown = document.getElementById("plotSavedDataList");
-  plotDropdown.parentNode.parentNode.parentNode.style.display = "block";
-  var li = makeElement("LI", plotDropdown);
-  var label = makeElement("LABEL", li, {className: "dropdown-item"});
-  var savedCB = makeElement("INPUT", label, {type: "checkbox", id: 'plotSavedData'+currentDataSaved, style: {marginRight: "1rem"}});
-  makeText(name, label);
-  savedCB.addEventListener("change", myUpdatePlot);
+    var plotDropdown = document.getElementById("plotSavedDataList");
+    plotDropdown.parentNode.parentNode.parentNode.style.display = "block";
+  }
+  rebuildSavedStuff();
 }
 
