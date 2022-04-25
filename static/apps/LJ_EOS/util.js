@@ -173,6 +173,23 @@ function updatePlotCoex(phase1, phase2, rhoMax, Tmax, xsets, ysets) {
     allDataCor.push(allCorrelations.Schultz);
     allDataNames.push("Correlation");
   }
+  for (var j=0; j<allSavedData.length; j++) {
+    if (allSavedData[j] == null) continue;
+    var cb = document.getElementById("plotSavedData"+j);
+    if (!cb.checked) continue;
+    if (xprop!="T" && !(xprop in allSavedData[j][0].props1)) {
+      alert(xprop+" not available in "+allSavedDataNames[j]);
+      cb.checked = false;
+      continue;
+    }
+    if (yprop!="T" && !(yprop in allSavedData[j][0].props1)) {
+      alert(yprop+" not available in "+allSavedDataNames[j]);
+      cb.checked = false;
+      continue;
+    }
+    allDataCor.push(allSavedData[j]);
+    allDataNames.push(allSavedDataNames[j]);
+  }
   var allColors = [["blue","red"],["cyan","purple"],["green","magenta"]];
   for (var q=0; q<allDataCor.length; q++) {
     var thisAllData = allDataCor[q];
@@ -283,7 +300,7 @@ function updatePlot() {
     ydata.push(allData[i][yprop]);
   }
   var sets = [{ x: xdata, y: ydata }];
-  for (var j=0; ; j++) {
+  for (var j=0; j<allSavedData.length; j++) {
     var cb = document.getElementById("plotSavedData"+j);
     if (!cb) break;
     if (!cb.checked) continue;
@@ -722,6 +739,7 @@ function updateCutoff(phase) {
 function makeTableDataParametric(i) {
   var savedIdx = document.getElementById("savedDataSel").value;
   var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
+  if (i >= myAllData.length) return null;
   var thisData = myAllData[i];
   var cols = document.getElementById("parametricTH").childNodes;
   var v = [];
@@ -741,10 +759,9 @@ function reconstructTable(tableID, myMakeTableData) {
   empty(tbody);
   var cb = document.getElementById("tabulateCorDiff");
   var doSubCor = cb && cb.checked;
-  var savedIdx = document.getElementById("savedDataSel").value;
-  var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
-  for (var i=0; i<allData.length; i++) {
+  for (var i=0; ; i++) {
     v = myMakeTableData(i);
+    if (!v) break;
     var row = makeElement("TR", tbody);
     for (var j=0; j<v.length; j++) {
       makeElement("TD", row, {textContent: v[j]});
@@ -754,6 +771,7 @@ function reconstructTable(tableID, myMakeTableData) {
 
 function makeTableRow(i) {
   var v = makeTableData(i);
+  if (!v) return null;
   var row = makeElement("TR");
   for (var i=0; i<v.length; i++) {
     makeElement("TD", row, {textContent: v[i]});

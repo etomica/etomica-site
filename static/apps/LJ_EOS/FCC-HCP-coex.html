@@ -31,13 +31,19 @@ document.title = "FCC-HCP Phase Coexistence for LJ";
 function clearAllRows() {
   var tbody = document.getElementById("coex-table");
   empty(tbody);
+  allData = [];
+  allCorrelations = {};
+  tableCorrelationData = [];
 }
   
 var allData = [], allCorrelations = {}, tableCorrelationData = [];
 var tableCor = "Schultz";
 var lastRow = null;
 function makeTableData(i) {
-  var iData = allData[i];
+  var savedIdx = document.getElementById("savedDataSel").value;
+  var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
+  if (i>=myAllData[i].length) return null;
+  var iData = myAllData[i];
   var v = [iData.T, iData.props1['rho'], iData.props2['rho'], iData.props1['P'], iData.props1['G']];
   var a = 'alpha' in iData.props2 ? iData.props2.alpha : 1;
   var v = [iData.T, iData.props1['rho'], iData.props2['rho'], iData.props1['P'], iData.props1['G'], a];
@@ -57,7 +63,7 @@ function addRow(T, props1, props2, correlations) {
     lastRow = null;
   }
   var tbody = document.getElementById("coex-table");
-  props2.v2 = 1/(props1.rho*props1.rho);
+  props1.v2 = 1/(props1.rho*props1.rho);
   props2.v2 = 1/(props2.rho*props2.rho);
   props1.Y = (T/4)*Math.pow(props1.rho,-4);
   props2.Y = (T/4)*Math.pow(props2.rho,-4);
@@ -376,8 +382,10 @@ function sortOutput() {
     <div id='resultsDiv' class='card'>
       <div id='headingResults' class='card-header' role='tab'>
         <h2 class='h5 mb-0' style='float: left'>Results <span id='lowPbranch' style='display: none;'>(finding low-P branch)</span></h2>
-        <button id='copyBtn' class='btn btn-info btn-sm' style='float: right' onclick='copyActiveTable()'>Copy</button>
-        <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
+        <button id='copyBtn' class='btn btn-info btn-sm float-end' onclick='copyActiveTable()'>Copy</button>
+        <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem;' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
+        <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem;' id='saveBtn' data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
+        <select id='savedDataSel' class='form-select float-end' style='width: auto; display: none; margin-right: 1rem;' onclick='reconstructTable("coex-table")'><option value='-1'>(current)</option></select>
         <div class='float-end form-check' style='margin-right: 1rem;' id='subtractCorCheckboxDiv'>
           <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable("coex-table")'>
           <label class='form-check-label' for='tabulateCorDiff' data-bs-html='true' data-bs-toggle="tooltip" data-bs-placement="right" title="Replaces data in table (except for &rho;<sub>1</sub>) with differences from correlation (based on Schultz predictions) for coexistence properties">subtract correlation</label>
@@ -393,8 +401,9 @@ function sortOutput() {
     </div>
   </div>
 
-      <div class='AJAX-div' data-content='PLOT'></div>
-      <div class='AJAX-div' data-content='INFO-MODAL'></div>
+  <div class='AJAX-div' data-content='SAVE'></div>
+  <div class='AJAX-div' data-content='PLOT'></div>
+  <div class='AJAX-div' data-content='INFO-MODAL'></div>
 
   </body>
 </html>
