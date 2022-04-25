@@ -31,7 +31,7 @@
         rhostr = doc['inputRho'].value
         try:
           T = eval(Tstr)
-        except (ValueError,SyntaxError) as err:
+        except Exception as err:
           window.alert("Trouble parsing T expression: {0}".format(err))
           stopUpdate()
           return

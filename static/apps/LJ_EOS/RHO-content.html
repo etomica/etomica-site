@@ -5,14 +5,14 @@
         if doc["checkP"].checked:
           try:
             P = eval(Pstr)
-          except (ValueError,SyntaxError) as err:
+          except Exception as err:
             window.alert("Trouble parsing P expression: {0}".format(err))
             return float("nan")
           return eos.rhoForProps(T, {'P': P})
 
         try:
           return eval(rhostr)
-        except (ValueError,SyntaxError) as err:
+        except Exception as err:
           window.alert("Trouble parsing rho expression: {0}".format(err))
           return float("nan")
 

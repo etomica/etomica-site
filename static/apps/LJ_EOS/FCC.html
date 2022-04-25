@@ -37,14 +37,14 @@ function myUpdatePlot() {
         if doc["checkP"].checked:
           try:
             P = eval(Pstr)
-          except (ValueError,SyntaxError) as err:
+          except Exception as err:
             window.alert("Trouble parsing P expression: {0}".format(err))
             return float("nan")
           rho = eos.rhoForProps(T, {'P': P})
         else:
           try:
             rho = eval(rhostr)
-          except (ValueError,SyntaxError) as err:
+          except Exception as err:
             window.alert("Trouble parsing rho expression: {0}".format(err))
             return float("nan")
           if doc["checkNrho"].checked:
