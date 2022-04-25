@@ -282,8 +282,31 @@ function updatePlot() {
     xdata.push(allData[i][xprop]);
     ydata.push(allData[i][yprop]);
   }
+  var sets = [{ x: xdata, y: ydata }];
+  for (var j=0; ; j++) {
+    var cb = document.getElementById("plotSavedData"+j);
+    if (!cb) break;
+    if (!cb.checked) continue;
+    sets[0].name = "current";
+    if (!(xprop in allSavedData[j][0])) {
+      alert(xprop+" not available in "+allSavedDataNames[j]);
+      cb.checked = false;
+      continue;
+    }
+    if (!(yprop in allSavedData[j][0])) {
+      alert(yprop+" not available in "+allSavedDataNames[j]);
+      cb.checked = false;
+      continue;
+    }
+    xdata = []; ydata = [];
+    for (var i=0; i<allSavedData[j].length; i++) {
+      xdata.push(allSavedData[j][i][xprop]);
+      ydata.push(allSavedData[j][i][yprop]);
+    }
+    sets.push({x: xdata, y: ydata, name: allSavedDataNames[j]});
+  }
   Plotly.newPlot(plotDiv,
-                 [{ x: xdata, y: ydata }],
+                 sets,
                  { autosize: true,
                    xaxis: {title: xprop, exponentformat:'power'},
                    yaxis: {title: yprop, exponentformat:'power'},
@@ -692,12 +715,32 @@ function updateCutoff(phase) {
   }
 }
 
-function reconstructTable() {
-  var tbody = document.getElementById("coex-table");
+function makeTableDataParametric(i) {
+  var savedIdx = document.getElementById("savedDataSel").value;
+  var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
+  var thisData = myAllData[i];
+  var cols = document.getElementById("parametricTH").childNodes;
+  var v = [];
+  for (var i=0; i<cols.length; i++) {
+    var p = cols[i].id.replace("_col","");
+    if (!(p in thisData)) {
+      continue;
+    }
+    v.push(thisData[p]);
+  }
+  return v;
+}
+
+function reconstructTable(tableID, myMakeTableData) {
+  if (typeof myMakeTableData == "undefined") myMakeTableData = makeTableData;
+  var tbody = document.getElementById(tableID);
   empty(tbody);
-  var doSubCor = document.getElementById("tabulateCorDiff").checked;
+  var cb = document.getElementById("tabulateCorDiff");
+  var doSubCor = cb && cb.checked;
+  var savedIdx = document.getElementById("savedDataSel").value;
+  var myAllData = savedIdx == -1 ? allData : allSavedData[savedIdx];
   for (var i=0; i<allData.length; i++) {
-    v = makeTableData(i);
+    v = myMakeTableData(i);
     var row = makeElement("TR", tbody);
     for (var j=0; j<v.length; j++) {
       makeElement("TD", row, {textContent: v[j]});
@@ -721,7 +764,6 @@ window.addEventListener("load", function() {
     window.dispatchEvent(event);
     return;
   }
-  console.log(ajaxDivs);
   var nDivsDone = 0;
   for (var i=0; i<ajaxDivs.length; i++) {
     let name = ajaxDivs[i].getAttribute("data-content");
@@ -742,3 +784,37 @@ window.addEventListener("load", function() {
     xmlHttp.send(null);
   }
 });
+
+var allSavedData = [], allSavedDataNames = [], currentDataSaved = -1;
+function saveData() {
+  var name = document.getElementById("inputSaveName").value;
+  if (name.length == 0) {
+    alert("please provide a name before saving");
+    return;
+  }
+  if (currentDataSaved>=0) {
+    allSavedDataNames[currentDataSaved] = name;
+    return;
+  }
+  allSavedData.push(allData);
+  currentDataSaved = allSavedData.length-1;
+  allSavedDataNames.push(name);
+  var savedSel = document.getElementById("savedDataSel");
+  var opt = makeElement("OPTION", null, {value: currentDataSaved, textContent: name});
+  if (savedSel.childNodes.length > 1) {
+    savedSel.insertBefore(opt, savedSel.childNodes[1]);
+  }
+  else {
+    savedSel.appendChild(opt);
+  }
+  savedSel.style.display = "block";
+
+  var plotDropdown = document.getElementById("plotSavedDataList");
+  plotDropdown.parentNode.parentNode.parentNode.style.display = "block";
+  var li = makeElement("LI", plotDropdown);
+  var label = makeElement("LABEL", li, {className: "dropdown-item"});
+  var savedCB = makeElement("INPUT", label, {type: "checkbox", id: 'plotSavedData'+currentDataSaved, style: {marginRight: "1rem"}});
+  makeText(name, label);
+  savedCB.addEventListener("change", myUpdatePlot);
+}
+

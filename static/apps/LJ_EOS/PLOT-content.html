@@ -74,6 +74,16 @@
                   </div>
                 </div>
               </div>
+              <div class='col-auto px-4' style='display: none'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="plotSavedDataBtn" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                      Saved data
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="plotSavedDataBtn" id='plotSavedDataList'></ul>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class='row'>
               <div class='col-auto px-4' style='display: none;' id='SLE-Tmax-div'>
@@ -108,7 +118,7 @@
               </div>
               <div class='col-auto px-4' style='display: none;' id='plot-cor-div'>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' class=form-check'>
+                  <div class='col-auto' class='form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='plotCor' onchange='myUpdatePlot()'>
                     <label class='form-check-label' for='plotCor' data-bs-toggle="tooltip" data-bs-placement="right" title="Plot correlation for coexistence properties">correlation</label>
                   </div>

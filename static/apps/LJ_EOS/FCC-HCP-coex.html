@@ -379,7 +379,7 @@ function sortOutput() {
         <button id='copyBtn' class='btn btn-info btn-sm' style='float: right' onclick='copyActiveTable()'>Copy</button>
         <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
         <div class='float-end form-check' style='margin-right: 1rem;' id='subtractCorCheckboxDiv'>
-          <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable()'>
+          <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable("coex-table")'>
           <label class='form-check-label' for='tabulateCorDiff' data-bs-html='true' data-bs-toggle="tooltip" data-bs-placement="right" title="Replaces data in table (except for &rho;<sub>1</sub>) with differences from correlation (based on Schultz predictions) for coexistence properties">subtract correlation</label>
         </div>
     </div>

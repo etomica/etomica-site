@@ -1,0 +1,33 @@
+    <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="saveModalLabel">Saved Data</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class='table'><tbody id='savedDataTable'></tbody></tbody></table>
+
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputSaveName' class='col-form-label'>Name:</label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' class='form-control' id='inputSaveName' placeholder='(current)'>
+                  </div>
+                  <div class='col-auto'>
+                    <button type='button' class='btn btn-success' onclick='saveData()'>Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
