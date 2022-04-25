@@ -25,7 +25,6 @@ window.addEventListener("fullload", phasesUpdated);
     <script type='text/python'>
       from browser import document, window, timer
       window.removeBrythonSpinner()
-      from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
 
@@ -33,6 +32,7 @@ window.addEventListener("fullload", phasesUpdated);
       eos1 = eos2 = eos3 = None
       T = Tstep = Tmin = Tmax = lastDT = stage = 0
       props1a = props2a = props2b = props3b = None
+      success = False
 
       def pushData():
         global T, props1a, props2a, props2b, props3b
@@ -51,11 +51,18 @@ window.addEventListener("fullload", phasesUpdated);
         document['Ggap'].textContent = props2b['G'] - props2a['G']
 
       def doOneTriplePoint():
-        global stage, eos1, eos2, eos3, props1a, props2a, props2b, props3b, lastDT, Tstep, Tmin, Tmax, T
+        global stage, eos1, eos2, eos3, props1a, props2a, props2b, props3b, lastDT, Tstep, Tmin, Tmax, T, success
+        if not success:
+          success = True
+          window.alert("Unknown trouble.  Stopping")
+          stopUpdate()
+          return
+        success = False
         if stage == 1:
           props1a, props2a = findCoexistence(T, eos1, eos2, props1a['P'], False)
           stage = 2
           # we'll come back and do 2-3 and then analyze
+          success = True
           return
         props2b, props3b = findCoexistence(T, eos2, eos3, props1a['P'], False)
         stage = 1
@@ -85,13 +92,16 @@ window.addEventListener("fullload", phasesUpdated);
           # at least one coex failed.  back off T and take smaller steps
           if lastDT == 0:
             # we didn't even start stepping yet.  probably bad guess
-            InfoDialog("Trouble", f"Could not find triple point")
+            window.alert("Could not find triple point")
+            stopUpdate()
+            success = True
             return
      
           T -= lastDT
           Tstep *= 0.1
           lastDT *= 0.1
           T += lastDT
+        success = True
 
       def stopUpdate():
         global myInterval
@@ -101,7 +111,7 @@ window.addEventListener("fullload", phasesUpdated);
         print("stopped")
 
       def update(ev):
-        global myInterval, stage, eos1, eos2, eos3, props1a, props2a, props2b, props3b, lastDT, Tstep, Tmin, Tmax, T
+        global myInterval, stage, eos1, eos2, eos3, props1a, props2a, props2b, props3b, lastDT, Tstep, Tmin, Tmax, T, success
         if not myInterval == None:
           stopUpdate()
           return
@@ -116,7 +126,7 @@ window.addEventListener("fullload", phasesUpdated);
         eos1 = getEOS(phase1, opts)
         phase2 = document['phase2'].value
         if phase1 == phase2:
-          InfoDialog("Trouble", f"The three phases must be different")
+          window.alert("The three phases must be different")
           return
         opts = optsForPhase(phase2, document, window.grabB3)
         if isinstance(opts,str):
@@ -125,7 +135,7 @@ window.addEventListener("fullload", phasesUpdated);
         eos2 = getEOS(phase2, opts)
         phase3 = document['phase3'].value
         if phase1 == phase3 or phase2 == phase3:
-          InfoDialog("Trouble", f"The three phases must be different")
+          window.alert("The three phases must be different")
           return
         opts = optsForPhase(phase3, document, window.grabB3)
         if isinstance(opts,str):
@@ -133,7 +143,11 @@ window.addEventListener("fullload", phasesUpdated);
           return
         eos3 = getEOS(phase3, opts)
         Tguess = document['inputT'].value
-        Tguess = float(Tguess)
+        try:
+          Tguess = float(Tguess)
+        except ValueError:
+          window.alert("Must provide a valid temperature guess")
+          return
         T=Tguess
         props1a = {'P': 0}
         Tmin=0
@@ -141,101 +155,102 @@ window.addEventListener("fullload", phasesUpdated);
         Tstep=0.001;
         lastDT=0
         stage = 1
+        success = True
         myInterval = timer.set_interval(doOneTriplePoint, 0)
 
       document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Triple Point for LJ</h1>
-    <div class="align-items-center" id="emscripten-status-div">
-      <div style='margin-right: 1rem;' class='spinner-border ms-auto' role="status" aria-hidden="true"></div><span id='emscripten-status-text'>emscripten loading...</span>
-    </div>
+      <div class="align-items-center" id="emscripten-status-div">
+        <div style='margin-right: 1rem;' class='spinner-border ms-auto' role="status" aria-hidden="true"></div><span id='emscripten-status-text'>emscripten loading...</span>
+      </div>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
           <h2 class='h5 mb-0'>Phase Choices</a></h2>
-      </div>
-      <div class='show' aria-labelledby='headingParameters'>
-        <div class='card-body'>
-          <div class='row'>
-            <div class='col-auto px-4'>
-              <div class='row g-3 py-1 align-items-center'>
-                <div class='col-auto'>
-                  <label for='inputT' class='col-form-label'>T</label>
+        </div>
+        <div class='show' aria-labelledby='headingParameters'>
+          <div class='card-body'>
+            <div class='row'>
+              <div class='col-auto px-4'>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='inputT' class='col-form-label'>T</label>
+                  </div>
+                  <div class='col-auto'>
+                    <input type='text' id='inputT' class='form-control' placeholder='estimate'>
+                  </div>
                 </div>
-                <div class='col-auto'>
-                  <input type='text' id='inputT' class='form-control' placeholder='estimate'>
+                <div class='row g-3 py-1 align-items-center' style='margin-top: 1rem;'>
+                  Phases must be listed in order of increasing density
                 </div>
-              </div>
-              <div class='row g-3 py-1 align-items-center' style='margin-top: 1rem;'>
-                Phases must be listed in order of increasing density
-              </div>
-              <div class='row g-3 py-1 align-items-center'>
-                <div class='col-auto'>
-                  <label for='phase1' class='col-form-label'>Phase 1</label>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='phase1' class='col-form-label'>Phase 1</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='phase1' onchange='phasesUpdated()'>
+                      <option value='vapor' selected>Vapor</option>
+                    </select>
+                  </div>
                 </div>
-                <div class='col-auto'>
-                  <select class='form-select' id='phase1' onchange='phasesUpdated()'>
-                    <option value='vapor' selected>Vapor</option>
-                  </select>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='phase2' class='col-form-label'>Phase 2</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='phase2' onchange='phasesUpdated()'>
+                      <option value='liquid' selected>Liquid</option>
+                      <option value='fcc'>FCC</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div class='row g-3 py-1 align-items-center'>
-                <div class='col-auto'>
-                  <label for='phase2' class='col-form-label'>Phase 2</label>
-                </div>
-                <div class='col-auto'>
-                  <select class='form-select' id='phase2' onchange='phasesUpdated()'>
-                    <option value='liquid' selected>Liquid</option>
-                    <option value='fcc'>FCC</option>
-                  </select>
-                </div>
-              </div>
-              <div class='row g-3 py-1 align-items-center'>
-                <div class='col-auto'>
-                  <label for='phase3' class='col-form-label'>Phase 3</label>
-                </div>
-                <div class='col-auto'>
-                  <select class='form-select' id='phase3' onchange='phasesUpdated()'>
-                    <option value='fcc' selected>FCC</option>
-                    <option value='hcp'>HCP</option>
-                  </select>
+                <div class='row g-3 py-1 align-items-center'>
+                  <div class='col-auto'>
+                    <label for='phase3' class='col-form-label'>Phase 3</label>
+                  </div>
+                  <div class='col-auto'>
+                    <select class='form-select' id='phase3' onchange='phasesUpdated()'>
+                      <option value='fcc' selected>FCC</option>
+                      <option value='hcp'>HCP</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class='row g-3 py-1 align-items-center'>
-            <div class='col-auto'>
-              <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
-              <button class='btn btn-sm btn-info' type='button' data-content='triple' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
+            <div class='row g-3 py-1 align-items-center'>
+              <div class='col-auto'>
+                <button id='btnUpdate' class='btn btn-sm btn-primary' type='button'>Update</button>
+                <button class='btn btn-sm btn-info' type='button' data-content='triple' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
       <div class='AJAX-div' data-content='VAPOR'></div>
       <div class='AJAX-div' data-content='LIQUID'></div>
       <div class='AJAX-div' data-content='HCP'></div>
       <div class='AJAX-div' data-content='FCC'></div>
 
-    <div id='resultsDiv' class='card'>
-      <div id='headingResults' class='card-header' role='tab'>
-        <h2 class='h5 mb-0'>Results</a></h2>
-    </div>
-    <div class='show' aria-labelledby='headingResults'>
-      <div class='card-body'>
-        <table class='table'>
-          <thead><tr><th>Prop</th><th>Phase1 - Phase2</th><th>Phase2 - Phase3</th><th>Gap</th></tr></thead>
-          <tbody>
-          <tr><td>T</td><td id='Ta'></td><td id='Tb'></td><td></td></tr>
-          <tr><td>&rho;1</td><td id='rho1a'></td><td></td><td></td></tr>
-          <tr><td>&rho;2</td><td id='rho2a'></td><td id='rho2b'></td><td id='rho2gap'></td></tr>
-          <tr><td>&rho;3</td><td></td><td id='rho3b'></td><td></td></tr>
-          <tr><td>P</td><td id='Pa'></td><td id='Pb'></td><td id='Pgap'></td></tr>
-          <tr><td>G</td><td id='Ga'></td><td id='Gb'></td><td id='Ggap'></td></tr>
-          </tbody>
-        </table>
-      </div>
+      <div id='resultsDiv' class='card'>
+        <div id='headingResults' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'>Results</h2>
+        </div>
+        <div class='show' aria-labelledby='headingResults'>
+          <div class='card-body'>
+            <table class='table'>
+              <thead><tr><th>Prop</th><th>Phase1 - Phase2</th><th>Phase2 - Phase3</th><th>Gap</th></tr></thead>
+              <tbody>
+                <tr><td>T</td><td id='Ta'></td><td id='Tb'></td><td></td></tr>
+                <tr><td>&rho;1</td><td id='rho1a'></td><td></td><td></td></tr>
+                <tr><td>&rho;2</td><td id='rho2a'></td><td id='rho2b'></td><td id='rho2gap'></td></tr>
+                <tr><td>&rho;3</td><td></td><td id='rho3b'></td><td></td></tr>
+                <tr><td>P</td><td id='Pa'></td><td id='Pb'></td><td id='Pgap'></td></tr>
+                <tr><td>G</td><td id='Ga'></td><td id='Gb'></td><td id='Ggap'></td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
