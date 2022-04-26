@@ -13,19 +13,19 @@
     <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
     <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
   </head>
-<body>
+  <body>
     <script type='text/javascript'>
-document.title = "LJ EOS for FCC";
-function myUpdatePlot() {
-  updatePlot();
-}
+      document.title = "LJ EOS for FCC";
+      function myUpdatePlot() {
+        updatePlot();
+      }
 
       window.addEventListener("fullload", function() {
         document.getElementById("checkNrho").parentNode.style.display = "block";
         updateRhoP();
         updateX();
         var plotModalEl = document.getElementById("plotModal");
-        plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
+        plotModalEl.addEventListener("shown.bs.modal", myUpdatePlot);
       });
       var phaseName = "fcc";
 
@@ -38,8 +38,8 @@ function myUpdatePlot() {
       <div class='AJAX-div' data-content='FCC'></div>
       <div class='AJAX-div' data-content='RESULTS'></div>
     </div>
-    <div class='AJAX-div' data-content='SAVE'></div>
-    <div class='AJAX-div' data-content='PLOT'></div>
     <div class='AJAX-div' data-content='INFO-MODAL'></div>
+    <div class='AJAX-div' data-content='PLOT'></div>
+    <div class='AJAX-div' data-content='SAVE'></div>
   </body>
 </html>
