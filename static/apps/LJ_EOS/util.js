@@ -366,15 +366,22 @@ function phasesUpdated() {
     if (el) el.style.display = "none";
   }
 
+  iamvapor = false;
   for (var i=1; i<=4; i++) {
     var el = document.getElementById("phase"+i);
     if (!el) break;
     var p = el.value;
+    if (i==1 && p == "vapor") iamvapor = true;
+    else if (i>1) iamvapor = false;
     document.getElementById("parametersDiv-"+p).style.display = "block";
     var cb = document.getElementById("checkNrho");
     if (cb) {
       cb.parentNode.style.display = p == "fcc" ? "block" : "none";
     }
+  }
+  if (iamvapor) {
+    var btn = document.getElementById("virialsBtn");
+    if (btn) btn.style.display = "block";
   }
 }
 window.addEventListener("fullload", function() {
