@@ -379,10 +379,7 @@ function phasesUpdated() {
       cb.parentNode.style.display = p == "fcc" ? "block" : "none";
     }
   }
-  if (iamvapor) {
-    var btn = document.getElementById("virialsBtn");
-    if (btn) btn.style.display = "block";
-  }
+  showThermos();
 }
 window.addEventListener("fullload", function() {
   var all = ["fcc","hcp","liquid"];
@@ -435,7 +432,7 @@ function showThermos() {
   var useX = document.getElementById("checkX").checked;
   document.getElementById("singleResultsDiv").style.display = useX ? "none" : "block";
   document.getElementById("parametricResultsDiv").style.display = useX ? "block" : "none";
-  document.getElementById("virialsBtn").style.display = "block";
+  if (iamvapor) document.getElementById("virialsBtn").style.display = "block";
   document.getElementById("thermosBtn").style.display = "none";
   document.getElementById("plotBtn").removeAttribute("disabled");
   showingVirials = false;
