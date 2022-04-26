@@ -46,7 +46,7 @@ function clearAllRows() {
   tableCorrelationData = [];
   if (currentDataSaved>-1) {
     console.log("here!");
-    document.getElementById("savedDataTableCell"+currentDataSaved).className = "col-sm-3";
+    document.getElementById("savedDataTableCell"+currentDataSaved).className = "";
     document.getElementById("inputSaveName").value = "";
     currentDataSaved = -1;
   }
@@ -109,8 +109,6 @@ function addRow(T, props1, props2, correlations) {
     </script>
   </head>
   <body>
-    <script type='text/python' src='LJ_EOS.py'></script>
-    <script type='text/python' src='EOS_util.py'></script>
     <script type='text/python'>
       from browser import document, window, timer
       window.removeBrythonSpinner()
