@@ -631,8 +631,8 @@ function updateLiquidRc() {
   }
 }
 function clearAllSimple() {
-  var tbody = document.getElementById("parametricResults");
-  empty(tbody);
+  empty(document.getElementById("parametricResults"));
+  empty(document.getElementById("parametricVirialResults"));
   allData = [];
   collapseParameters();
   if (currentDataSaved>-1) {
