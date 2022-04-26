@@ -626,7 +626,7 @@ function clearAllSimple() {
   allData = [];
   collapseParameters();
   if (currentDataSaved>-1) {
-    document.getElementById("savedDataTableCell"+currentDataSaved).className = "";
+    document.getElementById("savedDataTableCell"+currentDataSaved).className = "col-sm-3";
     document.getElementById("inputSaveName").value = "";
     currentDataSaved = -1;
   }
@@ -831,13 +831,12 @@ function rebuildSavedStuff() {
     }
 
     if (icol==0) {
-      row = makeElement("TR", savedTable);
+      row = makeElement("DIV", savedTable, {className: "row"});
     }
-    var attr = {id: "savedDataTableCell"+i, width: "25%"};
-    if (i==currentDataSaved) attr.className = "table-primary";
-    var cell = makeElement("TD", row, attr);
+    var attr = {id: "savedDataTableCell"+i, className: "col-sm-3"};
+    var cell = makeElement("DIV", row, attr);
     makeText(allSavedDataNames[i]+" ", cell);
-    var savedDelBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-danger", "data-savedIDX": i});
+    var savedDelBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-danger float-end", "data-savedIDX": i});
     savedDelBtn.addEventListener("click", deleteSavedData);
     makeElement("i", savedDelBtn, {className: "fa-solid fa-trash-can"});
     icol++;

@@ -35,7 +35,7 @@ function clearAllRows() {
   allCorrelations = {};
   tableCorrelationData = [];
   if (currentDataSaved>-1) {
-    document.getElementById("savedDataTableCell"+currentDataSaved).className = "";
+    document.getElementById("savedDataTableCell"+currentDataSaved).className = "col-sm-3";
     document.getElementById("inputSaveName").value = "";
     currentDataSaved = -1;
   }
