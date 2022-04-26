@@ -19,19 +19,16 @@ document.title = "LJ EOS for Liquid";
       function myUpdatePlot() {
         updatePlot();
       }
-      window.addEventListener("load", updateLiquidRc);
-      window.addEventListener("load", function() {
+      window.addEventListener("fullload", function() {
+        updateLiquidRc();
         updateRhoP();
         updateX();
         var plotModalEl = document.getElementById("plotModal");
-        plotModalEl.addEventListener("show.bs.modal", myUpdatePlot);
+        plotModalEl.addEventListener("shown.bs.modal", myUpdatePlot);
       });
       var phaseName = "liquid";
 
     </script>
-    <script type='text/python' src='LJ_EOS.py'></script>
-    <script type='text/python' src='EOS_util.py'></script>
-    <div class='AJAX-div' data-content='RHO'></div>
     <div class='AJAX-div' data-content='SIMPLE'></div>
     <div class='container'>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Equation of state for liquid phase of LJ</h1>

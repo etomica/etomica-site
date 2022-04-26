@@ -30,30 +30,6 @@ function myUpdatePlot() {
       var phaseName = "fcc";
 
     </script>
-    <script type='text/python' src='LJ_EOS.py'></script>
-    <script type='text/python' src='EOS_util.py'></script>
-    <script type='text/python'>
-      def gimmeRhoFCC(T, rhostr, Pstr, x, eos, doc):
-        if doc["checkP"].checked:
-          try:
-            P = eval(Pstr)
-          except Exception as err:
-            window.alert("Trouble parsing P expression: {0}".format(err))
-            return float("nan")
-          rho = eos.rhoForProps(T, {'P': P})
-        else:
-          try:
-            rho = eval(rhostr)
-          except Exception as err:
-            window.alert("Trouble parsing rho expression: {0}".format(err))
-            return float("nan")
-          if doc["checkNrho"].checked:
-            rho = eos.latRhoForNRho(T, rho)
-        return rho
-
-      from browser import window
-      window.thisGimmeRho = gimmeRhoFCC
-    </script>
     <div class='AJAX-div' data-content='SIMPLE'></div>
 
     <div class='container'>

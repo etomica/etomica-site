@@ -10,6 +10,25 @@
       success = False
       ix = 0
 
+      def gimmeRhoSimple(T, rhostr, Pstr, x, eos, doc):
+        if doc["checkP"].checked:
+          try:
+            P = eval(Pstr)
+          except Exception as err:
+            window.alert("Trouble parsing P expression: {0}".format(err))
+            return float("nan")
+          return eos.rhoForProps(T, {'P': P})
+
+        try:
+          rho = eval(rhostr)
+        except Exception as err:
+          window.alert("Trouble parsing rho expression: {0}".format(err))
+          return float("nan")
+        if "checkNrho" in doc and doc["checkNrho"].checked:
+          rho = eos.latRhoForNRho(T, rho)
+        return rho
+
+
       def doOnePoint(stuff):
         global myInterval, ix, success
         if not success:
@@ -86,7 +105,7 @@
             window.alert("Need at least 1 x value")
             return
           success = True
-          myInterval = timer.set_interval(doOnePoint, 0, [document,eos,window.thisGimmeRho])
+          myInterval = timer.set_interval(doOnePoint, 0, [document,eos,gimmeRhoSimple])
           return
 
         Tstr = document['inputT'].value
@@ -98,7 +117,7 @@
         except ValueError:
           window.alert("Must provide a valid temperature")
           return
-        rho = window.thisGimmeRho(T, rhostr, Pstr, 0, eos, document)
+        rho = gimmeRhoSimple(T, rhostr, Pstr, 0, eos, document)
         if math.isnan(rho):
           stopUpdate()
           return
