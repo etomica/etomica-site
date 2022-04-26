@@ -29,7 +29,7 @@ function makeElement(tagName, parentNode, props) {
   var el = document.createElement(tagName);
   if (props) {
     for (p in props) {
-      if (p == "disabled" || p=="colspan" || p=="rowspan" || p == "crossorigin" || /^data-/.test(p)) {
+      if (["disabled","colspan","rowspan","maxlength","corssorigin"].indexOf(p) > -1 || /^data-/.test(p)) {
         el.setAttribute(p, props[p]);
       }
       else if (p == "style") {
@@ -820,6 +820,49 @@ window.addEventListener("load", function() {
 
 var allSavedData = [], allSavedDataNames = [], currentDataSaved = -1;
 
+function buildSavedDataCell(i) {
+  var cell = document.getElementById("savedDataTableCell"+i);
+  empty(cell);
+  makeElement("SPAN", cell, {textContent: allSavedDataNames[i], id: "savedDataName"+i});
+  var savedDelBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-danger float-end", "data-savedIDX": i});
+  savedDelBtn.addEventListener("click", deleteSavedData);
+  makeElement("i", savedDelBtn, {className: "fa-solid fa-trash-can"});
+  var savedEditBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-success float-end", "data-savedIDX": i});
+  savedEditBtn.addEventListener("click", editNameSavedData);
+  makeElement("i", savedEditBtn, {className: "fa-solid fa-pen-to-square"});
+  return cell;
+}
+
+function restoreEditSavedName(e) {
+  var idx = Number(e.target.getAttribute("data-savedIDX"));
+  buildSavedDataCell(idx);
+}
+
+function okEditSavedName(e) {
+  var idx = Number(e.target.getAttribute("data-savedIDX"));
+  var newName = document.getElementById("savedDataNameInput").value;
+  allSavedDataNames[idx] = newName;
+  if (idx == currentDataSaved) {
+    document.getElementById("inputSaveName").value = newName;
+  }
+  buildSavedDataCell(idx);
+}
+
+function editNameSavedData(e) {
+  var btn = e.target;
+  var idx = Number(btn.getAttribute("data-savedIDX"));
+  var cell = document.getElementById("savedDataTableCell"+idx);
+  empty(cell);
+  makeElement("INPUT", cell, {id: "savedDataNameInput", className: "form-control", style: {width: "7rem", display: "inline-block"}, value: allSavedDataNames[idx], maxlength: "8"});
+  
+  var savedCancelBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-danger float-end", "data-savedIDX": idx});
+  savedCancelBtn.addEventListener("click", restoreEditSavedName);
+  makeElement("i", savedCancelBtn, {className: "fa-solid fa-xmark"});
+  var savedOKBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-success float-end", "data-savedIDX": idx});
+  savedOKBtn.addEventListener("click", okEditSavedName);
+  makeElement("i", savedOKBtn, {className: "fa-solid fa-check"});
+}
+
 function rebuildSavedStuff() {
   var savedTable = document.getElementById("savedDataTable");
   var plotDropdown = document.getElementById("plotSavedDataList");
@@ -843,12 +886,9 @@ function rebuildSavedStuff() {
     if (icol==0) {
       row = makeElement("DIV", savedTable, {className: "row"});
     }
-    var attr = {id: "savedDataTableCell"+i, className: "col-sm-3"};
+    var attr = {id: "savedDataTableCell"+i, className: "col-sm-3 border p-2"};
     var cell = makeElement("DIV", row, attr);
-    makeText(allSavedDataNames[i]+" ", cell);
-    var savedDelBtn = makeElement("BUTTON", cell, {className: "btn btn-sm btn-danger float-end", "data-savedIDX": i});
-    savedDelBtn.addEventListener("click", deleteSavedData);
-    makeElement("i", savedDelBtn, {className: "fa-solid fa-trash-can"});
+    buildSavedDataCell(i);
     icol++;
     if (icol==4) icol=0;
 
