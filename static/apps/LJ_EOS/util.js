@@ -371,7 +371,10 @@ function phasesUpdated() {
     if (!el) break;
     var p = el.value;
     document.getElementById("parametersDiv-"+p).style.display = "block";
-
+    var cb = document.getElementById("checkNrho");
+    if (cb) {
+      cb.parentNode.style.display = p == "fcc" ? "block" : "none";
+    }
   }
 }
 window.addEventListener("fullload", function() {

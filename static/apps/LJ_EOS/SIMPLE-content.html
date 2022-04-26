@@ -24,7 +24,7 @@
         except Exception as err:
           window.alert("Trouble parsing rho expression: {0}".format(err))
           return float("nan")
-        if "checkNrho" in doc and doc["checkNrho"].checked:
+        if document["phase1"].value == "fcc" and type(eos).__name__ == "Schultz" and doc["checkNrho"].checked:
           rho = eos.latRhoForNRho(T, rho)
         return rho
 
@@ -60,7 +60,8 @@
           return
         props = eos.eval(T,rho)
         Bvalues = None
-        if window.phaseName == "vapor" and type(eos).__name__ == "VEOS":
+        phase1 = document["phase1"].value
+        if phase1 == "vapor" and type(eos).__name__ == "VEOS":
           Bvalues = eos.B
         window.addParametricRow(T, rho, props, Bvalues)
         success = True
@@ -86,11 +87,12 @@
         if 'grabB3' in window:
           B3callback = window.grabB3
 
-        opts = optsForPhase(window.phaseName, document, B3callback)
+        phase1 = document["phase1"].value
+        opts = optsForPhase(phase1, document, B3callback)
         if isinstance(opts,str):
           window.alert(opts)
           return
-        eos = getEOS(window.phaseName, opts)
+        eos = getEOS(phase1, opts)
 
         useX = document["checkX"].checked
         if useX:
@@ -123,7 +125,7 @@
           return
         props = eos.eval(T,rho)
         Bvalues = None
-        if window.phaseName == "vapor" and type(eos).__name__ == "VEOS":
+        if phase1 == "vapor" and type(eos).__name__ == "VEOS":
           Bvalues = eos.B
         window.showResults(T, rho, props, Bvalues)
 
