@@ -6,7 +6,7 @@
           <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='saveBtn' data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
           <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right; display: none;' onclick='showVirials()' id='virialsBtn'>Virial Coefficients</button>
           <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right; display: none;' onclick='showThermos()' id='thermosBtn'>Thermo Properties</button>
-          <select id='savedDataSel' class='form-select float-end' style='width: auto; display: none; margin-right: 1rem;' onclick='reconstructTable("parametricResults", makeTableDataParametric)'><option value='-1'>(current)</option></select>
+          <select id='savedDataSel' class='form-select float-end' style='width: auto; display: none; margin-right: 1rem;' onclick='reconstructTable("parametricResults", makeTableDataParametric)' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose the set of data (either the current set or a saved set) to view in the table below"><option value='-1'>(current)</option></select>
         </div>
         <div class='collapse' id='resultsBody' aria-labelledby='headingResults'>
           <div class='card-body'>
