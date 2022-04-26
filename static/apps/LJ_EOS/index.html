@@ -77,11 +77,12 @@
         </div>
         <div id='collapseHow' class='collapse' role='tabpanel' aria-labelledby='headingHow'>
           <div class='card-body'>
-            <p>The equations of state and analysis scripts on this site are written in Python.  The site uses <a href='https://brython.info/'>Brython</a>, which allows Python 3 code to run in the browser and also provides the standard Python libraries.  Computing the third virial coefficient (B<sub>3</sub>) on the fly is particularly intensive and too slow via Brython.  Accordingly, the site uses a <a href='https://developer.mozilla.org/en-US/docs/WebAssembly'>WebAssembly</a> version of B<sub>3</sub> written in C and built with <a href='https://emscripten.org/'>emscripten</a>.</p>
-            <p style='margin-top: 2rem; font-size: 90%;'>Please report bugs, errors, suggestions to <a href='https://engineering.buffalo.edu/chemical-biological/people/faculty-directory.host.html/content/shared/engineering/chemical-biological/profiles/faculty/schultz-andrew.detail.html'>Andrew Schultz</a> at <a href='mailto:ajs42@buffalo.edu'>ajs42@buffalo.edu</a>.</p>
+            <p>The equations of state and analysis scripts on this site are written in Python.  The site uses <a href='https://brython.info/'>Brython</a>, which translates Python 3 code to JavaScript so it can run in the browser and also provides the standard Python libraries.  Accordingly, all of the scripting is done in the browser rather than the server &mdash; the server need only deliver static files.</p>
+            <p>Libraries using native code (like NumPy) are unavailable, but the site only needs scalar math, so this is not an issue.  However, expensive computations (like constructing a full coexistence curve) had to be broken up into small pieces of work (a function to find a single coexistence point) and use a <a href='https://brython.info/static_doc/en/timer.html'>Brython event loop</a> to call the coexistence function repeatedly, returning control to the browser after each call.  Computing the third virial coefficient (B<sub>3</sub>) on the fly is particularly intensive and too slow via Brython (10-20 seconds).  Accordingly, the site uses a <a href='https://developer.mozilla.org/en-US/docs/WebAssembly'>WebAssembly</a> version of B<sub>3</sub> written in C and built with <a href='https://emscripten.org/'>emscripten</a>.</p>
           </div>
         </div>
       </div>
+      <p style='margin-top: 2rem; font-size: 90%;'>Please report bugs, errors, suggestions to <a href='https://engineering.buffalo.edu/chemical-biological/people/faculty-directory.host.html/content/shared/engineering/chemical-biological/profiles/faculty/schultz-andrew.detail.html'>Andrew Schultz</a> at <a href='mailto:ajs42@buffalo.edu'>ajs42@buffalo.edu</a>.</p>
     </div>
       <div class='AJAX-div' data-content='INFO-MODAL'></div>
   </body>
