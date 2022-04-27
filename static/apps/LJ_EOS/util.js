@@ -427,6 +427,7 @@ function showVirials() {
   showingVirials = true;
 }
 function showThermos() {
+  if (!document.getElementById("singleResultsVirialDiv")) return;
   document.getElementById("singleResultsVirialDiv").style.display = "none";
   document.getElementById("parametricResultsVirialDiv").style.display = "none";
   var useX = document.getElementById("checkX").checked;
