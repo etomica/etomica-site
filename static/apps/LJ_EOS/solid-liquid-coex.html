@@ -111,9 +111,9 @@ function addRow(T, props1, props2, correlations) {
   <body>
     <script type='text/python'>
       from browser import document, window, timer
-      window.removeBrythonSpinner()
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase, CoexCorrelator
+      window.removeBrythonSpinner()
 
       eos1 = eos2 = myInterval = None
       T = Pguess = 0

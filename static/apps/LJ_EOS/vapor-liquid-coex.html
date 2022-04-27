@@ -96,10 +96,10 @@ window.addEventListener("fullload", phasesUpdated);
   <body>
     <script type='text/python'>
       from browser import document, window, timer
-      window.removeBrythonSpinner()
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase, CoexCorrelator
+      window.removeBrythonSpinner()
 
       eos1 = eos2 = myInterval = correlator = None
       Pguess = 0

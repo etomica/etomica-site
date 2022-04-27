@@ -21,11 +21,11 @@ window.addEventListener("fullload", phasesUpdated);
   <body>
     <script type='text/python'>
       from browser import document, window
-      window.removeBrythonSpinner()
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
       import math
+      window.removeBrythonSpinner()
 
       def update(ev):
         window.collapseParameters()
