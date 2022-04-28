@@ -34,19 +34,19 @@ window.addEventListener("fullload", phasesUpdated);
 
       def pushData():
         global T, props1a, props2a, props2b, props3b
-        document['Ta'].textContent = T
-        document['Tb'].textContent = T
-        document['rho1a'].textContent = props1a['rho']
-        document['rho2a'].textContent = props2a['rho']
-        document['rho2b'].textContent = props2b['rho']
-        document['rho2gap'].textContent = props2b['rho'] - props2a['rho']
-        document['rho3b'].textContent = props3b['rho']
-        document['Pa'].textContent = props1a['P']
-        document['Ga'].textContent = props1a['G']
-        document['Pb'].textContent = props2b['P']
-        document['Pgap'].textContent = props2b['P'] - props2a['P']
-        document['Gb'].textContent = props2b['G']
-        document['Ggap'].textContent = props2b['G'] - props2a['G']
+        document['Ta'].textContent = window.fromSim("T",T)
+        document['Tb'].textContent = window.fromSim("T",T)
+        document['rho1a'].textContent = window.fromSim("rho",props1a['rho'])
+        document['rho2a'].textContent = window.fromSim("rho",props2a['rho'])
+        document['rho2b'].textContent = window.fromSim("rho",props2b['rho'])
+        document['rho2gap'].textContent = window.fromSim("rho",props2b['rho'] - props2a['rho'])
+        document['rho3b'].textContent = window.fromSim("rho",props3b['rho'])
+        document['Pa'].textContent = window.fromSim("P",props1a['P'])
+        document['Ga'].textContent = window.fromSim("G",props1a['G'])
+        document['Pb'].textContent = window.fromSim("P",props2b['P'])
+        document['Pgap'].textContent = window.fromSim("P",props2b['P'] - props2a['P'])
+        document['Gb'].textContent = window.fromSim("G",props2b['G'])
+        document['Ggap'].textContent = window.fromSim("G",props2b['G'] - props2a['G'])
 
       def doOneTriplePoint():
         global stage, eos1, eos2, eos3, props1a, props2a, props2b, props3b, lastDT, Tstep, Tmin, Tmax, T, success
@@ -57,12 +57,27 @@ window.addEventListener("fullload", phasesUpdated);
           return
         success = False
         if stage == 1:
-          props1a, props2a = findCoexistence(T, eos1, eos2, props1a['P'], False)
+         
+          try:
+            props1a, props2a = findCoexistence(T, eos1, eos2, props1a['P'], False)
+          except Exception as err:
+            phase1 = document['phase1'].value
+            phase2 = document['phase2'].value
+            window.alert("Trouble finding coexistence between {0} and {1} at T={2}: {3}".format(phase1, phase2, window.fromSim("T",T), err)) 
+            stopUpdate()
+            return
           stage = 2
           # we'll come back and do 2-3 and then analyze
           success = True
           return
-        props2b, props3b = findCoexistence(T, eos2, eos3, props1a['P'], False)
+        try:
+          props2b, props3b = findCoexistence(T, eos2, eos3, props1a['P'], False)
+        except Exception as err:
+          phase2 = document['phase2'].value
+          phase3 = document['phase3'].value
+          window.alert("Trouble finding coexistence between {0} and {1} at T={2}: {3}".format(phase2, phase3, window.fromSim("T",T), err)) 
+          stopUpdate()
+          return
         stage = 1
 
         if 'rho' in props2a and 'rho' in props2b:
@@ -142,7 +157,7 @@ window.addEventListener("fullload", phasesUpdated);
         eos3 = getEOS(phase3, opts)
         Tguess = document['inputT'].value
         try:
-          Tguess = float(Tguess)
+          Tguess = window.toSim("T",float(Tguess))
         except ValueError:
           window.alert("Must provide a valid temperature guess")
           return
@@ -165,15 +180,16 @@ window.addEventListener("fullload", phasesUpdated);
       </div>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Phase Choices</a></h2>
+          <h2 class='h5 mb-0 float-start'>Phase Choices</a></h2>
+          <button class='btn btn-info btn-sm float-end' id='modelBtn' data-bs-toggle="modal" data-bs-target="#modelModal">Reduced LJ</button>
         </div>
         <div class='show' aria-labelledby='headingParameters'>
           <div class='card-body'>
             <div class='row'>
               <div class='col-auto px-4'>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto'>
-                    <label for='inputT' class='col-form-label'>T</label>
+                  <div class='col-auto' style='width: 4rem;'>
+                    <label for='inputT' class='col-form-label'>T<span class='SI' data-prop='T'></span></label>
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputT' class='form-control' placeholder='estimate'>
@@ -240,12 +256,12 @@ window.addEventListener("fullload", phasesUpdated);
             <table class='table'>
               <thead><tr><th>Prop</th><th>Phase1 - Phase2</th><th>Phase2 - Phase3</th><th>Gap</th></tr></thead>
               <tbody>
-                <tr><td>T</td><td id='Ta'></td><td id='Tb'></td><td></td></tr>
-                <tr><td>&rho;1</td><td id='rho1a'></td><td></td><td></td></tr>
-                <tr><td>&rho;2</td><td id='rho2a'></td><td id='rho2b'></td><td id='rho2gap'></td></tr>
-                <tr><td>&rho;3</td><td></td><td id='rho3b'></td><td></td></tr>
-                <tr><td>P</td><td id='Pa'></td><td id='Pb'></td><td id='Pgap'></td></tr>
-                <tr><td>G</td><td id='Ga'></td><td id='Gb'></td><td id='Ggap'></td></tr>
+                <tr><td>T<span class='SI' data-prop='T'></span></td><td id='Ta'></td><td id='Tb'></td><td></td></tr>
+                <tr><td>&rho;1<span class='SI' data-prop='rho'></span></td><td id='rho1a'></td><td></td><td></td></tr>
+                <tr><td>&rho;2<span class='SI' data-prop='rho'></span></td><td id='rho2a'></td><td id='rho2b'></td><td id='rho2gap'></td></tr>
+                <tr><td>&rho;3<span class='SI' data-prop='rho'></span></td><td></td><td id='rho3b'></td><td></td></tr>
+                <tr><td>P<span class='SI' data-prop='P'></span></td><td id='Pa'></td><td id='Pb'></td><td id='Pgap'></td></tr>
+                <tr><td>G<span class='SI' data-prop='G'></span></td><td id='Ga'></td><td id='Gb'></td><td id='Ggap'></td></tr>
               </tbody>
             </table>
           </div>
@@ -256,6 +272,7 @@ window.addEventListener("fullload", phasesUpdated);
     <script async type="text/javascript" src="virial.js"></script>
 
     <div class='AJAX-div' data-content='INFO-MODAL'></div>
+    <div class='AJAX-div' data-content='MODEL-MODAL'></div>
 
   </body>
 </html>

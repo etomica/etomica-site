@@ -69,6 +69,8 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
   rho1 = -1
   first=True
   last=False
+  lastDelta = float('inf')
+  lastDeltaTrouble = 0
   while True:
     rho1 = eos1.rhoForProps(T, props2, rho1)
     props1 = eos1.eval(T,rho1)
@@ -90,8 +92,17 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
 
       # G matches, determine deltarho to make P match
       dP = props2['P'] - props1['P']
+      if math.isnan(dP):
+        raise Exception("wound up with nan finding coexistence P1: "+str(props1['P'])+", P2: "+str(props2['P']))
       if dP == 0:
         break
+      if abs(dP) > abs(lastDelta):
+        lastDeltaProblem += 1
+        if lastDeltaProblem > 3:
+          raise Exception("We seem to be diverging while trying to find coexistence while trying to match dP")
+      else:
+        lastDeltaProblem = 0
+      lastDelta = dP
       deltaVal = 2*dP/(props2['P']+props1['P'])
       tol=2e-14*abs(rho1*props1['dPdrho'] + rho2*props2['dPdrho'])*2/abs(props2['P']+props1['P'])
       den = props1['dPdrho'] - props2['dPdrho']*props1['dGdrho']/props2['dGdrho']
@@ -121,6 +132,13 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
       dG = props2['G'] - props1['G']
       if dG == 0:
         break
+      if abs(dG) > abs(lastDelta):
+        lastDeltaProblem += 1
+        if lastDeltaProblem > 3:
+          raise Exception("We seem to be diverging while trying to find coexistence while trying to match dG")
+      else:
+        lastDeltaProblem = 0
+      lastDelta = dG
       deltaVal = 2*dG/(props2['G']+props1['G'])
       tol=2e-14*abs(rho1*props1['dGdrho'] + rho2*props2['dGdrho'])*2/abs(props2['G']+props1['G'])
       den = props1['dGdrho'] - props2['dGdrho']*props1['dPdrho']/props2['dPdrho']
@@ -430,8 +448,7 @@ class EOS(object):
             minRho = rho
           rho = (rho+oldRho)/2
         else:
-          print ("oops {0} T={1}, rho={2}, P={3}, dPdrho={4}".format(type(self).__name__,T,rho,rv['P'],rv['dPdrho']))
-          sys.exit(1)
+          raise Exception("oops {0} T={1}, rho={2}, P={3}, dPdrho={4}".format(type(self).__name__,T,rho,rv['P'],rv['dPdrho']))
         continue
 
       if rho > 0.8:

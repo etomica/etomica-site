@@ -39,14 +39,14 @@
       def gimmeRhoSimple(T, rhostr, Pstr, x, eos, doc):
         if doc["checkP"].checked:
           try:
-            P = eval(Pstr)
+            P = window.toSim("P",eval(Pstr))
           except Exception as err:
             window.alert("Trouble parsing P expression: {0}".format(err))
             return float("nan")
           return eos.rhoForProps(T, {'P': P})
 
         try:
-          rho = eval(rhostr)
+          rho = window.toSim("rho",eval(rhostr))
         except Exception as err:
           window.alert("Trouble parsing rho expression: {0}".format(err))
           return float("nan")
@@ -62,7 +62,7 @@
           stopUpdate()
           return
         success = False
-        doc,eos,myGimmeRho = stuff
+        doc,eos = stuff
         try:
           numX = int(doc["inputXnum"].value)
         except ValueError:
@@ -75,12 +75,13 @@
         Pstr = doc['inputP'].value
         rhostr = doc['inputRho'].value
         try:
-          T = eval(Tstr)
+          T = window.toSim("T",eval(Tstr))
         except Exception as err:
           window.alert("Trouble parsing T expression: {0}".format(err))
           stopUpdate()
           return
-        rho = myGimmeRho(T, rhostr, Pstr, x, eos, doc)
+        rho = gimmeRhoSimple(T, rhostr, Pstr, x, eos, doc)
+        print("here "+str(rho))
         if math.isnan(rho):
           stopUpdate()
           return
@@ -133,7 +134,7 @@
             window.alert("Need at least 1 x value")
             return
           success = True
-          myInterval = timer.set_interval(doOnePoint, 0, [document,eos,gimmeRhoSimple])
+          myInterval = timer.set_interval(doOnePoint, 0, [document,eos])
           return
 
         Tstr = document['inputT'].value
@@ -141,7 +142,7 @@
         rhostr = document['inputRho'].value
 
         try:
-          T = float(Tstr)
+          T = window.toSim("T",float(Tstr))
         except ValueError:
           window.alert("Must provide a valid temperature")
           return
@@ -167,7 +168,8 @@
 
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>State Condition</a></h2>
+          <h2 class='h5 mb-0 float-start'>State Condition</a></h2>
+          <button class='btn btn-info btn-sm float-end' id='modelBtn' data-bs-toggle="modal" data-bs-target="#modelModal">Reduced LJ</button>
         </div>
         <div class='show' aria-labelledby='headingParameters'>
           <div class='card-body'>
@@ -187,39 +189,42 @@
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' style='width: 1.8rem;'>
-                    <label for='inputT' class='col-form-label'>T</label>
+                  <div class='col-auto' style='width: 6rem;'>
+                    <label for='inputT' class='col-form-label'>T<span class='SI' data-prop='T'></span></label>
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputT' class='form-control'>
                   </div>
+                  <div class='col-auto SI' data-prop='T'></div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' style='width: 1.8rem;'>
-                    <label for='inputRho' class='col-form-label'>&rho;</label>
+                  <div class='col-auto' style='width: 6rem;'>
+                    <label for='inputRho' class='col-form-label'>&rho;<span class='SI' data-prop='rho'></span></label>
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputRho' class='form-control'>
                   </div>
+                  <div class='col-auto SI' data-prop='rho'></div>
                   <div class='col-auto' class=form-check' style='display: none'>
                     <input class='form-check-input' type='checkbox' value='' id='checkNrho' onchange='updateNrho()'>
                     <label class='form-check-label' for='checkNrho' data-bs-toggle="tooltip" data-bs-placement="right" title="given density will be imposed as atomic rather than as a site density">atom density</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' style='width: 1.8rem;'>
-                    <label for='inputP' class='col-form-label'>P</label>
+                  <div class='col-auto' style='width: 6rem;'>
+                    <label for='inputP' class='col-form-label'>P<span class='SI' data-prop='P'></span></label>
                   </div>
                   <div class='col-auto'>
                     <input type='text' id='inputP' class='form-control' disabled>
                   </div>
+                  <div class='col-auto SI' data-prop='P'></div>
                   <div class='col-auto' class=form-check'>
                     <input class='form-check-input' type='checkbox' value='' id='checkP' onclick='updateRhoP()'>
                     <label class='form-check-label' for='checkP'>compute &rho; for P</label>
                   </div>
                 </div>
                 <div class='row g-3 py-1 align-items-center'>
-                  <div class='col-auto' style='width: 1.8rem;'>
+                  <div class='col-auto' style='width: 6rem;'>
                     <label for='inputXnum' class='col-form-label'>#</label>
                   </div>
                   <div class='col-auto'>
@@ -250,46 +255,58 @@
       <div id='resultsDiv' class='card'>
         <div id='headingResults' class='card-header' role='tab'>
           <h2 class='h5 mb-0' style='float: left'>Results</a></h2>
-          <button class='btn btn-info btn-sm' style='float: right' onclick='copyActiveTable()' id='copyBtn'>Copy</button>
-          <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
-          <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right' id='saveBtn' data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
+          <button class='btn btn-info btn-sm float-end' onclick='copyActiveTable()' id='copyBtn'>Copy</button>
+          <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem;' id='plotBtn' data-bs-toggle="modal" data-bs-target="#plotModal">Plot</button>
+          <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem;' id='saveBtn' data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
           <select id='savedDataSel' class='form-select float-end' style='width: auto; display: none; margin-right: 1rem;' onclick='reconstructTable("parametricResults", makeTableDataParametric)' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose the set of data (either the current set or a saved set) to view in the table below"><option value='-1'>(current)</option></select>
-          <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right; display: none;' onclick='showVirials()' id='virialsBtn'>Virial Coefficients</button>
-          <button class='btn btn-info btn-sm' style='margin-right: 1rem; float: right; display: none;' onclick='showThermos()' id='thermosBtn'>Thermo Properties</button>
+          <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem; display: none;' onclick='showVirials()' id='virialsBtn'>Virial Coefficients</button>
+          <button class='btn btn-info btn-sm float-end' style='margin-right: 1rem; display: none;' onclick='showThermos()' id='thermosBtn'>Thermo Properties</button>
         </div>
         <div class='collapse' id='resultsBody' aria-labelledby='headingResults'>
           <div class='card-body'>
             <div id='singleResultsDiv'>
-              <p id='T_row'>T: <span id='T'></span></p>
-              <p id='rho_row'>&rho;: <span id='rho'></span></p>
-              <p id='P_row'>P: <span id='P'></span></p>
-              <p id='U_row'>U: <span id='U'></span></p>
-              <p id='A_row'>A: <span id='A'></span></p>
-              <p id='G_row'>G: <span id='G'></span></p>
+              <p id='T_row'>T<span class='SI' data-prop='T'></span>: <span id='T'></span></p>
+              <p id='rho_row'>&rho;<span class='SI' data-prop='rho'></span>: <span id='rho'></span></p>
+              <p id='P_row'>P<span class='SI' data-prop='P'></span>: <span id='P'></span></p>
+              <p id='U_row'>U<span class='SI' data-prop='U'></span>: <span id='U'></span></p>
+              <p id='A_row'>A<span class='SI' data-prop='A'></span>: <span id='A'></span></p>
+              <p id='G_row'>G<span class='SI' data-prop='G'></span>: <span id='G'></span></p>
               <p id='Z_row'>Z: <span id='Z'></span></p>
-              <p id='Cv_row'>Cv: <span id='Cv'></span></p>
+              <p id='Cv_row'>Cv<span class='SI' data-prop='Cv'></span>: <span id='Cv'></span></p>
               <p id='phi_row'>&phi;: <span id='phi'></span></p>
               <p id='alpha_row'>&alpha;: <span id='alpha'></span></p>
             </div>
             <div id='singleResultsVirialDiv'>
-              <p id='B2_row'>B<sub>2</sub>: <span id='B2'></span></p>
-              <p id='B3_row'>B<sub>3</sub>: <span id='B3'></span></p>
-              <p id='B4_row'>B<sub>4</sub>: <span id='B4'></span></p>
-              <p id='B5_row'>B<sub>5</sub>: <span id='B5'></span></p>
-              <p id='B6_row'>B<sub>6</sub>: <span id='B6'></span></p>
-              <p id='B7_row'>B<sub>7</sub>: <span id='B7'></span></p>
-              <p id='B8_row'>B<sub>8</sub>: <span id='B8'></span></p>
-              <p id='B9_row'>B<sub>9</sub>: <span id='B9'></span></p>
+              <p id='B2_row'>B<sub>2</sub><span class='SI' data-prop='B2'></span>: <span id='B2'></span></p>
+              <p id='B3_row'>B<sub>3</sub><span class='SI' data-prop='B3'></span>: <span id='B3'></span></p>
+              <p id='B4_row'>B<sub>4</sub><span class='SI' data-prop='B4'></span>: <span id='B4'></span></p>
+              <p id='B5_row'>B<sub>5</sub><span class='SI' data-prop='B5'></span>: <span id='B5'></span></p>
+              <p id='B6_row'>B<sub>6</sub><span class='SI' data-prop='B6'></span>: <span id='B6'></span></p>
+              <p id='B7_row'>B<sub>7</sub><span class='SI' data-prop='B7'></span>: <span id='B7'></span></p>
+              <p id='B8_row'>B<sub>8</sub><span class='SI' data-prop='B8'></span>: <span id='B8'></span></p>
+              <p id='B9_row'>B<sub>9</sub><span class='SI' data-prop='B9'></span>: <span id='B9'></span></p>
             </div>
             <div class='overflow-auto' id='parametricResultsDiv' style='display: none;'>
               <table class='table small'>
-                <thead><tr id='parametricTH'><th id='T_col'>T</th><th id='rho_col'>&rho;</th><th id='P_col'>P</th><th id='U_col'>U</th><th id='A_col'>A</th><th id='G_col'>G</th><th id='Z_col'>Z</th><th id='Cv_col'>Cv</th><th id='phi_col'>&phi;</th><th id='alpha_col'>&alpha;</th></tr></thead>
+                <thead><tr id='parametricTH'><th id='T_col'>T<span class='SI' data-prop='T'></span></th><th id='rho_col'>&rho;<span class='SI' data-prop='rho'></span></th><th id='P_col'>P<span class='SI' data-prop='P'></span></th><th id='U_col'>U<span class='SI' data-prop='U'></span></th><th id='A_col'>A<span class='SI' data-prop='A'></span></th><th id='G_col'>G<span class='SI' data-prop='G'></span></th><th id='Z_col'>Z</th><th id='Cv_col'>Cv<span class='SI' data-prop='Cv'></span></th><th id='phi_col'>&phi;</th><th id='alpha_col'>&alpha;</th></tr></thead>
                 <tbody id='parametricResults'></tbody>
               </table>
             </div>
             <div class='overflow-auto' id='parametricResultsVirialDiv' style='display: none;'>
               <table class='table small'>
-                <thead><tr id='parametricVirialTH'><th id='T_col'>T</th><th id='B2_col'>B<sub>2</sub></th><th id='B3_col'>B<sub>3</sub></th><th id='B4_col'>B<sub>4</sub></th><th id='B5_col'>B<sub>5</sub></th><th id='B6_col'>B<sub>6</sub></th><th id='B7_col'>B<sub>7</sub></th><th id='B8_col'>B<sub>8</sub></th><th id='B9_col'>B<sub>9</sub></th></tr></thead>
+                <thead>
+                  <tr id='parametricVirialTH'>
+                    <th id='T_col'>T<span class='SI' data-prop='T'></span></th>
+                    <th id='B2_col'>B<sub>2</sub><span class='SI' data-prop='B2'></span></th>
+                    <th id='B3_col'>B<sub>3</sub><span class='SI' data-prop='B3'></span></th>
+                    <th id='B4_col'>B<sub>4</sub><span class='SI' data-prop='B4'></span></th>
+                    <th id='B5_col'>B<sub>5</sub><span class='SI' data-prop='B5'></span></th>
+                    <th id='B6_col'>B<sub>6</sub><span class='SI' data-prop='B6'></span></th>
+                    <th id='B7_col'>B<sub>7</sub><span class='SI' data-prop='B7'></span></th>
+                    <th id='B8_col'>B<sub>8</sub><span class='SI' data-prop='B8'></span></th>
+                    <th id='B9_col'>B<sub>9</sub><span class='SI' data-prop='B9'></span></th>
+                  </tr>
+                </thead>
                 <tbody id='parametricVirialResults'></tbody>
               </table>
             </div>
@@ -301,6 +318,7 @@
     <div class='AJAX-div' data-content='INFO-MODAL'></div>
     <div class='AJAX-div' data-content='PLOT'></div>
     <div class='AJAX-div' data-content='SAVE'></div>
+    <div class='AJAX-div' data-content='MODEL-MODAL'></div>
 
     <script src='emscripten.js'></script>
     <script async type="text/javascript" src="virial.js"></script>

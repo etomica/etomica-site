@@ -83,6 +83,16 @@ function makeTableData(i) {
   return v;
 }
 function addRow(T, props1, props2, correlations) {
+  var currentModel = document.getElementById("model-select").value;
+  if (models[currentModel].units == "SI") {
+    T = toSI("T", T);
+    for (var p in props1) {
+      props1[p] = toSI(p, props1[p]);
+    }
+    for (var p in props2) {
+      props2[p] = toSI(p, props2[p]);
+    }
+  }
   var tbody = document.getElementById("coex-table");
   props1.v2 = 1/(props1.rho*props1.rho);
   props2.v2 = 1/(props2.rho*props2.rho);
@@ -128,7 +138,14 @@ function addRow(T, props1, props2, correlations) {
           stopUpdate()
           return
         success = False
-        props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
+        try:
+          props1, props2 = findCoexistence(T, eos1, eos2, Pguess, False)
+        except Exception as err:
+          phase1 = document['phase1'].value
+          phase2 = document['phase2'].value
+          window.alert("Trouble finding coexistence between {0} and {1} at T={2}: {3}".format(phase1, phase2, window.fromSim("T",T), err)) 
+          stopUpdate()
+          return
         if not 'rho' in props1:
           success = True
           window.alert("Could not find coexistence for T={0}, Pguess={1}".format(T,Pguess))
@@ -190,7 +207,8 @@ function addRow(T, props1, props2, correlations) {
         <button class='btn btn-xs btn-info' type='button' data-content='solid-liquid' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
       <div id='parametersDiv' class='card mb-4'>
         <div id='headingParameters' class='card-header' role='tab'>
-          <h2 class='h5 mb-0'>Phase Choices</a></h2>
+          <h2 class='h5 mb-0 float-start'>Phase Choices</a></h2>
+          <button class='btn btn-info btn-sm float-end' id='modelBtn' data-bs-toggle="modal" data-bs-target="#modelModal">Reduced LJ</button>
       </div>
       <div class='show' aria-labelledby='headingParameters'>
         <div class='card-body'>
@@ -248,7 +266,7 @@ function addRow(T, props1, props2, correlations) {
     <div class='show' aria-labelledby='headingResults'>
       <div class='card-body'>
         <table class='table table-sm' id='coexResults'>
-          <thead><tr><th id='T_col'>T</th><th id='rho1_col'>&rho;1</th><th id='rho2_col'>&rho;2</th><th id='P_col'>P</th><th id='G_col'>G</th><th id='phi_col'>&phi;</th></tr></thead>
+          <thead><tr><th id='T_col'>T<span class='SI' data-prop='T'></span></th><th id='rho1_col'>&rho;1<span class='SI' data-prop='rho'></span></th><th id='rho2_col'>&rho;2<span class='SI' data-prop='rho'></span></th><th id='P_col'>P<span class='SI' data-prop='P'></span></th><th id='G_col'>G<span class='SI' data-prop='G'></span></th><th id='phi_col'>&phi;</th></tr></thead>
           <tbody id='coex-table'></tbody>
         </table>
       </div>
@@ -258,6 +276,7 @@ function addRow(T, props1, props2, correlations) {
   <div class='AJAX-div' data-content='SAVE'></div>
   <div class='AJAX-div' data-content='PLOT'></div>
   <div class='AJAX-div' data-content='INFO-MODAL'></div>
+  <div class='AJAX-div' data-content='MODEL-MODAL'></div>
 
   </body>
 </html>

@@ -8,7 +8,7 @@ window.addEventListener("fullload", function() {
     h1.parentNode.insertBefore(div, h1.nextSibling);
     brythonSpinner = div;
     window.bstart = performance.now();
-    brython({cache: true});
+    brython(); //{cache: true});
   }
 });
 
@@ -322,11 +322,17 @@ function updatePlot() {
     }
     sets.push({x: xdata, y: ydata, name: allSavedDataNames[j]});
   }
+  var xtitle = xprop, ytitle = yprop;
+  var currentModel = document.getElementById("model-select").value;
+  if (models[currentModel].units == "SI") {
+    xtitle += " ("+unitsSI[xprop]+")";
+    ytitle += " ("+unitsSI[yprop]+")";
+  }
   Plotly.newPlot(plotDiv,
                  sets,
                  { autosize: true,
-                   xaxis: {title: xprop, exponentformat:'power'},
-                   yaxis: {title: yprop, exponentformat:'power'},
+                   xaxis: {title: xtitle, exponentformat:'power'},
+                   yaxis: {title: ytitle, exponentformat:'power'},
                    margin: { t: 0 }
                  },
                  { responsive: true} );
@@ -528,6 +534,13 @@ function addParametricRow(T, rho, props, Bvalues) {
   var v = [];
   props['T'] = T;
   props['rho'] = rho;
+  var currentModel = document.getElementById("model-select").value;
+  if (models[currentModel].units == "SI") {
+    for (var p in props) {
+      props[p] = toSI(p, props[p]);
+    }
+    T = toSI("T", T);
+  }
   var cols = document.getElementById("parametricTH").childNodes;
   for (var i=0; i<cols.length; i++) {
     var p = cols[i].id.replace("_col","");
@@ -555,6 +568,7 @@ function addParametricRow(T, rho, props, Bvalues) {
       var cols = document.getElementById("parametricVirialTH").childNodes;
       makeElement("TD", row, {textContent: T});
       for (var i=1; i<cols.length; i++) {
+        if (cols[i].nodeName != "TH" || cols[i].id=="T_col") continue;
         var p = cols[i].id.replace("_col","");
         var n = Number(p.replace("B",""));
         if (!(n in Bvalues)) {
@@ -592,6 +606,12 @@ function showVirialResults(Bvalues) {
 function showResults(T, rho, props, Bvalues) {
   props.T = T;
   props.rho = rho;
+  var currentModel = document.getElementById("model-select").value;
+  if (models[currentModel].units == "SI") {
+    for (var p in props) {
+      props[p] = toSI(p, props[p]);
+    }
+  }
   document.getElementById("resultsBody").className = "show";
   document.getElementById("virialsBtn").style.display = (!iamvapor || showingVirials) ? "none" : "block";
   document.getElementById("singleResultsDiv").style.display = showingVirials ? "none" : "block";
@@ -931,3 +951,171 @@ function saveData() {
   rebuildSavedStuff();
 }
 
+// Tc, rhocLJ from Potoff https://doi.org/10.1063/1.477787
+var TcLJ = 1.3123, rhocLJ = 0.3174, Na = 6.02214076e23, kB = 1.380649e-23;
+var models = [{name: "Reduced LJ", units: "LJ", sigma: 1, epsilon: 1},
+              {name: "Custom LJ", units: "LJ", sigma: 1, epsilon: 1},
+              {name: "Custom LJ (SI)", units: "SI", sigma: 3, epsilon: 1000},
+              {name: "Helium", units: "SI", Tc: 5.2, rhoc: 17.4},
+              {name: "Neon", units: "SI", Tc: 5.2, rhoc: 23.9806},
+              {name: "Argon", units: "SI", Tc: 150.65, rhoc: 13.4174},
+              {name: "Krypton", units: "SI", Tc: 209.46, rhoc: 11},
+              {name: "Oxygen", units: "SI", Tc: 154.58, rhoc: 13.6},
+              {name: "Nitrogen", units: "SI", Tc: 126.19, rhoc: 11.18},
+              {name: "Carbon Dioxide", units: "SI", Tc: 304.18, rhoc: 10.6},
+              {name: "Carbon Monoxide", units: "SI", Tc: 134.45, rhoc: 11.1},
+              {name: "Methane", units: "SI", Tc: 190.6, rhoc: 1/0.09860},
+              {name: "Ethane", units: "SI", Tc: 305.3, rhoc: 6.9},
+              {name: "Methanol", units: "SI", Tc: 513, rhoc: 8.51},
+              {name: "Ethanol", units: "SI", Tc: 514, rhoc: 6.0},
+              {name: "Water", units: "SI", Tc: 647, rhoc: 17.9}];
+
+window.addEventListener("fullload", function() {
+  var modelSel = document.getElementById("model-select");
+  if (!modelSel) return;
+  for (var i=0; i<models.length; i++) {
+    makeElement("OPTION", modelSel, {value: i, textContent: models[i].name});
+  }
+  modelSel.addEventListener("change", modelUpdated);
+  modelUpdated();
+});
+function modelParameters(i) {
+  var modelData = models[i];
+  if ('epsilon' in modelData) {
+    return modelData;
+  }
+  var eps = modelData.Tc / TcLJ / convProps.T.SI;  // K => J/mol
+  var sigma = Math.pow(modelData.rhoc / rhocLJ / convProps.rho.SI, -1/3); // mol/L => 1/nm^3
+  return {epsilon: eps, sigma: sigma};
+}
+
+function updateModelName() {
+  var currentModel = document.getElementById("model-select").value;
+  var units = models[currentModel].units;
+  var modelName = models[currentModel].name;
+  if (currentModel == 1 || currentModel == 2) {
+    var epsInput = document.getElementById("inputEpsilon");
+    var sigmaInput = document.getElementById("inputSigma");
+    var epsString = "???", sigmaString = "???";
+    try {
+      var eps = Number(epsInput.value);
+      if (eps>0) epsString = eps.toFixed(units=="LJ"?3:1)+(units=="SI"?" J/mol":"");
+    }
+    catch (e) { }
+    try {
+      var sigma = Number(sigmaInput.value);
+      if (sigma>0) sigmaString = sigma.toFixed(3)+(units=="SI"?" nm":"");
+    }
+    catch (e) { }
+    modelName = "LJ, ε: "+epsString+", σ: "+sigmaString;
+  }
+  document.getElementById("modelBtn").textContent = modelName;
+}
+
+function modelUpdated() {
+  var currentModel = document.getElementById("model-select").value;
+  var epsInput = document.getElementById("inputEpsilon");
+  var sigmaInput = document.getElementById("inputSigma");
+  if (currentModel == 0 || 'Tc' in models[currentModel]) {
+    // reduced LJ model.  disable epsilon+sigma
+    sigmaInput.setAttribute("disabled", "true");
+    epsInput.setAttribute("disabled", "true");
+  }
+  else {
+    sigmaInput.removeAttribute("disabled");
+    epsInput.removeAttribute("disabled");
+  }
+  var newParams = modelParameters(currentModel);
+  if (newParams.epsilon>0) {
+    epsInput.value = newParams.epsilon;
+  }
+  if (newParams.sigma>0) {
+    sigmaInput.value = newParams.sigma;
+  }
+  var allSI = document.getElementsByClassName("SI");
+  for (var i=0; i<allSI.length; i++) {
+    var prop = allSI[i].getAttribute("data-prop");
+    allSI[i].textContent = models[currentModel].units == "LJ" ? "" : (prop in unitsSI ? " ("+unitsSI[prop]+")" : "");
+  }
+  updateModelName();
+}
+
+var unitsSI = {T: "K",
+               rho: "mol/L",
+               P: "Pa",
+               U: "J/mol",
+               A: "J/mol",
+               G: "J/mol",
+               Cv: "J/(mol K)",
+               H: "J/mol",
+               S: "J/(mol K)",
+               v2: "(L/mol)^2",
+               Y: "K/(mol/L)^4",
+               sigma: "nm",
+               epsilon: "J/mol",
+               B2: "L/mol",
+               B3: "(L/mol)^2",
+               B4: "(L/mol)^3",
+               B5: "(L/mol)^4",
+               B6: "(L/mol)^5",
+               B7: "(L/mol)^6",
+               B8: "(L/mol)^7",
+               B9: "(L/mol)^8"
+              };
+var convProps = {T: {SI: 1/(kB*Na), dims: [0,1]},    // J/mol => K
+                 rho: {SI: 1e24 / Na, dims: [-3,0]}, // 1/nm^3 => mol/L
+                 P: {SI: 1e27/Na, dims: [-3,1]},     // K mol / L => Pa
+                 U: {SI: 1, dims: [0,1]},
+                 A: {SI: 1, dims: [0,1]},
+                 G: {SI: 1, dims: [0,1]},
+                 H: {SI: 1, dims: [0,1]},
+                 Cv: {SI: kB*Na, dims: [0,0]},       // (J/mol)/(J/mol) => (J/mol)/K
+                 S: {SI: kB*Na, dims: [0,0]},        // (J/mol)/(J/mol) => (J/mol)/K
+                 v2: {SI: Na*Na/1e48, dims: [6,0]},
+                 Y: {SI: 1/(kB*Na)*(Na*Na*Na*Na/1e96), dims: [12,1]},
+                 B2: {SI: Na/1e24, dims: [3,0]},
+                 B3: {SI: Math.pow(Na/1e24,2), dims: [6,0]},
+                 B4: {SI: Math.pow(Na/1e24,3), dims: [9,0]},
+                 B5: {SI: Math.pow(Na/1e24,4), dims: [12,0]},
+                 B6: {SI: Math.pow(Na/1e24,5), dims: [15,0]},
+                 B7: {SI: Math.pow(Na/1e24,6), dims: [18,0]},
+                 B8: {SI: Math.pow(Na/1e24,7), dims: [21,0]},
+                 B9: {SI: Math.pow(Na/1e24,8), dims: [24,0]}
+                 };       
+function toSI(prop, value) {
+  if (!(prop in convProps)) return value;
+  var sigma = Number(document.getElementById("inputSigma").value);
+  var epsilon = Number(document.getElementById("inputEpsilon").value);
+  var r = Math.pow(sigma,convProps[prop].dims[0])
+         *Math.pow(epsilon,convProps[prop].dims[1]);
+  var f = convProps[prop].SI;
+  return value*r*f;
+}
+function fromSI(prop, value) {
+  if (!(prop in convProps)) return value;
+  var sigma = Number(document.getElementById("inputSigma").value);
+  var epsilon = Number(document.getElementById("inputEpsilon").value);
+  var r = Math.pow(sigma,convProps[prop].dims[0])
+         *Math.pow(epsilon,convProps[prop].dims[1]);
+  var f = convProps[prop].SI;
+  return value/(f*r);
+}
+function toSim(prop, value) {
+  var currentModel = document.getElementById("model-select").value;
+  if (models[currentModel].units != "SI") return value;
+  return fromSI(prop, value);
+}
+function fromSim(prop, value) {
+  var currentModel = document.getElementById("model-select").value;
+  if (models[currentModel].units != "SI") return value;
+  return toSI(prop, value);
+}
+
+window.addEventListener("fullload", function() {
+  return;
+  var allSI = document.getElementsByClassName("SI");
+  for (var i=0; i<allSI.length; i++){
+    var prop = allSI[i].getAttribute("data-prop");
+    if (prop in unitsSI) allSI[i].textContent = " ("+unitsSI[prop]+")";
+  }
+});
