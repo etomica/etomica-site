@@ -952,7 +952,7 @@ function saveData() {
 }
 
 // Tc, rhocLJ from Potoff https://doi.org/10.1063/1.477787
-var TcLJ = 1.3123, rhocLJ = 0.3174, Na = 6.02214076e23, kB = 1.380649e-23;
+var TcLJ = 1.3123, rhocLJ = 0.3174, Na = 6.02214076e23, kB = 1.380649e-26;
 var models = [{name: "Reduced LJ", units: "LJ", sigma: 1, epsilon: 1},
               {name: "Custom LJ", units: "LJ", sigma: 1, epsilon: 1},
               {name: "Custom LJ (SI)", units: "SI", sigma: 3, epsilon: 1000},
@@ -984,7 +984,7 @@ function modelParameters(i) {
   if ('epsilon' in modelData) {
     return modelData;
   }
-  var eps = modelData.Tc / TcLJ / convProps.T.SI;  // K => J/mol
+  var eps = modelData.Tc / TcLJ / convProps.T.SI;  // K => kJ/mol
   var sigma = Math.pow(modelData.rhoc / rhocLJ / convProps.rho.SI, -1/3); // mol/L => 1/nm^3
   return {epsilon: eps, sigma: sigma};
 }
@@ -999,7 +999,7 @@ function updateModelName() {
     var epsString = "???", sigmaString = "???";
     try {
       var eps = Number(epsInput.value);
-      if (eps>0) epsString = eps.toFixed(units=="LJ"?3:1)+(units=="SI"?" J/mol":"");
+      if (eps>0) epsString = eps.toFixed(units=="LJ"?3:1)+(units=="SI"?" kJ/mol":"");
     }
     catch (e) { }
     try {
@@ -1042,17 +1042,16 @@ function modelUpdated() {
 
 var unitsSI = {T: "K",
                rho: "mol/L",
-               P: "Pa",
-               U: "J/mol",
-               A: "J/mol",
-               G: "J/mol",
-               Cv: "J/(mol K)",
-               H: "J/mol",
-               S: "J/(mol K)",
+               P: "MPa",
+               U: "kJ/mol",
+               A: "kJ/mol",
+               G: "kJ/mol",
+               Cv: "kJ/(mol K)",
+               H: "kJ/mol",
+               S: "kJ/(mol K)",
                v2: "(L/mol)^2",
-               Y: "K/(mol/L)^4",
                sigma: "nm",
-               epsilon: "J/mol",
+               epsilon: "kJ/mol",
                B2: "L/mol",
                B3: "(L/mol)^2",
                B4: "(L/mol)^3",
@@ -1062,17 +1061,16 @@ var unitsSI = {T: "K",
                B8: "(L/mol)^7",
                B9: "(L/mol)^8"
               };
-var convProps = {T: {SI: 1/(kB*Na), dims: [0,1]},    // J/mol => K
+var convProps = {T: {SI: 1/(kB*Na), dims: [0,1]},    // kJ/mol => K
                  rho: {SI: 1e24 / Na, dims: [-3,0]}, // 1/nm^3 => mol/L
-                 P: {SI: 1e27/Na, dims: [-3,1]},     // K mol / L => Pa
+                 P: {SI: 1e21/Na*1000, dims: [-3,1]},     // K mol / L => MPa
                  U: {SI: 1, dims: [0,1]},
                  A: {SI: 1, dims: [0,1]},
                  G: {SI: 1, dims: [0,1]},
                  H: {SI: 1, dims: [0,1]},
-                 Cv: {SI: kB*Na, dims: [0,0]},       // (J/mol)/(J/mol) => (J/mol)/K
-                 S: {SI: kB*Na, dims: [0,0]},        // (J/mol)/(J/mol) => (J/mol)/K
+                 Cv: {SI: kB*Na, dims: [0,0]},       // (kJ/mol)/(kJ/mol) => (kJ/mol)/K
+                 S: {SI: kB*Na, dims: [0,0]},        // (kJ/mol)/(kJ/mol) => (kJ/mol)/K
                  v2: {SI: Na*Na/1e48, dims: [6,0]},
-                 Y: {SI: 1/(kB*Na)*(Na*Na*Na*Na/1e96), dims: [12,1]},
                  B2: {SI: Na/1e24, dims: [3,0]},
                  B3: {SI: Math.pow(Na/1e24,2), dims: [6,0]},
                  B4: {SI: Math.pow(Na/1e24,3), dims: [9,0]},
