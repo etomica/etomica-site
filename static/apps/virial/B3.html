@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>B3</title>
+    <!-- <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'> -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel='stylesheet' href='style.css'>
+  </head>
+  <body>
+  <div class='container'>
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
+    <h1>B<sub>3</sub> via fast Fourier transforms</h1>
+    <p><a style='margin-right: 2em;' href='./'>Home</a> Source: <a href='potential.c'>potential.c</a> <a href='potential.h'>potential.h</a> <a href='b3.c'>b3.c</a> <a href='b3.h'>b3.h</a></p>
+    <div><label>Potential: <select class='form-control' id='potType' onchange='updatePotType()'>
+          <option value='0'>Soft sphere</option>
+          <option value='1' selected>Lennard-Jones</option>
+          <option value='2'>WCA</option>
+          <option value='3'>Custom</option>
+      </select></label><br>
+      <div id='uCustomDiv' style='display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em; display: inline-block;' value='r==0 ? Number.POSITIVE_INFINITY : 4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label></div>
+    <label>Temperature: <input id='T' size='3' value='1'></label>
+    <div id='ttDiv'><label>Truncation type: <select class='form-control' id='truncType' onchange='updateTrunc()'>
+        <option value='1'>Simple</option>
+        <option value='3'>Shifted</option>
+        <option value='4' id='truncType4'>Force-shifted</option>
+  </select></label></div>
+    <div id='rcDiv' style='display: none'><label>Cutoff: <input id='rc' size='3' value='3'></label></div></div>
+    <button type='button' id='goButton' class='btn btn-primary'>Go</button>
+    <div id='Output'></div>
+    <hr/>
+    <table id='resultsTable' class='table table-sm' style='display: none;'>
+      <thead><tr><th>log<sub>2</sub>N</th><th>B<sub>3</sub></th><th>Diff</th><th>dB<sub>3</sub>/d&beta;</th><th>Diff</th><th>d<sup>2</sup>B<sub>3</sub>/d&beta;<sup>2</sup></th><th>Diff</th></tr></thead>
+      <tbody id='results'></tbody>
+    </table>
+    <hr>
+  </div>
+    <script src='util.js'></script>
+    <script src='emscripten.js'></script>
+    <script type='text/javascript'>
+var running = false, stopRequested = false;
+document.getElementById('goButton').addEventListener('click', function(){
+  window.setTimeout(go, 0);
+});
+var nr2 = 5;
+var lastResult = null;
+function go() {
+  nr2 = 5;
+  lastResult = null;
+  var tbody = document.getElementById('results');
+  empty(tbody);
+
+  setTruncation();
+  goCalc();
+}
+
+function setTruncation() {
+  var T = Number(document.getElementById("T").value);
+  if (T<=0) {
+    alert("Invalid temperature "+T);
+    document.getElementById("T").focus();
+    return;
+  }
+  var potType = Number(document.getElementById("potType").value);
+  var truncType = 1, rc = 0;
+  if (potType != 2) {
+    truncType = Number(document.getElementById("truncType").value);
+    if (truncType < 0 || truncType > 4 || truncType != Math.round(truncType)) {
+      alert("Invalid truncation type " + truncType);
+      return;
+    }
+    rc = Number(document.getElementById("rc").value);
+    if (truncType>0 && rc <= 0) {
+      alert("Invalid rc "+rc);
+      document.getElementById("rc").focus();
+      return;
+    }
+  }
+  if (potType == 3) {
+    eval('uCustom = function(r) { return '+document.getElementById('uCustom').value+';};');
+  }
+
+  Module.ccall('setTruncation', 'number', ['number','number','number'], [potType,rc,truncType]);
+
+}
+var uCustom = function(r) {return 0;}
+function goCalc() {
+  var T = Number(document.getElementById("T").value);
+  if (T<=0) {
+    alert("Invalid temperature "+T);
+    document.getElementById("T").focus();
+    return;
+  }
+  var result = Module.ccall('calcB3', 'number', ['number','number'], [T,1<<nr2]);
+  var tbody = document.getElementById('results');
+  var row = makeElement("TR", tbody);
+  makeElement("TD", row, {textContent: nr2});
+  makeElement("TD", row, {textContent: result});
+  makeElement("TD", row, {textContent: lastResult ? (result-lastResult[0]).toPrecision(3) : ""});
+  var resultD1 = Module.ccall('getLastResultB3', 'number', ['number'], [1]);
+  makeElement("TD", row, {textContent: resultD1});
+  makeElement("TD", row, {textContent: lastResult ? (resultD1-lastResult[1]).toPrecision(3) : ""});
+  var resultD2 = Module.ccall('getLastResultB3', 'number', ['number'], [2]);
+  makeElement("TD", row, {textContent: resultD2});
+  makeElement("TD", row, {textContent: lastResult ? (resultD2-lastResult[2]).toPrecision(3) : ""});
+  lastResult = [result,resultD1,resultD2];
+  if (nr2<16) {
+    nr2++;
+    setTimeout(goCalc, 0);
+  }
+}
+function updatePotType() {
+  var potType = Number(document.getElementById("potType").value);
+  var truncType = Number(document.getElementById("truncType").value);
+  if (potType==2) {
+    document.getElementById("truncType").value = 3;
+    updateTrunc();
+  }
+  document.getElementById("rcDiv").style.display = (truncType==0||potType==2) ? "none" : "block";
+  document.getElementById("ttDiv").style.display = potType==2 ? "none" : "block";
+  document.getElementById("uCustomDiv").style.display = potType==3 ? "block" : "none";
+  document.getElementById("truncType4").style.display = potType==3 ? "none" : "";
+}
+function updateTrunc() {
+  var truncType = Number(document.getElementById("truncType").value);
+  document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "block";
+  document.getElementById("resultsTable").style.display = truncType==0 ? "none" : "block";
+}
+window.addEventListener("load", updatePotType);
+window.addEventListener("load", updateTrunc);
+    </script>
+    <script async type="text/javascript" src="virial.js"></script>
+  </body>
+</html>
