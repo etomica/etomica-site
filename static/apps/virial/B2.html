@@ -30,7 +30,9 @@
         </select>
       </label><br>
       <div id='uCustomSpan' style='margin-left: 2em; display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em; display: inline-block;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label></div>
-      <label>Temperature: <input class='form-control' id='T' style='width: 4rem;' value='1'></label>
+      <label>Temperature: <input class='form-control' id='T' style='width: 6rem;' value='1'></label>
+      <label><input type='checkbox' id='useX' onchange='updateTrunc()'> vary T(x) parametrically</label>
+      <input class='form-control' id='numX' style='width: 6rem; display: none;' placeholder='# of x'>
       <div id='ttDiv'>
         <label>Truncation type:
           <select id='truncType' class='form-select' onchange='updateTrunc()'>
@@ -47,7 +49,7 @@
       <div id='Output'></div>
       <hr>
       <table id='resultsTable' class='table table-sm' style='display: none;'>
-        <thead><tr><th>log<sub>2</sub>N</th><th>B<sub>2</sub></th><th>Diff</th><th>dB<sub>2</sub>/d&beta;</th><th>Diff</th><th>d<sup>2</sup>B<sub>2</sub>/d&beta;<sup>2</sup></th><th>Diff</th></tr></thead>
+        <thead><tr><th id='parametricThead'>T</th><th id='log2Ncol'>log<sub>2</sub>N</th><th>B<sub>2</sub></th><th class='diffcol'>Diff</th><th>dB<sub>2</sub>/d&beta;</th><th class='diffcol'>Diff</th><th>d<sup>2</sup>B<sub>2</sub>/d&beta;<sup>2</sup></th><th class='diffcol'>Diff</th></tr></thead>
         <tbody id='results'></tbody>
       </table>
       <p id='resultsP'>B<sub>2</sub>: <span id='valueB2'></span><br>
@@ -62,10 +64,12 @@ var running = false, stopRequested = false;
 document.getElementById('goButton').addEventListener('click', function(){
   window.setTimeout(go, 0);
 });
-var nr2 = 10;
+var nr2 = 10, ix = 0;
 var lastResult = null;
 function go() {
-  nr2 = 10;
+  var useX = document.getElementById("useX").checked;
+  nr2 = useX ? 19 : 10;
+  ix = 0;
   lastResult = null;
   var tbody = document.getElementById('results');
   empty(tbody);
@@ -73,7 +77,17 @@ function go() {
 }
 var uCustom = function(r) {return 0;}
 function goCalc() {
-  var T = Number(document.getElementById("T").value);
+  var useX = document.getElementById("useX").checked;
+  var T = 0;
+  var numX = 0;
+  if (useX) {
+    numX = Number(document.getElementById("numX").value);
+    x = ix / numX;
+    eval("T = "+document.getElementById("T").value);
+  }
+  else {
+    T = Number(document.getElementById("T").value);
+  }
   if (T<=0) {
     alert("Invalid temperature "+T);
     document.getElementById("T").focus();
@@ -102,28 +116,45 @@ function goCalc() {
   var result = Module.ccall('calcB2', 'number', ['number','number'], [T,1<<nr2]);
   var resultD1 = Module.ccall('getLastResultB2', 'number', ['number'], [1]);
   var resultD2 = Module.ccall('getLastResultB2', 'number', ['number'], [2]);
-  if (truncType == 0) {
+  if (truncType == 0 && !useX) {
     document.getElementById("valueB2").textContent = result;
     document.getElementById("valueB2d1").textContent = resultD1;
     document.getElementById("valueB2d2").textContent = resultD2;
     return;
   }
-  var tbody = document.getElementById('results');
-  var row = makeElement("TR", tbody);
-  makeElement("TD", row, {textContent: nr2});
-  makeElement("TD", row, {textContent: result});
-  makeElement("TD", row, {textContent: lastResult ? (result-lastResult[0]).toPrecision(3) : ""});
-  makeElement("TD", row, {textContent: resultD1});
-  makeElement("TD", row, {textContent: lastResult ? (resultD1-lastResult[1]).toPrecision(3) : ""});
-  makeElement("TD", row, {textContent: resultD2});
-  makeElement("TD", row, {textContent: lastResult ? (resultD2-lastResult[2]).toPrecision(3) : ""});
+  if (!useX || nr2 == 20) {
+    var tbody = document.getElementById('results');
+    var row = makeElement("TR", tbody);
+    if (useX) {
+      makeElement("TD", row, {textContent: T});
+    }
+    else {
+      makeElement("TD", row, {textContent: nr2});
+    }
+    makeElement("TD", row, {textContent: result});
+    if (truncType == 0) makeElement("TD", row, {style: {display: "none"}});
+    else makeElement("TD", row, {textContent: lastResult ? (result-lastResult[0]).toPrecision(3) : ""});
+    makeElement("TD", row, {textContent: resultD1});
+    if (truncType == 0) makeElement("TD", row, {style: {display: "none"}});
+    else makeElement("TD", row, {textContent: lastResult ? (resultD1-lastResult[1]).toPrecision(3) : ""});
+    makeElement("TD", row, {textContent: resultD2});
+    if (truncType == 0) makeElement("TD", row, {style: {display: "none"}});
+    else makeElement("TD", row, {textContent: lastResult ? (resultD2-lastResult[2]).toPrecision(3) : ""});
+  }
   lastResult = [result,resultD1,resultD2];
   if (nr2<20) {
     nr2++;
     setTimeout(goCalc, 0);
   }
+  else if (useX && ix<numX) {
+    ix++;
+    nr2 = 19;
+    setTimeout(goCalc, 0);
+  }
 }
 function updatePotType() {
+  var tbody = document.getElementById('results');
+  empty(tbody);
   var potType = Number(document.getElementById("potType").value);
   var truncType = Number(document.getElementById("truncType").value);
   if (potType==2) {
@@ -134,18 +165,30 @@ function updatePotType() {
   document.getElementById("ttDiv").style.display = potType==2 ? "none" : "block";
   document.getElementById("uCustomSpan").style.display = potType==4 ? "block" : "none";
   document.getElementById("truncType0").style.display = 
-      document.getElementById("truncType2").style.display = 
-      document.getElementById("truncType4").style.display = (potType==4 ? "none" : "");
+  document.getElementById("truncType2").style.display = 
+  document.getElementById("truncType4").style.display = (potType==4 ? "none" : "");
   if (potType == 4 && (truncType == 0 || truncType==2 || truncType==4)) {
     document.getElementById("truncType").value = 1;
     updateTrunc();
   }
 }
 function updateTrunc() {
+  var tbody = document.getElementById('results');
+  empty(tbody);
   var truncType = Number(document.getElementById("truncType").value);
+  var useX = document.getElementById("useX").checked;
   document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "block";
-  document.getElementById("resultsTable").style.display = truncType==0 ? "none" : "block";
-  document.getElementById("resultsP").style.display = truncType==0 ? "block" : "none";
+  document.getElementById("resultsTable").style.display = (truncType==0 && !useX) ? "none" : "block";
+  document.getElementById("resultsP").style.display = (truncType==0 && !useX) ? "block" : "none";
+  var truncType = Number(document.getElementById("truncType").value);
+  var diffHeads = document.getElementsByClassName("diffcol");
+  for (var i=0; i<diffHeads.length; i++) {
+    diffHeads[i].style.display = truncType == 0 ? "none" : "table-cell";
+  }
+  document.getElementById("parametricThead").style.display = useX ? "table-cell" : "none";
+  document.getElementById("log2Ncol").style.display = useX ? "none" : "table-cell";
+  document.getElementById("numX").style.display = useX ? "inline-block" : "none";
+
 }
 window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);
