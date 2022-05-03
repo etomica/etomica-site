@@ -1,5 +1,8 @@
+.pubName { font-style: italic; }
+.volume { font-weight: bold; }
+.citation { font-size: 90%; display: none; }
 body {padding: 1rem;}
-select.form-control {display: inline-block; width: auto;}
+select.form-control, select.form-select {display: inline-block; width: auto;}
 input.form-control {display: inline;}
 
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }

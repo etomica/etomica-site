@@ -17,46 +17,53 @@
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-    <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Virial coefficients via Mayer-sampling Monte Carlo</h1>
+    <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Virial coefficients via Mayer-sampling Monte Carlo
+    <button id='btnDoc' class='btn btn-sm btn-info' type='button' data-content='MSMC' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
     <p>Source: <a href='potential.c'>potential.c</a> <a href='potential.h'>potential.h</a> <a href='msmc.c'>msmc.c</a> <a href='mt.c'>mt.c</a> <a href='mt.h'>mt.h</a></p>
 
     <div id='parametersDiv' class='card'>
       <div class='card-header' role='tab' id='headingParameters'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
       <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
         <div class='card-body'>
-          <div>
-            <label>Number of molecules:
-              <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;'>
-            </label><br>
-            <label>Potential:
-              <select class='form-select' id='potType' onchange='updatePotType()'>
-                <option value='0'>Soft sphere</option>
-                <option value='1' selected>Lennard-Jones</option>
-                <option value='2'>WCA</option>
-                <option value='3'>Custom</option>
-              </select>
-            </label><br>
-            <div id='uCustomDiv' style='display: none'>
-              <label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label><br>
-              <label>Reference HS sigma: <input id='sigmaHSRef' class='form-control' size='5' style='width: 5em;' value='1'></label>
-            </div>
-            <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
-            <div id='ttDiv'>
-              <label>Truncation type:
-                <select class='form-select' id='truncType' onchange='updateTrunc()'>
-                  <option value='0'>None</option>
-                  <option value='1'>Simple</option>
-                  <option value='3'>Shifted</option>
-                  <option value='4' id='truncType4'>Force-shifted</option>
+          <div class='row'>
+            <div class='col-auto px-4'>
+              <label>Order of coefficient:
+                <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;'>
+              </label><br>
+              <label>Potential:
+                <select class='form-select' id='potType' onchange='updatePotType()'>
+                  <option value='0'>Soft sphere</option>
+                  <option value='1' selected>Lennard-Jones</option>
+                  <option value='2'>WCA</option>
+                  <option value='3'>Custom</option>
                 </select>
-              </label>
+              </label><br>
+              <div id='uCustomDiv' style='display: none'>
+                <label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label><br>
+                <label>Reference HS sigma: <input id='sigmaHSRef' class='form-control' size='5' style='width: 5em;' value='1'></label>
+              </div>
+              <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
+              <div id='ttDiv'>
+                <label>Truncation type:
+                  <select class='form-select' id='truncType' onchange='updateTrunc()'>
+                    <option value='0'>None</option>
+                    <option value='1'>Simple</option>
+                    <option value='3'>Shifted</option>
+                    <option value='4' id='truncType4'>Force-shifted</option>
+                  </select>
+                </label>
+              </div>
+              <div id='rcDiv'><label>Cutoff: <input class='form-control' id='rc' size='3' value='3' style='width: 5em;'></label></div>
+              <label># of derivatives: <input class='form-control' size='1' id='nDer' value='0' style='width: 3em;'></label><br>
+              <label>Seed: <input class='form-control' size='15' id='seed' style='width: 15em;'></label>
+  
+              <p><button type='button' id='setButton' class='btn btn-sm btn-primary'>Start</button></p>
             </div>
-            <div id='rcDiv'><label>Cutoff: <input class='form-control' id='rc' size='3' value='3' style='width: 5em;'></label></div>
-            <label># of derivatives: <input class='form-control' size='1' id='nDer' value='0' style='width: 3em;'></label><br>
-            <label>Seed: <input class='form-control' size='15' id='seed' style='width: 15em;'></label>
+            <div class='col-auto px-4'>
+              <p>Initialization output:</p>
+              <div class='output' id="initOutput"></div>
+            </div>
           </div>
-          <button type='button' id='setButton' class='btn btn-sm btn-primary'>Start</button></p>
-          <div class='output' id="initOutput"></div>
         </div>
       </div>
     </div>
@@ -83,7 +90,7 @@
           <p><button type='button' id='alphaButton' class='btn btn-sm btn-primary'>Find alpha</button></p>
           <div class='output' id="alphaOutput"></div>
           <table class='table table-sm'>
-            <thead><tr><th>ln(span)</th><th>&alpha;</th><th>Uncertainty</th><th>Target autocorrelation</th></tr></thead>
+            <thead><tr><th>ln(&alpha;<sub>max</sub>/&alpha;<sub>min</sub>)</th><th>&alpha;</th><th>Uncertainty</th><th>Target autocorrelation</th></tr></thead>
             <tbody id='alphaTable'></tbody>
           </table>
           <p>Block size: <span id="alphaBlockSize"></span></p>
@@ -507,5 +514,23 @@ window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);
     </script>
     <script async type="text/javascript" src="virial.js"></script>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

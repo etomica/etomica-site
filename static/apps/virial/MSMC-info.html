@@ -1,0 +1,26 @@
+<h3 class='h5'>MSMC</h3>
+
+<p>Mayer-sampling Monte Carlo (MSMC) is a method to compute virial coefficients.  The method relies on importance sampling of configurations using Metroplis Monte Carlo sampling and can be used for any type of model and any order of coefficient (limited only by the available computational effort).  The output of the simulation is the ratio of the desired virial coefficient integral to a known reference integral.  This site uses a chain of hard spheres as a reference.  The MSMC simulation must sample both reference and target systems.  The ratio of integrals is computed using overlap sampling (often called Bennett's acceptance ratio, BAR).  The virial coefficient is computed with recursion [1], which allows temperature derivatives [2] to also be measured for moderate additional cost.</p>
+
+<ol style='font-size: 90%'>
+  <li>R. J. Wheatley, "<a href='http://dx.doi.org/10.1103/PhysRevLett.110.200601'>Calculation of High-Order Virial Coefficients with Applications to Hard and Soft Spheres</a>", <span class='pubName'>Phys. Rev. Lett.</span> <span class='volume'>110</span>, 200601 (2013).</li>
+  <li>R. J. Wheatley, A. J. Schultz, H. N. Do, N. Gokul, D. A. Kofke, "<a href='https://doi.org/10.1103/PhysRevE.101.051301'>Cluster integrals and virial coefficients for realistic molecular models</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>101</span>, 051301 (2020).
+</ol>
+
+<h3 class='h5'>Step Size</h3>
+
+<p>The Monte Carlo step size has a significant impact on the efficiency of the simulation.  A too-large step size results in almost all moves being rejected while a too-small step size results in consistent but very slow exploration of configuration.  Initial runs are used to determine an appropriate step size (targeting 50% acceptance of moves).  Step size is adjusted more aggressively while the acceptance is far from 50%, but more slowly as the acceptance approaches the desired value.  The number of steps in a run also increases to suppress noise in the measured acceptance.  This stage ends when two consective runs have an acceptance in the 48-52% range.</p>
+
+<h3 class='h5'>Alpha</h3>
+
+Before overlap sampling production data can be collected, a value of &alpha; must be determined.  While the production virial coefficient value should converge to the same value regardless of &alpha;, in practice both accuracy and precision of the virial coefficient depend on &alpha;.  &alpha; values are estimated from a series of short runs, starting with a short run that considers a wide range of &alpha; values.  The number of steps per run is increased and the range of &alpha; values decreases until all the following criteria are met:
+<ul>
+  <li>ln(&alpha;<sub>max</sub>/&alpha;<sub>min</sub>) is less than 0.6</li>
+  <li>relative error in &alpha; is less than 10%</li>
+  <li>last two estimates of &alpha; are within ~20%</li>
+  <li>block auto-correlation is less than 0.2</li>
+</ul>
+
+<h3 class='h5'>Production</h3>
+
+During the production stage of MSMC, the simulation alternates between the reference and target system, optimizing the fraction of time spent in each.  Resulting averages, uncertainties and (for the target system) correlations are reported in tables.  The uncertainty is computed with block averages and the block size increases during the simulation in order to eliminate block auto-correlation that tends to happen with short blocks.  Additionally, &alpha; (=(&gamma;<sub>OS</sub>/&pi;)<sub>ref</sub> / (&gamma;<sub>OS</sub>/&pi;)<sub>target</sub>) is recomputed from data collected during production as a check that the chosen value of &alpha; is appropriate. Finally, the value of the virial coefficient is reported along with its uncertainty.</p>
