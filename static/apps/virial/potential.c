@@ -99,6 +99,5 @@ void EMSCRIPTEN_KEEPALIVE setTruncation(int newPT, double newRC, int tt) {
   else if (truncType == TRUNC_NONE) {
     rc = 1.0/0.0;
   }
-  printf("rc %e\n", rc);
 }
 

@@ -170,7 +170,6 @@ double EMSCRIPTEN_KEEPALIVE calcB3(double T, int nr) {
     // (f*f)*d2
     d2sum += 3*(ffr[i]*frd2[i]*i)*i;
   }
-  printf("d2sum %e\n", d2sum);
 
   sineForward(frd1, fk, nr, dr);
   for (int i=0; i<nr; i++) {
