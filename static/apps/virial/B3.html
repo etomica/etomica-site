@@ -17,7 +17,8 @@
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-    <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> B<sub>3</sub> via fast Fourier transforms</h1>
+    <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> B<sub>3</sub> via fast Fourier transforms
+      <button id='btnDoc' class='btn btn-sm btn-info' type='button' data-content='B3' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
     <p>Source: <a href='potential.c'>potential.c</a> <a href='potential.h'>potential.h</a> <a href='b3.c'>b3.c</a> <a href='b3.h'>b3.h</a></p>
     <div>
       <label>Potential:
@@ -144,5 +145,22 @@ window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);
     </script>
     <script async type="text/javascript" src="virial.js"></script>
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
