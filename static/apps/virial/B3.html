@@ -19,29 +19,36 @@
     </div>
     <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> B<sub>3</sub> via fast Fourier transforms</h1>
     <p>Source: <a href='potential.c'>potential.c</a> <a href='potential.h'>potential.h</a> <a href='b3.c'>b3.c</a> <a href='b3.h'>b3.h</a></p>
-    <div><label>Potential: <select class='form-select' id='potType' onchange='updatePotType()'>
+    <div>
+      <label>Potential:
+        <select class='form-select' id='potType' onchange='updatePotType()'>
           <option value='0'>Soft sphere</option>
           <option value='1' selected>Lennard-Jones</option>
           <option value='2'>WCA</option>
           <option value='3'>Custom</option>
-      </select></label><br>
+        </select>
+      </label><br>
       <div id='uCustomDiv' style='display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em; display: inline-block;' value='r==0 ? Number.POSITIVE_INFINITY : 4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label></div>
-    <label>Temperature: <input class='form-control' id='T' style='width: 4rem;' value='1'></label>
-    <div id='ttDiv'><label>Truncation type: <select class='form-select' id='truncType' onchange='updateTrunc()'>
-        <option value='1'>Simple</option>
-        <option value='3'>Shifted</option>
-        <option value='4' id='truncType4'>Force-shifted</option>
-  </select></label></div>
-    <div id='rcDiv' style='display: none'><label>Cutoff: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
-    <button type='button' id='goButton' class='btn btn-primary'>Go</button>
-    <div id='Output'></div>
-    <hr/>
-    <table id='resultsTable' class='table table-sm' style='display: none;'>
-      <thead><tr><th>log<sub>2</sub>N</th><th>B<sub>3</sub></th><th>Diff</th><th>dB<sub>3</sub>/d&beta;</th><th>Diff</th><th>d<sup>2</sup>B<sub>3</sub>/d&beta;<sup>2</sup></th><th>Diff</th></tr></thead>
-      <tbody id='results'></tbody>
-    </table>
-    <hr>
-  </div>
+      <label>Temperature: <input class='form-control' id='T' style='width: 4rem;' value='1'></label>
+      <div id='ttDiv'>
+        <label>Truncation type:
+          <select class='form-select' id='truncType' onchange='updateTrunc()'>
+            <option value='1'>Simple</option>
+            <option value='3'>Shifted</option>
+            <option value='4' id='truncType4'>Force-shifted</option>
+          </select>
+        </label>
+      </div>
+      <div id='rcDiv' style='display: none'><label>Cutoff: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
+      <button type='button' id='goButton' class='btn btn-primary'>Go</button>
+      <div id='Output'></div>
+      <hr>
+      <table id='resultsTable' class='table table-sm' style='display: none;'>
+        <thead><tr><th>log<sub>2</sub>N</th><th>B<sub>3</sub></th><th>Diff</th><th>dB<sub>3</sub>/d&beta;</th><th>Diff</th><th>d<sup>2</sup>B<sub>3</sub>/d&beta;<sup>2</sup></th><th>Diff</th></tr></thead>
+        <tbody id='results'></tbody>
+      </table>
+      <hr>
+    </div>
     <script src='util.js'></script>
     <script src='emscripten.js'></script>
     <script type='text/javascript'>

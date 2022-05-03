@@ -19,134 +19,150 @@
     </div>
     <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Virial coefficients via Mayer-sampling Monte Carlo</h1>
     <p>Source: <a href='potential.c'>potential.c</a> <a href='potential.h'>potential.h</a> <a href='msmc.c'>msmc.c</a> <a href='mt.c'>mt.c</a> <a href='mt.h'>mt.h</a></p>
+
     <div id='parametersDiv' class='card'>
-      <div class='card-header' role='tab' id='headingParameters'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
+      <div class='card-header' role='tab' id='headingParameters'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
       <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
-      <div class='card-body'>
-    <div><label>Number of molecules: <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;'></label><br>
-    <label>Potential: <select class='form-select' id='potType' onchange='updatePotType()'>
-          <option value='0'>Soft sphere</option>
-          <option value='1' selected>Lennard-Jones</option>
-          <option value='2'>WCA</option>
-          <option value='3'>Custom</option>
-      </select></label><br>
-      <div id='uCustomDiv' style='display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label><br>
-        <label>Reference HS sigma: <input id='sigmaHSRef' class='form-control' size='5' style='width: 5em;' value='1'></label></div>
-      <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
-    <div id='ttDiv'><label>Truncation type: <select class='form-select' id='truncType' onchange='updateTrunc()'>
-        <option value='0'>None</option>
-        <option value='1'>Simple</option>
-        <option value='3'>Shifted</option>
-        <option value='4' id='truncType4'>Force-shifted</option>
-  </select></label></div>
-  <div id='rcDiv'><label>Cutoff: <input class='form-control' id='rc' size='3' value='3' style='width: 5em;'></label></div>
-    <label># of derivatives: <input class='form-control' size='1' id='nDer' value='0' style='width: 3em;'></label><br>
-    <label>Seed: <input class='form-control' size='15' id='seed' style='width: 15em;'></label></div>
-    <button type='button' id='setButton' class='btn btn-sm btn-primary'>Start</button></p>
-    <div class='output' id="initOutput"></div>
-  </div>
-  </div>
-  </div>
+        <div class='card-body'>
+          <div>
+            <label>Number of molecules:
+              <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;'>
+            </label><br>
+            <label>Potential:
+              <select class='form-select' id='potType' onchange='updatePotType()'>
+                <option value='0'>Soft sphere</option>
+                <option value='1' selected>Lennard-Jones</option>
+                <option value='2'>WCA</option>
+                <option value='3'>Custom</option>
+              </select>
+            </label><br>
+            <div id='uCustomDiv' style='display: none'>
+              <label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label><br>
+              <label>Reference HS sigma: <input id='sigmaHSRef' class='form-control' size='5' style='width: 5em;' value='1'></label>
+            </div>
+            <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
+            <div id='ttDiv'>
+              <label>Truncation type:
+                <select class='form-select' id='truncType' onchange='updateTrunc()'>
+                  <option value='0'>None</option>
+                  <option value='1'>Simple</option>
+                  <option value='3'>Shifted</option>
+                  <option value='4' id='truncType4'>Force-shifted</option>
+                </select>
+              </label>
+            </div>
+            <div id='rcDiv'><label>Cutoff: <input class='form-control' id='rc' size='3' value='3' style='width: 5em;'></label></div>
+            <label># of derivatives: <input class='form-control' size='1' id='nDer' value='0' style='width: 3em;'></label><br>
+            <label>Seed: <input class='form-control' size='15' id='seed' style='width: 15em;'></label>
+          </div>
+          <button type='button' id='setButton' class='btn btn-sm btn-primary'>Start</button></p>
+          <div class='output' id="initOutput"></div>
+        </div>
+      </div>
+    </div>
 
     <div id='stepSizeDiv' style='display: none;' class='card'>
-      <div class='card-header' role='tab' id='headingStepSize'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseStepSize' aria-expanded='true' aria-controls='collapseStepSize'>Step size</a></h5></div>
+      <div class='card-header' role='tab' id='headingStepSize'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseStepSize' aria-expanded='true' aria-controls='collapseStepSize'>Step size</a></h5></div>
       <div id='collapseStepSize' class='collapse show' aria-labelledby='headingStepSize'>
         <div class='card-body'>
           <p><button type='button' id='stepSizeButton' class='btn btn-sm btn-primary'>Find step size</button></p>
-      <div class='output' id="stepSizeOutput"></div>
-      <table class='table table-sm'>
-        <thead><tr><th>Steps</th><th>Step size</th><th>Acceptance</th></tr></thead>
-        <tbody id='stepSizeTable'></tbody>
-      </table>
-      <p>Step size: <span id="stepSize"></span></p>
+          <div class='output' id="stepSizeOutput"></div>
+          <table class='table table-sm'>
+            <thead><tr><th>Steps</th><th>Step size</th><th>Acceptance</th></tr></thead>
+            <tbody id='stepSizeTable'></tbody>
+          </table>
+          <p>Step size: <span id="stepSize"></span></p>
+        </div>
+      </div>
     </div>
-    </div>
-    </div>
+
     <div id='alphaDiv' style='display: none' class='card'>
-      <div class='card-header' role='tab' id='headingAlpha'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseAlpha' aria-expanded='true' aria-controls='collapseAlpha'>Alpha</a></h5></div>
+      <div class='card-header' role='tab' id='headingAlpha'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseAlpha' aria-expanded='true' aria-controls='collapseAlpha'>Alpha</a></h5></div>
       <div id='collapseAlpha' class='collapse show' aria-labelledby='headingAlpha'>
-      <div class='card-body'>
-        <p><button type='button' id='alphaButton' class='btn btn-sm btn-primary'>Find alpha</button></p>
-      <div class='output' id="alphaOutput"></div>
-      <table class='table table-sm'>
-        <thead><tr><th>ln(span)</th><th>&alpha;</th><th>Uncertainty</th><th>Target autocorrelation</th></tr></thead>
-        <tbody id='alphaTable'></tbody>
-      </table>
-      <p>Block size: <span id="alphaBlockSize"></span></p>
-      <p>Alpha: <span id="alpha"></span></p>
+        <div class='card-body'>
+          <p><button type='button' id='alphaButton' class='btn btn-sm btn-primary'>Find alpha</button></p>
+          <div class='output' id="alphaOutput"></div>
+          <table class='table table-sm'>
+            <thead><tr><th>ln(span)</th><th>&alpha;</th><th>Uncertainty</th><th>Target autocorrelation</th></tr></thead>
+            <tbody id='alphaTable'></tbody>
+          </table>
+          <p>Block size: <span id="alphaBlockSize"></span></p>
+          <p>Alpha: <span id="alpha"></span></p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
     <div id='productionDiv' style='display: none' class='card'>
-      <div class='card-header' role='tab' id='headingProduction'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseProduction' aria-expanded='true' aria-controls='collapseProduction'>Production</a></h3></div>
+      <div class='card-header' role='tab' id='headingProduction'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseProduction' aria-expanded='true' aria-controls='collapseProduction'>Production</a></h3></div>
       <div id='collapseProduction' class='collapse show' aria-labelledby='headingProduction'>
-      <div class='card-body'>
-        <p><button type='button' id='productionButton' class='btn btn-sm btn-primary'>Run Production</button></p>
-      <div class='output' id="productionOutput"></div>
-      <h5>Reference (<span id='refSteps'></span>)</h5>
-      <table class='table table-sm'>
-        <thead><tr><th></th><th>Average</th><th>Uncertainty</th></tr></thead>
-        <tbody>
-        <tr>
-          <td>&gamma;<sub>OS</sub>/&pi;</td>
-          <td id='refOverAvg'></td>
-          <td id='refOverErr'></td>
-        </tr>
-        <tr>
-          <td>1/(&gamma;<sub>OS</sub>/&pi;)</td>
-          <td id='refRatioAvg'></td>
-          <td id='refRatioErr'></td>
-        </tr>
-      </table>
-      <h5>Target (<span id='targetSteps'></span>)</h5>
-      <table class='table table-sm'>
-        <thead><tr><th></th><th>Average</th><th>Uncertainty</th><th>Corrrelation</tr></thead>
-        <tbody id='results'>
-        <tr id='target0'>
-          <td>&gamma;/&pi;</td>
-          <td id='targetAvg'></td>
-          <td id='targetErr'></td>
-          <td id='targetAC'></td>
-        </tr>
-        <tr id='targetOver'>
-          <td>&gamma;<sub>OS</sub>/&pi;</td>
-          <td id='targetOverAvg'></td>
-          <td id='targetOverErr'></td>
-          <td id='targetOverAC'></td>
-        </tr>
-        <tr id='targetRatio'>
-          <td>(&gamma;/&pi;)/(&gamma;<sub>OS</sub>/&pi;)</td>
-          <td id='targetRatioAvg'></td>
-          <td id='targetRatioErr'></td>
-          <td><span id='targetRatioCor'></span>*</td>
-        </tr>
-      </table>
-      <p>* Correlation between numerator and denominator<br>
-      Alpha check: <span id='prodAlpha'></span> <span id='prodAlphaErr'></span><br>
-      Block size: <span id='prodBlockSize'></span><br>
-      Speed: <span id='prodSpeed'></span></p>
-      <h5>Results</h5>
-      <table class='table table-sm'>
-        <thead><tr><th></th><th>Estimate</th><th>Uncertainty</th></tr></thead>
-        <tbody id='resultsTable'>
-        <tr><td id='fullValueName'></td><td id='fullRatioAvg'></td><td id='fullRatioErr'></td></tr>
-        </tbody>
-      </table>
-      <h5 id='dCorHeading'>Derivative Correlations <button type='button' id='btnDCorrelations' class='btn btn-sm btn-info'>Show</button></h5>
-      <div id='dCorTables' style='display: none;'>
-      Correlation between raw averages.
-      <table class='table table-sm'>
-        <tbody id='dCorTableRawBody'><tr id='dCorTableRawHeadRow'><td></td></tr></tbody>
-      </table>
-      Correlation between results.
-      <table class='table table-sm'>
-        <tbody id='dCorTableFullBody'><tr id='dCorTableFullHeadRow'><td></td></tr></tbody>
-      </table>
+        <div class='card-body'>
+          <p><button type='button' id='productionButton' class='btn btn-sm btn-primary'>Run Production</button></p>
+          <div class='output' id="productionOutput"></div>
+          <h5>Reference (<span id='refSteps'></span>)</h5>
+          <table class='table table-sm'>
+            <thead><tr><th></th><th>Average</th><th>Uncertainty</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>&gamma;<sub>OS</sub>/&pi;</td>
+                <td id='refOverAvg'></td>
+                <td id='refOverErr'></td>
+              </tr>
+              <tr>
+                <td>1/(&gamma;<sub>OS</sub>/&pi;)</td>
+                <td id='refRatioAvg'></td>
+                <td id='refRatioErr'></td>
+              </tr>
+            </table>
+            <h5>Target (<span id='targetSteps'></span>)</h5>
+            <table class='table table-sm'>
+              <thead><tr><th></th><th>Average</th><th>Uncertainty</th><th>Corrrelation</tr></thead>
+              <tbody id='results'>
+              <tr id='target0'>
+                <td>&gamma;/&pi;</td>
+                <td id='targetAvg'></td>
+                <td id='targetErr'></td>
+                <td id='targetAC'></td>
+              </tr>
+              <tr id='targetOver'>
+                <td>&gamma;<sub>OS</sub>/&pi;</td>
+                <td id='targetOverAvg'></td>
+                <td id='targetOverErr'></td>
+                <td id='targetOverAC'></td>
+              </tr>
+              <tr id='targetRatio'>
+                <td>(&gamma;/&pi;)/(&gamma;<sub>OS</sub>/&pi;)</td>
+                <td id='targetRatioAvg'></td>
+                <td id='targetRatioErr'></td>
+                <td><span id='targetRatioCor'></span>*</td>
+              </tr>
+            </table>
+            <p>* Correlation between numerator and denominator<br>
+            Alpha check: <span id='prodAlpha'></span> <span id='prodAlphaErr'></span><br>
+            Block size: <span id='prodBlockSize'></span><br>
+            Speed: <span id='prodSpeed'></span></p>
+            <h5>Results</h5>
+            <table class='table table-sm'>
+              <thead><tr><th></th><th>Estimate</th><th>Uncertainty</th></tr></thead>
+              <tbody id='resultsTable'>
+              <tr><td id='fullValueName'></td><td id='fullRatioAvg'></td><td id='fullRatioErr'></td></tr>
+              </tbody>
+            </table>
+            <h5 id='dCorHeading'>Derivative Correlations <button type='button' id='btnDCorrelations' class='btn btn-sm btn-info'>Show</button></h5>
+            <div id='dCorTables' style='display: none;'>
+              Correlation between raw averages.
+              <table class='table table-sm'>
+                <tbody id='dCorTableRawBody'><tr id='dCorTableRawHeadRow'><td></td></tr></tbody>
+              </table>
+              Correlation between results.
+              <table class='table table-sm'>
+                <tbody id='dCorTableFullBody'><tr id='dCorTableFullHeadRow'><td></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-  </div>
-</div>
-  </div>
+
     <script src='util.js'></script>
     <script src='emscripten.js'></script>
     <script type='text/javascript'>

@@ -19,34 +19,41 @@
     </div>
     <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> B<sub>2</sub> via quadrature and series expansion</h1>
     <p>Source: <a href='potential.c'>potential.c</a> <a href='potential.h'>potential.h</a> <a href='b2.c'>b2.c</a></p>
-    <div><label>Potential: <select class='form-select' id='potType' onchange='updatePotType()'>
+    <div>
+      <label>Potential:
+        <select class='form-select' id='potType' onchange='updatePotType()'>
           <option value='0'>Soft sphere</option>
           <option value='1'>Lennard-Jones</option>
           <option value='2'>WCA</option>
           <option value='4'>Custom</option>
-      </select></label><br>
+        </select>
+      </label><br>
       <div id='uCustomSpan' style='margin-left: 2em; display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em; display: inline-block;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label></div>
-    <label>Temperature: <input class='form-control' id='T' style='width: 4rem;' value='1'></label>
-    <div id='ttDiv'><label>Truncation type: <select id='truncType' class='form-select' onchange='updateTrunc()'>
-        <option value='0' id='truncType0'>None</option>
-        <option value='1'>Simple</option>
-        <option value='2' id='truncType2'>Simple + LRC</option>
-        <option value='3'>Shifted</option>
-        <option value='4' id='truncType4'>Force-shifted</option>
-  </select></label></div>
-    <div id='rcDiv' style='display: none'><label>Cutoff: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
-    <button type='button' id='goButton' class='btn btn-primary'>Go</button>
-    <div id='Output'></div>
-    <hr/>
-    <table id='resultsTable' class='table table-sm' style='display: none;'>
-      <thead><tr><th>log<sub>2</sub>N</th><th>B<sub>2</sub></th><th>Diff</th><th>dB<sub>2</sub>/d&beta;</th><th>Diff</th><th>d<sup>2</sup>B<sub>2</sub>/d&beta;<sup>2</sup></th><th>Diff</th></tr></thead>
-      <tbody id='results'></tbody>
-    </table>
-    <p id='resultsP'>B<sub>2</sub>: <span id='valueB2'></span><br>
-    dB<sub>2</sub>/d&beta;: <span id='valueB2d1'></span><br>
-    d<sup>2</sup>B<sub>2</sub>/d&beta;<sup>2</sup>: <span id='valueB2d2'></span></p>
-    <hr>
-  </div>
+      <label>Temperature: <input class='form-control' id='T' style='width: 4rem;' value='1'></label>
+      <div id='ttDiv'>
+        <label>Truncation type:
+          <select id='truncType' class='form-select' onchange='updateTrunc()'>
+            <option value='0' id='truncType0'>None</option>
+            <option value='1'>Simple</option>
+            <option value='2' id='truncType2'>Simple + LRC</option>
+            <option value='3'>Shifted</option>
+            <option value='4' id='truncType4'>Force-shifted</option>
+          </select>
+        </label>
+      </div>
+      <div id='rcDiv' style='display: none'><label>Cutoff: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
+      <button type='button' id='goButton' class='btn btn-primary'>Go</button>
+      <div id='Output'></div>
+      <hr>
+      <table id='resultsTable' class='table table-sm' style='display: none;'>
+        <thead><tr><th>log<sub>2</sub>N</th><th>B<sub>2</sub></th><th>Diff</th><th>dB<sub>2</sub>/d&beta;</th><th>Diff</th><th>d<sup>2</sup>B<sub>2</sub>/d&beta;<sup>2</sup></th><th>Diff</th></tr></thead>
+        <tbody id='results'></tbody>
+      </table>
+      <p id='resultsP'>B<sub>2</sub>: <span id='valueB2'></span><br>
+      dB<sub>2</sub>/d&beta;: <span id='valueB2d1'></span><br>
+      d<sup>2</sup>B<sub>2</sub>/d&beta;<sup>2</sup>: <span id='valueB2d2'></span></p>
+      <hr>
+    </div>
     <script src='util.js'></script>
     <script src='emscripten.js'></script>
     <script type='text/javascript'>
