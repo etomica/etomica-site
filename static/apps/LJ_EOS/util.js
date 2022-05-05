@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 var brythonSpinner = null;
 window.addEventListener("fullload", function() {
   if (typeof __BRYTHON__ != "undefined") {
@@ -8,7 +14,7 @@ window.addEventListener("fullload", function() {
     h1.parentNode.insertBefore(div, h1.nextSibling);
     brythonSpinner = div;
     window.bstart = performance.now();
-    brython(); //{cache: true});
+    brython({cache: true});
   }
 });
 
