@@ -136,6 +136,33 @@ double EMSCRIPTEN_KEEPALIVE getLastResultB3(int d) {
 }
 
 double EMSCRIPTEN_KEEPALIVE calcB3(double T, int nr) {
+  if (potType == POT_SQW) {
+    double d = exp(1/T)-1;
+    double dddb = d+1;
+    double d2ddb2 = dddb;
+    double f1, f2, f3;
+    double lambda = rc;
+    double lambda2 = lambda*lambda;
+    double lambda3 = lambda2*lambda;
+    double lambda4 = lambda3*lambda;
+    double lambda6 = lambda4*lambda2;
+    if (rc < 2) {
+      f1 = 0.2*(lambda6 - 18*lambda4 + 32*lambda3 - 15);
+      f2 = 0.4*(lambda6 - 18*lambda4 + 16*lambda3 + 9*lambda2 - 8);
+      f3 = 1.2*(lambda2-1)*(lambda2-1)*(lambda2-1);
+    }
+    else {
+      f1 = 3.4;
+      f2 = 0.2*(          - 32*lambda3 + 18*lambda2 + 48);
+      f3 = 0.2*(5*lambda6 - 32*lambda3 + 18*lambda2 + 26);
+    }
+    double B2HS = 2.0/3.0*M_PI;
+    double B3HS = 5.0/8.0*B2HS*B2HS;
+    B3 = B3HS*(1-f1*d-f2*d*d-f3*d*d*d);
+    B3d1 = B3HS*(-f1 - 2*f2*d - 3*f3*d*d)*dddb;
+    B3d2 = B3HS*(-2*f2 - 6*f3*d)*dddb*dddb + B3HS*(-f1 - 2*f2*d - 3*f3*d*d)*d2ddb2;
+    return B3;
+  }
   if (potType == POT_SS) {
     T *= 4;
   }

@@ -129,6 +129,14 @@ double EMSCRIPTEN_KEEPALIVE calcB2(double T, int nr) {
   if (truncType == TRUNC_NONE) {
     return potType == POT_SS ? calcB2SS(T) : calcB2LJ(T);
   }
+  if (potType == POT_SQW) {
+    double B2HS = 2.0/3.0*M_PI;
+    double e = exp(1/T);
+    B2 = B2HS * (1 - (e-1)*(rc*rc*rc-1));
+    B2d1 = -B2HS*e*(rc*rc*rc-1);
+    B2d2 = B2d1;
+    return B2;
+  }
   if (potType == POT_SS) {
     T *= 4;
   }

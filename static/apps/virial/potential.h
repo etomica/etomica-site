@@ -12,6 +12,7 @@
 #define POT_LJ 1
 #define POT_WCA 2
 #define POT_JS 3
+#define POT_SQW 4
 
 void EMSCRIPTEN_KEEPALIVE setTruncation(int newPT, double newRC, int tt);
 double computeU(double r);

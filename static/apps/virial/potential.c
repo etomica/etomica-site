@@ -27,6 +27,9 @@ double computeU(double r) {
     return u;
   }
 #endif
+  if (potType == POT_SQW) {
+    return r>1 ? -1 : (1.0/0.0);
+  }
   double r2 = r*r;
   double s6 = 1/(r2*r2*r2);
   double ulj = 4*s6*(s6 - (potType==POT_SS?0:1));
@@ -43,6 +46,9 @@ double computeUr2(double r2) {
     return u;
   }
 #endif
+  if (potType == POT_SQW) {
+    return r2>1 ? -1 : (1.0/0.0);
+  }
   double s6 = 1/(r2*r2*r2);
   double ulj = 4*s6*(s6 - (potType==POT_SS?0:1));
   double u = ulj + uShift;
@@ -66,6 +72,11 @@ void EMSCRIPTEN_KEEPALIVE setTruncation(int newPT, double newRC, int tt) {
   if (potType == POT_WCA) {
     rc = pow(2, 1.0/6.0);
     truncType = TRUNC_SHIFT;
+  }
+  else if (potType == POT_SQW) {
+    if (truncType != TRUNC_SIMPLE) {
+      fprintf(stderr, "SQW must use simple truncation\n");
+    }
   }
   if (truncType == TRUNC_SHIFT) {
     uShift = -computeU(rc);
