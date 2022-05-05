@@ -45,7 +45,7 @@
               <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
               <div id='ttDiv'>
                 <label>Truncation type:
-                  <select class='form-select' id='truncType' onchange='updateTrunc()'>
+                  <select class='form-select' id='truncType' onchange='updateTruncMSMC()'>
                     <option value='0'>None</option>
                     <option value='1'>Simple</option>
                     <option value='3'>Shifted</option>
@@ -175,29 +175,6 @@
     <script type='text/javascript'>
 stage = "init";
 var running = false, stopRequested = false;
-function setTruncation() {
-  var potType = Number(document.getElementById("potType").value);
-  var truncType = 1, rc = 0;
-  if (potType != 2) {
-    truncType = Number(document.getElementById("truncType").value);
-    if (truncType < 0 || truncType > 4 || truncType != Math.round(truncType)) {
-      alert("Invalid truncation type " + truncType);
-      return;
-    }
-    rc = Number(document.getElementById("rc").value);
-    if (truncType>0 && rc <= 0) {
-      alert("Invalid rc "+rc);
-      document.getElementById("rc").focus();
-      return;
-    }
-  }
-  if (potType == 3) {
-    eval('uCustom = function(r) { return '+document.getElementById('uCustom').value+';};');
-  }
-
-  Module.ccall('setTruncation', 'number', ['number','number'], [potType,rc,truncType]);
-
-}
 var uCustom = function(r) {return 0;}
 function makeDRow(i, NOP) {
   var row = makeElement("TR", document.getElementById("results"), {id: 'targetD'+i});
@@ -498,7 +475,7 @@ function updatePotType() {
   document.getElementById("uCustomDiv").style.display = potType==3 ? "block" : "none";
   document.getElementById("truncType4").style.display = potType==3 ? "none" : "";
 }
-function updateTrunc() {
+function updateTruncMSMC() {
   var truncType = Number(document.getElementById("truncType").value);
   document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "block";
 }
@@ -511,7 +488,7 @@ document.getElementById('btnDCorrelations').addEventListener('click', function()
   makeText(showDCor ? "Hide" : "Show", btn);
 });
 window.addEventListener("load", updatePotType);
-window.addEventListener("load", updateTrunc);
+window.addEventListener("load", updateTruncMSMC);
     </script>
     <script async type="text/javascript" src="virial.js"></script>
 

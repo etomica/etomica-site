@@ -7,21 +7,8 @@
 #else
 #include <emscripten/emscripten.h>
 #endif
+#include "potential.h"
 
-#ifndef M_PI
-#define M_PI           3.14159265358979323846
-#endif
-
-#define TRUNC_NONE 0
-#define TRUNC_SIMPLE 1
-#define TRUNC_LRC 2
-#define TRUNC_SHIFT 3
-#define TRUNC_FORCE_SHIFT 4
-
-#define POT_SS 0
-#define POT_LJ 1
-#define POT_WCA 2
-#define POT_JS 3
 
 int potType = 1;
 int truncType = 0;
@@ -86,7 +73,7 @@ void EMSCRIPTEN_KEEPALIVE setTruncation(int newPT, double newRC, int tt) {
   else if (truncType == TRUNC_FORCE_SHIFT) {
     double rdudr = computeRDUDR(rc);
     ufShift = -rdudr / rc;
-    uShift = -computeU(rc);
+    uShift = -computeU(rc) - ufShift*rc;
   }
   else if (truncType == TRUNC_LRC) {
     // for B2
