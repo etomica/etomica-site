@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Virial Coefficients via Emscripten</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='style.css'>
+    <script src='util.js'></script>
+    <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class='container'>
+      <h1 class='h2'><i class='fa-solid fa-house'></i> Virial Coefficients via Emscripten
+        <button id='btnDoc' class='btn btn-sm btn-info' type='button' data-content='VIRIAL' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
+      <p>The pages below compute virial coefficients for simple spherical models:</p>
+      <p><a href='B2.html'>B2</a> compute B<sub>2</sub> using quadrature or a series expansion.</p>
+      <p><a href='B3.html'>B3</a> compute B<sub>3</sub> using fast Fourier transforms (FFT).</p>
+      <p><a href='msmc.html'>MSMC</a> compute any order coefficient using Mayer-Sampling Monte Carlo.</p>
+
+      <div class='card mb-4'>
+        <div id='headingPublication' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapsePublication' aria-expanded='true' aria-controls='collapsePublication'>Publications</a></h2>
+        </div>
+        <div id='collapsePublication' class='collapse' role='tabpanel' aria-labelledby='headingPublication'>
+          <div class='card-body'>
+            <ul>
+              <li>K. M. Benjamin, J. K. Singh, A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1021/jp0710685'>Higher-order virial coefficients of water models</a>", <span class='pubName'>J. Phys. Chem. B</span> <span class='volume'>111</span>, 11463-11473 (2007).</li>
+              <li>R. J. Masters "<a href='https://doi.org/10.1088/0953-8984/20/28/283102'>Virial Expansions</a>", <span class='pubName'>J. Phys.: Condens. Matter</span> <span class='volume'>20</span> 283102 (2008).</li>
+              <li>A. J. Schultz, D. A. Kofke, "<a href='https://doi.org/10.1080/00268970903267053'>Sixth, seventh and eighth virial coefficients of the Lennard-Jones model</a>", <span class='pubName'>Mol. Phys.</span> <span class='volume'>107</span>, 2309-2318 (2009).</li>
+              <li>R. J. Wheatley, "<a href='http://dx.doi.org/10.1103/PhysRevLett.110.200601'>Calculation of High-Order Virial Coefficients with Applications to Hard and Soft Spheres</a>", <span class='pubName'>Phys. Rev. Lett.</span> <span class='volume'>110</span>, 200601 (2013).</li>
+              <li>R. J. Wheatley, A. J. Schultz, H. N. Do, N. Gokul, D. A. Kofke, "<a href='https://doi.org/10.1103/PhysRevE.101.051301'>Cluster integrals and virial coefficients for realistic molecular models</a>", <span class='pubName'>Phys. Rev. E</span> <span class='volume'>101</span>, 051301 (2020).
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class='card mb-4'>
+        <div id='headingHow' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseHow' aria-expanded='true' aria-controls='collapseHow'>How this site works</a></h2>
+        </div>
+        <div id='collapseHow' class='collapse' role='tabpanel' aria-labelledby='headingHow'>
+          <div class='card-body'>
+            <p>The code to compute virial coefficients on this site are all written in C.  <a href='http://kripken.github.io/emscripten-site/'>emscripten</a> is used to compile the programs with <a href='https://developer.mozilla.org/en-US/docs/WebAssembly'>WebAssembly</a> as the target.  Performance in JavaScript is slower than the same prorgams compiled as C programs, but still dramatically faster than a native JavaScript implementation.  In some cases, (MSMC, computing B(T) parametrically or computing B<sub>n</sub> at a single temperatrue with varying accuracy) the work is split into smaller pieces (a short run of steps for MSMC) and control is returned to the browser after each piece.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+<p>Virial coefficients are used in the Virial Equation of State (VEOS).  The VEOS is expressed as a power series in density,</p>
+
+<p style='margin-left: 2rem;'>Z = 1 + B<sub>2</sub> &rho; + B<sub>3</sub> &rho;<sup>2</sup> + ...</p>
+
+<p>The coefficients are temperature dependent, but not density dependent.  The order-n coefficient is computable from a mlolecular interaction model for n molecules.</p>
+
+<p>The VEOS holds a unique place in statistical thermodynamics due to behaving like both a simulation and theory.  Like a simultaion, (where the series is converged) the results are as accurate as the underlying molecular model.  Like a theory, the results are expressed analytically and can be generated quickly.  The main disadvtage is that the density range of applicability is limited by the convergence of the series.  However, the series provides a self-assessment of convergence (by considering the impact of dropping the last coefficient) and approximants may be used to accelerate convergence.</p>
+
+<p>Thermodynamic properties such as the Helmholtz free energy or the bulk modulus (which do not involve a temperature derivative) can be computed from formulas involving a different series with the same virial coefficients.  Thermodynamic properties such as potential energy or heat capacity involve a first and second temperature derivative, respectively.  Accordingly, appropriate temperature derivatives of the virial coefficients must be determined to compute such properties from the VEOS.</p>

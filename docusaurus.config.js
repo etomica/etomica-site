@@ -65,6 +65,9 @@ module.exports = {
             {
               href: 'pathname:///apps/LJ_EOS/',
               label: 'LJ_EOS',
+            },
+            { href: 'pathname:///apps/virial/',
+              label: 'Virial Coefficients',
             }
           ]
         },
