@@ -230,24 +230,25 @@ function makeNewData(xName, x, result, resultD1, resultD2) {
   thisData.push(x);
   thisData.push(result);
   var truncType = 1;
-  if (Number(document.getElementById("potType").value != 2)) {
+  var potType = Number(document.getElementById("potType").value);
+  if (potType != 2) {
     truncType = Number(document.getElementById("truncType").value);
   }
-  if (truncType == 0) {
+  if (truncType == 0 || potType == 4) {
     thisData.push(null);
   }
   else {
     thisData.push(lastData ? (result-lastData[2]).toPrecision(3) : "");
   }
   thisData.push(resultD1);
-  if (truncType == 0) {
+  if (truncType == 0 || potType == 4) {
     thisData.push(null);
   }
   else {
     thisData.push(lastData ? (resultD1-lastData[4]).toPrecision(3) : "");
   }
   thisData.push(resultD2);
-  if (truncType == 0) {
+  if (truncType == 0 || potType == 4) {
     thisData.push(null);
   }
   else {
@@ -412,17 +413,18 @@ function updateTrunc() {
   empty(tbody);
   var truncType = Number(document.getElementById("truncType").value);
   var useX = document.getElementById("useX").checked;
-  document.getElementById("copyBtn").style.display = (useX || truncType!=0) ? "block" : "none";
-  document.getElementById("saveBtn").style.display = (useX || truncType!=0) ? "block" : "none";
-  document.getElementById("plotBtn").style.display = (useX || truncType!=0) ? "block" : "none";
+  var potType = Number(document.getElementById("potType").value);
+  document.getElementById("copyBtn").style.display = (useX || (truncType!=0||potType==4)) ? "block" : "none";
+  document.getElementById("saveBtn").style.display = (useX || (truncType!=0||potType==4)) ? "block" : "none";
+  document.getElementById("plotBtn").style.display = (useX || (truncType!=0||potType==4)) ? "block" : "none";
   document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "block";
-  document.getElementById("resultsTable").style.display = (truncType==0 && !useX) ? "none" : "block";
+  document.getElementById("resultsTable").style.display = ((truncType==0||potType==4) && !useX) ? "none" : "block";
   var rp = document.getElementById("resultsP");
-  if (rp) rp.style.display = (truncType==0 && !useX) ? "block" : "none";
+  if (rp) rp.style.display = ((truncType==0||potType==4) && !useX) ? "block" : "none";
   var truncType = Number(document.getElementById("truncType").value);
   var diffHeads = document.getElementsByClassName("diffcol");
   for (var i=0; i<diffHeads.length; i++) {
-    diffHeads[i].style.display = truncType == 0 ? "none" : "table-cell";
+    diffHeads[i].style.display = (truncType == 0||potType==4) ? "none" : "table-cell";
   }
   document.getElementById("T_col").style.display = useX ? "table-cell" : "none";
   document.getElementById("log2N_col").style.display = useX ? "none" : "table-cell";
@@ -433,12 +435,8 @@ function setTruncation() {
   var truncType = 1, rc = 0;
   if (potType != 2) {
     truncType = Number(document.getElementById("truncType").value);
-    if (truncType < 0 || truncType > 4 || truncType != Math.round(truncType)) {
-      alert("Invalid truncation type " + truncType);
-      return;
-    }
     rc = Number(document.getElementById("rc").value);
-    if (truncType>0 && rc <= 0) {
+    if (potType!=4 && truncType>0 && rc <= 0) {
       alert("Invalid rc "+rc);
       document.getElementById("rc").focus();
       return;
@@ -472,7 +470,9 @@ function goCalc() {
   var result = Module.ccall('calcB'+Bn, 'number', ['number','number'], [T,1<<nr2]);
   var resultD1 = Module.ccall('getLastResultB'+Bn, 'number', ['number'], [1]);
   var resultD2 = Module.ccall('getLastResultB'+Bn, 'number', ['number'], [2]);
-  if (truncType == 0 && !useX) {
+  var potType = Number(document.getElementById("potType").value);
+  console.log(potType);
+  if ((truncType == 0 || potType == 4) && !useX) {
     document.getElementById("valueB").textContent = result;
     document.getElementById("valueBd1").textContent = resultD1;
     document.getElementById("valueBd2").textContent = resultD2;

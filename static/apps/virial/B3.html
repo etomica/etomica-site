@@ -27,6 +27,7 @@
           <option value='0'>Soft sphere</option>
           <option value='1' selected>Lennard-Jones</option>
           <option value='2'>WCA</option>
+          <option value='4'>Square-well</option>
           <option value='3'>Custom</option>
         </select>
       </label><br>
@@ -43,7 +44,7 @@
           </select>
         </label>
       </div>
-      <div id='rcDiv' style='display: none'><label>Cutoff: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
+      <div id='rcDiv' style='display: none'><label><span id='cutoff-text'>Cutoff</span>: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
       <button type='button' id='goButton' class='btn btn-primary'>Go</button>
       <div id='Output'></div>
       <div id='resultsDiv' class='card mt-4'>
@@ -84,13 +85,35 @@ function updatePotType() {
   var potType = Number(document.getElementById("potType").value);
   var truncType = Number(document.getElementById("truncType").value);
   if (potType==2) {
+    // WCA -- force-shifted LJ, rc=1
     document.getElementById("truncType").value = 3;
     updateTrunc();
   }
+  else if (potType == 3) {
+    // Custom, must be simple
+    document.getElementById("truncType").value = 1;
+    truncType = 1;
+    document.getElementById("truncType").setAttribute("disabled","true");
+    updateTrunc();
+  }
+  else if (potType == 4) {
+    // SQW
+    document.getElementById("truncType").value = 1;
+    truncType = 1;
+    document.getElementById("cutoff-text").textContent = "Lambda";
+    updateTrunc();
+  }
+  else {
+    document.getElementById("truncType").removeAttribute("disabled");
+  }
+  if (potType != 4) {
+    document.getElementById("cutoff-text").textContent = "Cutoff";
+  }
+  // no trunc, WCA shouldn't show truncation type
   document.getElementById("rcDiv").style.display = (truncType==0||potType==2) ? "none" : "block";
-  document.getElementById("ttDiv").style.display = potType==2 ? "none" : "block";
+  // WCA, SQW shouldn't show truncation type
+  document.getElementById("ttDiv").style.display = (potType==2||potType==4) ? "none" : "block";
   document.getElementById("uCustomDiv").style.display = potType==3 ? "block" : "none";
-  document.getElementById("truncType4").style.display = potType==3 ? "none" : "";
 }
 window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);

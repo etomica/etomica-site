@@ -27,10 +27,11 @@
           <option value='0'>Soft sphere</option>
           <option value='1'>Lennard-Jones</option>
           <option value='2'>WCA</option>
+          <option value='4'>Square-well</option>
           <option value='3'>Custom</option>
         </select>
       </label><br>
-      <div id='uCustomSpan' style='margin-left: 2em; display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em; display: inline-block;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label></div>
+      <div id='uCustomDiv' style='margin-left: 2em; display: none'><label>u(r) = <input class='form-control' id='uCustom' size='40' style='width: 40em; display: inline-block;' value='4 * (Math.pow(r,-12) - Math.pow(r,-6))'></label></div>
       <label>Temperature: <input class='form-control' id='T' style='width: 6rem;' value='1'></label>
       <label><input type='checkbox' class='form-check-input' id='useX' onchange='updateTrunc()'> vary T(x) parametrically</label>
       <input class='form-control' id='numX' style='width: 6rem; display: none;' placeholder='# of x'>
@@ -45,7 +46,7 @@
           </select>
         </label>
       </div>
-      <div id='rcDiv' style='display: none'><label>Cutoff: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
+      <div id='rcDiv' style='display: none'><label><span id='cutoff-text'>Cutoff</span>: <input class='form-control' id='rc' style='width: 4rem;' value='3'></label></div></div>
       <button type='button' id='goButton' class='btn btn-primary'>Go</button>
       <div id='Output'></div>
       <div id='resultsDiv' class='card mt-4'>
@@ -85,19 +86,36 @@ function updatePotType() {
   var potType = Number(document.getElementById("potType").value);
   var truncType = Number(document.getElementById("truncType").value);
   if (potType==2) {
+    // WCA -- force-shifted LJ, rc=1
     document.getElementById("truncType").value = 3;
+    truncType = 3;
     updateTrunc();
   }
-  document.getElementById("rcDiv").style.display = (truncType==0||potType==2) ? "none" : "block";
-  document.getElementById("ttDiv").style.display = potType==2 ? "none" : "block";
-  document.getElementById("uCustomSpan").style.display = potType==3 ? "block" : "none";
-  document.getElementById("truncType0").style.display = 
-  document.getElementById("truncType2").style.display = 
-  document.getElementById("truncType4").style.display = (potType==3 ? "none" : "");
-  if (potType == 3 && (truncType == 0 || truncType==2 || truncType==4)) {
+  else if (potType == 3) {
+    // Custom, must be simple
     document.getElementById("truncType").value = 1;
+    truncType = 1;
+    document.getElementById("truncType").setAttribute("disabled","true");
     updateTrunc();
   }
+  else if (potType == 4) {
+    // SQW
+    document.getElementById("truncType").value = 1;
+    truncType = 1;
+    document.getElementById("cutoff-text").textContent = "Lambda";
+    updateTrunc();
+  }
+  else {
+    document.getElementById("truncType").removeAttribute("disabled");
+  }
+  if (potType != 4) {
+    document.getElementById("cutoff-text").textContent = "Cutoff";
+  }
+  // no trunc, WCA shouldn't show truncation type
+  document.getElementById("rcDiv").style.display = (truncType==0||potType==2) ? "none" : "block";
+  // WCA, SQW shouldn't show truncation type
+  document.getElementById("ttDiv").style.display = (potType==2||potType==4) ? "none" : "block";
+  document.getElementById("uCustomDiv").style.display = potType==3 ? "block" : "none";
 }
 window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);
