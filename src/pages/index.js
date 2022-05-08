@@ -12,7 +12,8 @@ const features = [
     title: 'Flexible and Extensible',
     description: (
       <>
-        Simulations are defined programmatically with customizable components. 
+        Simulations are defined programmatically with object-oriented customizable components. Basic capabilities include simulations using either soft or hard potentials,
+      molecular dynamics or Monte Carlo in any ensemble, arbitrary spatial dimension, 
       </>
     ),
   },
@@ -21,15 +22,17 @@ const features = [
     description: (
       <>
         Simulation data and configuration can be viewed graphically, allowing real-time visualization of results
-        and adjustment of parameters.
+        and adjustment of parameters; this is particularly helpful for development and exploration of systems and methods. 
+        Batch mode is also possible, to enable reproducible results for production runs.
       </>
     ),
   },
   {
-    title: 'fasterer?',
+    title: 'Efficient',
     description: (
       <>
-
+       Simulations are implemented using very efficient algorithms, with full neighbor-listing capabilities, state-of-the-art algorithm for event-driven MD
+      (for hard potentials), and more.
       </>
     ),
   },
