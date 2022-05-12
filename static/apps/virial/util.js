@@ -78,6 +78,7 @@ var infoTitles = [
                   {name: "B2", title: "Second Virial Coefficient", level: 1},
                   {name: "B3", title: "Third Virial Coefficient", level: 1},
                   {name: "MSMC", title: "Mayer-Sampling Monte Carlo", level: 1},
+                  {name: "MSMC-MOLECULAR", title: "Mayer-Sampling Monte Carlo for Molecules", level: 1},
                  ];
 
 function replaceInfoContent() {

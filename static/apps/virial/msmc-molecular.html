@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MSMC Virial Coefficients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='style.css'>
+    <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
+  </head>
+  <body style='padding: 1em;'>
+  <div class='container'>
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
+    <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Virial coefficients of molecules via MSMC
+    <button id='btnDoc' class='btn btn-sm btn-info' type='button' data-content='MSMC-MOLECULAR' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h1>
+    <p>Source: <a target='_blank' href='https://github.com/etomica/etomica-cpp'>etomica-cpp</a></p>
+
+    <div id='parametersDiv' class='card'>
+      <div class='card-header' role='tab' id='headingParameters'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
+      <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
+        <div class='card-body'>
+          <div class='row'>
+            <div class='col-auto px-4'>
+              <label>Order of coefficient:
+                <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;'>
+              </label><br>
+              <label>Reference HS sigma: <input id='sigmaHSRef' class='form-control' size='5' style='width: 5em;' value='1.5'></label><br>
+              <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
+              <label># of derivatives: <input class='form-control' size='1' id='nDer' value='0' style='width: 3em;'></label><br>
+              <label>Seed: <input class='form-control' size='15' id='seed' style='width: 15em;'></label>
+  
+              <p><button type='button' id='setButton' class='btn btn-sm btn-primary'>Start</button></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='atomDataDiv' class='card'>
+      <div class='card-header' role='tab' id='atomDataHeading'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseAtomData' aria-expanded='true' aria-controls='collapseAtomData'>Molecular Model</a></h5></div>
+      <div id='collapseParameters' class='collapse show' aria-labelledby='atomDataHeading'>
+        <div class='card-body'>
+          <div class='row'>
+            <div class='col-auto px-4'>
+              <p><label class='form-control-label' data-bs-toggle="tooltip" data-bs-placement="top" title="mixing rules are used to determine unlike interactions; only like interactions need to be provided below"> <input class='form-check-input' type='checkbox' id='model-simple-mixing' onchange='atomDataUpdated()' checked> standard mixing rules</label></p>
+              <label class='form-control-label'>Potential: <select class='form-select' style='width: auto; display: inline-block' id='model-potential' onchange='atomDataUpdated()'>
+                 <option value='HS'>Hard sphere</option>
+                 <option value='SS'>Soft sphere</option>
+                 <option value='WCA'>WCA</option>
+                 <option value='LJ'>Lennard-Jones</option>
+                 <option value='SQW'>Square well</option>
+                 <option value='mixed'>mixed</option>
+              </select></label><br>
+              <label class='form-control-label' data-bs-toggle="tooltip" data-bs-placement="top" title="point charges must be listed below after potential parameters"> <input type='checkbox' id='model-charges' class='form-check-input' onchange='atomDataUpdated()'> include charges</label>
+              <p style='margin-top: 1.5rem;'><label class='form-control-label' for='atom-data'>Atomic coordinates</label> (<span id='atomic-line'>type x y z</span>)</p>
+              <textarea id='atom-data' class='form-control' onchange='atomDataUpdated()' rows='5' placeholder='A -0.5 0 0
+A 0.5 0 0' rows='7' style='width: 20rem;'></textarea>
+              <p style='margin-top: 1.5rem;'><label class='form-control-label' for='potential-data'>Potential parameters</label> (<span id='potential-line'>type param1</span>)</p>
+              <textarea id='potential-data' class='form-control' onchange='atomDataUpdated()' rows='5' placeholder='A 1 1' rows='5' style='width: 20rem;'></textarea>
+            </div>
+
+            <div class='col-auto px-4'>
+              <table class='table'>
+                <thead><tr><th>#</th><th>Type</th><th>x</th><th>y</th><th>z</th></tr></thead>
+                <tbody id='atomDataTable'></tbody>
+              </table>
+              <table class='table'>
+                <thead><tr id='potParamsRow'><th>Type</th><th>Type</th></tr></thead>
+                <tbody id='potentialDataTable'></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id='alphaDiv' style='display: none' class='card'>
+      <div class='card-header' role='tab' id='headingAlpha'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseAlpha' aria-expanded='true' aria-controls='collapseAlpha'>Alpha</a></h5></div>
+      <div id='collapseAlpha' class='collapse show' aria-labelledby='headingAlpha'>
+        <div class='card-body'>
+          <p><button type='button' id='alphaButton' class='btn btn-sm btn-primary' onclick='pause()'>Pause</button></p>
+          <div class='output' id="alphaOutput"></div>
+          <table class='table table-sm'>
+            <thead><tr><th>Steps</th><th>ln(&alpha;<sub>max</sub>/&alpha;<sub>min</sub>)</th><th>&alpha;</th><th>Uncertainty</th><th>Target autocorrelation</th></tr></thead>
+            <tbody id='alphaTable'></tbody>
+          </table>
+          <p>Total &alpha; steps: <span id='alphaTotalStepsSpan'>0</span><br>
+          Target block size: <span id="alphaBlockSize"></span><br>
+          Alpha: <span id="alpha"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div id='productionDiv' style='display: none' class='card'>
+      <div class='card-header' role='tab' id='headingProduction'><h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseProduction' aria-expanded='true' aria-controls='collapseProduction'>Production</a></h3></div>
+      <div id='collapseProduction' class='collapse show' aria-labelledby='headingProduction'>
+        <div class='card-body'>
+          <p><button type='button' id='productionButton' class='btn btn-sm btn-primary' onclick='pause()'>Pause</button></p>
+          <div class='output' id="productionOutput"></div>
+          <h5>Reference (<span id='refSteps'></span> steps)</h5>
+          <table class='table table-sm'>
+            <thead><tr><th></th><th>Average</th><th>Uncertainty</th></tr></thead>
+            <tbody>
+              <tr id='target0'>
+                <td>&gamma;/&pi;</td>
+                <td id='refAvg'></td>
+                <td id='refErr'></td>
+              </tr>
+              <tr>
+                <td>&gamma;<sub>OS</sub>/&pi;</td>
+                <td id='refOverAvg'></td>
+                <td id='refOverErr'></td>
+              </tr>
+              <tr>
+                <td>(&gamma;/&pi;)/(&gamma;<sub>OS</sub>/&pi;)</td>
+                <td id='refRatioAvg'></td>
+                <td id='refRatioErr'></td>
+              </tr>
+            </table>
+            <h5>Target (<span id='targetSteps'></span> steps)</h5>
+            <table class='table table-sm'>
+              <thead><tr><th></th><th>Average</th><th>Uncertainty</th><th>Corrrelation</tr></thead>
+              <tbody id='results'>
+              <tr id='target0'>
+                <td>&gamma;/&pi;</td>
+                <td id='targetAvg'></td>
+                <td id='targetErr'></td>
+                <td id='targetAC'></td>
+              </tr>
+              <tr id='targetOver'>
+                <td>&gamma;<sub>OS</sub>/&pi;</td>
+                <td id='targetOverAvg'></td>
+                <td id='targetOverErr'></td>
+                <td id='targetOverAC'></td>
+              </tr>
+              <tr id='targetRatio'>
+                <td>(&gamma;/&pi;)/(&gamma;<sub>OS</sub>/&pi;)</td>
+                <td id='targetRatioAvg'></td>
+                <td id='targetRatioErr'></td>
+                <td><span id='targetRatioCor'></span>*</td>
+              </tr>
+            </table>
+            <p>* Correlation between numerator and denominator<br>
+            Alpha check: <span id='prodAlpha'></span> <span id='prodAlphaErr'></span><br>
+            Target block size: <span id='prodBlockSize'></span><br>
+            Steps in target: <span id='targetStepPercent'></span>%<br>
+            Speed: <span id='prodSpeed'></span></p>
+            <h5>Results</h5>
+            <table class='table table-sm'>
+              <thead><tr><th></th><th>Estimate</th><th>Uncertainty</th></tr></thead>
+              <tbody id='resultsTable'>
+              <tr><td id='fullValueName'></td><td id='fullRatioAvg'></td><td id='fullRatioErr'></td></tr>
+              </tbody>
+            </table>
+            <h5 id='dCorHeading'>Derivative Correlations <button type='button' id='btnDCorrelations' class='btn btn-sm btn-info'>Show</button></h5>
+            <div id='dCorTables' style='display: none;'>
+              Correlation between raw averages.
+              <table class='table table-sm'>
+                <tbody id='dCorTableRawBody'></tbody>
+              </table>
+              Correlation between final coefficient and derivatives.
+              <table class='table table-sm'>
+                <tbody id='dCorTableFullBody'></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src='util.js'></script>
+    <script src='emscripten.js'></script>
+    <script type='text/javascript'>
+function mixing(ptype, params1, params2) {
+  switch (ptype) {
+    case "HS":
+      return [(params1[0]+params2[0])/2];
+    case "SS":
+    case "WCA":
+    case "LJ":
+      return [(params1[0]+params2[0])/2,Math.sqrt(params1[1]*params2[1])];
+    case "SQW":
+      var core = (params1[0]+params2[0])/2;
+      var lambda = (params1[0]*params1[1] + params2[0]*params2[1]) / core;
+      return [core, lambda, Math.sqrt(params1[2]*params2[2])];
+    default:
+      throw "Unknown potential type";
+  }
+}
+
+function atomDataUpdated() {
+  var atomDataLines = document.getElementById("atom-data").value.split(/\r?\n/);
+  var atomTypesNew = []; atomXYZNew = [];
+  var potParamsNew = {};
+  allAtomTypes = {};
+
+  var potType = document.getElementById("model-potential").value;
+  var potParamNames = {"HS": ["sigma"], "SS": ["sigma","epsilon","n"], "WCA": ["sigma","epsilon"], "LJ": ["sigma","epsilon"], "SQW": ["sigma","lambda","epsilon"], "mixed": []};
+  var nPotParams = potParamNames[potType].length;
+  var simpleMixing = document.getElementById("model-simple-mixing").checked;
+  if (potType == "mixed" && simpleMixing) {
+    document.getElementById("model-simple-mixing").checked = false;
+    atomDataUpdated();
+    return;
+  }
+  document.getElementById("potential-data").setAttribute("placeholder", potType=="mixed" ? "A B LJ 1 1" : (simpleMixing ? "A 1 1" : "A B 1 1"));
+  document.getElementById("atom-data").setAttribute("placeholder", simpleMixing ? "A -0.5 0 0\nA 0.5 0 0" : "A -0.5 0 0\nB 0.5 0 0");
+  document.getElementById("atomic-line").textContent = "type x y z";
+  var ppr = document.getElementById("potParamsRow");
+  var pprCols = ppr.childNodes;
+  while (ppr.childNodes.length > 2) {
+    ppr.removeChild(pprCols[2]);
+  }
+  var paramExampleLine = "";
+  if (potType == "mixed") {
+    makeElement("TH", ppr, {textContent: "potential type"});
+    makeElement("TH", ppr, {textContent: "potential parameters"});
+    paramExampleLine = " potential_type param1 param2";
+    ijPotType = {};
+  }
+  else {
+    for (var i=0; i<nPotParams; i++) {
+      makeElement("TH", ppr, {textContent: potParamNames[potType][i]});
+      paramExampleLine += " "+potParamNames[potType][i];
+    }
+  }
+  var includeQ = document.getElementById("model-charges").checked;
+  if (includeQ) makeElement("TH", ppr, {textContent: "qiqj"});
+  document.getElementById("potential-line").textContent = (simpleMixing ? "type" : "type1 type2")+paramExampleLine;
+
+  for (var i=0; i<atomDataLines.length; i++) {
+    if (/^\s*#?\s*$/.test(atomDataLines[i])) continue;
+    var bits = atomDataLines[i].split(/\s+/);
+    if (bits.length < 4) {
+      return;
+    }
+    atomTypesNew.push(bits[0]);
+    allAtomTypes[bits[0]] = true;
+    if (isNaN(bits[1]) || isNaN(bits[2]) || isNaN(bits[3])) return;
+    var x = Number(bits[1]);
+    var y = Number(bits[2]);
+    var z = Number(bits[3]);
+    if (isNaN(x) || isNaN(y) || isNaN(z)) return;
+    atomXYZNew.push([x,y,z]);
+  }
+  if (atomTypesNew.length == 0) return;
+
+  var potentialDataLines = document.getElementById("potential-data").value.split(/\r?\n/);
+  for (var i=0; i<potentialDataLines.length; i++) {
+    if (/^\s*#?\s*$/.test(potentialDataLines[i])) continue;
+    var bits = potentialDataLines[i].split(/\s+/);
+    var offset = simpleMixing?1:2;
+    if (bits.length < offset+nPotParams) {
+      return;
+    }
+
+    var type1 = bits[0];
+    var type2 = (simpleMixing || /^[0-9]/.test(bits[1])) ? bits[0] : bits[1];
+    if (!(type1 in potParamsNew)) potParamsNew[type1] = {};
+    potParamsNew[type1][type2] = [];
+    if (potType=="mixed") {
+      if (!(bits[offset] in potParamNames)) return;
+      if (!(type1 in ijPotType)) ijPotType[type1] = {};
+      nPotParams = potParamNames[bits[offset]].length;
+      ijPotType[type1][type2] = bits[offset];
+      offset++;
+    }
+    for (var j=0; j<nPotParams; j++) {
+      if (isNaN(bits[offset+j]) || isNaN(Number(bits[offset+j]))) return;
+      potParamsNew[type1][type2].push(Number(bits[offset+j]));
+    }
+    if (includeQ && type1==type2) {
+      if (bits.length <= offset+nPotParams) return;
+      atomQ[type1] = Number(bits[offset+nPotParams]);
+    }
+  }
+  var atomTable = document.getElementById("atomDataTable");
+  empty(atomTable);
+  atomXYZ = atomXYZNew;
+  atomTypes = atomTypesNew;
+  potParams = potParamsNew;
+  for (var i=0; i<atomTypesNew.length; i++) {
+    var row = makeElement("TR", atomTable);
+    makeElement("TD", row, {textContent: i+1});
+    makeElement("TD", row, {textContent: atomTypes[i]});
+    makeElement("TD", row, {textContent: atomXYZ[i][0]});
+    makeElement("TD", row, {textContent: atomXYZ[i][1]});
+    makeElement("TD", row, {textContent: atomXYZ[i][2]});
+  }
+
+  var potTable = document.getElementById("potentialDataTable");
+  empty(potTable);
+  var aat = [];
+  for (var at in allAtomTypes) {
+    aat.push(at);
+  }
+  aat.sort();
+  allAtomTypes = aat;
+  for (var i=0; i<aat.length; i++) {
+    for (var j=i; j<aat.length; j++) {
+      var pp = null;
+      if (aat[i] in potParams && aat[j] in potParams[aat[i]]) pp = potParams[aat[i]][aat[j]];
+      else if (simpleMixing && i!=j && aat[i] in potParams && aat[j] in potParams) {
+        pp = mixing(potType, potParams[aat[i]][aat[i]], potParams[aat[j]][aat[j]]);
+      }
+      var row = makeElement("TR", potTable);
+      makeElement("TD", row, {textContent: aat[i]});
+      makeElement("TD", row, {textContent: aat[j]});
+      if (pp == null) {
+        makeElement("TD", row, {colspan: potType=="mixed" ? 2 : nPotParams, textContent: "(no interaction)"});
+      }
+      else {
+        if (potType == "mixed") {
+          var myPotType = ijPotType[aat[i]][aat[j]]
+          makeElement("TD", row, {textContent: myPotType});
+          var paramTxt = [];
+          for (var k=0; k<potParamNames[myPotType].length; k++) {
+            paramTxt.push(potParamNames[myPotType][k]+": "+pp[k]);
+          }
+          makeElement("TD", row, {textContent: paramTxt.join(", ")});
+        }
+        else {
+          for (var k=0; k<nPotParams; k++) {
+            makeElement("TD", row, {textContent: pp[k]});
+          }
+        }
+      }
+      if (includeQ) {
+        makeElement("TD", row, {textContent: atomQ[aat[i]]*atomQ[aat[j]]});
+      }
+    }
+  }
+}
+stage = "init";
+var running = false, stopRequested = false;
+function clearDRows() {
+  var results = document.getElementById("results");
+  var resultsTable = document.getElementById("resultsTable");
+  for (var i=1; ; i++) {
+    var row = document.getElementById("targetD"+i);
+    if (!row) break;
+    results.removeChild(row);
+    results.removeChild(document.getElementById("targetD"+i+"Over"));
+    resultsTable.removeChild(document.getElementById("fullD"+i));
+  }
+}
+function makeDRow(i, NOP) {
+  var row = makeElement("TR", document.getElementById("results"), {id: 'targetD'+i});
+  makeElement("TD", row, {innerHTML: "&gamma;<sub>"+i+"</sub>/&pi;"});
+  makeElement("TD", row, {id: "targetD"+i+"Avg"});
+  makeElement("TD", row, {id: "targetD"+i+"Err"});
+  makeElement("TD", row, {id: "targetD"+i+"AC"});
+  row = makeElement("TR", document.getElementById("results"), {id: 'targetD'+i+'Over'});
+  makeElement("TD", row, {innerHTML: "(&gamma;<sub>"+i+"</sub>/&pi;)/(&gamma;<sub>OS</sub>/&pi;)"});
+  makeElement("TD", row, {id: "targetD"+i+"RatioAvg"});
+  makeElement("TD", row, {id: "targetD"+i+"RatioErr"});
+  var cell = makeElement("TD", row);
+  makeElement("SPAN", cell, {id: "targetD"+i+"RatioCor"});
+  makeText("*", cell);
+  row = makeElement("TR", document.getElementById("resultsTable"), {id: 'fullD'+i});
+  var p = i==1?"":("<sup>"+i+"</sup>");
+  var name = "d"+p+"B<sub>"+NOP+"</sub>/d&beta;"+p;
+  makeElement("TD", row, {innerHTML: name});
+  makeElement("TD", row, {id: "fullD"+i+"RatioAvg"});
+  makeElement("TD", row, {id: "fullD"+i+"RatioErr"});
+}
+
+function teardownDRow(i) {
+  var results = document.getElementById("results");
+  results.removeChild(document.getElementById("targetD"+i));
+  results.removeChild(document.getElementById("targetD"+i+"Over"));
+  document.getElementById("resultsTable").removeChild(document.getElementById("fullD"+i));
+}
+function buildDCorTable(name, nDer) {
+  var tbody = document.getElementById('dCorTable'+name+"Body");
+  empty(tbody);
+  var hr = makeElement("TR", tbody);
+  makeElement("TD", hr);
+  for (var i=0; i<=nDer; i++) {
+    makeElement("TD", hr, {textContent: i});
+  }
+  for (var i=0; i<=nDer; i++) {
+    var row = makeElement("TR", tbody);
+    makeElement("TD", row, {textContent: i});
+    for (var j=0; j<=nDer; j++) {
+      var tc = i==j ? "1" : "";
+      makeElement("TD", row, {id: "dCor"+i+""+j+name, textContent: tc});
+    }
+  }
+}
+function teardownDCorTable(name) {
+  var tbody = document.getElementById('dCorTable'+name+"Body");
+  var rows = tbody.childNodes;
+  for (var i=0; i<rows.length; i++) {
+    var cols = rows[i].childNodes;
+    for (var j=(i==0?1:0); j<cols.length; j++) {
+      rows[i].removeChild(cols[j]);
+    }
+  }
+}
+function startOver() {
+  if (running) {
+    stopRequested = true;
+    running = false;
+  }
+  alphaTotalSteps = 0;
+  steps = 128;
+  empty(document.getElementById("alphaTable"));
+  document.getElementById("alphaDiv").style.display = "none";
+  new bootstrap.Collapse(document.getElementById("collapseAlpha")).show();
+  for (var i=1; i<=nDer; i++) {
+    teardownDRow(i);
+  }
+  teardownDCorTable('Raw');
+  teardownDCorTable('Full');
+  document.getElementById("productionDiv").style.display = "none";
+
+  var fields = ['sigmaHSRef','NOP','T','seed','nDer','atom-data','potential-data', 'model-simple-mixing', 'model-potential', 'model-charges'];
+  for (var i in fields) {
+    var inp = document.getElementById(fields[i]);
+    if (inp.nodeName == "SELECT" || (inp.nodeName == "INPUT" && inp.getAttribute("type") == "checkbox")) {
+      document.getElementById(fields[i]).removeAttribute("disabled");
+    }
+    else {
+      document.getElementById(fields[i]).removeAttribute("readonly");
+    }
+  }
+  document.getElementById('setButton').style.display = "";
+  btn = document.getElementById('alphaButton');
+  btn.style.display = "";
+  btn.textContent = "Pause";
+  var stages = ['alpha','production'];
+  for (var i=0; i<stages.length; i++) {
+    empty(document.getElementById(stages[i]+"Output"));
+  }
+  stage = "init";
+}
+var speciesList, refBox, targetBox, virialAlpha, numAlphaStats, alphaTotalSteps=0, refIntegral;
+var refIntegrator, targetIntegrator;
+var targetMove, targetMoveRotate, refMoveRotate, targetPotentialMasterLJ, refPotentialMasterHS;
+var refClusterHS, targetClusterHS, refClutserLJ, targetClusterLJ;
+var virialProduction = null;
+var refMove = null;
+var allAtomTypes = [];
+var atomTypes = [], atomXYZ = [], atomQ = {};
+var ijPotType = null;
+document.getElementById('setButton').addEventListener('click', function(){
+  var n = Number(document.getElementById("NOP").value);
+  if (n<2 || n>20 || Number.isNaN(n)) return;
+  var T = Number(document.getElementById("T").value);
+  if (T<=0 || Number.isNaN(T)) return;
+  var seed = Number(document.getElementById("seed").value);
+  if (seed<=0 || Number.isNaN(seed)) seed=0;
+  var nDer = Number(document.getElementById("nDer").value);
+  if (nDer<0 || Number.isNaN(nDer)) nDer=0;
+  var alphaButton = document.getElementById("alphaButton");
+  document.getElementById("alphaDiv").style.display = "block";
+  var fields = ['sigmaHSRef','NOP','T','seed','nDer','atom-data','potential-data', 'model-simple-mixing', 'model-potential', 'model-charges'];
+  for (var i in fields) {
+    var inp = document.getElementById(fields[i]);
+    if (inp.nodeName == "SELECT" || (inp.nodeName == "INPUT" && inp.getAttribute("type") == "checkbox")) {
+      inp.setAttribute("disabled","true");
+    }
+    else {
+      inp.setAttribute("readonly","true");
+    }
+  }
+  document.getElementById('setButton').style.display = "none";
+  document.getElementById('fullValueName').innerHTML = 'B<sub>'+n+'</sub>';
+
+  clearDRows();
+  for (var m=1; m<=nDer; m++) {
+    makeDRow(m, n);
+  }
+  if (nDer==0) {
+    document.getElementById("dCorHeading").style.display = "none";
+  }
+  else {
+    buildDCorTable('Raw', nDer);
+    buildDCorTable('Full', nDer);
+  }
+  document.getElementById("btnNewParameters").style.display = "";
+  document.getElementById("btnNewParameters").addEventListener('click', startOver);
+
+  numAlphaStats = 0;
+
+  var setSeed = document.getElementById("seed").value.trim();
+  if (setSeed.length > 0) {
+    seed = Number(seed);
+    rand = new Module.Random(seed);
+  }
+  else {
+    rand = new Module.Random();
+    seed = rand.getSeed();
+  }
+  document.getElementById("seed").value = seed;
+  var sigmaHSref = 1.5;
+
+  var vSphere = 4.0/3.0*Math.PI*Math.pow(sigmaHSref, 3);
+  refIntegral = Math.pow(vSphere, n-1)/2;
+  for (var i=2; i<=n; i++) refIntegral *= i;
+
+  var pHS = new Module.PotentialHS(sigmaHSref);
+  var pMoleculeHS = new Module.PotentialMolecularAtomic(atomTypes.length, pHS);
+  
+  speciesList = new SpeciesList();
+  var species = new SpeciesSimple(atomXYZ.length,1);
+  var anum = 0;
+  for (var i=0; i<allAtomTypes.length; i++) {
+    var lastAnum = anum;
+    for (var j=0; j<atomTypes.length; j++) {
+      if (atomTypes[j] == allAtomTypes[i]) {
+        species.setAtomPosition(anum, atomXYZ[j][0], atomXYZ[j][1], atomXYZ[j][2]);
+        anum++;
+      }
+    }
+    if (anum>lastAnum) species.addAtomType(1, anum - lastAnum);
+    lastAnum = anum;
+  }
+  speciesList.add(species);
+
+  refBox = new Module.Box(speciesList);
+  refBox.setPeriodic(false,false,false);
+  refBox.setNumMolecules(0, n);
+  var refPotentialMasterLJ = new Module.PotentialMasterVirial(speciesList, refBox);
+  var refPotentialMasterHS = new Module.PotentialMasterVirialMolecular(speciesList, refBox);
+  refPotentialMasterHS.setMoleculePairPotential(0, 0, pMoleculeHS);
+  refIntegrator = new Module.IntegratorMC(refPotentialMasterHS, rand);
+  refClusterLJ = new Module.ClusterVirial(refPotentialMasterLJ, T, 0, false);
+  refClusterHS = new Module.ClusterChain(refPotentialMasterHS, T, 1, 0, false);
+  refMove = new Module.MCMoveChainVirial(speciesList, refBox, refPotentialMasterHS, rand, sigmaHSref);
+  refIntegrator.addMove(refMove, 1);
+  refMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, refBox, refPotentialMasterHS, rand, 0.2, refClusterHS);
+  if (atomXYZ.length > 1) refIntegrator.addMove(refMoveRotate, 1);
+  refIntegrator.setTemperature(T);
+
+  targetBox = new Module.Box(speciesList);
+  targetBox.setPeriodic(false,false,false);
+  targetBox.setNumMolecules(0, n);
+  targetPotentialMasterLJ = new Module.PotentialMasterVirial(speciesList, targetBox);
+  var includeQ = document.getElementById("model-charges").checked;
+  var simpleMixing = document.getElementById("model-simple-mixing").checked;
+  var potType = document.getElementById("model-potential").value;
+  for (var i=0; i<allAtomTypes.length; i++) {
+    if (!(allAtomTypes[i] in potParams)) continue;
+    for (var j=i; j<allAtomTypes.length; j++) {
+      var myPotParams = null;
+      if (allAtomTypes[j] in potParams[allAtomTypes[i]]) myPotParams = potParams[allAtomTypes[i]][allAtomTypes[j]];
+      else if (simpleMixing && i!=j && allAtomTypes[i] in potParams && allAtomTypes[j] in potParams) {
+        myPotParams = mixing(potType, potParams[allAtomTypes[i]][allAtomTypes[i]], potParams[allAtomTypes[j]][allAtomTypes[j]]);
+      }
+      if (myPotParams == null) continue;
+      var myPotType = potType == "mixed" ? ijPotType[allAtomTypes[i]][allAtomTypes[j]] : potType;
+      switch (myPotType) {
+        case "HS":
+          pAtomic = new Module.PotentialHS(myPotParams[0]);
+          break;
+        case "SS":
+          var sigma = myPotParams[0];
+          var epsilon = myPotParams[1];
+          var ssPow = myPotParams[2];
+          epsilon = epsilon * Math.pow(sigma, ssPow);
+          pAtomic = new Module.PotentialSS(epsilon ,ssPow, 0, Infinity);
+          break;
+        case "LJ":
+          var sigma = myPotParams[0];
+          var epsilon = myPotParams[1];
+          pAtomic = new Module.PotentialLJ(sigma,epsilon,0,Infinity);
+          break;
+        case "SQW":
+          var sigma = myPotParams[0];
+          var lambda = myPotParams[1];
+          var epsilon = myPotParams[2];
+          pAtomic = new Module.PotentialSQW(sigma,lambda,epsilon);
+          break;
+      }
+      if (includeQ) {
+        pAtomic = new Module.PotentialCharge(pAtomic, atomQ[allAtomTypes[i]]*atomQ[allAtomTypes[j]], Infinity);
+      }
+      targetPotentialMasterLJ.setPairPotential(i, j, pAtomic);
+      refPotentialMasterLJ.setPairPotential(i, j, pAtomic);
+    }
+  }
+  var targetPotentialMasterHS = new Module.PotentialMasterVirialMolecular(speciesList, targetBox);
+  targetPotentialMasterHS.setMoleculePairPotential(0, 0, pMoleculeHS);
+  targetIntegrator = new Module.IntegratorMC(targetPotentialMasterLJ, rand);
+  targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, 0, false);
+  targetIntegrator.addListener(targetClusterLJ);
+  targetClusterHS = new Module.ClusterChain(targetPotentialMasterHS, T, 1, 0, false);
+  targetIntegrator.addListener(targetClusterHS);
+  targetMove = new Module.MCMoveMoleculeDisplacementVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, 0.2, targetClusterLJ);
+  targetIntegrator.addMove(targetMove, 1);
+  targetMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, 0.2, targetClusterLJ);
+  if (atomXYZ.length > 1) targetIntegrator.addMove(targetMoveRotate, 1);
+  targetIntegrator.setTemperature(T);
+
+  virialAlpha = new Module.VirialAlpha(refIntegrator, targetIntegrator, refClusterHS, refClusterLJ, targetClusterHS, targetClusterLJ);
+  btnRunner("alpha", runAlpha);
+});
+function pause() {
+  if (stopRequested) return;
+  if (!running) {
+    var btn = document.getElementById(stage+'Button');
+    btn.style.display = "";
+    btn.textContent = "Pause";
+    startRunner(stage, stage=="alpha" ? runAlpha : runProduction);
+    return;
+  }
+  if (stage=='production') startTime -= Date.now();
+  stopRequested = true;
+}
+function runAlpha(steps) {
+  if (stopRequested) {
+    var btn = document.getElementById('alphaButton');
+    btn.style.display = "";
+    btn.textContent = "Resume";
+    running = false;
+    return;
+  }
+  virialAlpha.runSteps(steps);
+  alphaTotalSteps += steps;
+  document.getElementById("alphaTotalStepsSpan").textContent = alphaTotalSteps;
+  var newNumAlphaStats = virialAlpha.getNumSavedStats();
+  for (var i=numAlphaStats; i<newNumAlphaStats; i++) {
+    var s = new Module.ArrayUtil(virialAlpha.getSavedStats(i));
+    var newSteps = s.x(0);
+    var newBlockSize = s.x(1);
+    var newAlpha = s.x(2);
+    var newAlphaErr = s.x(3);
+    var newAlphaCor = s.x(4);
+    var newAlphaSpan = s.x(5);
+    document.getElementById("alphaBlockSize").textContent = newBlockSize;
+    document.getElementById("alpha").textContent = newAlpha;
+    var alphaTable = document.getElementById("alphaTable");
+    var row = makeElement("TR", alphaTable);
+    makeElement("TD", row, {textContent: newSteps});
+    makeElement("TD", row, {textContent: newAlphaSpan});
+    makeElement("TD", row, {textContent: formatFloatForErr(newAlpha, newAlphaErr)});
+    makeElement("TD", row, {textContent: newAlphaErr.toPrecision(3)});
+    makeElement("TD", row, {textContent: newAlphaCor.toPrecision(3)});
+
+    if (i == newNumAlphaStats-1 && virialAlpha.getAllDone()) {
+      new bootstrap.Collapse(document.getElementById("collapseAlpha")).hide();
+      document.getElementById("alphaButton").setAttribute("disabled","true");
+      // set up production
+      var targetStepSize = targetMove.stepSize;
+      var targetRotateStepSize = targetMoveRotate.stepSize;
+      var refRotateStepSize = refMoveRotate.stepSize;
+      targetIntegrator.removeMove(targetMove);
+      Module.destroy(targetMove);
+      targetMove = null;
+      if (atomXYZ.length > 1) targetIntegrator.removeMove(targetMoveRotate);
+      Module.destroy(targetMoveRotate);
+      targetMoveRotate = null;
+      if (atomXYZ.length > 1) refIntegrator.removeMove(refMoveRotate);
+      Module.destroy(refMoveRotate);
+      refMoveRotate = null;
+      targetIntegrator.removeListener(targetClusterLJ);
+      Module.destroy(targetClusterLJ);
+      targetClusterLJ = null;
+      // display step sizes
+
+      var T = Number(document.getElementById("T").value);
+      var nDer = Number(document.getElementById("nDer").value);
+      if (nDer<0 || Number.isNaN(nDer)) nDer=0;
+      targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, nDer, true);
+      targetMove = new Module.MCMoveMoleculeDisplacementVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, targetStepSize, targetClusterLJ);
+      targetIntegrator.addMove(targetMove, 1);
+      targetRotateMove = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, targetRotateStepSize, targetClusterLJ);
+      if (atomXYZ.length > 1) targetIntegrator.addMove(targetRotateMove, 1);
+      targetIntegrator.addMove(targetMove, 1);
+      targetIntegrator.addListener(targetClusterLJ);
+      targetIntegrator.setTuning(false);
+
+      refMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, refBox, refPotentialMasterHS, rand, refRotateStepSize, refClusterHS);
+      if (atomXYZ.length > 1) refIntegrator.addMove(refMoveRotate, 1);
+
+      virialProduction = new Module.VirialProduction(refIntegrator, targetIntegrator, refClusterHS, refClusterLJ, targetClusterHS, targetClusterLJ, newAlpha, refIntegral);
+
+      // this is required.  it will disconnect the pumps from the integrators
+      Module.destroy(virialAlpha);
+      virialAlpha = null;
+
+      // launch production
+      document.getElementById("productionDiv").style.display = "block";
+      var btn = document.getElementById('productionButton');
+      btn.style.display = "";
+      btn.textContent = "Pause";
+      running = false;
+      btnRunner("production", runProduction);
+      return true;
+    }
+
+  }
+  numAlphaStats = newNumAlphaStats;
+
+  if (false && Math.random() < 0.0001) {
+    console.log("histograms");
+    var piHist = new Module.ArrayUtil(targetMove.getHistogramPi());
+    var countHist = new Module.ArrayUtil(targetMove.getHistogram());
+    for (var i=0; i<=90; i++) {
+      var r = (i+0.5)/10;
+      var y = countHist.x(i);
+      if (y == 0) continue;
+      var pi = piHist.x(i);
+      if (r > 1) {
+        r = Math.exp(r-1);
+        y /= r;
+      }
+      console.log(r+" "+y+" "+pi);
+    }
+  }
+  return false;
+}
+function runProduction(steps) {
+  if (stopRequested) {
+    var btn = document.getElementById('productionButton');
+    btn.style.display = "";
+    btn.textContent = "Resume";
+    running = false;
+    return;
+  }
+  virialProduction.runSteps(steps);
+  var refStats = new Module.ArrayUtil(virialProduction.getRefStats());
+  document.getElementById("refAvg").textContent = formatFloatForErr(refStats.x2d(0,1), refStats.x2d(0,2));
+  document.getElementById("refErr").textContent = refStats.x2d(0,2).toPrecision(3)
+  document.getElementById("refOverAvg").textContent = formatFloatForErr(refStats.x2d(1,1), refStats.x2d(1,2));
+  document.getElementById("refOverErr").textContent = refStats.x2d(1,2).toPrecision(3);
+  var refRatioStats = new Module.ArrayUtil(virialProduction.getRefRatioStats());
+  document.getElementById("refRatioAvg").textContent = formatFloatForErr(refRatioStats.x2d(0,1), refRatioStats.x2d(0,2));
+  document.getElementById("refRatioErr").textContent = refRatioStats.x2d(0,2).toPrecision(3);
+  var targetStats = new Module.ArrayUtil(virialProduction.getTargetStats());
+  document.getElementById("targetAvg").textContent = formatFloatForErr(targetStats.x2d(0,1), targetStats.x2d(0,2));
+  document.getElementById("targetErr").textContent = targetStats.x2d(0,2).toPrecision(3)
+  document.getElementById("targetAC").textContent = targetStats.x2d(0,3).toPrecision(3);
+  document.getElementById("targetOverAvg").textContent = formatFloatForErr(targetStats.x2d(1,1), targetStats.x2d(1,2));
+  document.getElementById("targetOverErr").textContent = targetStats.x2d(1,2).toPrecision(3);
+  document.getElementById("targetOverAC").textContent = targetStats.x2d(1,3).toPrecision(3);
+  var targetRatioStats = new Module.ArrayUtil(virialProduction.getTargetRatioStats());
+  document.getElementById("targetRatioAvg").textContent = formatFloatForErr(targetRatioStats.x2d(0,1), targetRatioStats.x2d(0,2));
+  document.getElementById("targetRatioErr").textContent = targetRatioStats.x2d(0,2).toPrecision(3);
+  var targetBCStats = new Module.ArrayUtil(virialProduction.getTargetBCStats());
+  document.getElementById("targetRatioCor").textContent = targetBCStats.x2d(0,1).toPrecision(3);
+  var alphaStats = new Module.ArrayUtil(virialProduction.getAlphaStats());
+  document.getElementById("prodAlpha").textContent = formatFloatForErr(alphaStats.x(0), alphaStats.x(1));
+  document.getElementById("prodAlphaErr").textContent = '\u00B1 '+alphaStats.x(1).toPrecision(3);
+
+  var targetBlockSize = virialProduction.getTargetAverage().getBlockSize();
+  document.getElementById("prodBlockSize").textContent = targetBlockSize;
+
+  var fullStats = new Module.ArrayUtil(virialProduction.getFullStats());
+  document.getElementById("fullRatioAvg").textContent = formatFloatForErr(fullStats.x2d(0,0), fullStats.x2d(0,1));
+  document.getElementById("fullRatioErr").textContent = fullStats.x2d(0,1).toPrecision(3);
+  var nDer = Number(document.getElementById("nDer").value);
+  if (nDer<0 || Number.isNaN(nDer)) nDer=0;
+  for (var m=1; m<=nDer; m++) {
+    document.getElementById("fullD"+m+"RatioAvg").textContent = formatFloatForErr(fullStats.x2d(m,0), fullStats.x2d(m,1));
+    document.getElementById("fullD"+m+"RatioErr").textContent = fullStats.x2d(m,1).toPrecision(3);
+  }
+  var fullBCStats = new Module.ArrayUtil(virialProduction.getFullBCStats());
+  for (var m=0; m<=nDer; m++) {
+    for (var mm=m+1; mm<=nDer; mm++) {
+      document.getElementById("dCor"+m+""+mm+"Raw").textContent = targetBCStats.x2d(m,mm).toPrecision(3);
+      document.getElementById("dCor"+mm+""+m+"Raw").textContent = targetBCStats.x2d(m,mm).toPrecision(3);
+      document.getElementById("dCor"+m+""+mm+"Full").textContent = fullBCStats.x2d(m,mm).toPrecision(3);
+      document.getElementById("dCor"+mm+""+m+"Full").textContent = fullBCStats.x2d(m,mm).toPrecision(3);
+    }
+  }
+
+  var refSteps = virialProduction.getRefSteps(), targetSteps = virialProduction.getTargetSteps();
+  document.getElementById("refSteps").textContent = refSteps;
+  document.getElementById("targetSteps").textContent = targetSteps;
+  if (refSteps>0) document.getElementById("targetStepPercent").textContent = (100*targetSteps/(refSteps+targetSteps)).toPrecision(4);
+  var now = Date.now();
+  var speed = now>startTime ? ((refSteps+targetSteps)/(now-startTime)/1000) : "";
+  document.getElementById("prodSpeed").textContent = speed ? (speed.toPrecision(5)+" million steps/s") : "";
+
+
+  return false;
+}
+
+var lastAlpha = 1;
+var lastAcc = 0;
+
+var lastProdUpdate = 0, startTime = 0;
+var steps = 128;
+function startRunner(newStage, cfunc) {
+  stage = newStage;
+  if (stage=='production') startTime += Date.now();
+  var btn = document.getElementById(stage+"Button");
+  var runner = function() {
+    if (stopRequested) {
+      running = false;
+      stopRequested = false;
+      btn.textContent = "Resume";
+      return;
+    }
+    running = true;
+    var t1 = Date.now();
+    var allDone = cfunc(steps);
+    var t2 = Date.now();
+    if (t2 - t1 < 50) {
+      steps *= 2;
+    }
+    var runMore = !allDone;
+    if (runMore) window.setTimeout(runner, 0);
+  };
+  window.setTimeout(runner, 0);
+}
+
+function btnRunner(thisStage, cfunc) {
+  stage = thisStage;
+  document.getElementById(stage+"Button").textContent = "Pause";
+  startRunner(stage, cfunc);
+}
+var showDCor = false;
+document.getElementById('btnDCorrelations').addEventListener('click', function(){
+  showDCor = !showDCor;
+  document.getElementById("dCorTables").style.display = showDCor ? "table" : "none";
+  var btn = document.getElementById('btnDCorrelations');
+  empty(btn);
+  makeText(showDCor ? "Hide" : "Show", btn);
+});
+window.addEventListener("load", atomDataUpdated);
+    </script>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script async type='text/javascript' src='mc.js'></script>
+  </body>
+</html>
