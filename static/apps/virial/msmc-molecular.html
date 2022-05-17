@@ -28,7 +28,7 @@
           <div class='row'>
             <div class='col-auto px-4'>
               <label>Order of coefficient:
-                <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;'>
+                <input class='form-control' size='2' id='NOP' value='2' style='width: 4rem;' onchange='atomDataUpdated()'>
               </label><br>
               <label>Reference HS sigma: <input id='sigmaHSRef' class='form-control' size='5' style='width: 5em;' value='1.5'></label><br>
               <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
@@ -74,6 +74,7 @@ A 0.5 0 0' rows='7' style='width: 20rem;'></textarea>
                 <thead><tr id='potParamsRow'><th>Type</th><th>Type</th></tr></thead>
                 <tbody id='potentialDataTable'></tbody>
               </table>
+              <p id='flip-text' style='display: none;'>Due to net dipole, molecules will be flipped to compute B<sub>2</sub>.</p>
             </div>
           </div>
         </div>
@@ -103,6 +104,11 @@ A 0.5 0 0' rows='7' style='width: 20rem;'></textarea>
         <div class='card-body'>
           <p><button type='button' id='productionButton' class='btn btn-sm btn-primary' onclick='pause()'>Pause</button></p>
           <div class='output' id="productionOutput"></div>
+          <div class='mb-3 mt-3'>
+            <p class='m-0'>Target displacement step size: <span id='targetStepSize'></span></p>
+            <p class='m-0' id='targetRotationSSp'>Target rotation step size: <span id='targetRotationStepSize'></span></p>
+            <p class='m-0' id='refRotationSSp'>Reference rotation step size: <span id='refRotationStepSize'></span></p>
+          </div>
           <h5>Reference (<span id='refSteps'></span> steps)</h5>
           <table class='table table-sm'>
             <thead><tr><th></th><th>Average</th><th>Uncertainty</th></tr></thead>
@@ -285,6 +291,7 @@ function atomDataUpdated() {
   atomXYZ = atomXYZNew;
   atomTypes = atomTypesNew;
   potParams = potParamsNew;
+  var dipole = [0,0,0];
   for (var i=0; i<atomTypesNew.length; i++) {
     var row = makeElement("TR", atomTable);
     makeElement("TD", row, {textContent: i+1});
@@ -292,7 +299,13 @@ function atomDataUpdated() {
     makeElement("TD", row, {textContent: atomXYZ[i][0]});
     makeElement("TD", row, {textContent: atomXYZ[i][1]});
     makeElement("TD", row, {textContent: atomXYZ[i][2]});
+    if (includeQ) {
+      for (var j=0; j<3; j++) dipole[j] += atomXYZ[i][j] * atomQ[atomTypes[i]];
+    }
   }
+  dipoleMag = Math.sqrt(dipole[0]*dipole[0] + dipole[1]+dipole[1] + dipole[2]*dipole[2]);
+  var n = Number(document.getElementById("NOP").value);
+  document.getElementById("flip-text").style.display = (dipoleMag > 1e-5 && n == 2) ? "block" : "none";
 
   var potTable = document.getElementById("potentialDataTable");
   empty(potTable);
@@ -409,6 +422,16 @@ function startOver() {
     stopRequested = true;
     running = false;
   }
+
+  if (virialAlpha) {
+    Module.destroy(virialAlpha);
+    virialAlpha = null;
+  }
+  if (virialProduction) {
+    Module.destroy(virialProduction);
+    virialProduction = null;
+  }
+
   alphaTotalSteps = 0;
   steps = 128;
   empty(document.getElementById("alphaTable"));
@@ -450,6 +473,7 @@ var refMove = null;
 var allAtomTypes = [];
 var atomTypes = [], atomXYZ = [], atomQ = {};
 var ijPotType = null;
+var dipoleMag = 0;
 document.getElementById('setButton').addEventListener('click', function(){
   var n = Number(document.getElementById("NOP").value);
   if (n<2 || n>20 || Number.isNaN(n)) return;
@@ -533,11 +557,17 @@ document.getElementById('setButton').addEventListener('click', function(){
   refPotentialMasterHS.setMoleculePairPotential(0, 0, pMoleculeHS);
   refIntegrator = new Module.IntegratorMC(refPotentialMasterHS, rand);
   refClusterLJ = new Module.ClusterVirial(refPotentialMasterLJ, T, 0, false);
+  if (dipoleMag > 1e-5 && n == 2) {
+    refClusterLJ = new Module.ClusterFlipped(refClusterLJ, speciesList, refBox, false);
+  }
   refClusterHS = new Module.ClusterChain(refPotentialMasterHS, T, 1, 0, false);
   refMove = new Module.MCMoveChainVirial(speciesList, refBox, refPotentialMasterHS, rand, sigmaHSref);
   refIntegrator.addMove(refMove, 1);
-  refMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, refBox, refPotentialMasterHS, rand, 0.2, refClusterHS);
-  if (atomXYZ.length > 1) refIntegrator.addMove(refMoveRotate, 1);
+  refMoveRotate = null;
+  if (atomXYZ.length > 1) {
+    refMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, refBox, refPotentialMasterHS, rand, 0.2, refClusterHS);
+    refIntegrator.addMove(refMoveRotate, 1);
+  }
   refIntegrator.setTemperature(T);
 
   targetBox = new Module.Box(speciesList);
@@ -590,14 +620,23 @@ document.getElementById('setButton').addEventListener('click', function(){
   var targetPotentialMasterHS = new Module.PotentialMasterVirialMolecular(speciesList, targetBox);
   targetPotentialMasterHS.setMoleculePairPotential(0, 0, pMoleculeHS);
   targetIntegrator = new Module.IntegratorMC(targetPotentialMasterLJ, rand);
-  targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, 0, false);
+  if (dipoleMag > 1e-5 && n == 2) {
+    targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, 0, false);
+    targetClusterLJ = new Module.ClusterFlipped(targetClusterLJ, speciesList, targetBox, true);
+  }
+  else {
+    targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, 0, true);
+  }
   targetIntegrator.addListener(targetClusterLJ);
   targetClusterHS = new Module.ClusterChain(targetPotentialMasterHS, T, 1, 0, false);
   targetIntegrator.addListener(targetClusterHS);
   targetMove = new Module.MCMoveMoleculeDisplacementVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, 0.2, targetClusterLJ);
   targetIntegrator.addMove(targetMove, 1);
-  targetMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, 0.2, targetClusterLJ);
-  if (atomXYZ.length > 1) targetIntegrator.addMove(targetMoveRotate, 1);
+  targetMoveRotate = null;
+  if (atomXYZ.length > 1) {
+    targetMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, 0.2, targetClusterLJ);
+    targetIntegrator.addMove(targetMoveRotate, 1);
+  }
   targetIntegrator.setTemperature(T);
 
   virialAlpha = new Module.VirialAlpha(refIntegrator, targetIntegrator, refClusterHS, refClusterLJ, targetClusterHS, targetClusterLJ);
@@ -650,36 +689,18 @@ function runAlpha(steps) {
       document.getElementById("alphaButton").setAttribute("disabled","true");
       // set up production
       var targetStepSize = targetMove.stepSize;
-      var targetRotateStepSize = targetMoveRotate.stepSize;
-      var refRotateStepSize = refMoveRotate.stepSize;
-      targetIntegrator.removeMove(targetMove);
-      Module.destroy(targetMove);
-      targetMove = null;
-      if (atomXYZ.length > 1) targetIntegrator.removeMove(targetMoveRotate);
-      Module.destroy(targetMoveRotate);
-      targetMoveRotate = null;
-      if (atomXYZ.length > 1) refIntegrator.removeMove(refMoveRotate);
-      Module.destroy(refMoveRotate);
-      refMoveRotate = null;
-      targetIntegrator.removeListener(targetClusterLJ);
-      Module.destroy(targetClusterLJ);
-      targetClusterLJ = null;
+      document.getElementById("targetStepSize").textContent = targetStepSize.toPrecision(3);
+      document.getElementById("targetRotationSSp").style.display = targetMoveRotate ? "block" : "none";
+      document.getElementById("refRotationSSp").style.display = refMoveRotate ? "block" : "none";
+      if (targetMoveRotate) {
+        var targetRotateStepSize = targetMoveRotate.stepSize;
+        document.getElementById("targetRotationStepSize").textContent = targetRotateStepSize.toPrecision(3);
+        var refRotateStepSize = refMoveRotate.stepSize;
+        document.getElementById("refRotationStepSize").textContent = refRotateStepSize.toPrecision(3);
+      }
       // display step sizes
 
-      var T = Number(document.getElementById("T").value);
-      var nDer = Number(document.getElementById("nDer").value);
-      if (nDer<0 || Number.isNaN(nDer)) nDer=0;
-      targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, nDer, true);
-      targetMove = new Module.MCMoveMoleculeDisplacementVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, targetStepSize, targetClusterLJ);
-      targetIntegrator.addMove(targetMove, 1);
-      targetRotateMove = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, targetBox, targetPotentialMasterLJ, rand, targetRotateStepSize, targetClusterLJ);
-      if (atomXYZ.length > 1) targetIntegrator.addMove(targetRotateMove, 1);
-      targetIntegrator.addMove(targetMove, 1);
-      targetIntegrator.addListener(targetClusterLJ);
       targetIntegrator.setTuning(false);
-
-      refMoveRotate = new Module.MCMoveMoleculeRotateVirial(speciesList, 0, refBox, refPotentialMasterHS, rand, refRotateStepSize, refClusterHS);
-      if (atomXYZ.length > 1) refIntegrator.addMove(refMoveRotate, 1);
 
       virialProduction = new Module.VirialProduction(refIntegrator, targetIntegrator, refClusterHS, refClusterLJ, targetClusterHS, targetClusterLJ, newAlpha, refIntegral);
 

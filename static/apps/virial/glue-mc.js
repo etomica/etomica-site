@@ -2214,6 +2214,25 @@ Module['ClusterChain'] = ClusterChain;
   var self = this.ptr;
   _emscripten_bind_ClusterChain___destroy___0(self);
 };
+// ClusterFlipped
+/** @suppress {undefinedVars, duplicate} @this{Object} */function ClusterFlipped(cluster, speciesList, box, cached) {
+  if (cluster && typeof cluster === 'object') cluster = cluster.ptr;
+  if (speciesList && typeof speciesList === 'object') speciesList = speciesList.ptr;
+  if (box && typeof box === 'object') box = box.ptr;
+  if (cached && typeof cached === 'object') cached = cached.ptr;
+  this.ptr = _emscripten_bind_ClusterFlipped_ClusterFlipped_4(cluster, speciesList, box, cached);
+  getCache(ClusterFlipped)[this.ptr] = this;
+};;
+ClusterFlipped.prototype = Object.create(Cluster.prototype);
+ClusterFlipped.prototype.constructor = ClusterFlipped;
+ClusterFlipped.prototype.__class__ = ClusterFlipped;
+ClusterFlipped.__cache__ = {};
+Module['ClusterFlipped'] = ClusterFlipped;
+
+  ClusterFlipped.prototype['__destroy__'] = ClusterFlipped.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_ClusterFlipped___destroy___0(self);
+};
 // VirialAlpha
 /** @suppress {undefinedVars, duplicate} @this{Object} */function VirialAlpha(refIntegrator, targetIntegrator, refClusterRef, refClusterTarget, targetClusterRef, targetClusterTarget) {
   if (refIntegrator && typeof refIntegrator === 'object') refIntegrator = refIntegrator.ptr;
