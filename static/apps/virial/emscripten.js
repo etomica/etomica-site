@@ -9,8 +9,13 @@ var Module = {
     return function(text) {
       if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
       var element = document.getElementById(stage+'Output');
-      element.appendChild(document.createTextNode(text));
-      element.appendChild(document.createElement("BR"));
+      if (element) {
+        element.appendChild(document.createTextNode(text));
+        element.appendChild(document.createElement("BR"));
+      }
+      else {
+        console.log(text);
+      }
     };
   })(),
   printErr: function(text) {
