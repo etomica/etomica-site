@@ -75,6 +75,7 @@ A 0.5 0 0' rows='7' style='width: 20rem;'></textarea>
                 <tbody id='potentialDataTable'></tbody>
               </table>
               <p id='flip-text' style='display: none;'>Due to net dipole, molecules will be flipped to compute B<sub>2</sub>.</p>
+              <p id='ion-text' style='display: none; color: red;'>The molecule has a net charge of <span id='ion-charge'></span></p>
             </div>
           </div>
         </div>
@@ -291,7 +292,7 @@ function atomDataUpdated() {
   atomXYZ = atomXYZNew;
   atomTypes = atomTypesNew;
   potParams = potParamsNew;
-  var dipole = [0,0,0];
+  var dipole = [0,0,0], netCharge = 0;
   for (var i=0; i<atomTypesNew.length; i++) {
     var row = makeElement("TR", atomTable);
     makeElement("TD", row, {textContent: i+1});
@@ -301,11 +302,15 @@ function atomDataUpdated() {
     makeElement("TD", row, {textContent: atomXYZ[i][2]});
     if (includeQ) {
       for (var j=0; j<3; j++) dipole[j] += atomXYZ[i][j] * atomQ[atomTypes[i]];
+      netCharge += atomQ[atomTypes[i]];
     }
   }
   dipoleMag = Math.sqrt(dipole[0]*dipole[0] + dipole[1]+dipole[1] + dipole[2]*dipole[2]);
   var n = Number(document.getElementById("NOP").value);
   document.getElementById("flip-text").style.display = (dipoleMag > 1e-5 && n == 2) ? "block" : "none";
+  var hasNetCharge = Math.sqrt(netCharge*netCharge) > 1e-5;
+  document.getElementById("ion-text").style.display = hasNetCharge ? "block" : "none";
+  document.getElementById("ion-charge").textContent = netCharge;
 
   var potTable = document.getElementById("potentialDataTable");
   empty(potTable);
