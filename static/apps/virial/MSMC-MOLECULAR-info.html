@@ -4,38 +4,49 @@
 
 <h3 class='h5'>Molecular model</h3>
 
-<p>The molecular model is specified in terms of the type and position of each atom and the potential interaction between each pair of atom types.  Point charges may also be included for each atom type.  When using one of the standard potentials, it is possible to specify only like interactions (between atoms of the same type) and then interactions between unlike atoms determined from standard mixing rules.</p>
+<p>The molecular model is specified in terms of the type and position of each atom and the potential interaction between each pair of atom types.  All interactions are specified with reduced units (Boltzmann's constant is 1; energy and temperature have the same units).  Point charges may also be included for each atom type.  When using one of the standard potentials, it is possible to specify only like interactions (between atoms of the same type) and then interactions between unlike atoms determined from standard mixing rules.</p>
 
 <table class='table'>
-  <thead><tr><th>Potential</th><th colspan='3'>Mixing Rule</th></tr></thead>
+  <thead><tr><th>Potential</th><th>Function</th><th colspan='3'>Mixing Rule</th></tr></thead>
   <tbody>
   <tr>
     <td>Hard Sphere</td>
+    <td>&infin;, if r &le; &sigma;</td>
     <td>&sigma;<sub>ij</sub> = (&sigma;<sub>i</sub> + &sigma;<sub>j</sub>)/2</td><td></td><td></td>
   </tr>
   <tr>
     <td>Soft Sphere</td>
+    <td>&epsilon; (&sigma;/r)<sup>n</sup></td>
     <td>&sigma;<sub>ij</sub> = (&sigma;<sub>i</sub> + &sigma;<sub>j</sub>)/2</td>
     <td>&epsilon;<sub>ij</sub> = (&epsilon;<sub>i</sub> &epsilon;<sub>j</sub>)<sup>1/2</sup></td>
     <td>n_<sub>ij</sub> = n<sub>i</sub> = n<sub>j</sub></td>
   </tr>
   <tr>
     <td>WCA</td>
+    <td>&epsilon; + 4&epsilon; [(&sigma;/r)<sup>12</sup> - (&sigma;/r)<sup>6</sup>], if r &le; 2<sup>1/6</sup>&sigma;</td>
     <td>&sigma;<sub>ij</sub> = (&sigma;<sub>i</sub> + &sigma;<sub>j</sub>)/2</td>
     <td>&epsilon;<sub>ij</sub> = (&epsilon;<sub>i</sub> &epsilon;<sub>j</sub>)<sup>1/2</sup></td>
     <td></td>
   </tr>
   <tr>
     <td>Lennard-Jones</td>
+    <td>4&epsilon; [(&sigma;/r)<sup>12</sup> - (&sigma;/r)<sup>6</sup>]</td>
     <td>&sigma;<sub>ij</sub> = (&sigma;<sub>i</sub> + &sigma;<sub>j</sub>)/2</td>
     <td>&epsilon;<sub>ij</sub> = (&epsilon;<sub>i</sub> &epsilon;<sub>j</sub>)<sup>1/2</sup></td>
     <td></td>
   </tr>
   <tr>
     <td>Square Well</td>
+    <td>&infin;, if r &le; &sigma;<br>
+        -&epsilon;, if &sigma; &lt; r &le; &lambda;&sigma;</td>
     <td>&sigma;<sub>ij</sub> = (&sigma;<sub>i</sub> + &sigma;<sub>j</sub>)/2</td>
     <td>&epsilon;<sub>ij</sub> = (&epsilon;<sub>i</sub> &epsilon;<sub>j</sub>)<sup>1/2</sup></td>
     <td>&lambda;<sub>ij</sub> = (&sigma;<sub>i</sub>&lambda;<sub>i</sub> + &sigma;<sub>j</sub>&lambda;<sub>j</sub>)/(&sigma;<sub>i</sub> + &sigma;<sub>j</sub>)</td>
+  </tr>
+  <tr>
+    <td>Charge</td>
+    <td>q<sub>i</sub>q<sub>j</sub>/r</td>
+    <td></td><td></td><td></td>
   </tr>
   </tbody>
 </table>
