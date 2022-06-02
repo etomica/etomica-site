@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Molecular Simulation via Emscripten</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='style.css'>
+    <script src='util.js'></script>
+    <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class='container'>
+      <h1 class='h2'><i class='fa-solid fa-house'></i> Molecular Simultaion via Emscripten</h1>
+      <p>Conduct a <a href='sim.html'>molecular simulation</a> for simple spherical models.</p>
+
+      <div class='card mb-4'>
+        <div id='headingHow' class='card-header' role='tab'>
+          <h2 class='h5 mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseHow' aria-expanded='true' aria-controls='collapseHow'>How this site works</a></h2>
+        </div>
+        <div id='collapseHow' class='collapse' role='tabpanel' aria-labelledby='headingHow'>
+          <div class='card-body'>
+            <p>The code to run molecular simulations on this site is written in C++.  <a href='http://kripken.github.io/emscripten-site/'>emscripten</a> is used to compile the programs with <a href='https://developer.mozilla.org/en-US/docs/WebAssembly'>WebAssembly</a> as the target; the <a href='https://emscripten.org/docs/porting/connecting_cpp_and_javascript/WebIDL-Binder.html'>WebIDL Binder</a> is used to expose an object-oriented interface to the C++ code.  Performance in JavaScript is slower than the same prorgams compiled as C programs, but still dramatically faster than a native JavaScript implementation.  The page runs a few steps at a time in order to return control to the browser after during the simulation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

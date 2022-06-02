@@ -68,6 +68,9 @@ module.exports = {
             },
             { href: 'pathname:///apps/virial/',
               label: 'Virial Coefficients',
+            },
+            { href: 'pathname:///apps/simulation/',
+              label: 'Simulation',
             }
           ]
         },
