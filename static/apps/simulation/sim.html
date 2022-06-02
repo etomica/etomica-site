@@ -26,46 +26,56 @@
         <div class='card-body'>
           <div>
             <div class='row'>
-              <div class='col-sm-7 col-md-5 col-lg-4 col-xl-3'><label>Number of molecules: <input class='form-control' size='4' id='numAtoms' value='500' style='width: 4rem;'></label></div>
-              <div class='col-sm-6 col-md-4 col-lg-3'><label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label></div>
-              <div class='col-sm-5 col-md-4 col-lg-3 col-xl-2'><label>Density: <input class='form-control' id='density' size='3' value='1' style='width: 5em;'></label></div>
-              <div class='col-sm-8 col-md-6 col-lg-4'><label>mu: <input id='mu' class='form-control' size='3' style='width: 5rem;' disabled></label> <label style='margin-left: 1rem;'><input type='checkbox' class='form-check-input' id='grandCB'> Grand Canonical</label></div>
-            </div>
-            <label>Potential: <select class='form-select' id='potType'>
-                <option value='0'>Soft sphere</option>
-                <option value='1' selected>Lennard-Jones</option>
-                <option value='2'>WCA</option>
-                <option value='3'>Hard sphere</option>
-                <option value='4'>Custom</option>
-            </select></label>
-            <span id='ssPowSpan' style='margin-left: 1rem; display: none'><label>Power: <input class='form-control' id='ssPow' size='3' value='12' style='width: 4rem;'></label></span><br>
-            <div id='uCustomDiv' style='padding-left: 1rem; display: none'><label>u(r2) = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r2,-6) - Math.pow(r2,-3))'></label>
-              <label>r(du/dr) = <input class='form-control' id='duCustom' size='40' style='width: 40em;' value='4 * (-12*Math.pow(r2,-6) + 6*Math.pow(r2,-3))'></label><br>
-              <label>r<sup>2</sup>(d<sup>2</sup>u/dr<sup>2</sup>) = <input class='form-control' id='d2uCustom' size='40' style='width: 40em;' value='4 * (12*13*Math.pow(r2,-6) - 6*7*Math.pow(r2,-3))'></label>
-            </div>
-            <div class='row'>
-              <div class='col-sm-12 col-md-6 col-lg-4'>
-                <div id='ttDiv'>
-                  <label>Truncation type: <select class='form-select' id='truncType'>
-                      <option value='1'>Simple</option>
-                      <option value='3'>Shifted</option>
-                      <option value='4' id='truncType4'>Force-shifted</option>
-                  </select></label>
-                </div>
+              <label>Number of molecules: <input class='form-control' size='4' id='numAtoms' value='500' style='width: 4rem;'><br>
+              <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
+              <label>Density: <input class='form-control' id='density' size='3' value='1' style='width: 5em;'></label><br>
+              <label>mu: <input id='mu' class='form-control' size='3' style='width: 5rem;' disabled></label> <label style='margin-left: 1rem;'><input type='checkbox' class='form-check-input' id='grandCB'> Grand Canonical</label><br>
+              <label style='margin-top: 0.5rem;'>Potential: <select class='form-select' id='potType'>
+                  <option value='0'>Soft sphere</option>
+                  <option value='1' selected>Lennard-Jones</option>
+                  <option value='2'>WCA</option>
+                  <option value='3'>Hard sphere</option>
+                  <option value='4'>Custom</option>
+              </select></label>
+              <span id='ssPowSpan' style='margin-left: 1rem; display: none'><label>Power: <input class='form-control' id='ssPow' size='3' value='12' style='width: 4rem;'></label></span><br>
+              <div id='uCustomDiv' style='padding-left: 1rem; display: none'><label>u(r2) = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r2,-6) - Math.pow(r2,-3))'></label>
+                <label>r(du/dr) = <input class='form-control' id='duCustom' size='40' style='width: 40em;' value='4 * (-12*Math.pow(r2,-6) + 6*Math.pow(r2,-3))'></label><br>
+                <label>r<sup>2</sup>(d<sup>2</sup>u/dr<sup>2</sup>) = <input class='form-control' id='d2uCustom' size='40' style='width: 40em;' value='4 * (12*13*Math.pow(r2,-6) - 6*7*Math.pow(r2,-3))'></label>
               </div>
-              <div class='col-sm-12 col-md-4 col-lg-3'>
-                <div id='rcDiv'>
+              <div id='ttDiv'>
+                <label>Truncation type: <select class='form-select' id='truncType'>
+                    <option value='1'>Simple</option>
+                    <option value='3'>Shifted</option>
+                    <option value='4' id='truncType4'>Force-shifted</option>
+                </select></label>
+              </div>
+              <div class='row' id='rcDiv'>
+                <div class='col-auto px-4' style='margin-left: 2rem;'>
                   <label>Cutoff: <input class='form-control' id='rc' size='3' value='3' style='width: 5em;'></label>
                 </div>
-              </div>
-              <div class='col-sm-12 col-md-4 col-lg-3'>
-                <div id='rcDiv'><label><input type='checkbox' class='form-check-input' id='lrc' checked> Include LRC</label></div>
+                <div class='col-auto px-4'>
+                  <label><input type='checkbox' class='form-check-input' id='lrc' checked> Include LRC</label>
+                </div>
               </div>
             </div>
-            <label><input type='checkbox' class='form-check-input' id='doMD' onchange='updateDoMD()'> Actually run MD</label> <label>timestep: <input class='form-control' style='width: 4rem;' id='tStep'></label><br>
+            <label style='margin-top: 0.5rem;'>Simulation type: <select class='form-select' id='simType' onchange='updateSimType()'>
+                <option value='MC'>MC</option>
+                <option value='MD'>MD</option>
+            </select></label><br>
+            <div class='row'>
+              <div class='col-auto px-4' style='margin-left: 2rem;'>
+                <label>timestep: <input class='form-control' style='width: 4rem;' id='tStep'></label>
+              </div>
+            </div>
             <div id='cellsDiv'><label><input type='checkbox' class='form-check-input' id='doCells'> Use cell lists</label></div>
-            <div id='nbrListDiv'><label><input type='checkbox' class='form-check-input' id='doNbrList'> Use neighbor lists</label> <label>range: <input class='form-control' style='width: 4rem;' id='nbrRange'></label></div>
-            <label>Seed: <input class='form-control' id='seed' style='width: 10em;'></label>
+            <div id='nbrListDiv'><label><input type='checkbox' class='form-check-input' id='doNbrList'> Use neighbor lists</label>
+              <div class='row'>
+                <div class='col-auto px-4' style='margin-left: 2rem;'>
+                  <label>neighbor range: <input class='form-control' style='width: 4rem;' id='nbrRange'></label>
+                </div>
+              </div>
+            </div>
+            <label style='margin-top: 0.5rem;'>Seed: <input class='form-control' id='seed' style='width: 10em;'></label>
           </div>
           <button type='button' id='btnStart' class='btn btn-sm btn-primary'>Start</button></p>
           <div class='output' id="initOutput"></div>
@@ -136,7 +146,7 @@ var startTime = 0;
       document.getElementById("rc").focus();
       return false;
     }
-    doMD = document.getElementById("doMD").checked;
+    doMD = document.getElementById("simType").value == "MD";
     var tStep = doMD ? getInputInt("tStep") : 0;
     var doCells = !doMD && document.getElementById("doCells").checked;
     var doNbrList = doMD && document.getElementById("doNbrList").checked;
@@ -237,7 +247,7 @@ var startTime = 0;
     integrator.reset();
     pcHMA = new Module.PotentialCallbackHMA(box, integrator.getTemperature(), 0);
 
-  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','doCells','doMD','tStep','nbrRange','doNbrList'];
+  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','doCells','simType','tStep','nbrRange','doNbrList'];
   for (var i in fields) {
     var inp = document.getElementById(fields[i]);
     inp.setAttribute("readonly","true");
@@ -260,7 +270,7 @@ document.getElementById('btnStart').addEventListener('click', function(){
       meters.push("NA");
       meters.push("Density");
     }
-    var doMD = document.getElementById("doMD").checked;
+    var doMD = document.getElementById("simType").value == "MD";
     if (doMD) {
       meters.push("Temperature");
     }
@@ -304,7 +314,6 @@ function updateResults() {
   }
   return true;
 }
-var steps = 128;
 function startRunner(btn, cFunc, cb) {
   var runner = function() {
     if (stopRequested) {
@@ -346,14 +355,14 @@ function btnRunner(thisStage, btnID, cFunc, cb) {
 function updatePotType() {
   var potType = Number(document.getElementById("potType").value);
   var truncType = Number(document.getElementById("truncType").value);
-  document.getElementById("rcDiv").style.display = (truncType==0||potType==2||potType==3) ? "none" : "block";
+  document.getElementById("rcDiv").style.display = (truncType==0||potType==2||potType==3) ? "none" : "flex";
   document.getElementById("ttDiv").style.display = (potType==2||potType==3) ? "none" : "block";
   document.getElementById("uCustomDiv").style.display = potType==4 ? "block" : "none";
   document.getElementById("ssPowSpan").style.display = potType==0 ? "inline" : "none";
 }
 function updateTrunc() {
   var truncType = Number(document.getElementById("truncType").value);
-  document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "block";
+  document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "flex";
 }
 function updateGC() {
   var doGC = document.getElementById("grandCB").checked;
@@ -365,8 +374,8 @@ function updateGC() {
     muInp.setAttribute("disabled", "true");
   }
 }
-function updateDoMD() {
-  var doMD = document.getElementById("doMD").checked;
+function updateSimType() {
+  var doMD = document.getElementById("simType").value == "MD";
   var mcBits = document.getElementsByClassName("statusMC");
   var mdBits = document.getElementsByClassName("statusMD");
   for (var i=0; i<mcBits.length; i++) mcBits[i].style.display = "none";
@@ -393,7 +402,7 @@ document.getElementById("moveNoTune").addEventListener("click", function() {
 window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);
 window.addEventListener("load", updateGC);
-window.addEventListener("load", updateDoMD);
+window.addEventListener("load", updateSimType);
 var dataStreams = [];
 function makeDataDiv(name, av) {
   var row = makeElement("DIV", document.getElementById("dataContent"), {id: "data_"+name, className: "row"});
@@ -500,8 +509,8 @@ document.getElementById("grandCB").removeAttribute("readonly");
 document.getElementById("grandCB").removeAttribute("disabled");
 document.getElementById("doCells").removeAttribute("readonly");
 document.getElementById("doCells").removeAttribute("disabled");
-document.getElementById("doMD").removeAttribute("readonly");
-document.getElementById("doMD").removeAttribute("disabled");
+document.getElementById("simType").removeAttribute("readonly");
+document.getElementById("simType").removeAttribute("disabled");
 document.getElementById("doNbrList").removeAttribute("readonly");
 document.getElementById("doNbrList").removeAttribute("disabled");
     </script>
