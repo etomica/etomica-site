@@ -626,11 +626,11 @@ document.getElementById('setButton').addEventListener('click', function(){
   targetPotentialMasterHS.setMoleculePairPotential(0, 0, pMoleculeHS);
   targetIntegrator = new Module.IntegratorMC(targetPotentialMasterLJ, rand);
   if (dipoleMag > 1e-5 && n == 2) {
-    targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, 0, false);
+    targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, nDer, false);
     targetClusterLJ = new Module.ClusterFlipped(targetClusterLJ, speciesList, targetBox, true);
   }
   else {
-    targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, 0, true);
+    targetClusterLJ = new Module.ClusterVirial(targetPotentialMasterLJ, T, nDer, true);
   }
   targetIntegrator.addListener(targetClusterLJ);
   targetClusterHS = new Module.ClusterChain(targetPotentialMasterHS, T, 1, 0, false);
@@ -786,6 +786,14 @@ function runProduction(steps) {
   var nDer = Number(document.getElementById("nDer").value);
   if (nDer<0 || Number.isNaN(nDer)) nDer=0;
   for (var m=1; m<=nDer; m++) {
+    document.getElementById("targetD"+m+"Avg").textContent = formatFloatForErr(targetStats.x2d(m,1), targetStats.x2d(m,2));
+    document.getElementById("targetD"+m+"Err").textContent = targetStats.x2d(m,2).toPrecision(3);
+    document.getElementById("targetD"+m+"AC").textContent = targetStats.x2d(m,3).toPrecision(3);
+
+    document.getElementById("targetD"+m+"RatioAvg").textContent = formatFloatForErr(targetRatioStats.x2d(m,1), targetRatioStats.x2d(m,2));
+    document.getElementById("targetD"+m+"RatioErr").textContent = targetRatioStats.x2d(m,2).toPrecision(3);
+    document.getElementById("targetD"+m+"RatioCor").textContent = targetBCStats.x2d(m,1).toPrecision(3);
+
     document.getElementById("fullD"+m+"RatioAvg").textContent = formatFloatForErr(fullStats.x2d(m,0), fullStats.x2d(m,1));
     document.getElementById("fullD"+m+"RatioErr").textContent = fullStats.x2d(m,1).toPrecision(3);
   }
