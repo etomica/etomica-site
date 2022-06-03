@@ -247,11 +247,11 @@ var startTime = 0;
     integrator.reset();
     pcHMA = new Module.PotentialCallbackHMA(box, integrator.getTemperature(), 0);
 
-  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','doCells','simType','tStep','nbrRange','doNbrList'];
+  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','doCells','simType','tStep','nbrRange','doNbrList','lrc'];
   for (var i in fields) {
     var inp = document.getElementById(fields[i]);
     inp.setAttribute("readonly","true");
-    if (inp.type == "checkbox") inp.setAttribute("disabled", "true");
+    if (inp.type == "checkbox" || inp.nodeName == "SELECT") inp.setAttribute("disabled", "true");
   }
   return true;
 }
@@ -281,8 +281,8 @@ document.getElementById('btnStart').addEventListener('click', function(){
   }
   startTime += Date.now();
   var mcFunc = function() {integrator.doSteps(workSteps); totalSteps += workSteps;}
-  new bootstrap.Collapse(document.getElementById("collapseResults")).show();
-  new bootstrap.Collapse(document.getElementById("collapseData")).show();
+  bootstrap.Collapse.getOrCreateInstance(document.getElementById("collapseResults")).show();
+  bootstrap.Collapse.getOrCreateInstance(document.getElementById("collapseData")).show();
   btnRunner("results", "btnStart", mcFunc, updateResults)();
 });
 
@@ -505,6 +505,8 @@ document.getElementById("btnDataDensity").addEventListener("click", function() {
     makeDataDiv("density", av);
     dataStreams.push({name: "density", avg: av});
 });
+document.getElementById("lrc").removeAttribute("readonly");
+document.getElementById("lrc").removeAttribute("disabled");
 document.getElementById("grandCB").removeAttribute("readonly");
 document.getElementById("grandCB").removeAttribute("disabled");
 document.getElementById("doCells").removeAttribute("readonly");
