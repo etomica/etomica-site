@@ -92,8 +92,8 @@
           <p class='statusMD statusMC'>Steps: <span id='stepCount'></span><br>
           Speed: <span id='speed'></span> steps/s</p>
           <p class='statusMD'>Simulation time: <span id='simTime'></span></p>
-          <p class='statusMC'>Displacement acceptance: <span id='chi'></span><br></p>
           <p class='statusMC'>Displacement step size: <span id='stepSize'></span></p>
+          <p class='statusMC'>Displacement acceptance: <span id='chi'></span><br></p>
           <p class='statusMC'>Insert/Delete acceptance: <span id='chiID'></span></p>
           <p class='statusMC'>Volume step size: <span id='stepSizeV'></span></p>
           <p class='statusMC'>Volume acceptance: <span id='chiV'></span></p>
@@ -256,7 +256,7 @@ var startTime = 0;
     integrator.reset();
     pcHMA = new Module.PotentialCallbackHMA(box, integrator.getTemperature(), 0);
 
-  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','pressureCB','doCells','simType','tStep','nbrRange','doNbrList','lrc'];
+  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','pressure','pressureCB','doCells','simType','tStep','nbrRange','doNbrList','lrc'];
   for (var i in fields) {
     var inp = document.getElementById(fields[i]);
     inp.setAttribute("readonly","true");
