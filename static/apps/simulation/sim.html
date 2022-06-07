@@ -26,10 +26,11 @@
         <div class='card-body'>
           <div>
             <div class='row'>
-              <label>Number of molecules: <input class='form-control' size='4' id='numAtoms' value='500' style='width: 4rem;'><br>
-              <label>Temperature: <input class='form-control' id='T' size='3' value='1' style='width: 5em;'></label><br>
-              <label>Density: <input class='form-control' id='density' size='3' value='1' style='width: 5em;'></label><br>
-              <label>mu: <input id='mu' class='form-control' size='3' style='width: 5rem;' disabled></label> <label style='margin-left: 1rem;'><input type='checkbox' class='form-check-input' id='grandCB'> Grand Canonical</label><br>
+              <label>Number of molecules: <input class='form-control' id='numAtoms' value='500' style='width: 5rem;'><br>
+              <label>Temperature: <input class='form-control' id='T' value='1' style='width: 5rem;'></label><br>
+              <label>Density: <input class='form-control' id='density' value='1' style='width: 5rem;'></label><br>
+              <label>Pressure: <input id='pressure' class='form-control' style='width: 5rem;' disabled></label> <label style='margin-left: 1rem;'><input type='checkbox' class='form-check-input' id='pressureCB'> Constant P</label><br>
+              <label>&mu;: <input id='mu' class='form-control' size='3' style='width: 5rem;' disabled></label> <label style='margin-left: 1rem;'><input type='checkbox' class='form-check-input' id='grandCB'> Grand Canonical</label><br>
               <label style='margin-top: 0.5rem;'>Potential: <select class='form-select' id='potType'>
                   <option value='0'>Soft sphere</option>
                   <option value='1' selected>Lennard-Jones</option>
@@ -117,7 +118,7 @@
     <script src='util.js'></script>
     <script src='emscripten.js'></script>
     <script type='text/javascript'>
-var box = null, potentialMaster = null, rand = null, move = null, moveID = null, integrator = null, pcHMA = null, meterFull = null, avgFull = null, doMD = false, speciesList = null;
+var box = null, potentialMaster = null, rand = null, move = null, moveID = null, moveP = null, integrator = null, pcHMA = null, meterFull = null, avgFull = null, doMD = false, speciesList = null;
 var workSteps = 1, totalSteps = 0;
 stage = "init";
 var running = false, stopRequested = false;
@@ -241,13 +242,19 @@ var startTime = 0;
         moveID = new Module.MCMoveInsertDelete(box, potentialMaster, rand, mu);
         integrator.addMove(moveID, 1);
       }
+      if (document.getElementById("pressureCB").checked) {
+        var P = getInputInt("pressure");
+        var meterOldPE = new Module.MeterPotentialEnergy(integrator);
+        moveP = new Module.MCMoveVolume(box, potentialMaster, rand, P, 0.1, speciesList, meterOldPE);
+        integrator.addMove(moveP, 1);
+      }
     }
     integrator.setTemperature(getInputInt("T"));
     potentialMaster.init();
     integrator.reset();
     pcHMA = new Module.PotentialCallbackHMA(box, integrator.getTemperature(), 0);
 
-  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','doCells','simType','tStep','nbrRange','doNbrList','lrc'];
+  var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','pressureCB','doCells','simType','tStep','nbrRange','doNbrList','lrc'];
   for (var i in fields) {
     var inp = document.getElementById(fields[i]);
     inp.setAttribute("readonly","true");
@@ -265,12 +272,15 @@ document.getElementById('btnStart').addEventListener('click', function(){
     var rv = setup();
     if (!rv) return;
     var doGC = document.getElementById("grandCB").checked;
+    var doP = document.getElementById("pressureCB").checked;
+    var doMD = document.getElementById("simType").value == "MD";
     var meters = ["Energy", "Pressure", "HMA"];
     if (doGC) {
       meters.push("NA");
+    }
+    if (doGC || doP) {
       meters.push("Density");
     }
-    var doMD = document.getElementById("simType").value == "MD";
     if (doMD) {
       meters.push("Temperature");
     }
@@ -374,6 +384,16 @@ function updateGC() {
     muInp.setAttribute("disabled", "true");
   }
 }
+function updateP() {
+  var doP = document.getElementById("pressureCB").checked;
+  var pInp = document.getElementById("pressure");
+  if (doP) {
+    pInp.removeAttribute("disabled");
+  }
+  else {
+    pInp.setAttribute("disabled", "true");
+  }
+}
 function updateSimType() {
   var doMD = document.getElementById("simType").value == "MD";
   var mcBits = document.getElementsByClassName("statusMC");
@@ -394,6 +414,7 @@ function updateSimType() {
 document.getElementById("potType").addEventListener("change", updatePotType);
 document.getElementById("truncType").addEventListener("change", updateTrunc);
 document.getElementById("grandCB").addEventListener("change", updateGC);
+document.getElementById("pressureCB").addEventListener("change", updateP);
 document.getElementById("moveNoTune").addEventListener("click", function() {
   integrator.setTuning(false);
   var btn = document.getElementById("moveNoTune");
@@ -402,6 +423,7 @@ document.getElementById("moveNoTune").addEventListener("click", function() {
 window.addEventListener("load", updatePotType);
 window.addEventListener("load", updateTrunc);
 window.addEventListener("load", updateGC);
+window.addEventListener("load", updateP);
 window.addEventListener("load", updateSimType);
 var dataStreams = [];
 function makeDataDiv(name, av) {
