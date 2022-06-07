@@ -93,8 +93,10 @@
           Speed: <span id='speed'></span> steps/s</p>
           <p class='statusMD'>Simulation time: <span id='simTime'></span></p>
           <p class='statusMC'>Displacement acceptance: <span id='chi'></span><br></p>
-          <p class='statusMC'>Step size: <span id='stepSize'></span></p>
+          <p class='statusMC'>Displacement step size: <span id='stepSize'></span></p>
           <p class='statusMC'>Insert/Delete acceptance: <span id='chiID'></span></p>
+          <p class='statusMC'>Volume step size: <span id='stepSizeV'></span></p>
+          <p class='statusMC'>Volume acceptance: <span id='chiV'></span></p>
           <p class='statusMC'><button class='btn btn-sm btn-reset btn-success' id='moveNoTune' disabled>Lock step sizes</button></p>
         </div>
       </div>
@@ -246,7 +248,7 @@ var startTime = 0;
         var P = getInputInt("pressure");
         var meterOldPE = new Module.MeterPotentialEnergy(integrator);
         moveP = new Module.MCMoveVolume(box, potentialMaster, rand, P, 0.1, speciesList, meterOldPE);
-        integrator.addMove(moveP, 1);
+        integrator.addMove(moveP, 1.0/numAtoms);
       }
     }
     integrator.setTemperature(getInputInt("T"));
@@ -305,11 +307,22 @@ function updateResults() {
   document.getElementById("speed").textContent = speed.toPrecision(5);
   if (move) {
     var avgChiGC = moveID ? moveID.getAcceptance() : "";
+    var avgChiV = moveP ? moveP.getAcceptance() : "";
     var newStepSize = move.get_stepSize();
+    var newStepSizeV = moveP ? moveP.get_stepSize() : "";
     var avgChi = move.getAcceptance();
     document.getElementById("stepSize").textContent = newStepSize.toPrecision(6);
     document.getElementById("chi").textContent = avgChi.toPrecision(6);
     if (moveID) document.getElementById("chiID").textContent = avgChiGC.toPrecision(6);
+    else document.getElementById("chiID").parentNode.style.display = "none";
+    if (moveP) {
+      document.getElementById("chiV").textContent = avgChiV.toPrecision(6);
+      document.getElementById("stepSizeV").textContent = newStepSizeV.toPrecision(6);
+    }
+    else {
+      document.getElementById("chiV").parentNode.style.display = "none";
+      document.getElementById("stepSizeV").parentNode.style.display = "none";
+    }
   }
   for (var i=0; i<dataStreams.length; i++) {
     var s = dataStreams[i];
