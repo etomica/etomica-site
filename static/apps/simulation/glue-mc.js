@@ -247,6 +247,12 @@ PotentialMaster.prototype['setDoTruncationCorrection'] = PotentialMaster.prototy
   _emscripten_bind_PotentialMaster_setDoTruncationCorrection_1(self, doCorrection);
 };;
 
+PotentialMaster.prototype['setDoSingleTruncationCorrection'] = PotentialMaster.prototype.setDoSingleTruncationCorrection = /** @suppress {undefinedVars, duplicate} @this{Object} */function(doCorrection) {
+  var self = this.ptr;
+  if (doCorrection && typeof doCorrection === 'object') doCorrection = doCorrection.ptr;
+  _emscripten_bind_PotentialMaster_setDoSingleTruncationCorrection_1(self, doCorrection);
+};;
+
 PotentialMaster.prototype['setRhoPotential'] = PotentialMaster.prototype.setRhoPotential = /** @suppress {undefinedVars, duplicate} @this{Object} */function(jType, rhoj) {
   var self = this.ptr;
   if (jType && typeof jType === 'object') jType = jType.ptr;
@@ -462,6 +468,12 @@ PotentialMasterCell.prototype['setDoTruncationCorrection'] = PotentialMasterCell
   var self = this.ptr;
   if (doCorrection && typeof doCorrection === 'object') doCorrection = doCorrection.ptr;
   _emscripten_bind_PotentialMasterCell_setDoTruncationCorrection_1(self, doCorrection);
+};;
+
+PotentialMasterCell.prototype['setDoSingleTruncationCorrection'] = PotentialMasterCell.prototype.setDoSingleTruncationCorrection = /** @suppress {undefinedVars, duplicate} @this{Object} */function(doCorrection) {
+  var self = this.ptr;
+  if (doCorrection && typeof doCorrection === 'object') doCorrection = doCorrection.ptr;
+  _emscripten_bind_PotentialMasterCell_setDoSingleTruncationCorrection_1(self, doCorrection);
 };;
 
 PotentialMasterCell.prototype['setRhoPotential'] = PotentialMasterCell.prototype.setRhoPotential = /** @suppress {undefinedVars, duplicate} @this{Object} */function(jType, rhoj) {
@@ -1266,6 +1278,12 @@ PotentialMasterList.prototype['setDoTruncationCorrection'] = PotentialMasterList
   _emscripten_bind_PotentialMasterList_setDoTruncationCorrection_1(self, doCorrection);
 };;
 
+PotentialMasterList.prototype['setDoSingleTruncationCorrection'] = PotentialMasterList.prototype.setDoSingleTruncationCorrection = /** @suppress {undefinedVars, duplicate} @this{Object} */function(doCorrection) {
+  var self = this.ptr;
+  if (doCorrection && typeof doCorrection === 'object') doCorrection = doCorrection.ptr;
+  _emscripten_bind_PotentialMasterList_setDoSingleTruncationCorrection_1(self, doCorrection);
+};;
+
 PotentialMasterList.prototype['setRhoPotential'] = PotentialMasterList.prototype.setRhoPotential = /** @suppress {undefinedVars, duplicate} @this{Object} */function(jType, rhoj) {
   var self = this.ptr;
   if (jType && typeof jType === 'object') jType = jType.ptr;
@@ -1319,6 +1337,12 @@ PotentialMasterVirial.prototype['setDoTruncationCorrection'] = PotentialMasterVi
   var self = this.ptr;
   if (doCorrection && typeof doCorrection === 'object') doCorrection = doCorrection.ptr;
   _emscripten_bind_PotentialMasterVirial_setDoTruncationCorrection_1(self, doCorrection);
+};;
+
+PotentialMasterVirial.prototype['setDoSingleTruncationCorrection'] = PotentialMasterVirial.prototype.setDoSingleTruncationCorrection = /** @suppress {undefinedVars, duplicate} @this{Object} */function(doCorrection) {
+  var self = this.ptr;
+  if (doCorrection && typeof doCorrection === 'object') doCorrection = doCorrection.ptr;
+  _emscripten_bind_PotentialMasterVirial_setDoSingleTruncationCorrection_1(self, doCorrection);
 };;
 
 PotentialMasterVirial.prototype['setRhoPotential'] = PotentialMasterVirial.prototype.setRhoPotential = /** @suppress {undefinedVars, duplicate} @this{Object} */function(jType, rhoj) {
@@ -2034,6 +2058,37 @@ MeterDensity.prototype['getData'] = MeterDensity.prototype.getData = /** @suppre
   MeterDensity.prototype['__destroy__'] = MeterDensity.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;
   _emscripten_bind_MeterDensity___destroy___0(self);
+};
+// MeterWidomInsertion
+/** @suppress {undefinedVars, duplicate} @this{Object} */function MeterWidomInsertion(box, is, pm, r, t, numTrials) {
+  if (box && typeof box === 'object') box = box.ptr;
+  if (is && typeof is === 'object') is = is.ptr;
+  if (pm && typeof pm === 'object') pm = pm.ptr;
+  if (r && typeof r === 'object') r = r.ptr;
+  if (t && typeof t === 'object') t = t.ptr;
+  if (numTrials && typeof numTrials === 'object') numTrials = numTrials.ptr;
+  this.ptr = _emscripten_bind_MeterWidomInsertion_MeterWidomInsertion_6(box, is, pm, r, t, numTrials);
+  getCache(MeterWidomInsertion)[this.ptr] = this;
+};;
+MeterWidomInsertion.prototype = Object.create(Meter.prototype);
+MeterWidomInsertion.prototype.constructor = MeterWidomInsertion;
+MeterWidomInsertion.prototype.__class__ = MeterWidomInsertion;
+MeterWidomInsertion.__cache__ = {};
+Module['MeterWidomInsertion'] = MeterWidomInsertion;
+
+MeterWidomInsertion.prototype['getNumData'] = MeterWidomInsertion.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_MeterWidomInsertion_getNumData_0(self);
+};;
+
+MeterWidomInsertion.prototype['getData'] = MeterWidomInsertion.prototype.getData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return wrapPointer(_emscripten_bind_MeterWidomInsertion_getData_0(self), VoidPtr);
+};;
+
+  MeterWidomInsertion.prototype['__destroy__'] = MeterWidomInsertion.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_MeterWidomInsertion___destroy___0(self);
 };
 // DataPump
 /** @suppress {undefinedVars, duplicate} @this{Object} */function DataPump(meter, interval, sink) {

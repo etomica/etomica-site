@@ -109,7 +109,7 @@
           <p><button type='button' id='btnDataEnergy' class='btn btn-sm btn-info' style='display: none;'>Energy</button>
           <button type='button' id='btnDataTemperature' class='btn btn-sm btn-info' style='display: none;'>Temperature</button>
           <button type='button' id='btnDataPressure' class='btn btn-sm btn-info' style='display: none;'>Pressure</button>
-          <button type='button' id='btnDataHMA' class='btn btn-sm btn-info' style='display: none;'>HMA</button>
+          <button type='button' id='btnDataWidom' class='btn btn-sm btn-info' style='display: none;'>Widom insertion</button>
           <button type='button' id='btnDataNA' class='btn btn-sm btn-info' style='display: none;'># of atoms</button>
           <button type='button' id='btnDataDensity' class='btn btn-sm btn-info' style='display: none;'>Density</button></p>
            <div id='dataContent'></div>
@@ -120,7 +120,7 @@
     <script src='util.js'></script>
     <script src='emscripten.js'></script>
     <script type='text/javascript'>
-var box = null, potentialMaster = null, rand = null, move = null, moveID = null, moveP = null, integrator = null, pcHMA = null, meterFull = null, avgFull = null, doMD = false, speciesList = null;
+var box = null, potentialMaster = null, rand = null, move = null, moveID = null, moveP = null, integrator = null, meterFull = null, avgFull = null, doMD = false, speciesList = null;
 var workSteps = 1, totalSteps = 0;
 stage = "init";
 var running = false, stopRequested = false;
@@ -217,6 +217,7 @@ var startTime = 0;
     potentialMaster.setPairPotential(0, 0, potential);
     var lrc = document.getElementById("lrc").checked;
     potentialMaster.setDoTruncationCorrection(lrc);
+    if (lrc) potentialMaster.setDoSingleTruncationCorrection(lrc);
     if (doCells || doNbrList) potentialMaster.init();
     var seed = getInputInt("seed");
     if (seed == 0) {
@@ -254,7 +255,6 @@ var startTime = 0;
     integrator.setTemperature(getInputInt("T"));
     potentialMaster.init();
     integrator.reset();
-    pcHMA = new Module.PotentialCallbackHMA(box, integrator.getTemperature(), 0);
 
   var fields = ['potType','uCustom','duCustom','d2uCustom','truncType','numAtoms','T','seed','rc','density','mu','grandCB','pressure','pressureCB','doCells','simType','tStep','nbrRange','doNbrList','lrc'];
   for (var i in fields) {
@@ -276,12 +276,18 @@ document.getElementById('btnStart').addEventListener('click', function(){
     var doGC = document.getElementById("grandCB").checked;
     var doP = document.getElementById("pressureCB").checked;
     var doMD = document.getElementById("simType").value == "MD";
-    var meters = ["Energy", "Pressure", "HMA"];
+    var meters = ["Energy"];
+    if (!doP) {
+      meters.push("Pressure");
+    }
     if (doGC) {
       meters.push("NA");
     }
     if (doGC || doP) {
       meters.push("Density");
+    }
+    if (!doGC && !doP) {
+      meters.push("Widom");
     }
     if (doMD) {
       meters.push("Temperature");
@@ -326,6 +332,17 @@ function updateResults() {
   }
   for (var i=0; i<dataStreams.length; i++) {
     var s = dataStreams[i];
+    if (s.name == "mu") {
+      var d = s.avg.getStatistics();
+      d = new Module.ArrayUtil(d);
+      var T = integrator.getTemperature();
+      var expbmu = d.x2d(0,1)
+      var expbmuErr = d.x2d(0,2);
+      document.getElementById("data_"+s.name+"_avg").textContent = (-T*Math.log(expbmu)).toPrecision(8);
+      document.getElementById("data_"+s.name+"_err").textContent = Math.abs(-T*expbmuErr/expbmu).toPrecision(4);
+      return;
+    }
+
     var d = s.avg.getStatistics();
     d = new Module.ArrayUtil(d);
     var idx = ('idx' in s) ? s.idx : 0;
@@ -439,10 +456,11 @@ window.addEventListener("load", updateGC);
 window.addEventListener("load", updateP);
 window.addEventListener("load", updateSimType);
 var dataStreams = [];
-function makeDataDiv(name, av) {
+function makeDataDiv(name, av, labelHTML) {
   var row = makeElement("DIV", document.getElementById("dataContent"), {id: "data_"+name, className: "row"});
   var label = makeElement("DIV", row, {className: "col-sm-4 col-md-3 col-lg-3 col-xl-2", textContent: name+" "});
-  makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(){av.reset();}, textContent: "reset"});
+  if (labelHTML) label.innerHTML = labelHTML+" ";
+  if (av) makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(){av.reset();}, textContent: "reset"});
   var cur = makeElement("DIV", row, {className: "col-sm-4 col-md-4 col-lg-3 col-xl-2"});
   makeText("cur: ", cur);
   makeElement("SPAN", cur, {id: "data_"+name+"_cur"});
@@ -499,27 +517,17 @@ document.getElementById("btnDataPressure").addEventListener("click", function() 
     makeDataDiv("pressure", avgFull);
     dataStreams.push({name: "pressure", avg: avgFull, idx: nData0});
 });
-document.getElementById("btnDataHMA").addEventListener("click", function() {
-    document.getElementById("btnDataHMA").style.display = "none";
-    if (!meterFull) {
-      meterFull = new Module.MeterFullCompute(potentialMaster);
-      if (doMD) meterFull.setDoCompute(false);
-    }
-    var nData0 = meterFull.getNumData();
-    meterFull.addCallback(pcHMA);
-    if (doMD) integrator.addPotentialCallback(pcHMA, 4);
-    if (!avgFull) {
-      avgFull = new Module.Average(2, 1, 100);
-      var pump = new Module.DataPump(meterFull, doMD ? 4 : 4*box.getNumAtoms(), avgFull);
-      integrator.addListener(pump);
-    }
-    else {
-      avgFull.setNumData(nData0+2);
-    }
-    makeDataDiv("HMA U", avgFull);
-    dataStreams.push({name: "HMA U", avg: avgFull, idx: nData0, fac: 1/box.getNumAtoms()});
-    makeDataDiv("HMA P", avgFull);
-    dataStreams.push({name: "HMA P", avg: avgFull, idx: nData0+1});
+document.getElementById("btnDataWidom").addEventListener("click", function() {
+    document.getElementById("btnDataWidom").style.display = "none";
+    var numAtoms = box.getNumAtoms();
+    var meter = new Module.MeterWidomInsertion(box, 0, potentialMaster, rand, integrator.getTemperature(), numAtoms/5);
+    var av = new Module.Average(1, 100, 100, false);
+    var pump = new Module.DataPump(meter, doMD ? 4 : 4*numAtoms, av);
+    integrator.addListener(pump);
+    makeDataDiv("expbmu", av, "exp(-βμ<sub>ex</sub>)");
+    dataStreams.push({name: "expbmu", avg: av});
+    makeDataDiv("mu", null, "μ<sub>ex</sub>");
+    dataStreams.push({name: "mu", avg: av});
 });
 document.getElementById("btnDataNA").addEventListener("click", function() {
     document.getElementById("btnDataNA").style.display = "none";
