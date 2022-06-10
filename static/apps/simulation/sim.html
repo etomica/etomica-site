@@ -276,6 +276,8 @@ document.getElementById('btnStart').addEventListener('click', function(){
     var doGC = document.getElementById("grandCB").checked;
     var doP = document.getElementById("pressureCB").checked;
     var doMD = document.getElementById("simType").value == "MD";
+    var doCells = !doMD && document.getElementById("doCells").checked;
+    var doNbrList = doMD && document.getElementById("doNbrList").checked;
     var meters = ["Energy"];
     if (!doP) {
       meters.push("Pressure");
@@ -286,7 +288,7 @@ document.getElementById('btnStart').addEventListener('click', function(){
     if (doGC || doP) {
       meters.push("Density");
     }
-    if (!doGC && !doP) {
+    if (!doGC && !doP && !doCells && !doNbrList) {
       meters.push("Widom");
     }
     if (doMD) {
