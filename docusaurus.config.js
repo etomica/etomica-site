@@ -40,10 +40,11 @@ module.exports = {
     },
     navbar: {
       title: 'Etomica',
+      style: 'primary',
       logo: {
         alt: 'Etomica Logo',
         src: 'img/logo_small.png',
-        height: '56px'
+        height: '64px'
       },
       items: [
         {
@@ -59,22 +60,11 @@ module.exports = {
           position: 'left',
         },
         {
-          type: 'dropdown',
+          to: 'apps',
+          activeBasePath: 'apps',
           label: 'Apps',
-          items: [
-            {
-              href: 'pathname:///apps/LJ_EOS/',
-              label: 'LJ_EOS',
-            },
-            { href: 'pathname:///apps/virial/',
-              label: 'Virial Coefficients',
-            },
-            { href: 'pathname:///apps/simulation/',
-              label: 'Simulation',
-            }
-          ]
+          position: 'left'
         },
-        {to: 'blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/etomica/etomica',
           label: 'GitHub',

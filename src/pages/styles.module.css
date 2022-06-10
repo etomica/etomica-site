@@ -11,7 +11,7 @@
   position: relative;
   overflow: hidden;
 
-  color: var(--ifm-color-gray-100)
+  /* color: var(--ifm-color-gray-100) */
 }
 
 @media screen and (max-width: 966px) {
@@ -43,9 +43,10 @@
 }
 
 .aboutRow {
-  align-items: center;
+  /* align-items: center; */
 
   margin-top: var(--ifm-spacing-vertical);
+  margin-bottom: var(--ifm-spacing-vertical);
 }
 
 .aboutImage {

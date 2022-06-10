@@ -7,48 +7,40 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 import Image from '@theme/IdealImage'
 
-const features = [
+const areas = [
   {
-    title: 'Flexible and Extensible',
-    description: (
-      <>
-        Simulations are defined programmatically with object-oriented customizable components. Basic capabilities include simulations using either soft or hard potentials,
-      molecular dynamics or Monte Carlo in any ensemble, arbitrary spatial dimension, 
-      </>
-    ),
+    title: "Software",
+    link: "/docs",
+    description: `A framework written in Java to support object-oriented development of a wide variety of molecular simulations.`,
   },
   {
-    title: 'Interactive Graphical Simulations',
-    description: (
-      <>
-        Simulation data and configuration can be viewed graphically, allowing real-time visualization of results
-        and adjustment of parameters; this is particularly helpful for development and exploration of systems and methods. 
-        Batch mode is also possible, to enable reproducible results for production runs.
-      </>
-    ),
+    title: "Modules",
+    link: "/modules",
+    description: `Interactive molecular simulations and tutorials that provide insight on how molecular behavior leads to
+      thermodynamics, transport phenomena, and chemical reaction kinetics.`,
   },
   {
-    title: 'Efficient',
-    description: (
-      <>
-       Simulations are implemented using very efficient algorithms, with full neighbor-listing capabilities, state-of-the-art algorithm for event-driven MD
-      (for hard potentials), and more.
-      </>
-    ),
+    title: "Apps",
+    link: "/apps",
+    description: `Useful web applications related to molecular modeling`
   },
+  // {
+  //   title: "Lessons",
+  //   link: "/lessons",
+  //   description: ` Lecture slides, reading material, and exercises relating
+  //                     to molecular modeling and simulation`
+  // },
 ];
 
-function Feature({imageUrl, title, description}) {
-  const imgUrl = useBaseUrl(imageUrl);
+const SiteArea = ({title, link, description}) => {
   return (
-    <div className={clsx('col col--4', styles.feature)}>
-      {imgUrl && (
-        <div className="text--center">
-          <img className={styles.featureImage} src={imgUrl} alt={title} />
-        </div>
-      )}
-      <h3>{title}</h3>
-      <p>{description}</p>
+    <div className="col col--12">
+      <Link to={link}>
+        <h3>{title}</h3>
+      </Link>
+      <p>
+        {description}
+      </p>
     </div>
   );
 }
@@ -59,60 +51,45 @@ function Home() {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <header className={clsx('hero hero--primary', styles.heroBanner)}>
-        <div className="container">
-          <div>
-            {/* <img className={styles.heroLogo} src={useBaseUrl('img/logo.png')}></img> */}
-            <Image className={styles.heroLogo} img={require('/img/logo_med.png')} />
-          </div>
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <div className={styles.buttons}>
-            <Link
-              className={clsx(
-                'button button--secondary button--lg',
-                styles.getStarted,
-              )}
-              to={useBaseUrl('docs/')}>
-              Get Started
-            </Link>
-          </div>
-        </div>
-      </header>
+      description="Etomica is a Java molecular simulation framework and a collection of resources for molecular modeling"
+    >
       <main>
         <section>
           <div className="container">
-            <div className={clsx('row', styles.aboutRow)}>
+            <div className={clsx("row", styles.aboutRow)}>
               <div className="col">
                 <h3>
-                  Etomica has been developed at the University at Buffalo since 1999
-                  for research and education.
+                  Etomica is a collection of resources for molecular modeling,
+                  developed at the University at Buffalo.
                 </h3>
-                {/* <p>
-                  It is modular in design, providing many choices for the simulation elements,
-                  including: sampling algorithm; spatial dimension; molecular model (including both hard and soft potentials);
-                  and properties for measurement. Simulation components are easily extended to develop new capabilities.
-                </p> */}
+                <h3>This is what you can find here:</h3>
+                <div className="row">
+                  {areas.map((props, idx) => (
+                    <SiteArea key={idx} {...props} />
+                  ))}
+                </div>
               </div>
               <div className="col">
-                <Image className={styles.aboutImage} img={require('/img/catalysis-demo.png')}/>
+                <Image
+                  className={styles.aboutImage}
+                  img={require("/img/catalysis-demo.png")}
+                />
                 {/* <img src={useBaseUrl('/img/catalysis-demo.png')} className={styles.aboutImage}></img> */}
               </div>
             </div>
+            <div className="row">
+              <p className="col">
+                Molecular modeling is concerned with understanding and
+                evaluating material behavior using models for how molecules
+                interact. A quantitative connection between molecular and
+                macroscopic behaviors can be made rigorously using either
+                molecular simulation, or calculation of virial coefficients.
+                This site provides information and resources relating to both
+                approaches.
+              </p>
+            </div>
           </div>
         </section>
-        {features && features.length > 0 && (
-          <section className={styles.features}>
-            <div className="container">
-              <div className="row">
-                {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </main>
     </Layout>
   );
