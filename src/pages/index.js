@@ -22,13 +22,13 @@ const areas = [
   {
     title: "Apps",
     link: "/apps",
-    description: `Useful web applications related to molecular modeling`
+    description: `Useful web applications related to molecular modeling.`
   },
   // {
   //   title: "Lessons",
   //   link: "/lessons",
   //   description: ` Lecture slides, reading material, and exercises relating
-  //                     to molecular modeling and simulation`
+  //                     to molecular modeling and simulation.`
   // },
 ];
 
