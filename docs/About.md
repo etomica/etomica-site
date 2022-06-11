@@ -2,67 +2,54 @@
 slug: /
 ---
 The Etomica molecular modeling framework enables object-oriented molecular simulations to be constructed using classes written in Java. It has been under development since 1997. The framework is formed from more than 1000 such classes, enabling a wide variety of simulations to be constructed. Key capabilities include the following.
-<h2>Molecular Dynamics</h2>
-<ul>
-  <li>Velocity Verlet</li>
-  <li>Collision-based</li>
-  <li>Thermostats, barostats</li>
-</ul>
 
-<h2>Monte Carlo</h2>
-<ul>
-  <li>Atom moves: molecule translation, rotation,...</li>
-  <li>Ensembles: NVT, NVE, isobaric, grand-canonical, semigrand,...</li>
-  <li>Biasing methods</li>
-</ul>
+## Molecular Dynamics
+- Velocity Verlet
+- Collision-based
+- Thermostats, barostats
 
-<h2>Potential-energy functions</h2>
-<ul>
-  <li>Soft: Lennard-Jones, Exp-6, Yukawa, WCA,...</li>
-  <li>Hard: Spheres, square well, tether,...</li>
-  <li>Electrostatics: Coulomb, point multipole, Ewald sum</li>
-  <li>Multibody: MEAM, Axilrod-Teller, polarizable,...
-  <li>Intramolecular: Stretch, bending, torsion,...</li>
-  <li>Various realistic molecular models (e.g., GCPM water)
-  <li>Hard or soft walls</li>
-  <li>Energies, forces, torques, Hessian</li>
-  <li>Neighbor listing</li>
-</ul>
+## Monte Carlo
+- Atom moves: molecule translation, rotation,...
+- Ensembles: NVT, NVE, isobaric, grand-canonical, semigrand,...
+- Biasing methods
 
-<h2>Space and Boxes</h2>
-<ul>
-  <li>3-, 2-, or 1-dimensional systems</li>
-  <li>Single box for conventional simulations</li>
-  <li>Multiple boxes for Gibbs ensemble, parallel tempering</li>
-  <li>Period boundaries in all, some, or no coordinate directions</li>
-  <li>Deformable boundaries</li>
-</ul>
+## Potential-energy functions
+- Soft: Lennard-Jones, Exp-6, Yukawa, WCA,...
+- Hard: Spheres, square well, tether,...
+- Electrostatics: Coulomb, point multipole, Ewald sum
+- Multibody: MEAM, Axilrod-Teller, polarizable,...
+- Intramolecular: Stretch, bending, torsion,...
+- Various realistic molecular models (e.g., GCPM water)
+- Hard or soft walls
+- Energies, forces, torques, Hessian
+- Neighbor listing
 
-<h2>Properties</h2>
-<ul>
-  <li>First- and second-derivative thermodynamic</li>
-  <li>Transport coefficients</li>
-  <li>Free energy</li>
-  <li>Structure</li>
-  <li>Uncertainty estimates for all calculations</li>
-</ul>
+## Space and Boxes
+- 3-, 2-, or 1-dimensional systems
+- Single box for conventional simulations
+- Multiple boxes for Gibbs ensemble, parallel tempering
+- Period boundaries in all, some, or no coordinate directions
+- Deformable boundaries
 
-<h2>Mode of Operation</h2>
-<ul>
-  <li>GUI-based, for interactive exploration of behavior</li>
-  <li>Batch, for reproducible, scripted production runs</li>
-  <li>Inputs and outputs may be specified in arbitrary units</li>
- </ul>
+## Properties
+- First- and second-derivative thermodynamic
+- Transport coefficients
+- Free energy
+- Structure
+- Uncertainty estimates for all calculations
+
+## Mode of Operation
+- GUI-based, for interactive exploration of behavior
+- Batch, for reproducible, scripted production runs
+- Inputs and outputs may be specified in arbitrary units
  
- <h2>Virial Coefficients</h2>
-<ul>
-  <li>Mayer-sampling Monte Carlo</li>
-  <li>Wheatley recursion</li>
-  <li>Temperature derivatives</li>
-  <li>Multibody potentials</li>
-  <li>Flexible correction</li>
-  <li>Nuclear quantum effects: semiclassical or path integral
-</ul>
+## Virial Coefficients
+- Mayer-sampling Monte Carlo
+- Wheatley recursion
+- Temperature derivatives
+- Multibody potentials
+- Flexible correction
+- Nuclear quantum effects: semiclassical or path integral
 
 
 
