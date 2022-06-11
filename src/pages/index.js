@@ -81,9 +81,12 @@ function Home() {
               <p className="col">
                 Molecular modeling is concerned with understanding and
                 evaluating material behavior using models for how molecules
-                interact. A quantitative connection between molecular and
+                interact. 
+                
+                A quantitative connection between molecular and
                 macroscopic behaviors can be made rigorously using either
                 molecular simulation, or calculation of virial coefficients.
+                
                 This site provides information and resources relating to both
                 approaches.
               </p>
