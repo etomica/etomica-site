@@ -9,9 +9,9 @@ import Image from '@theme/IdealImage'
 
 const areas = [
   {
-    title: "Software",
+    title: "Docs",
     link: "/docs",
-    description: `A framework written in Java to support object-oriented development of a wide variety of molecular simulations.`,
+    description: `Documentation and dowloads for a framework written in Java to support object-oriented development of a wide variety of molecular simulations.`,
   },
   {
     title: "Modules",
@@ -62,7 +62,6 @@ function Home() {
                   Etomica is a collection of resources for molecular modeling,
                   developed at the University at Buffalo.
                 </h3>
-                <h3>This is what you can find here:</h3>
                 <div className="row">
                   {areas.map((props, idx) => (
                     <SiteArea key={idx} {...props} />
