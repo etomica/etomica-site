@@ -24,12 +24,12 @@ const areas = [
     link: "/apps",
     description: `Useful web applications related to molecular modeling.`
   },
-  // {
-  //   title: "Lessons",
-  //   link: "/lessons",
-  //   description: ` Lecture slides, reading material, and exercises relating
-  //                     to molecular modeling and simulation.`
-  // },
+  {
+    title: "Lessons",
+    link: "/lessons",
+    description: ` Lecture slides, reading material, and exercises relating
+                      to molecular modeling and simulation.`
+  },
 ];
 
 const SiteArea = ({title, link, description}) => {

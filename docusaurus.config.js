@@ -66,6 +66,12 @@ module.exports = {
           position: 'left'
         },
         {
+          to: 'lessons',
+          activeBasePath: 'lessons',
+          label: 'Lessons',
+          position: 'left'
+        },
+        {
           href: 'https://github.com/etomica/etomica',
           label: 'GitHub',
           position: 'right',
