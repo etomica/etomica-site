@@ -11,7 +11,7 @@ const areas = [
   {
     title: "Docs",
     link: "/docs",
-    description: `Documentation and dowloads for a framework written in Java to support object-oriented development of a wide variety of molecular simulations.`,
+    description: `Documentation and downloads for a framework written in Java to support object-oriented development of a wide variety of molecular simulations.`,
   },
   {
     title: "Modules",
