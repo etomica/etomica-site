@@ -1868,6 +1868,46 @@ AverageRatio.prototype['reset'] = AverageRatio.prototype.reset = /** @suppress {
   var self = this.ptr;
   _emscripten_bind_AverageRatio___destroy___0(self);
 };
+// History
+/** @suppress {undefinedVars, duplicate} @this{Object} */function History(nData, historyType, historySize, xMeter) {
+  if (nData && typeof nData === 'object') nData = nData.ptr;
+  if (historyType && typeof historyType === 'object') historyType = historyType.ptr;
+  if (historySize && typeof historySize === 'object') historySize = historySize.ptr;
+  if (xMeter && typeof xMeter === 'object') xMeter = xMeter.ptr;
+  this.ptr = _emscripten_bind_History_History_4(nData, historyType, historySize, xMeter);
+  getCache(History)[this.ptr] = this;
+};;
+History.prototype = Object.create(DataSink.prototype);
+History.prototype.constructor = History;
+History.prototype.__class__ = History;
+History.__cache__ = {};
+Module['History'] = History;
+
+History.prototype['setHistoryType'] = History.prototype.setHistoryType = /** @suppress {undefinedVars, duplicate} @this{Object} */function(historyType) {
+  var self = this.ptr;
+  if (historyType && typeof historyType === 'object') historyType = historyType.ptr;
+  _emscripten_bind_History_setHistoryType_1(self, historyType);
+};;
+
+History.prototype['getHistory'] = History.prototype.getHistory = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return wrapPointer(_emscripten_bind_History_getHistory_0(self), VoidPtr);
+};;
+
+History.prototype['getHistorySize'] = History.prototype.getHistorySize = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_History_getHistorySize_0(self);
+};;
+
+History.prototype['reset'] = History.prototype.reset = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_History_reset_0(self);
+};;
+
+  History.prototype['__destroy__'] = History.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_History___destroy___0(self);
+};
 // PotentialCallbackPressure
 /** @suppress {undefinedVars, duplicate} @this{Object} */function PotentialCallbackPressure(box, temperature, takesForces) {
   if (box && typeof box === 'object') box = box.ptr;
@@ -2090,6 +2130,58 @@ MeterWidomInsertion.prototype['getData'] = MeterWidomInsertion.prototype.getData
   var self = this.ptr;
   _emscripten_bind_MeterWidomInsertion___destroy___0(self);
 };
+// MeterSteps
+/** @suppress {undefinedVars, duplicate} @this{Object} */function MeterSteps(integrator) {
+  if (integrator && typeof integrator === 'object') integrator = integrator.ptr;
+  this.ptr = _emscripten_bind_MeterSteps_MeterSteps_1(integrator);
+  getCache(MeterSteps)[this.ptr] = this;
+};;
+MeterSteps.prototype = Object.create(Meter.prototype);
+MeterSteps.prototype.constructor = MeterSteps;
+MeterSteps.prototype.__class__ = MeterSteps;
+MeterSteps.__cache__ = {};
+Module['MeterSteps'] = MeterSteps;
+
+MeterSteps.prototype['getNumData'] = MeterSteps.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_MeterSteps_getNumData_0(self);
+};;
+
+MeterSteps.prototype['getData'] = MeterSteps.prototype.getData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return wrapPointer(_emscripten_bind_MeterSteps_getData_0(self), VoidPtr);
+};;
+
+  MeterSteps.prototype['__destroy__'] = MeterSteps.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_MeterSteps___destroy___0(self);
+};
+// MeterTime
+/** @suppress {undefinedVars, duplicate} @this{Object} */function MeterTime(integrator) {
+  if (integrator && typeof integrator === 'object') integrator = integrator.ptr;
+  this.ptr = _emscripten_bind_MeterTime_MeterTime_1(integrator);
+  getCache(MeterTime)[this.ptr] = this;
+};;
+MeterTime.prototype = Object.create(Meter.prototype);
+MeterTime.prototype.constructor = MeterTime;
+MeterTime.prototype.__class__ = MeterTime;
+MeterTime.__cache__ = {};
+Module['MeterTime'] = MeterTime;
+
+MeterTime.prototype['getNumData'] = MeterTime.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_MeterTime_getNumData_0(self);
+};;
+
+MeterTime.prototype['getData'] = MeterTime.prototype.getData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return wrapPointer(_emscripten_bind_MeterTime_getData_0(self), VoidPtr);
+};;
+
+  MeterTime.prototype['__destroy__'] = MeterTime.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_MeterTime___destroy___0(self);
+};
 // DataPump
 /** @suppress {undefinedVars, duplicate} @this{Object} */function DataPump(meter, interval, sink) {
   if (meter && typeof meter === 'object') meter = meter.ptr;
@@ -2109,6 +2201,12 @@ DataPump.prototype['getDataSink'] = DataPump.prototype.getDataSink = /** @suppre
   var self = this.ptr;
   if (i && typeof i === 'object') i = i.ptr;
   return wrapPointer(_emscripten_bind_DataPump_getDataSink_1(self, i), DataSink);
+};;
+
+DataPump.prototype['addDataSink'] = DataPump.prototype.addDataSink = /** @suppress {undefinedVars, duplicate} @this{Object} */function(dataSink) {
+  var self = this.ptr;
+  if (dataSink && typeof dataSink === 'object') dataSink = dataSink.ptr;
+  _emscripten_bind_DataPump_addDataSink_1(self, dataSink);
 };;
 
   DataPump.prototype['__destroy__'] = DataPump.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
