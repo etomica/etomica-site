@@ -584,6 +584,11 @@ Average.prototype['setNumData'] = Average.prototype.setNumData = /** @suppress {
   _emscripten_bind_Average_setNumData_1(self, newNumData);
 };;
 
+Average.prototype['getNumData'] = Average.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_Average_getNumData_0(self);
+};;
+
 Average.prototype['getBlockSize'] = Average.prototype.getBlockSize = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;
   return _emscripten_bind_Average_getBlockSize_0(self);
@@ -1839,6 +1844,11 @@ AverageRatio.prototype['setNumData'] = AverageRatio.prototype.setNumData = /** @
   _emscripten_bind_AverageRatio_setNumData_1(self, newNumData);
 };;
 
+AverageRatio.prototype['getNumData'] = AverageRatio.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_AverageRatio_getNumData_0(self);
+};;
+
 AverageRatio.prototype['getBlockSize'] = AverageRatio.prototype.getBlockSize = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;
   return _emscripten_bind_AverageRatio_getBlockSize_0(self);
@@ -2181,6 +2191,56 @@ MeterTime.prototype['getData'] = MeterTime.prototype.getData = /** @suppress {un
   MeterTime.prototype['__destroy__'] = MeterTime.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;
   _emscripten_bind_MeterTime___destroy___0(self);
+};
+// MeterRDF
+/** @suppress {undefinedVars, duplicate} @this{Object} */function MeterRDF(box, rMax, nBins) {
+  if (box && typeof box === 'object') box = box.ptr;
+  if (rMax && typeof rMax === 'object') rMax = rMax.ptr;
+  if (nBins && typeof nBins === 'object') nBins = nBins.ptr;
+  this.ptr = _emscripten_bind_MeterRDF_MeterRDF_3(box, rMax, nBins);
+  getCache(MeterRDF)[this.ptr] = this;
+};;
+MeterRDF.prototype = Object.create(Meter.prototype);
+MeterRDF.prototype.constructor = MeterRDF;
+MeterRDF.prototype.__class__ = MeterRDF;
+MeterRDF.__cache__ = {};
+Module['MeterRDF'] = MeterRDF;
+
+MeterRDF.prototype['reset'] = MeterRDF.prototype.reset = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_MeterRDF_reset_0(self);
+};;
+
+MeterRDF.prototype['getRData'] = MeterRDF.prototype.getRData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return wrapPointer(_emscripten_bind_MeterRDF_getRData_0(self), VoidPtr);
+};;
+
+MeterRDF.prototype['setRMax'] = MeterRDF.prototype.setRMax = /** @suppress {undefinedVars, duplicate} @this{Object} */function(rMax) {
+  var self = this.ptr;
+  if (rMax && typeof rMax === 'object') rMax = rMax.ptr;
+  _emscripten_bind_MeterRDF_setRMax_1(self, rMax);
+};;
+
+MeterRDF.prototype['setNBins'] = MeterRDF.prototype.setNBins = /** @suppress {undefinedVars, duplicate} @this{Object} */function(nBins) {
+  var self = this.ptr;
+  if (nBins && typeof nBins === 'object') nBins = nBins.ptr;
+  _emscripten_bind_MeterRDF_setNBins_1(self, nBins);
+};;
+
+MeterRDF.prototype['getNumData'] = MeterRDF.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_MeterRDF_getNumData_0(self);
+};;
+
+MeterRDF.prototype['getData'] = MeterRDF.prototype.getData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return wrapPointer(_emscripten_bind_MeterRDF_getData_0(self), VoidPtr);
+};;
+
+  MeterRDF.prototype['__destroy__'] = MeterRDF.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_MeterRDF___destroy___0(self);
 };
 // DataPump
 /** @suppress {undefinedVars, duplicate} @this{Object} */function DataPump(meter, interval, sink) {
