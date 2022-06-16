@@ -1,0 +1,50 @@
+interface LatticeDynamics {
+  void LatticeDynamics(double d, Potential p, boolean doLRC, long nBasis);
+  long getStatus();
+  void setNumCells(long x, long y, long z);
+  void setUnitCell(double x, double y, double z);
+  void setBasis(long i, double x, double y, double z);
+  void setup();
+  long goLS(long nMax);
+  long countLS();
+  long doSelfSum();
+  long goEVD(long nwv);
+  long getWaveVectorCount();
+  boolean getUnstable();
+  double getU();
+  double getLogSum();
+  VoidPtr getEigenvalues();
+};
+
+interface Potential {
+  void setCutoff(double rc);
+  double getCutoff();
+  void setTruncationType(long tt);
+  long getTruncationType();
+};
+
+interface PotentialLJ : Potential {
+  void PotentialLJ(double epsilon, double sigma, long tt, double rc);
+};
+
+interface PotentialSS : Potential {
+  void PotentialSS(double epsilon, long p, long tt, double rc);
+};
+
+interface PotentialWCA : PotentialLJ {
+  void PotentialWCA(double epsilon, double sigma);
+};
+
+[JSImplementation="Potential"]
+interface PotentialJS {
+  void PotentialJS();
+  double u(double r2);
+  double du(double r2);
+  double d2u(double r2);
+};
+
+interface ArrayUtil {
+  void ArrayUtil(VoidPtr p);
+  double x(long i);
+  double x2d(long i, long j);
+};

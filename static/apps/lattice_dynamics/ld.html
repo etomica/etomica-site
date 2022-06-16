@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Lattice Dynamics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/7f972bf8c7.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel='stylesheet' href='style.css'>
+  </head>
+  <body style='padding: 1em;'>
+  <div class='container'>
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <div class="emscripten" id="status">Downloading...</div>
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>  
+    </div>
+    <h1>Lattice Dynamics</h1>
+    <p>Source: <a href='ld.cpp'>ld.cpp</a> <a href='ld.h'>ld.h</a> <a href='potential.cpp'>potential.cpp</a> <a href='potential.h'>potential.h</a> <a href='ld.idl'>ld.idl</a> <a href='ld-glue-wrapper.cpp'>ld-glue-wrapper.cpp</a> <a href='Makefile'>Makefile</a><br>
+    Generated: <a href='glue.cpp'>glue.cpp</a> <a href='glue.js'>glue.js</a></p>
+    <div id='parametersDiv' class='card'>
+      <div class='card-header' role='tab' id='headingParameters'><h5 class='mb-0'><a role='button' data-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
+      <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
+      <div class='card-body'>
+        <label>Number of cells:  <input class='form-control' size='2' id='nCellsX' value='2' style='width: 3rem;'> &times; <input class='form-control' size='2' id='nCellsY' value='2' style='width: 3rem;'> &times; <input class='form-control' size='2' id='nCellsZ' value='2' style='width: 3rem;'></label> (<span id='numAtoms'></span> atoms)<br>
+          <div class='card' style='margin-bottom: 0.5rem;'>
+            <div class='card-body'>
+              <p style='margin-bottom:0;'><label>Crystal: <select class='form-control' id='basisType' onchange='updateBasisType()'>
+                  <option value='SC'>Simple Cubic</option>
+                  <option value='FCC' selected>FCC</option>
+                  <option value='HCP'>HCP</option>
+                  <option value='BCC'>BCC</option>
+                  <option value='custom'>Custom</option>
+              </select></label> <label id='nBasisLabel' style='margin-left: 1rem; display: none;'># of atoms <input class='form-control' style='width: 3rem;' id='nBasis' value='1' onchange='updateBasisType()'></label> <button type='button' class='btn btn-info btn-sm' id='btnCrystalDetails' style='margin-left: 1em;'>Show Details</button></p>
+              <div id='crystal-details' style='display: none; margin-top: 1rem;'>
+                <h5>Cell size</h5>
+              <table class='table table-sm'>
+                <thead><tr><th>x</th><th>y</th><th>z</th></tr></thead>
+                <tbody>
+                <tr>
+                  <td><input id='cellXYZ0' class='form-control' value='1'></td>
+                  <td><input id='cellXYZ1' class='form-control' value='1'></td>
+                  <td><input id='cellXYZ2' class='form-control' value='1'></td>
+                </tr>
+                </tbody>
+              </table>
+                <h5>Basis positions</h5>
+              <table class='table table-sm' style='margin-bottom: 0;'>
+                <thead><tr><th>Atom</th><th>x</th><th>y</th><th>z</th></tr></thead>
+                <tbody id='basisXYZ'></tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+      <label>Density: <input class='form-control' size='4' id='density' value='1' style='width: 4rem;'></label><br>
+    <label>Potential: <select class='form-control' id='potType' onchange='updatePotType()'>
+          <option value='0'>Soft sphere</option>
+          <option value='1' selected>Lennard-Jones</option>
+          <option value='2'>WCA</option>
+          <option value='3'>Custom</option>
+      </select></label> <span id='ssPowSpan' style='margin-left: 1rem; display: none'><label>Power: <input class='form-control' id='ssPow' size='3' value='12' style='width: 4rem;'></label></span><br>
+      <div id='uCustomDiv' style='display: none; margin-bottom: 0.5rem;' class='card'>
+        <div class='card-body'>
+          <p>Provide each potential quantity as a function of r<sup>2</sup> (Javascript syntax)</p>
+        <p style='margin:0;'><label>u = <input class='form-control' id='uCustom' size='40' style='width: 40em;' value='4 * (Math.pow(r2,-6) - Math.pow(r2,-3))'></label><br>
+        <label>r(du/dr) = <input class='form-control' id='duCustom' size='40' style='width: 40em;' value='4 * (-12*Math.pow(r2,-6) + 6*Math.pow(r2,-3))'></label><br>
+        <label>r<sup>2</sup>(d<sup>2</sup>u/dr<sup>2</sup>) = <input class='form-control' id='d2uCustom' size='40' style='width: 40em;' value='4 * (12*13*Math.pow(r2,-6) - 6*7*Math.pow(r2,-3))'></label></p>
+    </div></div>
+    <div id='ttDiv'><label>Truncation type: <select class='form-control' id='truncType' onchange='updateTrunc()'>
+        <option value='1'>Simple</option>
+        <option value='2' id='truncType2'>Simple + LRC</option>
+        <option value='3'>Shifted</option>
+        <option value='4' id='truncType4'>Force-shifted</option>
+  </select></label></div>
+  <div id='rcDiv'><label>Cutoff: <input class='form-control' id='rc' size='3' value='3' style='width: 5em;'></label></div>
+  </div>
+  </div>
+</div>
+  <p style='margin-top: 1em;'><button type='button' id='btnStart' class='btn btn-sm btn-primary'>Start</button></p>
+    <div id='resultsDiv' class='card'>
+      <div class='card-header' role='tab' id='headingResults'><h5 class='mb-0'><a role='button' data-toggle='collapse' href='#collapseResults' aria-expanded='true' aria-controls='collapseResults'>Results</a></h5></div>
+      <div id='collapseResults' class='collapse show' aria-labelledby='headingResults'>
+      <div class='card-body'>
+    <div id='progress-div' style='display: none;'>
+      <div class='row'>
+        <div class='col-lg-2 col-sm-4 col-5'>Lattice Sum</div>
+        <div class='col-lg-10 col-sm-8 col-7'>
+          <div class='progress'><div id='progressLS' class='progress-bar progress-bar-primary' role='progressbar' aria-valuemin='0' style='width: 0;'></div></div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-lg-2 col-sm-4 col-5'>Eigenvalues</div>
+        <div class='col-lg-10 col-sm-8 col-7'>
+          <div class='progress'><div id='progressEVD' class='progress-bar progress-bar-primary' role='progressbar' style='width: 0;'></div></div>
+        </div>
+      </div>
+    </div>
+    <p style='font-size: 120%; margin-top: 0.5em;'>U<sub>lat</sub>/N: <span id='uLat'></span><br>
+    (1/2N)<span style='font-size: 170%; vertical-align: middle;'>&Sigma;</span>ln(evals): <span id='logSum'></span></p>
+    <div class='output' id="initOutput"></div>
+    <div class='output' id="LSOutput"></div>
+    <div class='output' id="SSOutput"></div>
+    <div class='output' id="EVDOutput"></div>
+    <div class='output' id='timing'></div>
+    <div id='plotContainer'>
+      <div id="plotDiv"></div>
+      <label>Smearing width (&omega;): <input class='form-control' id='wsig' style='width: 5em;' value='0.2' onchange='updateDOS()'></label>
+      <label>Resolution (&omega;): <input class='form-control' id='dw' style='width: 5em;' value='0.05' onchange='updateDOS()'></label>
+  </div>
+  </div>
+</div>
+  </div>
+
+    <script src='util.js'></script>
+    <script src='emscripten.js'></script>
+    <script type='text/javascript'>
+var cellXYZ = {SC: [1,1,1], FCC: [1,1,1], BCC: [1,1,1], HCP: [1,Math.sqrt(3),Math.sqrt(8/3)]};
+var basisXYZ = {SC: [[0,0,0]],
+                FCC: [[0,0,0],[0,0.5,0.5],[0.5,0,0.5],[0.5,0.5,0]],
+                BCC: [[0,0,0],[0.5,0.5,0.5]],
+                HCP: [[0,0,0],[0.5,0.5,0],[0.5,1/6,0.5],[0,2/3,0.5]]}
+var latticeDynamics = null, potential = null;
+stage = "init";
+var running = false, stopRequested = false;
+document.getElementById('nCellsX').addEventListener('change', updateNumAtoms);
+document.getElementById('nCellsY').addEventListener('change', updateNumAtoms);
+document.getElementById('nCellsZ').addEventListener('change', updateNumAtoms);
+function getNumBasis() {
+  var basisType = document.getElementById("basisType").value;
+  if (basisType == "custom") {
+    return getInputInt("nBasis");
+  }
+  return basisXYZ[basisType].length;
+}
+function getInputInt(id) {
+  var num = document.getElementById(id).value.trim();
+  if (!num) return 0;
+  num = Number(num);
+  if (num<1 || num != Math.round(num)) return 0;
+  return num;
+}
+function getNumAtoms() {
+  var nCellsX = getInputInt("nCellsX");
+  var nCellsY = getInputInt("nCellsY");
+  var nCellsZ = getInputInt("nCellsZ");
+  return getNumBasis()*nCellsX*nCellsY*nCellsZ;
+}
+function updateNumAtoms() {
+  document.getElementById("numAtoms").textContent = getNumAtoms();
+}
+  function updateBasisType() {
+    var basisType = document.getElementById("basisType").value;
+    var nBasisLabel = document.getElementById("nBasisLabel");
+    var tbody = document.getElementById("basisXYZ");
+    if (basisType != "custom") {
+      empty(tbody);
+      var c = cellXYZ[basisType];
+      for (var j=0; j<3; j++) {
+        var inp = document.getElementById("cellXYZ"+j);
+        inp.value = c[j];
+        inp.setAttribute("readonly", "true");
+      }
+      nBasisLabel.style.display = "none";
+      var b = basisXYZ[basisType];
+      document.getElementById("nBasis").value = b.length;
+      for (var i=0; i<b.length; i++) {
+        if (document.getElementById("basisXYZ"+i+"_0")) {
+          for (var j=0; j<3; j++) {
+            var inp = document.getElementById("basisXYZ"+i+"_"+j);
+            inp.value = b[i][j];
+            inp.setAttribute("readonly", "true");
+          }
+          continue;
+        }
+
+        var row = makeElement("TR", tbody);
+        makeElement("TD", row, {textContent: i});
+        for (var j=0; j<3; j++) {
+          var cell = makeElement("TD", row);
+          makeElement("INPUT", cell, {id: "basisXYZ"+i+"_"+j, className: 'form-control', value: b[i][j], readonly: "true"});
+        }
+      }
+      for (var i=b.length; i<100; i++) {
+        var inp = document.getElementById("basisXYZ"+i+"_0");
+        if (!inp) break;
+        tbody.removeChild(inp.parentNode.parentNode);
+      }
+      updateNumAtoms();
+      return;
+    }
+    if (!crystalDetailsShown) toggleCrystalDetails();
+    nBasisLabel.style.display = "";
+    for (var j=0; j<3; j++) {
+      var inp = document.getElementById("cellXYZ"+j);
+      inp.removeAttribute("readonly");
+    }
+    var nBasis = Number(document.getElementById("nBasis").value);
+    if (nBasis<100) {
+      for (var i=0; i<nBasis; i++) {
+        if (document.getElementById("basisXYZ"+i+"_0")) {
+          for (var j=0; j<3; j++) {
+            document.getElementById("basisXYZ"+i+"_"+j).removeAttribute("readonly");
+          }
+          continue;
+        }
+        var row = makeElement("TR", tbody);
+        makeElement("TD", row, {textContent: i});
+        for (var j=0; j<3; j++) {
+          var cell = makeElement("TD", row);
+          var v = i==0 ? 0 : "";
+          makeElement("INPUT", cell, {id: "basisXYZ"+i+"_"+j, className: 'form-control', value: v});
+        }
+      }
+      for (var i=nBasis; i<100; i++) {
+        var inp = document.getElementById("basisXYZ"+i+"_0");
+        if (!inp) break;
+        tbody.removeChild(inp.parentNode.parentNode);
+      }
+    }
+    updateNumAtoms();
+  }
+  function setParameters() {
+    var density = Number(document.getElementById("density").value.trim());
+    if (density < 0.5) {
+      alert("Invalid density "+density);
+      return;
+    }
+    var potType = Number(document.getElementById("potType").value);
+    var truncType = Number(document.getElementById("truncType").value);
+    var doLRC = false;
+    if (truncType == 2) {
+      doLRC = true;
+      truncType = 1;
+    }
+    if (truncType < 0 || truncType > 4 || truncType != Math.round(truncType)) {
+      alert("Invalid truncation type " + truncType);
+      return;
+    }
+    var rc = Number(document.getElementById("rc").value);
+    if (truncType>0 && rc <= 0) {
+      alert("Invalid rc "+rc);
+      document.getElementById("rc").focus();
+      return;
+    }
+    if (potType == 3) {
+      eval('uCustom = function(r) { return '+document.getElementById('uCustom').value+';};');
+    }
+
+    switch (potType) {
+      case 0:
+        var ssPow = getInputInt("ssPow");
+        potential = new Module.PotentialSS(1, ssPow, truncType, rc);
+        break;
+      case 1:
+        potential = new Module.PotentialLJ(1, 1, truncType, rc);
+        break;
+      case 2:
+        potential = new Module.PotentialWCA(1, 1);
+        break;
+      case 3:
+        potential = new PotentialJS();
+        eval('potential.u = function(r2) { return '+document.getElementById('uCustom').value+';};');
+        eval('potential.du = function(r2) { return '+document.getElementById('duCustom').value+';};');
+        eval('potential.d2u = function(r2) { return '+document.getElementById('d2uCustom').value+';};');
+        potential.setCutoff(rc);
+        potential.setTruncationType(truncType);
+        break;
+      case 4:
+        throw new Exception("unknown potential type!");
+    }
+    latticeDynamics = new Module.LatticeDynamics(density, potential, doLRC, getNumBasis());
+    if (latticeDynamics.getStatus() != 0) {
+      Module.destroy(latticeDynamics);
+      Module.destroy(potential);
+      latticeDynamics = null;
+      return;
+    }
+  var nCellsX = getInputInt("nCellsX");
+  var nCellsY = getInputInt("nCellsY");
+  var nCellsZ = getInputInt("nCellsZ");
+  latticeDynamics.setNumCells(nCellsX, nCellsY, nCellsZ);
+  var basisType = document.getElementById("basisType").value;
+  var b, c;
+  if (basisType != "custom") {
+    var c = cellXYZ[basisType];
+    var b = basisXYZ[basisType];
+  }
+  else {
+    c = [];
+    for (var j=0; j<3; j++) {
+      c.push(Number(document.getElementById("cellXYZ"+j).value));
+    }
+    b = [];
+    var nBasis = Number(document.getElementById("nBasis").value);
+    for (var i=0; i<nBasis; i++) {
+      var v = [];
+      for (var j=0; j<3; j++) {
+        v.push(Number(document.getElementById("basisXYZ"+i+"_"+j).value));
+      }
+      b.push(v);
+    }
+  }
+  latticeDynamics.setUnitCell(c[0], c[1], c[2]);
+  for (var i=0; i<b.length; i++) {
+    latticeDynamics.setBasis(i, b[i][0], b[i][1], b[i][2]);
+  }
+}
+var uCustom = function(r) {return 0;}
+var tStartEVD = 0;
+var allEV = [];
+function updateDOS() {
+  var maxw = Math.max(...allw);
+  var sig = Number(document.getElementById("wsig").value);
+  var wmax = maxw + 4*sig;
+  var ydos = [], xdos = [];
+  var deltaw = Number(document.getElementById("dw").value);
+  var nw = Math.round(wmax / deltaw)+1;
+  for (i=1; i<=nw; i++) {
+    xdos.push(i*deltaw);
+    ydos.push(0);
+  }
+  for (var i=0; i<allw.length; i++) {
+    for (var j=0; j<nw; j++) {
+      var dw = xdos[j]-allw[i];
+      ydos[j] += Math.exp(-0.5*dw*dw/(sig*sig));
+    }
+  }
+  var norm = sig*Math.sqrt(2*Math.PI) * allw.length;
+  for (var j=0; j<nw; j++) {
+    ydos[j] /= norm;
+  }
+  var sets = [{x: xdos, y: ydos}];
+  Plotly.newPlot(document.getElementById("plotDiv"),
+                 sets,
+                 { autosize: true,
+                   xaxis: {title: "Frequency, ω", exponentformat:'power'},
+                   yaxis: {title: "Normalized phonon density of states", exponentformat:'power'},
+                   margin: { t: 0 }
+                 },
+                 { responsive: true} );
+}
+function updateEVD(nextWV) {
+  if (tStartEVD == 0) tStartEVD = Date.now();
+  updateProgressEVD(nextWV);
+  if (nextWV==-1) {
+    var tNow = Date.now();
+    if (tNow>tStartEVD) {
+      document.getElementById("progressEVD").textContent += " ("+((tNow-tStartEVD)*0.001).toPrecision(3)+"s)";
+    }
+    tStartEVD = 0;
+    running = false;
+    var unstable = latticeDynamics.getUnstable();
+    if (unstable) {
+      document.getElementById("logSum").textContent = "unstable";
+    }
+    else {
+      var logSum = latticeDynamics.getLogSum();
+      var numAtoms = getNumAtoms();
+      document.getElementById("logSum").textContent = logSum/(2*numAtoms);
+      var eigenvalues = new Module.ArrayUtil(latticeDynamics.getEigenvalues());
+      allw = [];
+      var nBasis = Number(document.getElementById("nBasis").value);
+      for (var i=0; i<wvCount; i++) {
+        for (var j=0; j<3*nBasis; j++) {
+          if (i > 0 || j > 2) {
+            var ev = eigenvalues.x2d(i,j);
+            allw.push(Math.sqrt(ev));
+          }
+        }
+      }
+    }
+    updateDOS();
+    cleanup();
+    return false;
+  }
+  return true;
+}
+var workSteps = 10, wvCount = 0, totXYZ = 0;
+function updateSelfSum(nextSS) {
+  if (nextSS>-1) {
+    alert("oops self sum unfinished?");
+    return true;
+  }
+  running = false;
+  var ldFunc = function() {return latticeDynamics.goEVD(workSteps);};
+  btnRunner("EVD","btnStart",ldFunc, updateEVD)();
+  return false;
+}
+
+function updateProgressLS(iXYZ) {
+  var bar = document.getElementById("progressLS");
+  bar.setAttribute("aria-valuenow", iXYZ);
+  var w = (iXYZ/totXYZ)*100;
+  w = Math.round(w);
+  if (bar.style.width != (w+"%")) bar.style.width = w+"%";
+  if (w>5) bar.textContent = w+"%";
+}
+function updateProgressEVD(nextWV) {
+  var bar = document.getElementById("progressEVD");
+  bar.setAttribute("aria-valuenow", wvCount - nextWV);
+  var x = wvCount - (nextWV+1);
+  bar.style.width = (x/wvCount)*100+"%";
+  if (x/wvCount>0.05) bar.textContent = x+" / "+wvCount;
+}
+var tStartLS = 0;
+function updateLS(nextLS) {
+  if (tStartLS == 0) tStartLS = Date.now();
+  updateProgressLS(nextLS>=0 ? nextLS : totXYZ);
+  if (nextLS<0) {
+    var tNow = Date.now();
+    if (tNow>tStartLS) {
+      document.getElementById("progressLS").textContent += " ("+((tNow-tStartLS)*0.001).toPrecision(3)+"s)";
+    }
+    tStartLS = 0;
+    running = false;
+    workSteps = 10;
+    document.getElementById("uLat").textContent = latticeDynamics.getU();
+    var ldFunc = function() {return latticeDynamics.doSelfSum();};
+    btnRunner("SS","btnStart", ldFunc, updateSelfSum)();
+    return false;
+  }
+  return true;
+}
+
+var cleanup = function() {
+  Module.destroy(latticeDynamics);
+  Module.destroy(potential);
+  potential = latticeDynamics = null;
+  var btn = document.getElementById("btnStart");
+  btn.textContent = "Start";
+}
+document.getElementById('btnStart').addEventListener('click', function(){
+  if (stopRequested && running) return;
+  if (running) {
+    stopRequested = true;
+    return;
+  }
+  var btn = document.getElementById("btnStart");
+  workSteps = 10;
+  document.getElementById("progressLS").textContent = "";
+  document.getElementById("progressEVD").textContent = "";
+  document.getElementById("progress-div").style.display = "block";
+  document.getElementById("logSum").textContent = "";
+  try {
+    setParameters();
+    latticeDynamics.setup();
+    if (latticeDynamics.getStatus() < 0) {
+      cleanup();
+      return;
+    }
+    wvCount = latticeDynamics.getWaveVectorCount();
+    totXYZ = latticeDynamics.countLS();
+    document.getElementById("progressLS").setAttribute("aria-valuemax", totXYZ);
+    updateProgressLS(0);
+    updateProgressEVD(wvCount-1);
+    var ldFunc = function() {return latticeDynamics.goLS(workSteps);};
+    btnRunner("LS","btnStart",ldFunc, updateLS)();
+  }
+  catch (e) {
+    console.log(e);
+  }
+});
+
+function startRunner(btn, ldFunc, cb) {
+  var runner = function() {
+    if (stopRequested) {
+      running = false;
+      stopRequested = false;
+      btn.textContent = "Continue";
+      return;
+    }
+    btn.textContent = "Pause";
+    running = true;
+    var t1 = Date.now();
+    var result = ldFunc();
+    var t2 = Date.now();
+    //makeElement("P", document.getElementById("timing"), {textContent: stage+" "+workSteps+" "+result+" "+(t2-t1), style: {marginBottom: "0"}});
+    if (stage == 'EVD' || stage == 'LS') {
+      if (t2-t1 < 50) workSteps *= 2;
+      else if (t2-t1 > 200 && workSteps>10) workSteps /= 2;
+    }
+    var runMore = result >= 0;
+    if (cb) cb(result);
+    if (runMore) window.setTimeout(runner, 0);
+  };
+  window.setTimeout(runner, 0);
+}
+
+function btnRunner(thisStage, btnID, ldFunc, cb) {
+  return function() {
+    stage = thisStage;
+    if (stopRequested && running) return;
+    if (running) {
+      cb(true);
+      stopRequested = true;
+      return;
+    }
+    var btn = document.getElementById(btnID);
+    btn.textContent = "Pause";
+    startRunner(btn, ldFunc, cb);
+  };
+}
+function updatePotType() {
+  var potType = Number(document.getElementById("potType").value);
+  var truncType = Number(document.getElementById("truncType").value);
+  document.getElementById("rcDiv").style.display = (truncType==0||potType==2) ? "none" : "block";
+  document.getElementById("ttDiv").style.display = potType==2 ? "none" : "block";
+  document.getElementById("uCustomDiv").style.display = potType==3 ? "block" : "none";
+  document.getElementById("ssPowSpan").style.display = potType==0 ? "inline" : "none";
+}
+function updateTrunc() {
+  var truncType = Number(document.getElementById("truncType").value);
+  document.getElementById("rcDiv").style.display = truncType==0 ? "none" : "block";
+}
+var crystalDetailsShown = false;
+function toggleCrystalDetails() {
+  crystalDetailsShown = !crystalDetailsShown;
+  document.getElementById("crystal-details").style.display = crystalDetailsShown ? "block" : "none";
+  var btn = document.getElementById("btnCrystalDetails");
+  empty(btn);
+  makeText((crystalDetailsShown ? "Hide" : "Show")+" Details", btn);
+}
+document.getElementById("btnCrystalDetails").addEventListener("click", toggleCrystalDetails);
+window.addEventListener("load", updatePotType);
+window.addEventListener("load", updateTrunc);
+window.addEventListener("load", updateNumAtoms);
+window.addEventListener("load", updateBasisType);
+    </script>
+    <script async type="text/javascript" src="ld.js"></script>
+  </body>
+</html>
