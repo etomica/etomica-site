@@ -1,0 +1,21 @@
+<p>The simulation is capable of collecting data periodically and displaying statistics about the measured values.  Statistics include the average, uncertainty and block autocorrelation.  The block autocorrelation provides an indication of the reliability of the uncertainty &mdash; a large correlation (greater than ~0.3) indicates that the blocks are correlated with each other and the uncertainty is likely to be too small. The correlation tends to decrease as the simulation progresses due to the block size increasing.</p>
+
+<p>Quantities that can be collected during the simulation include</p>
+
+<ul>
+  <li>Energy: the potential energy of the system</li>
+  <li>Temperature (MD only): the temperature of the system, based on the kinetic energy</li>
+  <li>Pressure: the pressure of the system</li>
+  <li>Widom insertion: trial insertion of atoms are used to estimate the chemical potential of the system.</li>
+  <li># of atoms (grand canonical only): the number of atoms in the system</li>
+  <li>density (grand canonical or constant pressure): the density of the system (N/V)</li>
+  <li>RDF: the radial distribution of the system, presented as a plot.  The # of bins and maximum separtation distance can be set.</li>
+</ul>
+
+<p>Other than the RDF, the history of the quantity can also be collected and shown as a plot.  The history can be collected in one of three ways:</p>
+
+<ul>
+  <li>Scrolling: once the history is full, new data replaces the first sample.</li>
+  <li>Collapsing discard: once the history is full, every other data point (2nd, 4th, 6th, etc) are discarded.  Moving forward, only even samples are kept.  The process is repeated each time the history fills up.</li>
+  <li>Collapsing average: once the history is full, each pair of points is replaced with a new point with a value equal to the average of the pair.</li>
+</ul>

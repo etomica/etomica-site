@@ -1,0 +1,5 @@
+<p>As the simulation runs, the status panel displays the simulation's progress.  This includes the number of steps performed and the speed.</p>
+
+<p>For Monte Carlo, the step sizes and acceptances (including volume changes if the simulation is NPT) are shown.  The move acceptance is the average probability of acceptance (rather than the fraction of moves accepted); the two quantities will converge to the same value, but the average probability converges more quickly.  This is used by the simulation to adjust the step size.  Once suitable step sizes is found, the step sizes can be locked in place for the duration of the simulation (allowing the step sizes to continue violates detailed balance and in extreme situations may result in inaccurate results).</p>
+
+<p>For molecular dynamics, the simulation time is shown.</p>

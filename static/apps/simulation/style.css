@@ -5,6 +5,13 @@ button.btn-reset {line-height: 1;}
 .dataContent span {white-space: nowrap;}
 p.statusMC, p.statusMD {margin-bottom: 0;}
 
+.btn-group-xs > .btn, .btn-xs {
+  padding: .4rem .3rem;
+  font-size: .875rem;
+  line-height: .5;
+  border-radius: .2rem;
+}
+
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
       div.emscripten { text-align: center; }
       div.emscripten_border { border: 1px solid black; }

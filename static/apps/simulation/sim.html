@@ -22,7 +22,12 @@
     <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Molecular Simulation<a class='float-end' href='https://www.etomica.org/'><img src='https://www.etomica.org/img/logo_small.png' style='height: 2.5rem;' title='Etomica'></a></h1>
     <p><a href='https://github.com/etomica/etomica-cpp'>Github repository</a></p>
     <div id='parametersDiv' class='card'>
-      <div class='card-header' role='tab' id='headingParameters'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
+      <div class='card-header' role='tab' id='headingParameters'>
+        <h2 class='h5 mb-0'>
+          <a role='button' data-bs-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a>
+          <button class='btn btn-xs btn-info' type='button' data-content='sim-param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
+        </h2>
+      </div>
       <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
         <div class='card-body'>
           <div>
@@ -64,7 +69,7 @@
                 <option value='MC'>MC</option>
                 <option value='MD'>MD</option>
             </select></label><br>
-            <div class='row'>
+            <div class='row' id='timestep-row'>
               <div class='col-auto px-4' style='margin-left: 2rem;'>
                 <label>timestep: <input class='form-control' style='width: 4rem;' id='tStep'></label>
               </div>
@@ -77,16 +82,22 @@
                 </div>
               </div>
             </div>
-            <label style='margin-top: 0.5rem;'>Seed: <input class='form-control' id='seed' style='width: 10em;'></label>
+            <label style='margin-top: 0.5rem;'>Random seed: <input class='form-control' id='seed' style='width: 10em;'></label>
           </div>
-          <button type='button' id='btnStart' class='btn btn-sm btn-primary'>Start</button></p>
+          <button type='button' id='btnStart' class='btn btn-sm btn-primary'>Start</button>
+          <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary' onclick='document.location.reload()'>New parameters</button></p>
           <div class='output' id="initOutput"></div>
         </div>
       </div>
     </div>
 
     <div id='resultsDiv' class='card'>
-      <div class='card-header' role='tab' id='headingResults'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseResults' aria-expanded='true' aria-controls='collapseResults'>Simulation Status</a></h5></div>
+      <div class='card-header' role='tab' id='headingResults'>
+        <h2 class='h5 mb-0'>
+          <a role='button' data-bs-toggle='collapse' href='#collapseResults' aria-expanded='true' aria-controls='collapseResults'>Simulation Status</a>
+          <button class='btn btn-xs btn-info' type='button' data-content='status' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
+        </h2>
+      </div>
       <div id='collapseResults' class='collapse' aria-labelledby='headingResults'>
         <div class='card-body'>
           <div class='output' id="resultsOutput"></div>
@@ -104,7 +115,12 @@
     </div>
 
     <div id='dataDiv' class='card'>
-      <div class='card-header' role='tab' id='headingData'><h5 class='mb-0'><a role='button' data-bs-toggle='collapse' href='#collapseData' aria-expanded='true' aria-controls='collapseData'>Data</a></h5></div>
+      <div class='card-header' role='tab' id='headingData'>
+        <h5 class='mb-0'>
+          <a role='button' data-bs-toggle='collapse' href='#collapseData' aria-expanded='true' aria-controls='collapseData'>Data</a>
+          <button class='btn btn-xs btn-info' type='button' data-content='data' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
+        </h5>
+      </div>
       <div id='collapseData' class='collapse' aria-labelledby='headingData'>
         <div class='card-body'>
           <p><button type='button' id='btnDataEnergy' class='btn btn-sm btn-info' style='display: none;'>Energy</button>
@@ -232,7 +248,7 @@ var startTime = 0;
     }
     document.getElementById("seed").value = seed;
     if (doMD) {
-      integrator = new Module.IntegratorMD(speciesList.getAtomInfo(), potentialMaster, rand, box);
+      integrator = new Module.IntegratorMDVelocityVerlet(speciesList.getAtomInfo(), potentialMaster, rand, box);
       integrator.setTimeStep(tStep);
       box.enableVelocities();
       if (doNbrList) {
@@ -410,6 +426,7 @@ function startRunner(btn, cFunc, cb) {
       return;
     }
     btn.textContent = "Pause";
+    document.getElementById("btnNewParameters").style.display = "inline-block";
     running = true;
     var t1 = Date.now();
     cFunc();
@@ -460,6 +477,15 @@ function updateGC() {
   else {
     muInp.setAttribute("disabled", "true");
   }
+  var doP = document.getElementById("pressureCB").checked;
+  if  (doGC || doP) {
+    document.getElementById("simType").value = "MC";
+    updateSimType();
+    document.getElementById("simType").disabled = true;
+  }
+  else {
+    document.getElementById("simType").removeAttribute("disabled");
+  }
 }
 function updateP() {
   var doP = document.getElementById("pressureCB").checked;
@@ -469,6 +495,15 @@ function updateP() {
   }
   else {
     pInp.setAttribute("disabled", "true");
+  }
+  var doGC = document.getElementById("grandCB").checked;
+  if  (doGC || doP) {
+    document.getElementById("simType").value = "MC";
+    updateSimType();
+    document.getElementById("simType").disabled = true;
+  }
+  else {
+    document.getElementById("simType").removeAttribute("disabled");
   }
 }
 function updateSimType() {
@@ -480,9 +515,11 @@ function updateSimType() {
   if (!doMD) for (var i=0; i<mcBits.length; i++) mcBits[i].style.display = "";
   else for (var i=0; i<mdBits.length; i++) mdBits[i].style.display = "";
   if (doMD) {
+    document.getElementById("timestep-row").style.display = "flex";
     document.getElementById("tStep").removeAttribute("disabled");
   }
   else {
+    document.getElementById("timestep-row").style.display = "none";
     document.getElementById("tStep").setAttribute("disabled", "true");
   }
   document.getElementById("cellsDiv").style.display = doMD ? "none" : "";
@@ -692,6 +729,24 @@ document.getElementById("doNbrList").removeAttribute("readonly");
 document.getElementById("doNbrList").removeAttribute("disabled");
     </script>
     <script async type='text/javascript' src='mc.js'></script>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
 

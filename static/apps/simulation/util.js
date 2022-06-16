@@ -148,3 +148,51 @@ function getInputInt(id) {
   //if (num<=0) return 0;
   return num;
 }
+
+var infoTitles = [
+                  {name: "sim-param", title: "Simulation Parameters", level: 1},
+                  {name: "status", title: "Simulation Status", level: 1},
+                  {name: "data", title: "Data", level: 1}
+                  ], infoTitleMap = null;
+
+function loadModalContent(content) {
+  document.getElementById("infoModalLabel").textContent = infoTitleMap[content];
+  var sel = document.getElementById("info-modal-select");
+  sel.value = content;
+
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState == 4) {
+      var response = xmlHttp.responseText;
+      var body = document.getElementById("infoModalBody");
+      body.innerHTML = response;
+    }
+  };
+  xmlHttp.open("GET", content+"-info.html");
+  xmlHttp.send(null);
+}
+
+function replaceInfoContent() {
+  var sel = document.getElementById("info-modal-select");
+  loadModalContent(sel.value);
+}
+
+window.addEventListener("load", function() {
+  var infoModal = document.getElementById("infoModal");
+  if (!infoModal) return;
+  infoTitleMap = {};
+  var sel = document.getElementById("info-modal-select");
+  for (var i=0; i<infoTitles.length; i++) {
+    var n = infoTitles[i].name, t = infoTitles[i].title;
+    infoTitleMap[n] = t;
+    if (infoTitles[i].level == 2) t = "• "+t;
+    makeElement("OPTION", sel, {value: n, textContent: t});
+  }
+  sel.addEventListener("change", replaceInfoContent);
+  infoModal.addEventListener("show.bs.modal", function(event) {
+    var content = event.relatedTarget.getAttribute("data-content");
+    if (!/^[a-zA-Z0-9-]*/.test(content)) return;
+    loadModalContent(content);
+  });
+});
+
