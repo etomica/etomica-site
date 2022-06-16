@@ -679,6 +679,12 @@ IntegratorMD.prototype['addPotentialCallback'] = IntegratorMD.prototype.addPoten
   _emscripten_bind_IntegratorMD_addPotentialCallback_2(self, pc, interval);
 };;
 
+IntegratorMD.prototype['randomizeVelocities'] = IntegratorMD.prototype.randomizeVelocities = /** @suppress {undefinedVars, duplicate} @this{Object} */function(zeroMomentum) {
+  var self = this.ptr;
+  if (zeroMomentum && typeof zeroMomentum === 'object') zeroMomentum = zeroMomentum.ptr;
+  _emscripten_bind_IntegratorMD_randomizeVelocities_1(self, zeroMomentum);
+};;
+
 IntegratorMD.prototype['doStep'] = IntegratorMD.prototype.doStep = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;
   _emscripten_bind_IntegratorMD_doStep_0(self);
@@ -2441,9 +2447,110 @@ IntegratorMDVelocityVerlet.prototype['addPotentialCallback'] = IntegratorMDVeloc
   _emscripten_bind_IntegratorMDVelocityVerlet_addPotentialCallback_2(self, pc, interval);
 };;
 
+IntegratorMDVelocityVerlet.prototype['randomizeVelocities'] = IntegratorMDVelocityVerlet.prototype.randomizeVelocities = /** @suppress {undefinedVars, duplicate} @this{Object} */function(zeroMomentum) {
+  var self = this.ptr;
+  if (zeroMomentum && typeof zeroMomentum === 'object') zeroMomentum = zeroMomentum.ptr;
+  _emscripten_bind_IntegratorMDVelocityVerlet_randomizeVelocities_1(self, zeroMomentum);
+};;
+
   IntegratorMDVelocityVerlet.prototype['__destroy__'] = IntegratorMDVelocityVerlet.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;
   _emscripten_bind_IntegratorMDVelocityVerlet___destroy___0(self);
+};
+// IntegratorNHC
+/** @suppress {undefinedVars, duplicate} @this{Object} */function IntegratorNHC(atomInfo, potentialMaster, random, box, nChains, tau) {
+  if (atomInfo && typeof atomInfo === 'object') atomInfo = atomInfo.ptr;
+  if (potentialMaster && typeof potentialMaster === 'object') potentialMaster = potentialMaster.ptr;
+  if (random && typeof random === 'object') random = random.ptr;
+  if (box && typeof box === 'object') box = box.ptr;
+  if (nChains && typeof nChains === 'object') nChains = nChains.ptr;
+  if (tau && typeof tau === 'object') tau = tau.ptr;
+  this.ptr = _emscripten_bind_IntegratorNHC_IntegratorNHC_6(atomInfo, potentialMaster, random, box, nChains, tau);
+  getCache(IntegratorNHC)[this.ptr] = this;
+};;
+IntegratorNHC.prototype = Object.create(IntegratorMD.prototype);
+IntegratorNHC.prototype.constructor = IntegratorNHC;
+IntegratorNHC.prototype.__class__ = IntegratorNHC;
+IntegratorNHC.__cache__ = {};
+Module['IntegratorNHC'] = IntegratorNHC;
+
+IntegratorNHC.prototype['doStep'] = IntegratorNHC.prototype.doStep = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_IntegratorNHC_doStep_0(self);
+};;
+
+IntegratorNHC.prototype['doSteps'] = IntegratorNHC.prototype.doSteps = /** @suppress {undefinedVars, duplicate} @this{Object} */function(steps) {
+  var self = this.ptr;
+  if (steps && typeof steps === 'object') steps = steps.ptr;
+  _emscripten_bind_IntegratorNHC_doSteps_1(self, steps);
+};;
+
+IntegratorNHC.prototype['setTemperature'] = IntegratorNHC.prototype.setTemperature = /** @suppress {undefinedVars, duplicate} @this{Object} */function(temperature) {
+  var self = this.ptr;
+  if (temperature && typeof temperature === 'object') temperature = temperature.ptr;
+  _emscripten_bind_IntegratorNHC_setTemperature_1(self, temperature);
+};;
+
+IntegratorNHC.prototype['getTemperature'] = IntegratorNHC.prototype.getTemperature = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_IntegratorNHC_getTemperature_0(self);
+};;
+
+IntegratorNHC.prototype['reset'] = IntegratorNHC.prototype.reset = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_IntegratorNHC_reset_0(self);
+};;
+
+IntegratorNHC.prototype['getPotentialEnergy'] = IntegratorNHC.prototype.getPotentialEnergy = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_IntegratorNHC_getPotentialEnergy_0(self);
+};;
+
+IntegratorNHC.prototype['addListener'] = IntegratorNHC.prototype.addListener = /** @suppress {undefinedVars, duplicate} @this{Object} */function(listener) {
+  var self = this.ptr;
+  if (listener && typeof listener === 'object') listener = listener.ptr;
+  _emscripten_bind_IntegratorNHC_addListener_1(self, listener);
+};;
+
+IntegratorNHC.prototype['removeListener'] = IntegratorNHC.prototype.removeListener = /** @suppress {undefinedVars, duplicate} @this{Object} */function(listener) {
+  var self = this.ptr;
+  if (listener && typeof listener === 'object') listener = listener.ptr;
+  _emscripten_bind_IntegratorNHC_removeListener_1(self, listener);
+};;
+
+IntegratorNHC.prototype['getStepCount'] = IntegratorNHC.prototype.getStepCount = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  return _emscripten_bind_IntegratorNHC_getStepCount_0(self);
+};;
+
+IntegratorNHC.prototype['setTimeStep'] = IntegratorNHC.prototype.setTimeStep = /** @suppress {undefinedVars, duplicate} @this{Object} */function(tStep) {
+  var self = this.ptr;
+  if (tStep && typeof tStep === 'object') tStep = tStep.ptr;
+  _emscripten_bind_IntegratorNHC_setTimeStep_1(self, tStep);
+};;
+
+IntegratorNHC.prototype['setNbrCheckInterval'] = IntegratorNHC.prototype.setNbrCheckInterval = /** @suppress {undefinedVars, duplicate} @this{Object} */function(interval) {
+  var self = this.ptr;
+  if (interval && typeof interval === 'object') interval = interval.ptr;
+  _emscripten_bind_IntegratorNHC_setNbrCheckInterval_1(self, interval);
+};;
+
+IntegratorNHC.prototype['addPotentialCallback'] = IntegratorNHC.prototype.addPotentialCallback = /** @suppress {undefinedVars, duplicate} @this{Object} */function(pc, interval) {
+  var self = this.ptr;
+  if (pc && typeof pc === 'object') pc = pc.ptr;
+  if (interval && typeof interval === 'object') interval = interval.ptr;
+  _emscripten_bind_IntegratorNHC_addPotentialCallback_2(self, pc, interval);
+};;
+
+IntegratorNHC.prototype['randomizeVelocities'] = IntegratorNHC.prototype.randomizeVelocities = /** @suppress {undefinedVars, duplicate} @this{Object} */function(zeroMomentum) {
+  var self = this.ptr;
+  if (zeroMomentum && typeof zeroMomentum === 'object') zeroMomentum = zeroMomentum.ptr;
+  _emscripten_bind_IntegratorNHC_randomizeVelocities_1(self, zeroMomentum);
+};;
+
+  IntegratorNHC.prototype['__destroy__'] = IntegratorNHC.prototype.__destroy__ = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
+  var self = this.ptr;
+  _emscripten_bind_IntegratorNHC___destroy___0(self);
 };
 // ClusterVirial
 /** @suppress {undefinedVars, duplicate} @this{Object} */function ClusterVirial(potentialMaster, temperature, nDer, cached) {

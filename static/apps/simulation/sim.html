@@ -248,7 +248,7 @@ var startTime = 0;
     }
     document.getElementById("seed").value = seed;
     if (doMD) {
-      integrator = new Module.IntegratorMDVelocityVerlet(speciesList.getAtomInfo(), potentialMaster, rand, box);
+      integrator = new Module.IntegratorNHC(speciesList.getAtomInfo(), potentialMaster, rand, box, 3, 0.1);
       integrator.setTimeStep(tStep);
       box.enableVelocities();
       if (doNbrList) {
@@ -272,6 +272,7 @@ var startTime = 0;
       }
     }
     integrator.setTemperature(getInputInt("T"));
+    if (doMD) integrator.randomizeVelocities(true);
     potentialMaster.init();
     integrator.reset();
 
