@@ -374,6 +374,7 @@ function updateResults() {
     document.getElementById("data_"+s.name+"_err").textContent = (fac*d.x2d(idx,2)).toPrecision(4);
     document.getElementById("data_"+s.name+"_cor").textContent = d.x2d(idx,3).toPrecision(4);
   }
+  var xTitle = doMD ? "Time" : "Steps";
   for (var i=0; i<historyStreams.length; i++) {
     var name = historyStreams[i].name;
     var hist = historyStreams[i].hist;
@@ -388,7 +389,7 @@ function updateResults() {
                    sets,
                    { title: {text: name+" history"},
                      autosize: true,
-                     xaxis: {title: "", exponentformat:'power'},
+                     xaxis: {title: xTitle, exponentformat:'power'},
                      yaxis: {title: name, exponentformat:'power'},
                      margin: { t: 40 }
                    },
@@ -398,6 +399,7 @@ function updateResults() {
     var name = plotStreams[i].name;
     var avg = plotStreams[i].avg;
     var plotDiv = plotStreams[i].plotDiv;
+    var xTitle = plotStreams[i].xTitle;
     var xFunc = plotStreams[i].xFunc;
     var yData = new Module.ArrayUtil(avg.getStatistics());
     var xData = new Module.ArrayUtil(xFunc());
@@ -410,7 +412,7 @@ function updateResults() {
                    sets,
                    { title: {text: name},
                      autosize: true,
-                     xaxis: {title: "", exponentformat:'power'},
+                     xaxis: {title: xTitle, exponentformat:'power'},
                      yaxis: {title: name, exponentformat:'power'},
                      margin: { t: 40 }
                    },
@@ -565,20 +567,22 @@ function makeHistoryPlot(e, pump, name) {
   var plotDiv = makeElement("DIV", parent, {id: "plot"+nPlots});
   var xMeter = doMD ? new Module.MeterTime(integrator) : new Module.MeterSteps(integrator);
   var hist = new Module.History(1, 3, 100, xMeter);
+  makeElement("BUTTON", col, {className: "btn btn-success btn-sm", style: {marginLeft: "1rem"}, textContent: "reset", onclick: function() {hist.reset();}})
   pump.addDataSink(hist);
+  var xTitle = doMD ? "Time" : "Steps";
   var sets = [{x: [], y: []}];
   Plotly.newPlot(plotDiv,
                  sets,
                  { title: {text: name+" history"},
                    autosize: true,
-                   xaxis: {title: "", exponentformat:'power'},
+                   xaxis: {title: xTitle, exponentformat:'power'},
                    yaxis: {title: name, exponentformat:'power'},
                    margin: { t: 40 }
                  },
                  { responsive: true} );
   historyStreams.push({idx: nPlots, name: name, hist: hist, fac: 1, plotDiv: plotDiv});
 }
-function makePlot(name, av, pump, xFunc) {
+function makePlot(name, av, pump, xTitle, xFunc) {
   var parent = makeElement("DIV", document.getElementById("plotContent"));
   var row = makeElement("DIV", parent, {className: "row"});
   var col = makeElement("DIV", row, {className: "col-auto px-4"});
@@ -593,7 +597,7 @@ function makePlot(name, av, pump, xFunc) {
                    margin: { t: 40 }
                  },
                  { responsive: true} );
-  plotStreams.push({idx: nPlots, name: name, avg: av, xFunc: xFunc, fac: 1, plotDiv: plotDiv});
+  plotStreams.push({idx: nPlots, name: name, xTitle: xTitle, avg: av, xFunc: xFunc, fac: 1, plotDiv: plotDiv});
   return col;
 }
 function makeDataDiv(name, av, pump, labelHTML) {
@@ -604,7 +608,7 @@ function makeDataDiv(name, av, pump, labelHTML) {
     makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(){av.reset();}, textContent: "reset", style: {marginRight: "0.2rem"}});
   }
   if (pump) {
-    makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(e){makeHistoryPlot(e, pump, name);}, textContent: "plot"});
+    makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(e){makeHistoryPlot(e, pump, name);}, textContent: "history"});
   }
   var cur = makeElement("DIV", row, {className: "col-sm-4 col-md-4 col-lg-3 col-xl-2"});
   makeText("cur: ", cur);
@@ -712,11 +716,12 @@ document.getElementById("btnDataRDF").addEventListener("click", function() {
     var av = new Module.Average(100, 1, 100, false);
     var pump = new Module.DataPump(meter, doMD ? 4 : 4*box.getNumAtoms(), av);
     integrator.addListener(pump);
-    var col = makePlot("RDF", av, pump, function() {return meter.getRData();});
+    var col = makePlot("RDF", av, pump, "r", function() {return meter.getRData();});
     var label = makeElement("LABEL", col, {textContent: "rmax: "});
     makeElement("INPUT", label, {className: "form-control", id: "rdf_rmax", style: {display: "inline-block", width: "auto"}, value: 3, onchange: function() {updateRDF(meter, av)}});
     label = makeElement("LABEL", col, {textContent: "# of bins: ", style: {marginLeft: "3rem"}});
     makeElement("INPUT", label, {className: "form-control", id: "rdf_nbins", style: {display: "inline-block", width: "auto"}, value: 100, onchange: function() {updateRDF(meter, av)}});
+    makeElement("BUTTON", col, {className: "btn btn-success btn-sm", style: {marginLeft: "1rem"}, textContent: "reset", onclick: function() {av.reset();}});
 });
 document.getElementById("lrc").removeAttribute("readonly");
 document.getElementById("lrc").removeAttribute("disabled");
