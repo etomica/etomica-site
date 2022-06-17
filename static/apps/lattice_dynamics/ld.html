@@ -19,11 +19,16 @@
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-    <h1>Lattice Dynamics</h1>
+    <h1 class='h2'><a href='index.html'><i class='fa-solid fa-house'></i></a> Lattice Dynamics<a class='float-end' href='https://www.etomica.org/'><img src='https://www.etomica.org/img/logo_small.png' style='height: 2.5rem;' title='Etomica'></a></h1>
     <p>Source: <a href='ld.cpp'>ld.cpp</a> <a href='ld.h'>ld.h</a> <a href='potential.cpp'>potential.cpp</a> <a href='potential.h'>potential.h</a> <a href='ld.idl'>ld.idl</a> <a href='ld-glue-wrapper.cpp'>ld-glue-wrapper.cpp</a> <a href='Makefile'>Makefile</a><br>
     Generated: <a href='glue.cpp'>glue.cpp</a> <a href='glue.js'>glue.js</a></p>
     <div id='parametersDiv' class='card'>
-      <div class='card-header' role='tab' id='headingParameters'><h5 class='mb-0'><a role='button' data-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a> <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button></h5></div>
+      <div class='card-header' role='tab' id='headingParameters'>
+        <h2 class='h5 mb-0'>
+          <a role='button' data-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a>
+          <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button>
+        </h2>
+      </div>
       <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
       <div class='card-body'>
         <label>Number of cells:  <input class='form-control' size='2' id='nCellsX' value='2' style='width: 3rem;'> &times; <input class='form-control' size='2' id='nCellsY' value='2' style='width: 3rem;'> &times; <input class='form-control' size='2' id='nCellsZ' value='2' style='width: 3rem;'></label> (<span id='numAtoms'></span> atoms)<br>
