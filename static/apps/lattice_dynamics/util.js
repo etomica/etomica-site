@@ -64,6 +64,8 @@ window.addEventListener("load", function() {
 });
 
 var infoTitles = [
+                  {name: "param", title: "Parameters", level: 1},
+                  {name: "results", title: "Results", level: 1},
                  ];
 
 function replaceInfoContent() {

@@ -1,0 +1,9 @@
+<p>The lattice dynamics app produces several different results.  First, while performing the actual lattice dynamics calculations, it also computes and reports the lattice energy.</p>
+
+<p>The primary result of the calculation is the eigenvalues (&lambda;) of the dynamical matrix.  These appear in the formula for the (intensive) harmonic free energy of the solid:</p>
+
+<p>&beta;A/N = (1/2N)<span style='font-size: 170%; vertical-align: middle;'>&Sigma;</span>ln(&lambda; / (2&pi;k<sub>B</sub>T)) + 3 ln(&Lambda;) - (3/2N) ln(N) + (1/N) ln(&rho;)</p>
+
+<p>where N is the number of atoms in the system, k<sub>B</sub> is Boltzmann's constant, T is the temperature, &rho; is the density and &Lambda; is the de Broglie wavelength.  The app reports the part that involves the eigenvalues and the rest can be added on to recover the full free energy.</p>
+
+<p>The lattice dynamics app also takes the eigenvalues and produces a phonon density of states plot, with frequency (&omega; = &lambda;<sup>1/2</sup>) on the x axis.  For a small system, it is useful to use Gaussian smearing to broaden the effect of each eigenvalue in the historgram.  The Gaussian smearing parameters can be adjusted: the width determines the width of the Gaussian peak used for each eigenvalue and the resolution determines spacing between drawn points in the plot.</p>

@@ -27,6 +27,7 @@
         <h2 class='h5 mb-0'>
           <a role='button' data-toggle='collapse' href='#collapseParameters' aria-expanded='true' aria-controls='collapseParameters'>Parameters</a>
           <button type='button' id='btnNewParameters' style='display: none;' class='btn btn-sm btn-secondary'>New parameters</button>
+          <button class='btn btn-xs btn-info' type='button' data-content='param' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
         </h2>
       </div>
       <div id='collapseParameters' class='collapse show' aria-labelledby='headingParameters'>
@@ -87,7 +88,12 @@
 </div>
   <p style='margin-top: 1em;'><button type='button' id='btnStart' class='btn btn-sm btn-primary'>Start</button></p>
     <div id='resultsDiv' class='card'>
-      <div class='card-header' role='tab' id='headingResults'><h5 class='mb-0'><a role='button' data-toggle='collapse' href='#collapseResults' aria-expanded='true' aria-controls='collapseResults'>Results</a></h5></div>
+      <div class='card-header' role='tab' id='headingResults'>
+        <h2 class='h5 mb-0'>
+          <a role='button' data-toggle='collapse' href='#collapseResults' aria-expanded='true' aria-controls='collapseResults'>Results</a>
+          <button class='btn btn-xs btn-info' type='button' data-content='results' data-bs-toggle="modal" data-bs-target="#infoModal">Info</button></h2>
+        </h5>
+      </div>
       <div id='collapseResults' class='collapse show' aria-labelledby='headingResults'>
       <div class='card-body'>
     <div id='progress-div' style='display: none;'>
@@ -111,10 +117,10 @@
     <div class='output' id="SSOutput"></div>
     <div class='output' id="EVDOutput"></div>
     <div class='output' id='timing'></div>
-    <div id='plotContainer'>
+    <div id='plotContainer' style='display: none'>
       <div id="plotDiv"></div>
       <label>Smearing width (&omega;): <input class='form-control' id='wsig' style='width: 5em;' value='0.2' onchange='updateDOS()'></label>
-      <label>Resolution (&omega;): <input class='form-control' id='dw' style='width: 5em;' value='0.05' onchange='updateDOS()'></label>
+      <label style='margin-left: 2rem;'>Resolution (&omega;): <input class='form-control' id='dw' style='width: 5em;' value='0.05' onchange='updateDOS()'></label>
   </div>
   </div>
 </div>
@@ -339,6 +345,7 @@ function updateDOS() {
     ydos[j] /= norm;
   }
   var sets = [{x: xdos, y: ydos}];
+  document.getElementById("plotContainer").style.display = "block";
   Plotly.newPlot(document.getElementById("plotDiv"),
                  sets,
                  { autosize: true,
@@ -536,5 +543,23 @@ window.addEventListener("load", updateNumAtoms);
 window.addEventListener("load", updateBasisType);
     </script>
     <script async type="text/javascript" src="ld.js"></script>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>All info: <select class='form-select' style='width: auto; display: inline-block' id='info-modal-select'></select>
+            <div id='infoModalBody'></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
