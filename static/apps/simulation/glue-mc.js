@@ -1995,8 +1995,9 @@ MeterPotentialEnergy.prototype['getData'] = MeterPotentialEnergy.prototype.getDa
   _emscripten_bind_MeterPotentialEnergy___destroy___0(self);
 };
 // MeterKineticEnergy
-/** @suppress {undefinedVars, duplicate} @this{Object} */function MeterKineticEnergy() {
-  this.ptr = _emscripten_bind_MeterKineticEnergy_MeterKineticEnergy_0();
+/** @suppress {undefinedVars, duplicate} @this{Object} */function MeterKineticEnergy(integrator) {
+  if (integrator && typeof integrator === 'object') integrator = integrator.ptr;
+  this.ptr = _emscripten_bind_MeterKineticEnergy_MeterKineticEnergy_1(integrator);
   getCache(MeterKineticEnergy)[this.ptr] = this;
 };;
 MeterKineticEnergy.prototype = Object.create(Meter.prototype);
@@ -2004,12 +2005,6 @@ MeterKineticEnergy.prototype.constructor = MeterKineticEnergy;
 MeterKineticEnergy.prototype.__class__ = MeterKineticEnergy;
 MeterKineticEnergy.__cache__ = {};
 Module['MeterKineticEnergy'] = MeterKineticEnergy;
-
-MeterKineticEnergy.prototype['setIntegrator'] = MeterKineticEnergy.prototype.setIntegrator = /** @suppress {undefinedVars, duplicate} @this{Object} */function(integrator) {
-  var self = this.ptr;
-  if (integrator && typeof integrator === 'object') integrator = integrator.ptr;
-  _emscripten_bind_MeterKineticEnergy_setIntegrator_1(self, integrator);
-};;
 
 MeterKineticEnergy.prototype['getNumData'] = MeterKineticEnergy.prototype.getNumData = /** @suppress {undefinedVars, duplicate} @this{Object} */function() {
   var self = this.ptr;

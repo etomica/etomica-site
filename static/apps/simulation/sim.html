@@ -362,7 +362,7 @@ function updateResults() {
       var expbmuErr = d.x2d(0,2);
       document.getElementById("data_"+s.name+"_avg").textContent = (-T*Math.log(expbmu)).toPrecision(8);
       document.getElementById("data_"+s.name+"_err").textContent = Math.abs(-T*expbmuErr/expbmu).toPrecision(4);
-      return;
+      continue;
     }
 
     var d = s.avg.getStatistics();
@@ -380,10 +380,11 @@ function updateResults() {
     var hist = historyStreams[i].hist;
     var plotDiv = historyStreams[i].plotDiv;
     var histData = new Module.ArrayUtil(hist.getHistory());
+    var fac = historyStreams[i].fac;
     var sets = [{x: [], y: []}];
     for (var j=0; j<hist.getHistorySize(); j++) {
       sets[0].x.push(histData.x2d(0,j));
-      sets[0].y.push(histData.x2d(1,j));
+      sets[0].y.push(histData.x2d(1,j)*fac);
     }
     Plotly.newPlot(plotDiv,
                    sets,
@@ -550,7 +551,7 @@ function reconstructPlot(e) {
   var hist = historyStreams[n-1].hist;
   hist.setHistoryType(sel.value);
 }
-function makeHistoryPlot(e, pump, name) {
+function makeHistoryPlot(e, pump, name, fac) {
   var btn = e.target;
   btn.parentNode.removeChild(btn);
   nPlots++;
@@ -580,7 +581,7 @@ function makeHistoryPlot(e, pump, name) {
                    margin: { t: 40 }
                  },
                  { responsive: true} );
-  historyStreams.push({idx: nPlots, name: name, hist: hist, fac: 1, plotDiv: plotDiv});
+  historyStreams.push({idx: nPlots, name: name, hist: hist, fac: fac, plotDiv: plotDiv});
 }
 function makePlot(name, av, pump, xTitle, xFunc) {
   var parent = makeElement("DIV", document.getElementById("plotContent"));
@@ -600,7 +601,8 @@ function makePlot(name, av, pump, xTitle, xFunc) {
   plotStreams.push({idx: nPlots, name: name, xTitle: xTitle, avg: av, xFunc: xFunc, fac: 1, plotDiv: plotDiv});
   return col;
 }
-function makeDataDiv(name, av, pump, labelHTML) {
+function makeDataDiv(name, av, pump, labelHTML, fac) {
+  if (!fac) fac = 1;
   var row = makeElement("DIV", document.getElementById("dataContent"), {id: "data_"+name, className: "row"});
   var label = makeElement("DIV", row, {className: "col-sm-4 col-md-3 col-lg-3 col-xl-2", textContent: name+" "});
   if (labelHTML) label.innerHTML = labelHTML+" ";
@@ -608,7 +610,7 @@ function makeDataDiv(name, av, pump, labelHTML) {
     makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(){av.reset();}, textContent: "reset", style: {marginRight: "0.2rem"}});
   }
   if (pump) {
-    makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(e){makeHistoryPlot(e, pump, name);}, textContent: "history"});
+    makeElement("BUTTON", label, {className: 'btn btn-sm btn-success btn-reset', onclick: function(e){makeHistoryPlot(e, pump, name, fac);}, textContent: "history"});
   }
   var cur = makeElement("DIV", row, {className: "col-sm-4 col-md-4 col-lg-3 col-xl-2"});
   makeText("cur: ", cur);
@@ -630,20 +632,17 @@ document.getElementById("btnDataEnergy").addEventListener("click", function() {
     var av = new Module.Average(1, 10, 100, false);
     var pump = new Module.DataPump(meter, doMD?1:10, av);
     integrator.addListener(pump);
-    makeDataDiv("energy", av, pump);
+    makeDataDiv("energy", av, pump, null, 1/box.getNumAtoms());
     dataStreams.push({name: "energy", avg: av, fac: 1/box.getNumAtoms()});
 });
 document.getElementById("btnDataTemperature").addEventListener("click", function() {
     document.getElementById("btnDataTemperature").style.display = "none";
-    var meter = new Module.MeterKineticEnergy(box);
-    meter.setIntegrator(integrator);
-    var av = new Module.Average(2, 1, 100, false);
+    var meter = new Module.MeterKineticEnergy(integrator);
+    var av = new Module.Average(1, 1, 100, false);
     var pump = new Module.DataPump(meter, 4, av);
     integrator.addListener(pump);
-    makeDataDiv("T", av);
-    dataStreams.push({name: "T", avg: av, fac: (2.0/3.0)/box.getNumAtoms(), idx: 0});
-    makeDataDiv("total E", av);
-    dataStreams.push({name: "total E", avg: av, fac: 1/box.getNumAtoms(), idx: 1});
+    makeDataDiv("T", av, pump, null, (2.0/3.0)/box.getNumAtoms());
+    dataStreams.push({name: "T", avg: av, fac: (2.0/3.0)/box.getNumAtoms()});
 });
 document.getElementById("btnDataPressure").addEventListener("click", function() {
     document.getElementById("btnDataPressure").style.display = "none";
