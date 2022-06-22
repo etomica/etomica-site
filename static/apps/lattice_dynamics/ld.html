@@ -20,8 +20,7 @@
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
     <h1 class='h2'><a href='index.html'><i class='fa-solid fa-house'></i></a> Lattice Dynamics<a class='float-end' href='https://www.etomica.org/'><img src='https://www.etomica.org/img/logo_small.png' style='height: 2.5rem;' title='Etomica'></a></h1>
-    <p>Source: <a href='ld.cpp'>ld.cpp</a> <a href='ld.h'>ld.h</a> <a href='potential.cpp'>potential.cpp</a> <a href='potential.h'>potential.h</a> <a href='ld.idl'>ld.idl</a> <a href='ld-glue-wrapper.cpp'>ld-glue-wrapper.cpp</a> <a href='Makefile'>Makefile</a><br>
-    Generated: <a href='glue.cpp'>glue.cpp</a> <a href='glue.js'>glue.js</a></p>
+    <p>LD Source: <a href='https://github.com/etomica/etomica-cpp'>etomica-cpp</a></p>
     <div id='parametersDiv' class='card'>
       <div class='card-header' role='tab' id='headingParameters'>
         <h2 class='h5 mb-0'>
@@ -374,6 +373,7 @@ function updateEVD(nextWV) {
       var logSum = latticeDynamics.getLogSum();
       var numAtoms = getNumAtoms();
       document.getElementById("logSum").textContent = logSum/(2*numAtoms);
+      var nwv = latticeDynamics.getWaveVectorCount();
       var eigenvalues = new Module.ArrayUtil(latticeDynamics.getEigenvalues());
       allw = [];
       var nBasis = Number(document.getElementById("nBasis").value);
@@ -385,6 +385,7 @@ function updateEVD(nextWV) {
           }
         }
       }
+      eigenvalues.free2Dau();
     }
     updateDOS();
     cleanup();
@@ -543,7 +544,7 @@ window.addEventListener("load", updateTrunc);
 window.addEventListener("load", updateNumAtoms);
 window.addEventListener("load", updateBasisType);
     </script>
-    <script async type="text/javascript" src="ld.js"></script>
+    <script async type="text/javascript" src="mc.js"></script>
 
     <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl">
