@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-from os.path import isfile
+import os
 from subprocess import check_output
 from math import pow,log
 import sys
@@ -227,7 +227,7 @@ def getEOS(name, opts):
         return Gottschalk(False)
       elif o == '--vnicholas':
         return Nicolas(False)
-    return VEOS(maxB, log2nB3, nder, B3func)
+    return VEOSLJ(maxB, log2nB3, nder, B3func)
   elif name == 'liquid':
     liqDir=sys.path[0]
     Nl=4000
@@ -492,10 +492,12 @@ class EOS(object):
         self.minRhoT[T] = minRho
         return rho
 
+def convSortVEOS(a):
+  return a[0]
 
 class VEOS(EOS):
   """Virial EOS"""
-  def __init__(self,n=1000, log2nB3=12, nder=2, B3func=None):
+  def __init__(self, n=1000, nder=2, readB=True):
     EOS.__init__(self)
     self.lastT = 0
     self.maxB = n
@@ -503,22 +505,18 @@ class VEOS(EOS):
     self.dBdT = {}
     self.askForG = True
     self.Bobj = {}
-    if True:
-      if n>=2:
-        self.Bobj[2] = virialLJ.makeB(2)
-        self.maxB = 2
-      if n>=3:
-        if B3func is None:
-          self.Bobj[3] = virialLJ.makeB3(log2nB3, nder)
-        else:
-          self.Bobj[3] = virialLJ.Bwrapper(B3func)
-        self.maxB = 3
-      for i in range(4,n+1):
-        if virialLJ.LJBfit.checkN(i):
-          self.Bobj[i] = virialLJ.makeB(i)
-          self.maxB = i
-        else:
+
+    if readB:
+      for i in range(2,n+1):
+        if not VEOS.checkN(i):
           break
+        self.Bobj[i] = virialLJ.LJBfit(i)
+        self.maxB = i
+
+  @staticmethod
+  def checkN(n):
+    infile = "B%dY.fit" % n
+    return os.path.exists(infile)
 
   def refreshB(self,T):
     self.lastT = T
@@ -584,6 +582,101 @@ class VEOS(EOS):
       return 0
     return math.exp(G/T)
 
+  def convergence1(self, T, propB, tol):
+    minConverged = 0
+    proplv = propB[self.maxB-1]
+    for i in range(self.maxB):
+      diff = abs(propB[i] - proplv)
+      if diff > tol:
+        minConverged = self.maxB
+        continue
+      # seems to be converged at i
+      if minConverged == self.maxB:
+        minConverged = i
+    return minConverged
+
+  def findConvergence(self, T, prop, maxRho, rhoRes, tol, fracTol=True):
+    rho = maxRho
+    result = [[0,0]]
+    moreWork = True
+    while moreWork:
+      props = self.evalAllB(T, rho)
+      myProp = props[prop]
+      proplv = myProp[self.maxB-1]
+      t = tol
+      if fracTol:
+        t = tol*abs(proplv)
+      minConverged = self.convergence1(T, myProp, t)
+      result.append([rho, minConverged])
+      result.sort(key=convSortVEOS)
+      for i in range(1,len(result)):
+        if result[i][1] < result[i-1][1]:
+          result[i][1] = result[i-1][1]
+
+      moreWork = False
+      for i in range(1,len(result)):
+        if result[i][0] - result[i-1][0] > rhoRes and result[i][1] != result[i-1][1]:
+          rho = (result[i][0] + result[i-1][0] ) / 2
+          moreWork = True
+          break
+
+    rv = []
+    prevResult = [0,0]
+    for i in range(1,len(result)):
+      if result[i][1] != result[i-1][1]:
+        for j in range(result[i-1][1], min(result[i][1],self.maxB)):
+          rv.append([j, result[i-1][0]])
+        prevResult = result[i-1]
+    return rv
+
+
+  def evalAllB(self,T,rho):
+    if T!=self.lastT:
+      self.refreshB(T)
+
+    if rho==0:
+      return None
+
+    A = [log(rho)-1]
+    Z = [1]
+    dZdrho = [0]
+    U = [0]
+    Cv = [1.5]
+    dPdT = [0]
+    #print(self.B)
+    #print(self.dBdT)
+    for i in self.B:
+      Z.append(Z[i-2] + self.B[i]*pow(rho,i-1))
+      dZdrho.append(dZdrho[i-2] + (i-1)*self.B[i]*pow(rho,i-2))
+      A.append(A[i-2] + self.B[i]*pow(rho,i-1)/(i-1))
+      U.append(U[i-2] + self.dBdT[i]/(i-1)*pow(rho,i-1))
+      Cv.append(Cv[i-2] + self.d2BdT2[i]/(i-1)*pow(rho,i-1))
+      dPdT.append(dPdT[i-2] + self.dBdT[i]*pow(rho,i))
+
+    P = []
+    dPdrho = []
+    alphap = []
+    kappaT = []
+    Cp = []
+    W2 = []
+    G = []
+    dGdrho = []
+    for i in range(self.maxB):
+      dPdT[i] = Z[i]*rho + T*dPdT[i]
+      Cv[i] = -T*T*Cv[i] - 2*T*U[i]
+      U[i] *= -T*T
+      A[i] *= T
+      P.append(Z[i]*rho*T)
+      dPdrho.append(dZdrho[i]*rho*T + Z[i]*T)
+      alphap.append(-(dPdT[i] / dPdrho[i]) / rho)
+      kappaT.append(1/(rho*dPdrho[i]))
+      Cp.append(Cv[i] + T*alphap[i]*alphap[i]/(rho*kappaT[i]))
+      W2.append((Cp[i]/Cv[i]) / (kappaT[i] * rho))
+      G.append(A[i]+P[i]/rho)
+      dGdrho.append((P[i]/rho)/rho + T*dZdrho[i])
+
+    return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho, 'Cv': Cv, 'Cp': Cp}
+
   def eval2(self,T,rho):
     if T!=self.lastT:
       self.refreshB(T)
@@ -599,6 +692,8 @@ class VEOS(EOS):
     dZdrho = 0
     U = 0
     Cv = 0
+    dPdT = 0
+    alphapn = 1
     #print(self.B)
     #print(self.dBdT)
     for i in self.B:
@@ -607,19 +702,46 @@ class VEOS(EOS):
       A += self.B[i]*pow(rho,i-1)/(i-1)
       U += self.dBdT[i]/(i-1)*pow(rho,i-1)
       Cv += self.d2BdT2[i]/(i-1)*pow(rho,i-1) 
+      dPdT += self.dBdT[i]*pow(rho,i)
+    dPdT = Z*rho + T*dPdT
     Cv = -T*T*Cv - 2*T*U
     U *= -T*T
     A *= T
     P = Z*rho*T
     dPdrho = dZdrho*rho*T + Z*T
+    alphap = -(dPdT / dPdrho) / rho
+    kappaT = 1/(rho*dPdrho)
+    Cp = Cv + T*alphap*alphap/(rho*kappaT)
+    # 1 here is the molecular weight
+    W2 = (Cp/Cv) / (kappaT * rho * 1)
     if rho>0:
       G = A+P/rho
       dGdrho = (P/rho)/rho + T*dZdrho
     else:
       G = float('nan')
       dGdrho = float('nan')
-    return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho, 'Cv': Cv}
+    return {'A': A, 'Z': Z, 'P': P, 'G': G, 'U': U, 'dZdrho': dZdrho, 'dPdrho': dPdrho, 'dGdrho': dGdrho, 'Cv': Cv, 'Cp': Cp}
 
+class VEOSLJ(VEOS):
+  """Virial LJ EOS"""
+  def __init__(self,n=1000, log2nB3=12, nder=2, B3func=None):
+    VEOS.__init__(self, n, nder, False)
+    if True:
+      if n>=2:
+        self.Bobj[2] = virialLJ.makeB(2)
+        self.maxB = 2
+      if n>=3:
+        if B3func is None:
+          self.Bobj[3] = virialLJ.makeB3(log2nB3, nder)
+        else:
+          self.Bobj[3] = virialLJ.Bwrapper(B3func)
+        self.maxB = 3
+      for i in range(4,n+1):
+        if virialLJ.LJBfit.checkN(i):
+          self.Bobj[i] = virialLJ.makeB(i)
+          self.maxB = i
+        else:
+          break
 
 class Solid(EOS):
   """Harmonic/Anharmonic EOS for crystal with LJ 12/6 potential"""
