@@ -457,6 +457,7 @@ function setTruncation() {
 }
 function goCalc() {
   var useX = document.getElementById("useX").checked;
+  var truncType = Number(document.getElementById("truncType").value);
   var T = 0;
   var numX = 0;
   if (useX) {
