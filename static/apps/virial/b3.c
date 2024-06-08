@@ -184,8 +184,8 @@ double EMSCRIPTEN_KEEPALIVE calcB3(double T, int nr) {
     double e = exp(x);
     double f = e-1;
     fr[i] = f;
-    frd1[i] = e>0 ? (-x*beta*e) : 0;
-    frd2[i] = e>0 ? (x*x + 2*x)*beta*beta*e : 0;
+    frd1[i] = e>0 ? (-u*e) : 0;
+    frd2[i] = e>0 ? (u*u*e) : 0;
   }
   double fk[nr];
   sineForward(fr, fk, nr, dr);
