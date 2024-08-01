@@ -12,14 +12,8 @@
 
 1. Compare the pressure obtained for the repulsion only simulation to that from the SW MD applet and from the piston-cylinder applet.  Referring to the figure on P13 of the text, explain how the box must change in a system with hard walls to obtain the same trajectory and pressure for a repulsive disk compared to an ideal gas.  Referring to the picture below, which region should be used to obtain the ideal gas pressure in the low density limit, the blue area or the area inside the green (and gray) bars?
 
-```
-<table width="50%">
-<tr>
-<td width="50%">![](./DMD_Lvl3_1.jpg)
-<td width="50%">![](./DMD_Lvl3_2.jpg)
-</tr>
-</table>
-```
+![](./DMD_Lvl3_1.jpg)
+<!--- file missing ![](./DMD_Lvl3_2.jpg) --->
 
 **Problem 4**
 

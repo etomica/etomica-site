@@ -1,6 +1,6 @@
 
 
-= The Role of the Temperature in the Repulsion Only Case =
+## The Role of the Temperature in the Repulsion Only Case
 
 The discussion of the Z factors suggests an interesting possibility for simplifying the analysis of P, $\rho$, T, and the resulting model equations.  A well-known result is that Zid = 1.  The simplification here is that Zid does not vary with temperature or density.  What about Zrep?  Clearly, Zrep must vary with density, because it approaches infinity when the density approaches its close packed value.  This observation means that P and ρ cannot be proportional under all conditions.  On the other hand, it may be possible that an increase in temperature would give rise to a proportional rise in pressure.  After all, temperature simply makes the molecules move faster and Eq.  shows that the change in velocity may cancel with the change in temperature.  What experiment and analysis can we perform to prove or disprove this possibility?  
 

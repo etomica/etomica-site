@@ -12,50 +12,14 @@ We would like to understand better the distinctions between the system with wall
 1.The piston goes down as the density increases, squeezing the molecules into a smaller volume, as we should expect.  The pressure came out at 66.47±0.46 bar-nm in roughly 10 seconds of clock time and 4.0ns of simulation time.  T=300K and $\rho$=2.0mol/m² as stipulated.  This simulation time seemed less than half what it took for Ex 3c.  
 1.30 molecules give 1.993E-6 for the density.  The pressure comes out to 69.01±0.13 in roughly 4 seconds of clock time and 2.3ns of simulation time.  
 1.Referring to the dimensional analysis of Ex3c, Z = P/(1000ρRT) in these units.  So we get the results tabulated below.  By comparing Z instead of P, some of the small variation in $\rho$ is canceled since P increases as $\rho$ increases.
-```
-<table width="50%">
-<tr>
-<td>Property\Ex
-<td>3c
-<td>5a
-<td>5b
-</tr>
-<tr>
-<td>Type
-<td>p-c2d
-<td>p-c2d
-<td>pbc2d
-</tr>
-<tr>
-<td>N
-<td>134
-<td>54
-<td>30
-</tr>
-<tr>
-<td>~Clock time(s)
-<td>20
-<td>10
-<td>4
-</tr>
-<tr>
-<td>$\rho$
-<td>2.005E-6
-<td>2.000E-6
-<td>1.993E-6
-</tr>
-<tr>
-<td>P
-<td>68.16
-<td>66.47
-<td>69.01
-</tr>
-<tr>
-<td>Z
-<td>1.363
-<td>1.332
-<td>1.388
-</tr>
-</table>
-```
+
+| Property | 3c | 5a | 5b |
+| - | - | - | - |
+| Type | p-c2d | p-c2d | pbc2d |
+| N | 134 | 54 | 30 |
+| ~Clock time(s) | 20 | 10 | 4 |
+| $\rho$ | 2.005E-6 | 2.000E-6 | 1.993E-6 |
+| P | 68.16 | 66.47 | 69.01 |
+| Z | 1.363 | 1.332 | 1.388 |
+
 Comparing the Z values, shows that the p-c2d Z value approaches the pbc2d value as the system becomes larger.  Noting the much shorter simulation time for pbc2d, it suggests that the pbc2d approach may provide greater accuracy in less time.  We should do some more experiments to confirm this.  What experiments and analysis would you suggest?

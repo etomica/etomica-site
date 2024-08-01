@@ -10,16 +10,9 @@ The factor of 3 in the denominator (compared to 2 in 2D and 1 in 1D) shows that 
 
 The major difference between the 2D and 3D situations refers back to Eq.  and the concept of the close packed density.  How closely can the disks be packed?  We can analyze this by considering an equilateral triangle and asking what fraction of the total space is occupied by disks.  If they completely filled the space, then this “packing fraction” $(\eta)$ would be 100%.  But the Figure below shows that the white spaces between the disks cannot be filled.
 
-```
-<table width="100%>
-<tr>
-<td width="55%" align="left">
 By focusing on one triangle, we can get the packing fraction for the overall system.  The area of the triangle is $(\sigma / 2)(3^{1/2}\sigma / 2) = 3^{1/2} \sigma^2/4$.  The area occupied by disks is $3 \pi (\sigma / 2)^2 60/360 = 3 \pi \sigma^2 / 24$ and the ratio is $\eta^{2D}_x = 0.9069$ where the subscript *x* indicates the close packing limit.  This arrangement is called hexagonal packing and is known to provide the most effective packing for disks or spheres.
-<td width="45%" align="center">
+
 ![](./Motions.jpg)
-</tr>
-</table>
-```
 
 
 

@@ -3,29 +3,29 @@
 Elliott and Lira derive the following equations for the pressure and temperature of ideal gases in 2D,
 
 
-$(10) P = \frac{m}{2L^3}(u^2_i + u^2_2 + ...) $  
+(10) $P = \frac{m}{2L^3}(u^2_i + u^2_2 + ...)$
 
 This leads to, 
 
-$ nRT = \underline{V} P  =  L^3*\frac{m}{2L^3} \sum_1^N u_i^2 $ 
+$nRT = \underline{V} P  =  L^3*\frac{m}{2L^3} \sum_1^N u_i^2$ 
 
-$ u_1^2 = u_2^2 = u_{avg}^2 $ and $ n = N/N_A,$ 
+$u_1^2 = u_2^2 = u_{avg}^2$ and $n = N/N_A$, 
  
-$(11) RT(2D) = \frac{MW}{2} u_{avg}^2 $ 
+(11) $RT(2D) = \frac{MW}{2} u_{avg}^2$
 
 In 3D, 
 
-$(12) P = \frac{m}{3L^3}(u^2_i + u^2_2 + ...) $  
+(12) $P = \frac{m}{3L^3}(u^2_i + u^2_2 + ...)$
 
 
-$(13) \frac{3RT}{2} = \sum_1^N \frac{mu^2_i}{2n} = N_A \frac{m}{2} u_{avg}^2 = \frac{MW}{2} u_{avg}^2 $
+(13) $\frac{3RT}{2} = \sum_1^N \frac{mu^2_i}{2n} = N_A \frac{m}{2} u_{avg}^2 = \frac{MW}{2} u_{avg}^2$
 
 
 The basic idea behind the pressure equation is that collisions with the wall impart an average force.  That force is greater per collision if the particles have greater mass (m). The force is imparted more often if there are: (1) more particles (N), (2) the distance between walls (L) is less, or (3) if the particles are moving faster $(u_i)$.  The temperature equation relates the thermal energy to the kinetic energy of the particles.  For ideal gases, there is no potential energy so the internal energy is simply the molecular kinetic energy.  The extension to the repulsive potential recognizes that hard spheres take up space as their diameters become finite.  This leads to more frequent collisions with the wall as the distance traveled between collisions becomes very small.  We can even imagine diameters large enough that the molecules pack tightly against the walls so the pressure diverges.  We call this the “close-packed density.”  The attractive interactions (ie. association, dissociation, and bouncing) pull the molecules together, resulting in a negative contribution to pressure.  For example, when an atom is being pulled to the left by its bonding partner, it does not hit the right wall quite as hard.  Summing up, we can write the pressure as three contributions,
 Eqs.(10,12) represent just the ideal gas contribution.  DMD is required to compute the other contributions.
 
 
-$(14) P = P^{id} + P^{rep} + P^{att}$
+(14) $P = P^{id} + P^{rep} + P^{att}$
 
 
 Now for a result that you may find surprising, the equation for temperature is the same regardless of potential.  If you consider a thermometer in air, the velocities of its atoms equilibrate with the velocities of the atoms around it because of the conservation of momentum.  Making the air hotter makes the thermometer atoms move faster, which makes the vibrations in the thermometer expand, which causes the mercury to rise up the tube. If you put the thermometer in water at the same temperature, then momentum is still conserved.  Therefore, the velocities of the water atoms must also be the same.  Water in this case (or any liquid) is an example of a fluid with potential energy sufficiently strong that the molecules stick together on average.  The kinetic energy of their motion cannot overcome the potential energy, like the truck that fell into a gorge.  You can check the velocities at various conditions using the “Show Velocities” button and see how the temperatures relate to molecular velocity for liquid or vapor.
@@ -57,15 +57,15 @@ $Z^{att} = -\frac{N_A \rho}{6kT} \int_{\sigma}^{\infty} \ g(r) \frac{du}{dr} *4 
 where g(r) represents the radial distribution function (rdf). 
 
 
-Noting that (du/dr) for a hard sphere or square well potential at $ r=\sigma $ is a (negative) Dirac delta (EL Apx B), we obtain,
+Noting that (du/dr) for a hard sphere or square well potential at $r=\sigma$ is a (negative) Dirac delta (EL Apx B), we obtain,
 
 
-$Z^{rep} = 4 \eta g(\sigma) $ where, for a spherical molecule $\eta=\frac{N_A \rho \pi \sigma^3}{6} $ 
+$Z^{rep} = 4 \eta g(\sigma)$ where, for a spherical molecule $\eta=\frac{N_A \rho \pi \sigma^3}{6}$
 
 
 Another expression relates the rdf to the internal energy (also described in EL Ch6):
 
-"The Energy Equation:"  $ \frac{U-U^{id}}{RT} = \frac{N_A \rho}{2kT} \int_0^{\infty} \ g(r) u(r) *4 \pi r^2 dr$  
+"The Energy Equation:"  $\frac{U-U^{id}}{RT} = \frac{N_A \rho}{2kT} \int_0^{\infty} \ g(r) u(r) *4 \pi r^2 dr$  
 
 
 The Energy equation simply states that the total energy is the sum of all molecular energy.  This result is more obvious than the Pressure equation, but closely related.
