@@ -104,7 +104,11 @@ module.exports = {
       ],
       copyright: `<small><i>Etomica is dedicated to the memory of Bryan Mihalick.</i> <br> Copyright © ${new Date().getFullYear()} Etomica Group. Built with Docusaurus.</small>`,
     },
-    hideableSidebar: true,
+    docs: {
+      sidebar: {
+        hideable: true
+      }
+    }
   },
   presets: [
     [
