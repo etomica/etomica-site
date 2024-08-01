@@ -24,7 +24,9 @@ window.addEventListener("fullload", phasesUpdated);
       from browser import document, window, timer
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
-      window.removeBrythonSpinner()
+      if not window.removeBrythonSpinner():
+        # this script executes on load and then again when we pull in ajax!
+        crashOnPurpose()
 
       myInterval = None
       eos1 = eos2 = eos3 = None

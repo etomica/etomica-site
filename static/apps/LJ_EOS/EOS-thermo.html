@@ -30,7 +30,9 @@
       from LJ_EOS import getEOS
       from EOS_util import optsForPhase
       import math
-      window.removeBrythonSpinner()
+      if not window.removeBrythonSpinner():
+        # this script executes on load and then again when we pull in ajax!
+        crashOnPurpose()
 
       myInterval = None
       success = False

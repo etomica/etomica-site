@@ -19,11 +19,12 @@ window.addEventListener("fullload", function() {
 });
 
 function removeBrythonSpinner() {
-  if (!brythonSpinner) return;
+  if (!brythonSpinner) return false;
   var bstop = performance.now();
   console.log("brython load time: "+(bstop-window.bstart)/1000);
   brythonSpinner.parentNode.removeChild(brythonSpinner);
   brythonSpinner = null;
+  return true;
 }
 
 function makeText(str, parentNode) {
