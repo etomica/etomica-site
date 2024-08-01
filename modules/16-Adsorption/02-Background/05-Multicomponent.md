@@ -20,9 +20,7 @@ $\frac{[B(ads)]}{P_B\times[S]} = K_B$
 As for the one-component case, we define surface coverages $\theta_A = [A(ads)]/[S]_0$
 and $\theta_B = [B(ads)]/[S]_0$, and note that
 
-$$
-[S] + [A(ads)] + [B(ads)] = [S]_0$,  or $[S]/[S]_0 = 1 - \theta_A - \theta_B
-$$
+$[S] + [A(ads)] + [B(ads)] = [S]_0$,  or $[S]/[S]_0 = 1 - \theta_A - \theta_B$
 
 Then,
 
