@@ -84,8 +84,9 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
       break
 
     if verbose:
-      print ("{0} {1} {2}   {3} {4} {5}".format(rho1, props1['P'], props1['G'], \
-                                                rho2, props2['P'], props2['G']))
+      print ("{0} {1} {2}   {3} {4} {5}   {6} {7}".format(rho1, props1['P'], props1['G'], \
+                                                          rho2, props2['P'], props2['G'], \
+                                                          props2['P']-props1['P'], props2['G']-props1['G']))
     if last:
       break
 
@@ -100,10 +101,13 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
         raise Exception("wound up with nan finding coexistence P1: "+str(props1['P'])+", P2: "+str(props2['P']))
       if dP == 0:
         break
-      if abs(dP) > abs(lastDelta):
+      if abs(dP) > abs(lastDelta) and False:
         lastDeltaProblem += 1
         if lastDeltaProblem > 3:
-          raise Exception("We seem to be diverging while trying to find coexistence while trying to match dP")
+          if verbose:
+            print ("unable to find coexistence; We seem to be diverging while trying to find coexistence while trying to match dP")
+          return ({},{})
+          #raise Exception("We seem to be diverging while trying to find coexistence while trying to match dP")
       else:
         lastDeltaProblem = 0
       lastDelta = dP
@@ -136,10 +140,13 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
       dG = props2['G'] - props1['G']
       if dG == 0:
         break
-      if abs(dG) > abs(lastDelta):
+      if abs(dG) > abs(lastDelta) and False:
         lastDeltaProblem += 1
         if lastDeltaProblem > 3:
-          raise Exception("We seem to be diverging while trying to find coexistence while trying to match dG")
+          if verbose:
+            print ("unable to find coexistence; We seem to be diverging while trying to find coexistence while trying to match dG")
+          return ({},{})
+          #raise Exception("We seem to be diverging while trying to find coexistence while trying to match dG")
       else:
         lastDeltaProblem = 0
       lastDelta = dG
