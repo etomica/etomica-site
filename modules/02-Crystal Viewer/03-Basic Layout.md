@@ -45,22 +45,24 @@ The "Display Features" section contains buttons to turn on/off various graphic r
 
 
 
-```
 <table width="100%">
 <tr>
 <td width="50%" align="center">
 Clipping On
+</td>
 <td width="50%" align="center">
 Clipping Off
+</td>
 </tr>
 <tr>
 <td width="50%" align="center">
 ![](./CrystalViewer_Crystal4.jpg)
+</td>
 <td width="50%" align="center">
 ![](./CrystalViewer_Crystal5.jpg)
+</td>
 </tr>
 </table>
-```
 
 
 
@@ -71,22 +73,24 @@ The **show plane button** displays a "thin transparant sheet" through the curren
 
 
 
-```
 <table width="100%">
 <tr>
 <td width="50%" align="center">
 Show Plane On
+</td>
 <td width="50%" align="center">
 Show Plane Off
+</td>
 </tr>
 <tr>
 <td width="50%" align="center">
 ![](./CrystalViewer_Crystal6.jpg)
+</td>
 <td width="50%" align="center">
 ![](./CrystalViewer_Crystal7.jpg)
+</td>
 </tr>
 </table>
-```
 
 
 
@@ -103,133 +107,173 @@ The following table outlines the features available for manipulating the three d
 
 The following table outlines the features available for manipulating the three dimensional figure.
 
-```
 <table width="80%" border="2">
 <tr>
 <td width="35%" align="center">
 <b>Key/Mouse Combination</b>
+</td>
 <td width="65%" align="center">
 <b>Function</b>
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 h
+</td>
 <td width="65%" align="left">
 Move figure to home (original) position.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 r
+</td>
 <td width="65%" align="left">
 Center the figure on the display.  If the figure is rotated, it will remain rotated.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 x or X
+</td>
 <td width="65%" align="left">
 Rotate figure around the X axis.  Case of letter determines direction of rotation.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 y or Y
+</td>
 <td width="65%" align="left">
 Rotate figure around the Y axis.  Case of letter determines direction of rotation.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 z or Z
+</td>
 <td width="65%" align="left">
 Rotate figure around the Z axis.  Case of letter determines direction of rotation.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 =
+</td>
 <td width="65%" align="left">
 Zoom in on center of graphic.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 -
+</td>
 <td width="65%" align="left">
 Zoom out on center of graphic.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 p
+</td>
 <td width="65%" align="left">
 Toggle &quot;perspective&quot; on/off.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 1 - 9
+</td>
 <td width="65%" align="left">
 Set the number of &quot;shells&quot; to display.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 i
+</td>
 <td width="65%" align="left">
 Toggle &quot;shell&quot; display on/off.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 a
+</td>
 <td width="65%" align="left">
 Toggle molecule display on/off.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Left Mouse Button + Mouse Drag
+</td>
 <td width="65%" align="left">
 Rotate the figure in the direction of the mouse drag (only applicable to X and Y axis.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Right Mouse Button + Mouse Drag
+</td>
 <td width="65%" align="left">
 Move the figure in the direction of the mouse drag.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Ctrl + Left Mouse Button + Mouse Drag
+</td>
 <td width="65%" align="left">
 Set depth percentage.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Ctrl + Right Mouse Button + Mouse Drag
+</td>
 <td width="65%" align="left">
 Set slab percentage.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Shift + Left Mouse Button + Mouse Drag Up
+</td>
 <td width="65%" align="left">
 Zoom in on center of graphic.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Shift + Left Mouse Button + Mouse Drag Down
+</td>
 <td width="65%" align="left">
 Zoom out on center of graphic.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Shift + Right Mouse Button + Mouse Drag
+</td>
 <td width="65%" align="left">
 Inertially rotate in direction of mouse drag.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Shift + Right Mouse Button Click
+</td>
 <td width="65%" align="left">
 Stop Inertial rotation.
+</td>
 </tr>
 <tr>
 <td width="35%" align="left">
 Ctrl + Shift + Left Mouse Button Drag
+</td>
 <td width="65%" align="left">
 Rotate around the Z axis.
+</td>
 </tr>
 </table>
-```
