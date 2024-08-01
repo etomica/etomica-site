@@ -48,36 +48,31 @@ of what a simulation typically looks like after roughly 2000 ps (following the e
 
 
 
-*surfactant head = purple
+* surfactant head = purple
 
-*surfactant tail = blue
+* surfactant tail = blue
+
 ![](./Config_surf2.gif)
 
 
+* Density Tab (with surfactants)
 
-
-*Density Tab (with surfactants)
 ![](./Surf_profile.gif)
 
 
+* Orientation (of the surfactants)
 
-
-*Orientation (of the surfactants)
 ![](./Orientation.gif)
 
 
+* Virial Profile
 
-
-*Virial Profile
 ![](./Virial.gif)
 
 
+* Tension Profile
 
-
-*Tension Profile
 ![](./ST_profile.gif)
-
-
 
 
 It takes approximately 1500 ps (roughly 6 to 8 min on a modern PC) for the most drastic

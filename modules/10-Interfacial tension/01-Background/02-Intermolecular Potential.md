@@ -4,7 +4,12 @@ In these simulations, an intermolecular potential is necessary for describing th
 
 
 
-$u(r)= \begin{cases} \begin{align} \infty \text{ if r} \leq \sigma \\ -\epsilon \text{ if r} < \lambda\sigma \\ 0 \text{ if r} \geq \lambda\sigma \end{align} \end{cases} $ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Equation 3)
+$u(r)=
+\begin{cases}
+  \infty \text{ if r} \leq \sigma \\
+ -\epsilon \text{ if r} < \lambda\sigma \\
+  0 \text{ if r} \geq \lambda\sigma
+\end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Equation 3)
 
 
 Graphically, the SW potential can be representated as:
