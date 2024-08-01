@@ -8,15 +8,15 @@
 
 **Problem 4.** Carry out a Continuum simulation with the following parameters.
 
-:Time step: 0.2
+&nbsp; &nbsp; Time step: 0.2
 
-:Number of Atoms: 2000
+&nbsp; &nbsp; Number of Atoms: 2000
 
-:Initial deformation: 0.5 (prolate)
+&nbsp; &nbsp; Initial deformation: 0.5 (prolate)
 
-:Cohesion Strength (Bulk Cohesion): 1.0
+&nbsp; &nbsp; Cohesion Strength (Bulk Cohesion): 1.0
 
-:Squeezing Force: 0.0
+&nbsp; &nbsp; Squeezing Force: 0.0
 
 Compare your deformation-versus-time curve with equation (17) from the Background section. How accurate is the theoretical formula? Repeat this problem for a smaller initial deformation (0.3). For which case do you expect the theoretical curve to be more accurate? Why?
 

@@ -1,6 +1,6 @@
 
 
-=Atomistic Simulation=
+## Atomistic Simulation
 
 ![](./BL01.jpg)
 
@@ -60,17 +60,17 @@ You can change the angle of view by pushing the left mouse button while the mous
 
 ***# of molecules*** **tab:** Used to set the initial configuration of the droplet.
 
-:***Number of Atoms*** **slider:** A larger number will run slower, but yield more accurate results.
+&nbsp; &nbsp; ***Number of Atoms*** **slider:** A larger number will run slower, but yield more accurate results.
 
-:***Initial Deformation*** **slider:** Choose between positive (prolate) and negative (oblate) deformations. You will want to rotate the view (see above) to discern  the different deformations.
+&nbsp; &nbsp; ***Initial Deformation*** **slider:** Choose between positive (prolate) and negative (oblate) deformations. You will want to rotate the view (see above) to discern  the different deformations.
 
 ![](./BL09.jpg)
 
 ***Potential*** **tab:** Used to set the cohesive and squeezing forces.
 
-:***Use Surface Cohesion / Use Bulk Cohesion*** **button:** Toggles between just surface (red) particles attracting each other versus all (green and red) particles attracting each other, respectively. Each case has a slider control. The cohesive force may be varied between 0.0 and 20.0 for surface cohesion and between 0.4 and 1.0 for bulk cohesion.
+&nbsp; &nbsp; ***Use Surface Cohesion / Use Bulk Cohesion*** **button:** Toggles between just surface (red) particles attracting each other versus all (green and red) particles attracting each other, respectively. Each case has a slider control. The cohesive force may be varied between 0.0 and 20.0 for surface cohesion and between 0.4 and 1.0 for bulk cohesion.
 
-:***Squeezing Force*** **slider:** Vary the squeezing force between 0.0 and 5.0.
+&nbsp; &nbsp; ***Squeezing Force*** **slider:** Vary the squeezing force between 0.0 and 5.0.
 
 ![](./BL06.jpg)
 

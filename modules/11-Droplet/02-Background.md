@@ -165,7 +165,7 @@ Gravity acts to flatten the drop against the horizontal surface, thereby reducin
 
 $
 (13) \;\;\;\;\;\;\;\;\;\;
-D \;\; = \;\; \frac{\mbox{height} - \mbox{width}}{\mbox{height} + \mbox{width}} 
+D \;\; = \;\; \frac{\text{height} - \text{width}}{\text{height} + \text{width}} 
 $
 
 Note that $D = 0$ for an undeformed sphere; it is positive for a prolate (rod-like) deformation and negative for an oblate (disc-like) deformation. The greater the Bond number, the greater the deformation, as quantified by the following deformation curve. 
@@ -222,15 +222,17 @@ Let’s see what magnitude of gravity would be required to significantly squash 
 
 That was why we based the equivalent radius in equation (6) on twice the volume of the sessile drop. Now $a$ is precisely the radius of the undeformed nanodrop. Here we consider a drop of liquid argon in equilibrium with its vapor at temperature $T$ = 118K. The relevant properties of saturated liquid argon are as follows.
 
-: Density $\rho_{\rm d}\;\; = \;\; 1.237 \times 10^{3} \, \mbox{kg} \, \mbox{m}^{-3}$
-: Viscosity $\mu_{\rm d} \;\; = \;\; 7.27 \times 10^{-5} \, \mbox{kg} \, \mbox{m}^{-1} \, \mbox{s}^{-1} $
-: Interfacial tension $\gamma \;\; = \;\; 7.54 \times 10^{-3} \, \mbox{kg} \, \mbox{s}^{-2} $ 
+&nbsp; &nbsp; Density $\rho_{\rm d}\;\; = \;\; 1.237 \times 10^{3} \, \text{kg} \, \text{m}^{-3}$
+
+&nbsp; &nbsp; Viscosity $\mu_{\rm d} \;\; = \;\; 7.27 \times 10^{-5} \, \text{kg} \, \text{m}^{-1} \, \text{s}^{-1}$
+
+&nbsp; &nbsp; Interfacial tension $\gamma \;\; = \;\; 7.54 \times 10^{-3} \, \text{kg} \, \text{s}^{-2}$ 
 
 We shall base the radius of the drop upon units of Angstroms,
 
 $
 (18) \;\;\;\;\;\;\;\;\;\;
-a^{\prime} \;\; = \;\; \frac{a} {10^{-10} \, \mbox{m}}
+a^{\prime} \;\; = \;\; \frac{a} {10^{-10} \, \text{m}}
 $
 
 the viscous timescale upon units of picoseconds,
@@ -240,7 +242,7 @@ $
 \tau^{\prime}_{\rm viscous}
 \;\; = \;\;
 \frac{\tau_{\rm viscous}}
-{10^{-12} \, \mbox{s}} 
+{10^{-12} \, \text{s}} 
 $
 
 and the gravitational acceleration upon units of Angstroms per square picosecond
@@ -249,12 +251,12 @@ $
 (20) \;\;\;\;\;\;\;\;\;\;
 g^{\prime} \;\; = \;\;
 \frac{g}
-{ (10^{-10} \, \mbox{m}) \,
- (10^{-12} \, \mbox{s} )^{-2} }
+{ (10^{-10} \, \text{m}) \,
+ (10^{-12} \, \text{s} )^{-2} }
 \;\; = \;\; 
 \frac{g}
-{ 10^{14} \, \mbox{m} 
-\, \mbox{s}^{-2} }
+{ 10^{14} \, \text{m} 
+\, \text{s}^{-2} }
 $
 
 According to the definition (9) of the Bond number, we find the gravitational acceleration

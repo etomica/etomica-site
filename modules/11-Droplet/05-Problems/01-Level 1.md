@@ -6,16 +6,16 @@
 
 **Problem 3.** Carry out a Continuum simulation with the following parameters.
 
-:Time step: 0.2
+&nbsp; &nbsp; Time step: 0.2
 
-:Number of Atoms: 1000
+&nbsp; &nbsp; Number of Atoms: 1000
 
-:Initial Deformation: 0.0
+&nbsp; &nbsp; Initial Deformation: 0.0
 
-:Cohesion Strength (Bulk Cohesion): 1.0
+&nbsp; &nbsp; Cohesion Strength (Bulk Cohesion): 1.0
 
-:Squeezing Force: 4.0
+&nbsp; &nbsp; Squeezing Force: 4.0
 
-:Simulation Duration: 6.0 time units
+&nbsp; &nbsp; Simulation Duration: 6.0 time units
 
 What is the final deformation? What is the final effective radius (a check on volume conservation)? Repeat the simulation with the same parameters except for a smaller time step (0.1) and twice as many particles (2000). How close are the deformation-versus-time curves? How much better is volume conserved? By extrapolating the computer run time for the first simulation, how long would you expect the new simulation to take? Does this match up with the actual time required?

@@ -1,6 +1,6 @@
 
 
-=Atomistic Simulation=
+# Atomistic Simulation
 
 Launch the **Droplet (Atomic)** applet. Leave the squeezing force at its default value (4.0) and rotate the view slightly. 
 
