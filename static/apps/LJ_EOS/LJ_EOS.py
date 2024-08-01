@@ -75,6 +75,7 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
   last=False
   lastDelta = float('inf')
   lastDeltaTrouble = 0
+  tolEOS = max(eos1.getNominalTol(), eos2.getNominalTol())
   while True:
     rho1 = eos1.rhoForProps(T, props2, rho1)
     props1 = eos1.eval(T,rho1)
@@ -112,7 +113,7 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
         lastDeltaProblem = 0
       lastDelta = dP
       deltaVal = 2*dP/(props2['P']+props1['P'])
-      tol=2e-14*abs(rho1*props1['dPdrho'] + rho2*props2['dPdrho'])*2/abs(props2['P']+props1['P'])
+      tol=tolEOS*abs(rho1*props1['dPdrho'] + rho2*props2['dPdrho'])*2/abs(props2['P']+props1['P'])
       den = props1['dPdrho'] - props2['dPdrho']*props1['dGdrho']/props2['dGdrho']
       if abs(den/dP) < 1e-13:
         if verbose:
@@ -151,7 +152,7 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
         lastDeltaProblem = 0
       lastDelta = dG
       deltaVal = 2*dG/(props2['G']+props1['G'])
-      tol=2e-14*abs(rho1*props1['dGdrho'] + rho2*props2['dGdrho'])*2/abs(props2['G']+props1['G'])
+      tol=tolEOS*abs(rho1*props1['dGdrho'] + rho2*props2['dGdrho'])*2/abs(props2['G']+props1['G'])
       den = props1['dGdrho'] - props2['dGdrho']*props1['dPdrho']/props2['dPdrho']
       if abs(den/dG) < 1e-13:
         if verbose:
@@ -179,13 +180,13 @@ def findCoexistence(T, eos1, eos2, Pguess, verbose=False):
 
     props2 = newProps2
     if newRho2 == rho2 or pow(newRho2-rho2,2)/pow(newRho2+rho2,2) < 1e-28:
-      if abs(deltaVal) > 1e-8 and abs(deltaVal) > tol:
+      if abs(deltaVal) > 1e-7 and abs(deltaVal) > tol:
         if verbose:
           print ("failed to find coexistence")
           print ("rho {0} => {1}".format(rho2,newRho2))
           print ("deltaVal {0}, tol {1}".format(deltaVal, tol))
         return ({},{})
-      if abs(props2['P'] - props1['P']) > 2e-12 and abs(props2['P'] - props1['P'])/abs(props1['P']+props2['P']) > 2e-12:
+      if abs(props2['P'] - props1['P']) > 100*tolEOS and abs(props2['P'] - props1['P'])/abs(props1['P']+props2['P']) > 100*tolEOS:
         if verbose:
           print ("failed to find coexistence")
           print ("rho {0} => {1}".format(rho2,newRho2))
@@ -349,6 +350,10 @@ class EOS(object):
     self.verbose = verbose
     self.askForG = False
     self.includeLRC = False
+    self.tol = 2e-14
+
+  def getNominalTol(self):
+    return self.tol
 
   def setVerbose(self,newVerbose):
     self.verbose = newVerbose
@@ -1674,7 +1679,7 @@ class Johnson(MBWR):
     if discr > 0:
       v2 = 2*(0.97 - math.sqrt(discr))/(1.08*T)
       return 1/math.sqrt(v2)
-    return 1/math.sqrt(1.8)
+    return 0.3
 
 class May(MBWR):
   """May & Mausbach EOS"""
@@ -2397,6 +2402,7 @@ class Gottschalk(EOS):
                -2.185586771300271,-0.26455129172474134,0.3982533293041873e-2,0.,0.,0.,0.,0.,0.,0.]
              ]
     self.f = [0.,0.,1.,1./2.,1./3.,1./4.,1./5.,1./6.,1./7.,1./8.,1./9.,1./10.,1./11.,1./12.,1./13.,1./14.,1./15.]
+    self.tol = 4e-9
 
   def eval2(self,T,rho):
     if rho==0:
