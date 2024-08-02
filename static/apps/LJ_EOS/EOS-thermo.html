@@ -30,13 +30,12 @@
       from LJ_EOS import getEOS
       from EOS_util import optsForPhase
       import math
-      if not window.removeBrythonSpinner():
-        # this script executes on load and then again when we pull in ajax!
-        crashOnPurpose()
+      secondPass = window.removeBrythonSpinner()
 
-      myInterval = None
-      success = False
-      ix = 0
+      if not secondPass:
+        myInterval = None
+        success = False
+        ix = 0
 
       def gimmeRhoSimple(T, rhostr, Pstr, x, eos, doc):
         if doc["checkP"].checked:
@@ -55,7 +54,6 @@
         if document["phase1"].value == "fcc" and type(eos).__name__ == "Schultz" and doc["checkNrho"].checked:
           rho = eos.latRhoForNRho(T, rho)
         return rho
-
 
       def doOnePoint(stuff):
         global myInterval, ix, success
@@ -157,7 +155,8 @@
           Bvalues = eos.B
         window.showResults(T, rho, props, Bvalues)
 
-      document["btnUpdate"].bind("click", update)
+      if not secondPass:
+        document["btnUpdate"].bind("click", update)
     </script>
   </head>
   <body>

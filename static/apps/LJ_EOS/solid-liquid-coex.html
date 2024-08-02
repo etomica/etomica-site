@@ -123,14 +123,14 @@ function addRow(T, props1, props2, correlations) {
       from browser import document, window, timer
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase, CoexCorrelator
-      if not window.removeBrythonSpinner():
-        # this script executes on load and then again when we pull in ajax!
-        crashOnPurpose()
 
-      eos1 = eos2 = myInterval = None
-      T = Pguess = 0
-      correlator = None
-      success = False
+      secondPass = window.removeBrythonSpinner()
+
+      if not secondPass:
+        eos1 = eos2 = myInterval = None
+        T = Pguess = 0
+        correlator = None
+        success = False
 
       def doOneCoex():
         global eos1, eos2, myInterval, T, Pguess, correlator, success
@@ -202,7 +202,8 @@ function addRow(T, props1, props2, correlations) {
         success = True
         myInterval = timer.set_interval(doOneCoex, 0)
 
-      document["btnUpdate"].bind("click", update)
+      if not secondPass:
+        document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Solid-Liquid Phase Coexistence for LJ

@@ -159,15 +159,15 @@ function sortOutput() {
       from browser.widgets.dialog import InfoDialog
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase, CoexCorrelator
-      if not window.removeBrythonSpinner():
-        # this script executes on load and then again when we pull in ajax!
-        crashOnPurpose()
+      secondPass = window.removeBrythonSpinner()
 
-      success = False
-      eos1 = eos2 = myInterval = correlator = None
-      iteration = dT = diT = Pguess = stage = Pg = Thigh = Plow = iT = 0
-      doneiT = {}
-      maxdiT = 27
+      if not secondPass:
+        success = False
+        eos1 = eos2 = myInterval = correlator = None
+        iteration = dT = diT = Pguess = stage = Pg = Thigh = Plow = iT = 0
+        doneiT = {}
+        maxdiT = 27
+
       # stage 1: increase T from 0 while P decreases
       # stage 2: decrease Pguess at max T to look for low-P branch
       # stage 3: decrease T (with acceleration) along low-P branch from max toward P=0
@@ -353,7 +353,8 @@ function sortOutput() {
         success = True
         myInterval = timer.set_interval(doOneCoex, 0)
 
-      document["btnUpdate"].bind("click", update)
+      if not secondPass:
+        document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> FCC-HCP Phase Coexistence for LJ

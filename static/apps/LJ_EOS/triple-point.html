@@ -24,15 +24,15 @@ window.addEventListener("fullload", phasesUpdated);
       from browser import document, window, timer
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
-      if not window.removeBrythonSpinner():
-        # this script executes on load and then again when we pull in ajax!
-        crashOnPurpose()
 
-      myInterval = None
-      eos1 = eos2 = eos3 = None
-      T = Tstep = Tmin = Tmax = lastDT = stage = 0
-      props1a = props2a = props2b = props3b = None
-      success = False
+      secondPass = window.removeBrythonSpinner()
+
+      if not secondPass:
+        myInterval = None
+        eos1 = eos2 = eos3 = None
+        T = Tstep = Tmin = Tmax = lastDT = stage = 0
+        props1a = props2a = props2b = props3b = None
+        success = False
 
       def pushData():
         global T, props1a, props2a, props2b, props3b
@@ -173,7 +173,8 @@ window.addEventListener("fullload", phasesUpdated);
         success = True
         myInterval = timer.set_interval(doOneTriplePoint, 0)
 
-      document["btnUpdate"].bind("click", update)
+      if not secondPass:
+        document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Triple Point for LJ<a class='float-end' href='https://www.etomica.org/'><img src='https://www.etomica.org/img/logo_small.png' style='height: 2.5rem;' title='Etomica'></a></h1>

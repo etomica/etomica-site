@@ -44,9 +44,7 @@ function addRow(T, props1, props2) {
       from LJ_EOS import getEOS, findCoexistence
       from EOS_util import optsForPhase
       import math
-      if not window.removeBrythonSpinner():
-        # this script executes on load and then again when we pull in ajax!
-        crashOnPurpose()
+      secondPass = window.removeBrythonSpinner()
 
       def update(ev):
         window.collapseParameters()
@@ -94,7 +92,8 @@ function addRow(T, props1, props2) {
       def stopUpdate():
         print("stopped")
 
-      document["btnUpdate"].bind("click", update)
+      if not secondPass:
+        document["btnUpdate"].bind("click", update)
     </script>
     <div class='container'>
       <h1 class='h2'><a href='index.html'><i class="fa-solid fa-house"></i></a> Phase Coexistence for LJ<a class='float-end' href='https://www.etomica.org/'><img src='https://www.etomica.org/img/logo_small.png' style='height: 2.5rem;' title='Etomica'></a></h1>
