@@ -49,9 +49,11 @@ function updateSubtractCheckboxForT() {
   var valid = Tmin>=0.67 && Tmax<=0.9;
   if (valid) {
     document.getElementById("tabulateCorDiff").removeAttribute("disabled");
+    document.getElementById("tabulateCorDiffLabel").setAttribute("title","");
   }
   else {
     document.getElementById("tabulateCorDiff").setAttribute("disabled","true");
+    document.getElementById("tabulateCorDiffLabel").setAttribute("title","Correlation only valid for 0.67 < T < 0.9");
   }
 }
   
@@ -283,7 +285,7 @@ window.addEventListener("fullload", phasesUpdated);
       <select id='savedDataSel' class='form-select float-end' style='width: auto; display: none; margin-right: 1rem;' onclick='reconstructTable("coex-table")' data-bs-toggle="tooltip" data-bs-placement="top" title="Choose the set of data (either the current set or a saved set) to view in the table below"><option value='-1'>(current)</option></select>
       <div class='float-end form-check' style='margin-right: 1rem;' id='subtractCorCheckboxDiv'>
         <input class='form-check-input' type='checkbox' value='' id='tabulateCorDiff' onchange='reconstructTable("coex-table")'>
-        <label class='form-check-label' for='tabulateCorDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Replaces data in table (except for T) with differences from correlation (based on Schultz predictions) for coexistence properties">subtract correlation</label>
+        <label id='tabulateCorDiffLabel' class='form-check-label' for='tabulateCorDiff' data-bs-toggle="tooltip" data-bs-placement="right" title="Replaces data in table (except for T) with differences from correlation (based on Schultz predictions) for coexistence properties">subtract correlation</label>
       </div>
     </div>
     <div class='show' aria-labelledby='headingResults'>
