@@ -478,7 +478,6 @@ function goCalc() {
   var resultD1 = Module.ccall('getLastResultB'+Bn, 'number', ['number'], [1]);
   var resultD2 = Module.ccall('getLastResultB'+Bn, 'number', ['number'], [2]);
   var potType = Number(document.getElementById("potType").value);
-  console.log(potType);
   if ((truncType == 0 || potType == 4) && !useX) {
     document.getElementById("valueB").textContent = result;
     document.getElementById("valueBd1").textContent = resultD1;
