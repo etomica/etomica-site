@@ -1,6 +1,6 @@
 
 
-**Problem 1**
+## Problem 1
 
 Compute the time to collision for four repulsive disks bouncing in two dimensions around a square box.  Let the disk diameters, $\sigma = 0.4nm$.  Let the box length, L=5nm. Use initial velocities of (v, v/2.414), (-v,v), (v/1.414,-v/1.414), (-v/1.414,-v/1.414) E.g. $u_{1,x} = v, u_{1,y} = v/2.414$.
 
@@ -9,10 +9,9 @@ Compute the time to collision for four repulsive disks bouncing in two dimension
 1. Compute the times until collision for the molecule in the northwest corner of the box for both walls and particles.  Which occurs first?
 1. Write the vector formulas for the positions and velocities of the two disks of part c after the first collision, ignoring wall collisions.
 
-**Problem 2**
+## Problem 2
 
-This problem uses a  
-[piston-cylinder visual simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)  Throughout the problem, the user will be setting up the simulation's initial conditions and then running the simulation.  Additional help on setting up the initial conditions and running the simulation [can be found here.](http://rheneas.eng.buffalo.edu/wiki/PistonCylinder:Basic_Layout)
+This problem uses a  [piston-cylinder visual simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)  Throughout the problem, the user will be setting up the simulation's initial conditions and then running the simulation.  Additional help on setting up the initial conditions and running the simulation [can be found here.](/modules/Piston-Cylinder/Basic%20Layout)
 
 
 Throughout this problem, the simulation should be set to run in "adiabatic" mode.
@@ -24,10 +23,9 @@ Throughout this problem, the simulation should be set to run in "adiabatic" mode
 1. Reinitialize and repeat for “repulsion and attraction” at 2.86e-6mol/m2.  Explain why the temperature is constant for ideal gas and repulsion only, but not for repulsion+attraction.  Report the temperature, density, and pressure, including the standard error of each.
 1. Click the “potential” tab, reinitialize, and set up for “repulsion only” at 2.86e-6mol/m2.  Run for 1000ps each and tabulate Z while setting the number of particles to 7, 13, 26, 51, 100, 191.  Extrapolate to $N \rightarrow \infty$ by plotting Z vs 1/N, fitting a quadratic trendline, and reporting the intercept.  Note the simulation time required to reach 1000ps for the cases of N=51, 100, 191.
 
-**Problem 3**
+## Problem 3
 
-This problem uses a  
-[square well MD simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
+This problem uses a  [square well MD simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
 
 
 Throughout this problem, the simulation should be set to run in "adiabatic" mode.
@@ -38,10 +36,9 @@ Throughout this problem, the simulation should be set to run in "adiabatic" mode
 1. Set the simulation delay slider to "fast." Note the time and run for 1000ps. Report the temperature, density, and pressure, including the standard error of each.  Compute Z=PV/RT (should be dimensionless) and compare to Problem 2.5.  What do you conclude about PBC's relative to the "thermodynamic limit?"
 1. Reinitialize and repeat for “repulsion and attraction” at 2.86E-6mol/m2.  Explain why the temperature is constant for ideal gas and repulsion only, but not for repulsion+attraction.  Try starting temperatures of 300 and 84K.  Report the temperature, density, and pressure, including the standard error of each.
 
-**Problem 4**
+## Problem 4
 
-This problem uses a  
-[square well MD simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
+This problem uses a  [square well MD simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
 
 
 Throughout this problem, the simulation should be set to run in "isothermal" mode.

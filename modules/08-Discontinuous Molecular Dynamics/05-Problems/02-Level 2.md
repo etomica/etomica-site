@@ -1,9 +1,8 @@
 
 
-**Problem 1**
+## Problem 1
 
-This problem uses a  
-[square well MD (2D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
+This problem uses a [square well MD (2D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
 
 
 Throughout this problem, the simulation should be set to run in "isothermal" mode.
@@ -13,10 +12,9 @@ Define a dimensionless density as <i>bρ ≡ η ≡ NA ρπσ</i>²/4 where NA i
 
 (b) For the “repulsion+attraction,” simulate at a density of 4.29E-6 and temperatures of 500, 1000, 1500.  Plot Z vs. 1/T, where <i>Z=P/(ρRT)=PV/RT</i>.  Note that $\rho$(=) mol/m² and Z should be dimensionless.  Explain your observations.  What value do you obtain for $ a $ in $Z-Z_{HS}= -a \rho /RT$?
 
-**Problem 2**
+## Problem 2
 
-This problem uses a  
-[square well MD (3D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
+This problem uses a [square well MD (3D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
 
 
 Throughout this problem, the simulation should be set to run in "adiabatic" mode.
@@ -36,10 +34,9 @@ Recall that the packing fraction is a dimensionless density as <i>bρ ≡ η ≡
 (f) What values do you obtain for $z_1$, $z_2$, $z_3$ in 2D?  In 3D?  Also report the %AAD for each model, where $%AAD = (\sum |calc-obs|/obs*100%)/n_{obs}$, and $n_{obs}$ is the # of observations.
 
 
-**Problem 3**
+## Problem 3
 
-This problem uses a  
-[square well MD (3D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
+This problem uses a  [square well MD (3D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
 
 
 Throughout this problem, the simulation should be set to run in "isothermal" mode.  Define a dimensionless density as <i>bρ ≡ η ≡ NA ρπσ</i>³/6 and λ = 2.0.
@@ -62,7 +59,7 @@ SW results at η = 0.325, λ = 2.0, ε = 1000J/mol, σ = 0.4nm.
 
 Hint : Look at the time in minutes for each simulation and estimate the time for your simulation.  Staring at a computer screen for an extended time is not a recommended aspect of this problem.
 
-**Problem 4**
+## Problem 4
 
 Do better model equations really lead to better extrapolations?  HW2.1 makes the vdW repulsive term look pretty bad, but we can make it fit the data of Ex. 8 by tuning the a and b parameters.  We can replace the vdW repulsive term with the CS repulsive term while retaining the vdW attractive term to obtain a better model.  Then we have,
 
@@ -73,7 +70,7 @@ CS+vdW : $Z = 1 + \frac{4\eta (1-\eta / 2)}{(1-\eta )^3} - \frac{a}{bRT} \eta$
 
 where $\eta \equiv b\rho$.  For both models, use the data in Ex. 8 to find the values of η (and b) that fit Z at $\beta \varepsilon = 0$, then determine the value of a that matches the Z value at 205.6K.  Then use the same values of a and b to predict the data given in HW2.3.  Plot all the data and both models on one set of axes and discuss your observations. 
 
-**Problem 5**
+## Problem 5
 
 Classical thermodynamics shows how $(A-A^{HS})/RT$ can be computed by integration of Z or U  (e.g. E&L, Ch5-7).
 
@@ -90,13 +87,11 @@ SW results at $T \approx 300K$, $\lambda = 2.0$, $\varepsilon = 1000J/mol$, $\si
 | 10.70 | $299.4 \pm 3.4$ | 791 | 66 | $0.9 \pm 5$ | $-696 \pm 2$ | ~2.95 | ~1.52 |
 | 22.33 | $295.6 \pm 3.5$ | 4131 | 363 | $161.3 \pm 6$ | $-1425 \pm 5$ | 3.99 | 1.55 |
 
-**Problem 6**
+## Problem 6
 
-This problem uses a  
-[square well MD (3D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
+This problem uses a  [square well MD (3D) simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)
 
-
-[Example 8](http://rheneas.eng.buffalo.edu/wiki/DMD:Example_8) showed how to tune the ε parameter.  Now we explore the σ parameter. 
+[Example 8](../Examples/Example%208) showed how to tune the ε parameter.  Now we explore the σ parameter. 
 
 (a) According to the CS model (cf. Problem1a, Level2 above), what value do you obtain for ZHS at η=0.375? 
 
@@ -124,7 +119,7 @@ SW results at η = 0.375, λ=1.7.
 | 0.375 | 0.611 ± 0.002 | 418 | 23 | 2.44 ± 0.04 | -0.725 ± 0.001 | 2.85 | 1.1 |
 | 0.375 | 0.965 ± 0.001 | 453 | 21 | 0.29 ± 0.03 | -0.750 ± 0.0004 | 2.9 | 1.3 |
 
-**Problem 7**
+## Problem 7
 
 The following equation can be used to compute the value of Z from the rdf (E&L, ApxB):
 
@@ -140,7 +135,7 @@ Where <i> β ≡ 1/kT </i>
 (c) Comment on the sensitivity of Z to the estimate of <i>g(λσ)</i>.
 
 
-**Problem 8**
+## Problem 8
 
 The following equation can be used to compute the value of $U-U^{HS}$ from the rdf (E&L, Ch6):
 

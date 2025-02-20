@@ -1,6 +1,6 @@
 
 
-= The Periodic Boundary =
+## The Periodic Boundary
 
 This example is demonstrated using a 
 [visual simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)  The simulation should be run in "First Shell" mode.  To enter "First Shell" mode, push the button labeled "First shell".  If the simulation is already running in "First Shell" mode, there will not be a button labeled "First shell".  When running the simulation in "First Shell" mode, the button labeled "Central image" can be pushed to exit "First Shell" mode.

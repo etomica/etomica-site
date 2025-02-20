@@ -1,6 +1,6 @@
 
 
-= The Periodic Boundary 3D SW (pbc3d) =
+## The Periodic Boundary 3D SW (pbc3d)
 
 Elliott and Lira show that $Z = 1 + 4\eta g(\sigma)$ for hard spheres, where $g(\sigma)$ is the radial distribution function (rdf) at $r = \sigma$.  Evaluate the accuracy of this relationship for 3D HS fluids at a packing fraction equivalent to the $\rho = 2E-6 mol/m^2$ of the HD simulation and 300K.  
 
@@ -8,7 +8,7 @@ Elliott and Lira show that $Z = 1 + 4\eta g(\sigma)$ for hard spheres, where $g(
 The rdf is illustrated on the RDF tab. (Surprise!)  The challenge of this problem then is to determine the proper unit conversions to obtain the targeted packing fractions. Note that the value of 2E-6 mol/m² is a 2D density. So we must first compute the packing fraction in 2D, then infer the 3D density that matches this packing fraction. 
  
 
-Tinkering with the density slider, we find that 2E-6 mol/m² corresponds to 54 molecules. Referring to the Potential tab, we see that σ = 4$A^\circ $ = 0.4nm. In 2D, we have $V_{HD}=\pi \sigma^2/4$=0.1257nm² for the space occupied by one disk. The size of the simulation box can be inferred from the number of molecules and the density. 
+Tinkering with the density slider, we find that 2E-6 mol/m² corresponds to 54 molecules. Referring to the Potential tab, we see that σ = 4$\text{\AA}$ = 0.4nm. In 2D, we have $V_{HD}=\pi \sigma^2/4$=0.1257nm² for the space occupied by one disk. The size of the simulation box can be inferred from the number of molecules and the density. 
 
 54/{2E-6 mol*(602E21 disks/mol)/m²/(1E18nm²/m²)}=44.85nm² for the size of simulation box. 
 

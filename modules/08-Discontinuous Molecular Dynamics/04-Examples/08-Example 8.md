@@ -30,7 +30,7 @@ Determine the density of saturated liquid Xenon at its normal boiling temperatur
 
 ## Solution 
 
-Referring to webbook.nist.gov, the density at 165K is 22.41 mol/L.  We can also simulate a table of Z factors from 175-750K.  For the SW fluid, we obtain the tabulated Z factors at 0.02241 mol/cm3 (364 molecules). FYI: $η=0.02241\*602E21 π0.4^3/(6\*1E21)=0.452$. 
+Referring to webbook.nist.gov, the density at 165K is 22.41 mol/L.  We can also simulate a table of Z factors from 175-750K.  For the SW fluid, we obtain the tabulated Z factors at 0.02241 mol/cm3 (364 molecules). FYI: $η=0.02241*602E21 π0.4^3/(6*1E21)=0.452$. 
 
 **SW results at $\eta = 0.452$, $\lambda = 2.0$, ε = 1000J/mol, $\sigma = 0.4nm$, $\rho = 22.41 mol/L$.**
 
@@ -47,7 +47,7 @@ The trendline indicates that Tb(sim)=205.1K, but Tb(expt)=165.  So a better valu
 
 Having matched the boiling temperature along the x-axis, it becomes more apparent that the slope and y-intercept are deficient.  This suggests that another parameter may be wrong, but which?  We could obtain a reasonable representation at more common conditions if the y-intercept were 6.6.  Does a lower intercept indicate a higher or lower packing fraction? Which parameter (σ or λ) could be varied to alter the packing fraction (the space occupied by molecules) while maintaining a density of 22.41mol/L?  What exact value of η would permit you to match ZHS = 6.0?  (Hint: if the CS equation gives accurate values for ZHS(η), do you really need to simulate iteratively to answer this question?) 
  
-Homework: [Problem 2.6](http://rheneas.eng.buffalo.edu/wiki/DMD:Problems:Level_2) 
+Homework: [Problem 2.6](../05-Problems/02-Level 2.md#problem-6)
  
 In case you are wondering, the curvature in the experimental data at high temperature results from the softness of the interactions between real molecules. The square well model assumes that the repulsive energy is infinite at r < σ, so it cannot characterize this softness accurately. Returning to the truck analogy, slamming a truck into a cliff at Mach 3 might make a non-negligible dent. The square well approximation oversimplifies slightly, but 750K and 611MPa are uncommon conditions. Many applications may be studied with the square well model at more modest conditions.
 

@@ -1,6 +1,6 @@
 
 
-= The p-c2D vs. Periodic Boundary 2D SW (pbc2d) =
+## The p-c2D vs. Periodic Boundary 2D SW (pbc2d)
 
 We would like to understand better the distinctions between the system with walls and the system without.  Noting that realistic systems have 1023 molecules, we should investigate how the simulation results change with increasing number of molecules.  Unfortunately, the pbc applets have fixed box sizes, so we cannot vary the number of molecules while maintaining fixed density.  For the p-c2d applet, however, we can accomplish this.  The following exercises demonstrate this procedure and a homework problem carries it through in greater detail.  
 1.Link to the p-c2d applet and set the potential to repulsion only.  Check that you are on the Configuration tab.  Set the number of molecules to 54 and the density to 2E-6.  How does the height of the piston changes in response to the density change?  Start the simulation and record the pressure, temperature, density and standard errors.  How does the simulation time for this simulation compare to that for Example 3c?

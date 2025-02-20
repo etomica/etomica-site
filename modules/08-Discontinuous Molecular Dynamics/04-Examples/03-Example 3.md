@@ -1,6 +1,6 @@
 
 
-= The Piston-Cylinder (p-c) =
+## The Piston-Cylinder (p-c)
 
 This example is demonstrated using a 
 [visual simulation.](http://rheneas.eng.buffalo.edu/wiki/DMD:Simulator)  Throughout this example, the user will be setting up the simulation's initial conditions and then running the simulation.  Additional help on setting up the initial conditions and running the simulation [can be found here.](http://rheneas.eng.buffalo.edu/wiki/PistonCylinder:Basic_Layout)
