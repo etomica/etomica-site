@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <emscripten/emscripten.h>
+#include "b2.h"
 #include "potential.h"
 
 extern double rc;
@@ -117,7 +117,6 @@ double EMSCRIPTEN_KEEPALIVE calcB2LJ(double T) {
   sum = dsum = d2sum = 0;
   for (i=lastTerm+1; i>-1; i--) {
     double term = computeTerm(beta, i);
-    term *= gammaOfac(-0.25+0.5*i, i);
     sum += term;
     // d(sum)/dbeta = (dsum)/(beta)
     dsum += 0.5*i*term;
