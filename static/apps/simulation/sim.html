@@ -169,6 +169,10 @@ var startTime = 0;
       return false;
     }
     doMD = document.getElementById("simType").value == "MD";
+    if (potType == 3 && doMD) {
+      alert("HS is incompatible with MD.");
+      return false;
+    }
     var tStep = doMD ? getInputInt("tStep") : 0;
     var doCells = !doMD && document.getElementById("doCells").checked;
     var doNbrList = doMD && document.getElementById("doNbrList").checked;
@@ -545,6 +549,7 @@ window.addEventListener("load", updateP);
 window.addEventListener("load", updateSimType);
 var dataStreams = [], historyStreams = [], plotStreams = [];
 var nPlots = 0;
+var dataModal = null, dataModalBS = null;
 function reconstructPlot(e) {
   var sel = e.target;
   var n = sel.getAttribute("data-plot");
@@ -708,6 +713,55 @@ function updateRDF(meter, av) {
   av.setNumData(nbins);
   av.reset();
 }
+function padString(s, n) {
+  while (s.length < n) s = " "+s;
+  return s;
+}
+function showRawData(xData, yData, n, xname, yname) {
+  if (!dataModal) {
+    let body = document.body;
+    dataModal = makeElement("DIV", body, {className: "modal", id: "dataModal", tabindex: "-1", role: "dialog", "aria-labelledby": "dataModalLabel"});
+    let doc = makeElement("DIV", dataModal, {className: "modal-dialog modal-sm", role: "document"});
+    let content = makeElement("DIV", doc, {className: "modal-content"});
+    let header = makeElement("DIV", content, {className: "modal-header"});
+    makeElement("H4", header, {className: "modal-title", id: "dataModalLabel", textContent: "Raw Data"});
+    makeElement("BUTTON", header, {type: "button", className: "btn-close", "data-bs-dismiss": "modal", "aria-label": "Close"});
+    let modalBody = makeElement("DIV", content, {className: "modal-body", id: "raw-data-body"});
+    makeElement("TEXTAREA", modalBody, {className: "form-control", style: {fontFamily: "monospace", height: "15rem", fontSize: "0.875rem"}, id: "raw-data-textarea"});
+    let table = makeElement("TABLE", modalBody, {className: "table table-sm small"});
+    makeElement("THEAD", table, {id: "raw-data-thead"});
+    makeElement("TBODY", table, {id: "raw-data-tbody"});
+    let footer = makeElement("DIV", content, {className: "modal-footer"});
+    let cancelButton = makeElement("BUTTON", footer, {type: "button", className: "btn btn-default btn-secondary", "data-dismiss": "modal", "data-bs-dismiss": "modal", textContent: "Close"});
+    dataModalBS = new bootstrap.Modal(document.getElementById('dataModal'), { });
+  }
+  dataModalBS.show();
+  let ta = document.getElementById("raw-data-textarea");
+  if (true) {
+    let tav = "";
+    tav += padString(xname, 10);
+    tav += padString(yname, 10);
+    tav += "\n";
+    for (let j=0; j<n; j++) {
+      tav += padString(xData.x(j).toFixed(5), 10);
+      tav += padString(yData.x2d(j,1).toFixed(5), 10);
+      tav += "\n";
+    }
+    ta.value = tav;
+    return;
+  }
+  let thead = document.getElementById("raw-data-thead");
+  empty(thead);
+  let row = makeElement("TR", thead);
+  makeElement("TH", row, {textContent: xname});
+  makeElement("TH", row, {textContent: yname});
+  let tbody = document.getElementById("raw-data-tbody");
+  for (let j=0; j<n; j++) {
+    row = makeElement("TR", tbody);
+    makeElement("TD", row, {textContent: xData.x(j)});
+    makeElement("TD", row, {textContent: yData.x2d(j,1)});
+  }
+}
 document.getElementById("btnDataRDF").addEventListener("click", function() {
     if (integrator==null) return;
     document.getElementById("btnDataRDF").style.display = "none";
@@ -721,6 +775,7 @@ document.getElementById("btnDataRDF").addEventListener("click", function() {
     label = makeElement("LABEL", col, {textContent: "# of bins: ", style: {marginLeft: "3rem"}});
     makeElement("INPUT", label, {className: "form-control", id: "rdf_nbins", style: {display: "inline-block", width: "auto"}, value: 100, onchange: function() {updateRDF(meter, av)}});
     makeElement("BUTTON", col, {className: "btn btn-success btn-sm", style: {marginLeft: "1rem"}, textContent: "reset", onclick: function() {av.reset();}});
+    makeElement("BUTTON", col, {className: "btn btn-info btn-sm", style: {marginLeft: "1rem"}, textContent: "raw data", onclick: function() {showRawData(new Module.ArrayUtil(meter.getRData()), new Module.ArrayUtil(av.getStatistics()), av.getNumData(), "r", "g(r)");}});
 });
 document.getElementById("lrc").removeAttribute("readonly");
 document.getElementById("lrc").removeAttribute("disabled");
