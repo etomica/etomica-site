@@ -21,6 +21,29 @@ The modules are distributed together as a single self-contained application that
 You can download the latest build from GitHub [here](https://github.com/etomica/etomica/releases/latest) and run the application from the zip archive. On MacOS and
 Windows your system may need to be configured to allow running unsigned applications. 
 
+### Key Bindings
+For most of the modules, some of the keys on your keyboard can be used to manipulate the configuration display.  
+
+First, make sure the focus is on the configuration display (select the Configuration tab and click somewhere in the display).
+
+Then, keypresses will perform the actions as follows:
+
+1. The 1 key causes display of the first shell of periodic images (2 does the 2nd as well, etc.); 0 returns to just the original central image. Also, in 3D, the i key will toggle between two displays of image shells.
+2. The b key ("boundary") affects the presentation of the boundary boxes when multiple image shells are displayed. In 3D, it cycles through several options when pressed multiple times; in 2D there are only two such options, but it takes several presses to cycle through them.  
+3. The o key will toggle drawing of "overlap images", i.e., parts of images that fall in a neighboring box. This applies only if periodic images are displayed.  The effect is rather subtle (2D only).
+4. +/- keys (without shift key) zooms in/out (3D only).
+5. The x,y,z keys will rotate about respective axes (3D only).
+6. The h key ("home") will present the view in the standard orientation and size.
+7. The p key toggles the perspective on/off (3D only).
+8. Arrow keys will move the image left/right/up/down (3D only).
+
+Remember to have the focus on the configuration when applying these!
+
+Additionally, the mouse can be used to manipulate 3D images:
+
+1. Click on the image and drag to rotate.
+2. Hold the Shift key while moving the mouse vertically changes the zoom level.
+
 ### Index of Molecular Simulation Modules
 
 <ModulesIndex/>
