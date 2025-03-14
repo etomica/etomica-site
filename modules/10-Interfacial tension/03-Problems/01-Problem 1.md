@@ -38,7 +38,7 @@ $P^*=\rho^*T^* + \frac{Vir(x) + Vir(y) + Vir(z)}{3V^*}$ &nbsp; &nbsp; &nbsp; &nb
 
 
 
-For instance, you can acquire the vapor phase density from the density profile plot, and you can obtain the virial components (in the vapor phase) from the virial profile plot.  You can use this route to calculate the pressure in both the liquid phase and the vapor phase.  *Using this approach, calculate the pressure in both phases (liquid and vapor) at each temperature and compare your values.  Should they be the same, or can they be different?  If they are different, which one represents the true value of the vapor pressure at each temperature?*
+For instance, you can acquire the vapor phase density from the density profile plot, and you can obtain the virial components (in the vapor phase) from the virial profile plot.  The volume to use in Equation 15 is the volume of the slice of the box corresponding to each point in the virial plot (10 x 10 x 0.1).  You can use this route to calculate the pressure in both the liquid phase and the vapor phase.  *Using this approach, calculate the pressure in both phases (liquid and vapor) at each temperature and compare your values.  Should they be the same, or can they be different?  If they are different, which one represents the true value of the vapor pressure at each temperature?*
 
 
 
