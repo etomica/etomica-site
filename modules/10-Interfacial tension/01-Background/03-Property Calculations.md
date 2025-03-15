@@ -10,7 +10,7 @@ During the course of the simulation, several different system properties are cal
   
 ## Density 
 
-The density profile provides a good representation of the phase behavior of the system.  In the first stage of the simulation, when the molecules are at a liquid-phase density in the cubic simulation box, the density profile is relatively consistent along the x-coordinate.  However, once the box is expanded during the second stage (and the vapor phase is allowed to form), the density profile can be examined to clearly identify the vapor phase, liquid phase, and interface region (see figure below).  Also, when surfactants are present, their preferred locations can be clearly identified.  In order to extract quantitative information from the density profile data, the local density bins are dynamically fit to an empirical equation:
+The density profile provides a good representation of the phase behavior of the system.  In the first stage of the simulation, when the molecules are at a liquid-phase density in the simulation box, the density profile is relatively consistent along the x-coordinate.  However, once the box is expanded during the second stage (and the vapor phase is allowed to form), the density profile can be examined to clearly identify the vapor phase, liquid phase, and interface region (see figure below).  Also, when surfactants are present, their preferred locations can be clearly identified.  In order to extract quantitative information from the density profile data, the local density bins are dynamically fit to an empirical equation:
 
 
 $\rho(x)=\frac{1}{2}(\rho_L + \rho_V)-\frac{1}{2}(\rho_L-\rho_V)\text{tanh}\left[\frac{2(x-x_0)}{d}\right]$ &nbsp;&nbsp;&nbsp;&nbsp; (Equation 4)

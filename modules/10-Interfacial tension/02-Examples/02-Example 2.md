@@ -21,7 +21,7 @@ Set the simulation parameters to :
 Start the simulation by pushing the Start button. The button will change its label to “Pause” which can be
 used to pause and continue the simulation at any given time.
 
-As the simulation proceeds, observe the atoms diffusing within the cubic simulation
+As the simulation proceeds, observe the atoms diffusing within the simulation
 box at a liquid-like density.  The density profile can be monitored (which should have an average value of around
 0.54), as well as the potential energy and the other simulation metrics.  Once the simulation
 has been allowed to run for approximately 100 ps, the liquid phase should be fairly well stabilized.  On a 
