@@ -2,7 +2,7 @@
 These problems are appropriate for students in an undergraduate/graduate thermodynamics or physical chemistry course.  The Level 1 questions are well-defined tasks, whereas the Level 2 questions are designed to be more open-ended.
 
 ## Level 1 
-**(a)** *Using one set of parameters for your surfactant molecules (choose as you see fit), predict the critical temperature and critical density of your fluid, with 40 of these surfactant molecules present.  Do your coexisting densities and interfacial tension values follow the same scaling behavior as the pure fluid? (see Problem #1)*  In order to accomodate the higher temperatures, you will likely have to use a large simulation cell (box size > 20 and number of atoms > 1400).  In order to maintain consistency, use the same simulation parameters at all temperatures.
+**(a)** *Using one set of parameters for your surfactant molecules (choose as you see fit), predict the critical temperature and critical density of your fluid, with 40 of these surfactant molecules present.  Do your coexisting densities and interfacial tension values follow the same scaling behavior as the pure fluid? (see Problem #1)*  In order to accomodate the higher temperatures, you will likely have to use a large simulation cell (box length > 20 and number of atoms > 1400).  In order to maintain consistency, use the same simulation parameters at all temperatures.
 
 
 ## Level 2 

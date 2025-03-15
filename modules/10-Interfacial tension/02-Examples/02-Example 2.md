@@ -10,7 +10,7 @@ the simulation has been previously started, even if it is currently paused, push
 Set the simulation parameters to :
 
 * Temperature ($\epsilon$) = 1.0
-* Box size = 12.0
+* Box length = 12.0
 * Number of atoms = 643
 * Number of surfactants = 20.0
 * Surfactant head epsilon = 3.0
