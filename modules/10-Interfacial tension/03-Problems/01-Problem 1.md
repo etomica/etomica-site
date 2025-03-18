@@ -7,24 +7,17 @@ These problems are appropriate for students in an undergraduate/graduate thermod
 
 
 
-**(b)** The temperature at which the two distinct phases (vapor and liquid) become one phase is known as the critical temperature.  Your data and figures from part (a) provide an estimate of the critical temperature.  However, it likely underestimates the value of the true critical temperature, due to the finite simulation size limitations.  You can improve your estimate by fitting your density and surface tension values to standard thermodynamic relationships.  First, using your density data, you can extract the critical density ($\rho_c$) and critical temperature ($T_c$) using the law of rectilinear diameters (using a critical exponent of $\beta$=0.325, with *A* and *B* as adjustable parameters):
+**(b)** The temperature at which the two distinct phases (vapor and liquid) become one phase is known as the critical temperature.  Your data and figures from part (a) provide an estimate of the critical temperature.  However, it likely underestimates the value of the true critical temperature, due to the finite simulation size limitations.  You can improve your estimate by fitting your density and surface tension values to standard thermodynamic relationships. First, using your density data, you can extract the critical temperature ($T_c$​) by fitting it (and the parameter $B$) to the critical scaling relation (with a critical exponent of $\beta = 0.325$): 
 
+$\displaystyle \rho_l^* - \rho_v^* = B(T_c^* - T^*)^{\beta}$ &nbsp; &nbsp; &nbsp; &nbsp; Equation (12)
 
+Then, having $T_c$, the critical density ($\rho_c$​) can be evaluated by fitting it (and the parameter $A$) to the law of rectilinear diameter, which is based on the empirical observation that the average of the liquid and vapor densities is approximately a linear function of temperature:
 
-$\displaystyle \rho_l^* - \rho_v^* = B(T^* - T_c^*)^{\beta}$ &nbsp; &nbsp; &nbsp; &nbsp; Equation (12)
+$\frac{\rho_l^* + \rho_v^*}{2}=\rho_c+A(T_c^*-T^*)$ &nbsp; &nbsp; &nbsp; &nbsp; Equation (13)
 
-
-$\frac{\rho_l^* + \rho_v^*}{2}=\rho_c+A(T^*-T_c^*)$ &nbsp; &nbsp; &nbsp; &nbsp; Equation (13)
-
-
-
-Also, you can use the interfacial tension to extrapolate the critical temperature using the relationship below.  By fitting your interfacial tension data to this expression (with $2\nu$=1.26 [[6]](Interfacial_tension/References#ref_ferrenberg),[[7]](Interfacial_tension/References#ref_chen)), you can estimate the temperature at which the interfacial tension becomes zero (which coincides with the critical temperature of the fluid).
-
-
+Alternatively, you can use the interfacial tension to estimate the critical temperature by extrapolation using the relationship below. By fitting your interfacial tension data to this expression (with $2\nu$=1.26 [[6]](Interfacial_tension/References#ref_ferrenberg),[[7]](Interfacial_tension/References#ref_chen)), you can estimate the temperature at which the interfacial tension becomes zero (which coincides with the critical temperature of the fluid).
 
 $\displaystyle \gamma = \gamma_0 (1-T^*/T_c^*)^{2\nu}$ &nbsp; &nbsp; &nbsp; &nbsp; Equation (14)
-
-
 
 *Report your estimates of the critical temperature (using both methods) and the critical density (using the first method).*
 
